@@ -1,6 +1,5 @@
 ﻿// <reference path ="/jquery-3.2.1.js"/>
 
-const RESOURCE_TYPES = ["money", "stone", "wood", "iron_ore", "coal", "iron", "gold", "diamond", "jewelry"];
 var resources = {};
 var resources_per_sec = {};
 var buildings = {};
@@ -9,6 +8,9 @@ var remaining_upgrades = {}; /* All remaining upgrades that need to be purchased
 
 function set_initial_state() {
     resources = {
+        "energy": 0, /* TODO: Have a better system for energy and mana, treat them separately and have buildings provide static changes to them */
+        "mana" : 0,
+
         "money": 10,
         "stone": 0,
         "wood": 0,
@@ -18,6 +20,7 @@ function set_initial_state() {
         "gold": 0,
         "diamond": 0,
         "jewelry": 0,
+        "oil" : 0,
     };
     resources_per_sec = JSON.parse(JSON.stringify(resources)) /* Not just a simple assignment. We want a deep copy */
     resources_per_sec["money"] = 0;
@@ -104,7 +107,7 @@ function set_initial_state() {
                 "diamond": 0.1,
                 "coal": -10,
             },
-            "unlocks": [],
+            "unlocks": ["oil_well"],
         },
         "gold_finder": {
             "on": true,
@@ -162,6 +165,41 @@ function set_initial_state() {
             },
             "unlocks": [],
         },
+        "oil_well": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 1000,
+                "stone": 100,
+                "iron": 500
+            },
+            "price_ratio": {
+                "money": 1.2,
+                "stone": 1.1,
+                "iron": 1.3,
+            },
+            "generation": {
+                "oil": 1,
+            },
+            "unlocks": ["oil_engine"],
+        },
+        "oil_engine": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 500,
+                "iron": 200
+            },
+            "price_ratio": {
+                "money": 1.3,
+                "iron": 1.3,
+            },
+            "generation": {
+                "oil": -1,
+                "energy": 1,
+            },
+            "unlocks": [""],
+        },
     };
     purchased_upgrades = [];
     remaining_upgrades = {
@@ -188,12 +226,34 @@ function set_initial_state() {
             "name": "Improve Mines",
             "image": "images/pickaxe.png",
         },
-        "better_compressors": {
-            "unlock": function () { return buildings["compressor"].amount >= 3; },
+        "coal_mines": {
+            "unlock": function () { return buildings["mine"].amount >= 3 && buildings["compressor"].amount >= 1 && resources["coal"] < 50; },
             "purchase": function () { /* When bought, turn all mines off, increase generation, and turn them back on again. Turns off first to get generation from them properly calculated */
+                let mines_state = buildings["mine"].on;
+                if (mines_state) {
+                    toggle_building_state("mine");
+
+                }
+                buildings["mine"]["generation"]["coal"] = 0.2;
+                if (mines_state) { /* Only turn on if it already was on */
+                    toggle_building_state("mine");
+                }
+                $("#building_mine > .tooltiptext").html(gen_building_tooltip("mine"));
+            },
+            "cost": {
+                "money": 100,
+                "stone": 10,
+            },
+            "tooltip": "Mines produce coal.<br /> Costs 100 money, 100 wood.",
+            "name": "Coal Mining <br />",
+            "image": "images/pickaxe.png",
+        },
+        "better_compressors": {
+            "unlock": function () { return buildings["compressor"].amount >= 1; },
+            "purchase": function () { /* When bought, turn all compressors off, increase generation, and turn them back on again. Turns off first to get generation from them properly calculated */
                 let comp_state = buildings["compressor"].on;
                 if (comp_state) {
-                    toggle_building_state("mine");
+                    toggle_building_state("compressor");
 
                 }
                 buildings["compressor"]["generation"]["coal"] *= 0.7;
@@ -210,12 +270,48 @@ function set_initial_state() {
             "name": "Improve Compressors",
             "image": "",
         },
+        "oiled_compressors": {
+            "unlock": function () { return buildings["compressor"].amount >= 1 && resources["oil"] > 20; },
+            "purchase": function () { /* When bought, turn all compressors off, increase generation, and turn them back on again. Turns off first to get generation from them properly calculated */
+                let comp_state = buildings["compressor"].on;
+                if (comp_state) {
+                    toggle_building_state("compressor");
+                }
+                buildings["compressor"]["generation"]["coal"] *= 0.9;
+                if (comp_state) { /* Only turn on if it already was on */
+                    toggle_building_state("compressor");
+                }
+                $("#building_compressor > .tooltiptext").html(gen_building_tooltip("compressor"));
+            },
+            "cost": {
+                "oil": 50,
+            },
+            "tooltip": "Oil compressors to have them run more efficiently. <br /> Costs 50 oil.",
+            "name": "Oil Compressors",
+            "image": "",
+        },
+
+        "cheaper_banks": {
+            "unlock": function () { return resources["money"] >= 2500 && buildings["bank"].amount > 20; },
+            "purchase": function () { /* When bought, turn all mines off, increase generation, and turn them back on again. Turns off first to get generation from them properly calculated */
+                buildings["bank"].price_ratio["money"] = (buildings["bank"].price_ratio["money"] - 1) * .7 + 1;
+                $("#building_bank > .tooltiptext").html(gen_building_tooltip("bank"));
+            },
+            "cost": {
+                "money": 3000,
+                "iron": 500,
+            },
+            "tooltip": "Banks are cheaper to buy.<br /> Costs 3000 money, 500 iron.",
+            "name": "Build a vault",
+            "image": "",
+        },
+
     };
 }
 
 
 function save() {
-    RESOURCE_TYPES.forEach(function (type) {
+    Object.keys(resources).forEach(function (type) {
         document.cookie = "res-" + type + "=" + resources[type].toString();
     });
     Object.keys(buildings).forEach(function (type) {
@@ -245,7 +341,7 @@ function load() {
         return "";
     }
     console.log("Loading resources...");
-    RESOURCE_TYPES.forEach(function (type) {
+    Object.keys(resources).forEach(function (type) {
         /* Store in temp string because we need to check if it exists */
         let temp_str = getCookie("res-" + type);
         if (temp_str !== "") {
@@ -322,9 +418,9 @@ function update() {
     Object.keys(resources).forEach(function (key) {
         resources[key] += resources_per_sec[key] * UPDATE_INTERVAL / 1000;
         /* Formats it so that it says "Resource name: amount" */
-        $("#" + key + " span").first().html((key.charAt(0).toUpperCase() + key.slice(1)).replace("_", " ") + ": " + Math.floor(resources[key]).toString() + "<br />");
+        $("#" + key + " span").first().html((key.charAt(0).toUpperCase() + key.slice(1)).replace("_", " ") + ": " + Math.max(0, Math.floor(resources[key])).toString() + "<br />");
         /* Same for tooltip */
-        $("#" + key + "_per_sec").text("Making " + resources_per_sec[key].toString() + " per second");
+        $("#" + key + "_per_sec").text("Making " + (Math.round(resources_per_sec[key] * 10) /10).toString() + " per second");
     });
     /* Check for negative resources */
     Object.keys(resources).forEach(function (res) { /* Loop through all resources, res is current checked resource */
@@ -373,7 +469,7 @@ function update_upgrade_list() {
         if (remaining_upgrades[upg_name].unlock()) {
             let upg_elem: string = "<li id=\"upgrade_" + upg_name +
                 "\" class=\"upgrade tooltip\" onclick=\"purchase_upgrade('" + upg_name + "')\" style='text-align: center'><span>" +
-                remaining_upgrades[upg_name].name + "<br /> <img src='" + remaining_upgrades[upg_name].image + "' alt='' style='width: 3em; height: 3em;' /></span><span class=\"tooltiptext\">" +
+                remaining_upgrades[upg_name].name + "<br /> <img src='" + remaining_upgrades[upg_name].image + "' alt='' style='width: 3em; height: 3em; float: bottom;' /></span><span class=\"tooltiptext\">" +
                 remaining_upgrades[upg_name].tooltip + "</span> </li>";
             $("#upgrades > ul").append(upg_elem);
         }
@@ -442,10 +538,10 @@ function purchase_upgrade(name: string) {
     });
 
     /* Do cleanup. Get benefit from having it, remove it from purchasable upgrades, add it to purchased upgrades, remove from page */
-    upg.purchase();
-    delete remaining_upgrades[name]
     purchased_upgrades.push(name);
+    delete remaining_upgrades[name]
     $("#upgrade_" + name).remove();
+    upg.purchase();
 }
 
 function random_title() {

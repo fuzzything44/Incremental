@@ -10,6 +10,9 @@
 </head>
 <body>
     <div id="resource_bar">
+        <span id="energy" class="tooltip hidden" style="color: gold"><span>Energy: 0<br /></span><span id="energy_per_sec" class="tooltiptext">Making 1 per second.</span></span>
+        <span id="mana" class="tooltip hidden" style="color: mediumpurple"><span>Mana: 0<br /></span><span id="mana_per_sec" class="tooltiptext">Making 1 per second.</span></span>
+
         <span id="money" class="tooltip hidden"><span>Money: 0<br /></span><span id="money_per_sec" class="tooltiptext">Making 1 per second.</span></span>
         <span id="stone" class="tooltip hidden"><span>Stone: 0<br /></span><span id="stone_per_sec" class="tooltiptext">Making 0 per second.</span></span>
         <span id="wood" class="tooltip hidden"><span>Wood: 0<br /></span><span id="wood_per_sec" class="tooltiptext">Making 0 per second.</span></span>
@@ -19,6 +22,7 @@
         <span id="gold" class="tooltip hidden"><span>Gold: 0<br /></span><span id="gold_per_sec" class="tooltiptext">Making 1 per second.</span></span>
         <span id="diamond" class="tooltip hidden"><span>Diamond: 0<br /></span><span id="diamond_per_sec" class="tooltiptext">Making 1 per second.</span></span>
         <span id="jewelry" class="tooltip hidden"><span>Jewelry: 0<br /></span><span id="jewelry_per_sec" class="tooltiptext">Making 1 per second.</span></span>
+        <span id="oil" class="tooltip hidden"><span>Oil: 0<br /></span><span id="oil_per_sec" class="tooltiptext">Making 1 per second.</span></span>
 
     </div>
     <div id="buildings">
@@ -53,6 +57,14 @@
         <div style="position: relative" class="hidden">
             <span id="building_jewelry_store" class="building tooltip" onclick="purchase_building('jewelry_store');"><span class="building_name">Jewelry Store</span><span class="building_amount">0</span><span class="tooltiptext">Generates -1 jewelry per second, 500 money per second.<br /> Costs 5000 money, 500 stone, 500 wood.</span></span>
             <span id="toggle_jewelry_store" class="building_state_on" onclick="toggle_building_state('jewelry_store')">On</span>
+        </div>
+        <div style="position: relative" class="hidden">
+            <span id="building_oil_well" class="building tooltip" onclick="purchase_building('oil_well');"><span class="building_name">Oil Well</span><span class="building_amount">0</span><span class="tooltiptext">Generates 1 oil per second.<br /> Costs 1000 money, 100 stone, 500 iron.</span></span>
+            <span id="toggle_oil_well" class="building_state_on" onclick="toggle_building_state('oil_well')">On</span>
+        </div>
+        <div style="position: relative" class="hidden">
+            <span id="building_oil_engine" class="building tooltip" onclick="purchase_building('oil_engine');"><span class="building_name">Oil-burning Engine</span><span class="building_amount">0</span><span class="tooltiptext">Generates -1 oil per second, 1 energy per second.<br /> Costs 500 money, 200 iron.</span></span>
+            <span id="toggle_oil_engine" class="building_state_on" onclick="toggle_building_state('oil_engine')">On</span>
         </div>
     </div>
     <div id="upgrades">
