@@ -1,4 +1,5 @@
 // <reference path ="/jquery-3.2.1.js"/>
+var RESOURCE_TYPES = ["money", "stone", "wood", "iron_ore", "coal", "iron", "gold", "diamond", "jewelry"];
 var resources = {
     "money": 10,
     "stone": 0,
@@ -164,8 +165,14 @@ var buildings = {
     },
 };
 function save() {
-    document.cookie = "resources=" + JSON.stringify(resources);
-    document.cookie = "buildings=" + JSON.stringify(buildings);
+    RESOURCE_TYPES.forEach(function (type) {
+        document.cookie = "res-" + type + "=" + resources[type].toString();
+    });
+    Object.keys(buildings).forEach(function (type) {
+        document.cookie = "build-" + type + "=" + JSON.stringify(buildings[type]);
+    });
+    document.cookie = "save_version=1";
+    document.cookie = "expires=Fri, 31 Dec 9999 23:59:59 GMT";
     console.log("Saved");
 }
 function load() {
@@ -183,12 +190,25 @@ function load() {
                 return c.substring(name.length, c.length);
             }
         }
-        throw Error("Oops!");
+        return "";
     }
     console.log("Loading resources...");
-    resources = JSON.parse(getCookie("resources"));
+    RESOURCE_TYPES.forEach(function (type) {
+        /* Store in temp string because we need to check if it exists */
+        var temp_str = getCookie("res-" + type);
+        if (temp_str !== "") {
+            resources[type] = parseFloat(temp_str);
+        }
+    });
     console.log("Loading buildings...");
-    buildings = JSON.parse(getCookie("buildings"));
+    Object.keys(buildings).forEach(function (type) {
+        var temp_str = getCookie("build-" + type);
+        if (temp_str !== "") {
+            buildings[type] = JSON.parse(temp_str);
+            /* Show how many buildings they have */
+            $('#building_' + type + " > .building_amount").html(buildings[type].amount.toString());
+        }
+    });
     /* Recalculate earnings. Loop through each building */
     Object.keys(buildings).forEach(function (name) {
         /* See if it's on */
@@ -198,6 +218,11 @@ function load() {
                 /* And increase production */
                 resources_per_sec[key] += buildings[name].amount * buildings[name].generation[key];
             });
+        }
+        else {
+            $("#toggle_" + name).addClass("building_state_off");
+            $("#toggle_" + name).removeClass("building_state_on");
+            $("#toggle_" + name).text("Off");
         }
     });
 }
@@ -289,7 +314,9 @@ function purchase_building(name) {
     var gen_text = "Generates ";
     /* Add resource gen, update how much each one generates. */
     Object.keys(buildings[name].generation).forEach(function (key) {
-        resources_per_sec[key] += buildings[name].generation[key];
+        if (buildings[name].on) {
+            resources_per_sec[key] += buildings[name].generation[key];
+        }
         gen_text += Math.round((buildings[name].generation[key]) * 10) / 10 + " " + key.replace("_", " ") + " per second, ";
     });
     var cost_text = "Costs ";
@@ -305,12 +332,7 @@ function random_title() {
     document.title = TITLES.filter(function (item) { return item !== document.title; })[Math.floor(Math.random() * (TITLES.length - 1))];
 }
 window.onload = function () {
-    try {
-        load();
-    }
-    catch (Error) {
-        console.error("Oops!");
-    }
+    load();
     setInterval(update, UPDATE_INTERVAL);
     setInterval(save, 15000);
     random_title();
