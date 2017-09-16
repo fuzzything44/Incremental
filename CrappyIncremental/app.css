@@ -76,8 +76,9 @@
 
 .upgrade {
     border-radius: 3px;
-    height: 5em;
-    width: 5em;
+    height: 6em;
+    width: 6em;
+    background-color: #222;
 }
 
 #reset {

@@ -186,6 +186,28 @@ function set_initial_state() {
             },
             "tooltip": "Mines produce double stone and 5x iron. <br /> Costs 100 money, 10 stone.",
             "name": "Improve Mines",
+            "image": "images/pickaxe.png",
+        },
+        "better_compressors": {
+            "unlock": function () { return buildings["compressor"].amount >= 3; },
+            "purchase": function () { /* When bought, turn all mines off, increase generation, and turn them back on again. Turns off first to get generation from them properly calculated */
+                let comp_state = buildings["compressor"].on;
+                if (comp_state) {
+                    toggle_building_state("mine");
+
+                }
+                buildings["compressor"]["generation"]["coal"] *= 0.7;
+                if (comp_state) { /* Only turn on if it already was on */
+                    toggle_building_state("compressor");
+                }
+                $("#building_compressor > .tooltiptext").html(gen_building_tooltip("compressor"));
+            },
+            "cost": {
+                "money": 100,
+                "iron": 100,
+            },
+            "tooltip": "Compressors use 30% less coal. <br /> Costs 100 money, 100 iron.",
+            "name": "Improve Compressors",
             "image": "",
         },
     };
@@ -242,7 +264,12 @@ function load() {
         }
     });
     console.log("Loading upgrades...");
-    purchased_upgrades = JSON.parse(getCookie("upgrades"));
+    if (getCookie("upgrades") == "") {
+        purchased_upgrades = [];
+    } else {
+        purchased_upgrades = JSON.parse(getCookie("upgrades"));
+
+    }
     purchased_upgrades.forEach(function (upg) {
         delete remaining_upgrades[upg]; /* They shouldn't be able to get the same upgrade twice, so delete what was bought. */
     });
@@ -345,8 +372,8 @@ function update_upgrade_list() {
     Object.keys(remaining_upgrades).forEach(function (upg_name) {
         if (remaining_upgrades[upg_name].unlock()) {
             let upg_elem: string = "<li id=\"upgrade_" + upg_name +
-                "\" class=\"upgrade tooltip\" onclick=\"purchase_upgrade('" + upg_name + "')\"><span>" +
-                remaining_upgrades[upg_name].name + "</span><span class=\"tooltiptext\">" +
+                "\" class=\"upgrade tooltip\" onclick=\"purchase_upgrade('" + upg_name + "')\" style='text-align: center'><span>" +
+                remaining_upgrades[upg_name].name + "<br /> <img src='" + remaining_upgrades[upg_name].image + "' alt='' style='width: 3em; height: 3em;' /></span><span class=\"tooltiptext\">" +
                 remaining_upgrades[upg_name].tooltip + "</span> </li>";
             $("#upgrades > ul").append(upg_elem);
         }
