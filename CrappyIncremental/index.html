@@ -55,5 +55,14 @@
             <span id="toggle_jewelry_store" class="building_state_on" onclick="toggle_building_state('jewelry_store')">On</span>
         </div>
     </div>
+    <div id="upgrades">
+        <span id="reset" class="tooltip" onclick="if(confirm('Are you sure? This resets EVERYTHING!')) {set_initial_state(); save(); location.reload();}"><span>Reset</span><span class="tooltiptext">Resets ALL progress. There is NO bonus for this!</span></span>
+        <span id="save" onclick="save();">Save</span>
+        <ul>
+        </ul>
+
+
+
+    </div>
 </body>
 </html>

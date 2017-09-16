@@ -1,176 +1,195 @@
 ﻿// <reference path ="/jquery-3.2.1.js"/>
 
 const RESOURCE_TYPES = ["money", "stone", "wood", "iron_ore", "coal", "iron", "gold", "diamond", "jewelry"];
-var resources = {
-    "money": 10,
-    "stone": 0,
-    "wood": 0,
-    "iron_ore": 0,
-    "coal": 0,
-    "iron": 0,
-    "gold": 0,
-    "diamond": 0,
-    "jewelry": 0,
-};
+var resources = {};
+var resources_per_sec = {};
+var buildings = {};
+var purchased_upgrades = []; /* Names of all purchased upgrades */
+var remaining_upgrades = {}; /* All remaining upgrades that need to be purchased */
 
-var resources_per_sec = {
-    "money": 0,
-    "stone": 0,
-    "wood": 0,
-    "iron_ore": 0,
-    "coal": 0,
-    "iron": 0,
-    "gold": 0,
-    "diamond": 0,
-    "jewelry": 0,
+function set_initial_state() {
+    resources = {
+        "money": 10,
+        "stone": 0,
+        "wood": 0,
+        "iron_ore": 0,
+        "coal": 0,
+        "iron": 0,
+        "gold": 0,
+        "diamond": 0,
+        "jewelry": 0,
+    };
+    resources_per_sec = JSON.parse(JSON.stringify(resources)) /* Not just a simple assignment. We want a deep copy */
+    resources_per_sec["money"] = 0;
+    buildings = {
+        "bank": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 10,
+            },
+            "price_ratio": {
+                "money": 1.1,
+            },
+            "generation": {
+                "money": 1,
+            },
+            "unlocks": ["mine", "logging"],
+        },
+        "mine": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 20,
+            },
+            "price_ratio": {
+                "money": 1.2,
+            },
+            "generation": {
+                "money": -1,
+                "stone": 1,
+                "iron_ore": 0.1,
+            },
+            "unlocks": ["furnace", "gold_finder"],
+        },
+        "logging": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 20,
+            },
+            "price_ratio": {
+                "money": 1.2,
+            },
+            "generation": {
+                "money": -1,
+                "wood": 1,
+                "coal": 0.1,
+            },
+            "unlocks": ["compressor"],
+        },
+        "furnace": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 15,
+                "stone": 30,
+            },
+            "price_ratio": {
+                "money": 1.1,
+                "stone": 1.2,
+            },
+            "generation": {
+                "iron": 1,
+                "coal": 1,
+                "wood": -5,
+                "iron_ore": -3,
+            },
+            "unlocks": [],
+        },
+        "compressor": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 100,
+                "stone": 500,
+                "iron": 200
+            },
+            "price_ratio": {
+                "money": 1.3,
+                "stone": 1.3,
+                "iron": 1.2,
+            },
+            "generation": {
+                "diamond": 0.1,
+                "coal": -10,
+            },
+            "unlocks": [],
+        },
+        "gold_finder": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 100,
+                "stone": 500,
+                "wood": 200
+            },
+            "price_ratio": {
+                "money": 1.3,
+                "stone": 1.3,
+                "wood": 1.2,
+            },
+            "generation": {
+                "gold": 0.1,
+                "stone": -20,
+            },
+            "unlocks": ["jeweler"],
+        },
+        "jeweler": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 200,
+                "stone": 750,
+            },
+            "price_ratio": {
+                "money": 1.3,
+                "stone": 1.3,
+            },
+            "generation": {
+                "gold": -3,
+                "diamond": -1,
+                "jewelry": 1,
+            },
+            "unlocks": ["jewelry_store"],
+        },
+        "jewelry_store": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 5000,
+                "stone": 500,
+                "wood": 500
+            },
+            "price_ratio": {
+                "money": 1.5,
+                "stone": 1.4,
+                "wood": 1.4,
+            },
+            "generation": {
+                "jewelry": -1,
+                "money": 500,
+            },
+            "unlocks": [],
+        },
+    };
+    purchased_upgrades = [];
+    remaining_upgrades = {
+        "better_mines": {
+            "unlock": function () { return buildings["mine"].amount >= 3; },
+            "purchase": function () { /* When bought, turn all mines off, increase generation, and turn them back on again. Turns off first to get generation from them properly calculated */
+                let mines_state = buildings["mine"].on;
+                if (mines_state) {
+                    toggle_building_state("mine");
 
-};
-
-var buildings = {
-    "bank": {
-        "on": true,
-        "amount" : 0,
-        "base_cost": {
-            "money" : 10,
+                }
+                buildings["mine"]["generation"]["stone"] *= 2;
+                buildings["mine"]["generation"]["iron_ore"] *= 5;
+                if (mines_state) { /* Only turn on if it already was on */
+                    toggle_building_state("mine");
+                }
+                $("#building_mine > .tooltiptext").html(gen_building_tooltip("mine"));
+            },
+            "cost": {
+                "money": 100,
+                "stone": 10,
+            },
+            "tooltip": "Mines produce double stone and 5x iron. <br /> Costs 100 money, 10 stone.",
+            "name": "Improve Mines",
+            "image": "",
         },
-        "price_ratio": {
-            "money" : 1.1,
-        },
-        "generation": {
-            "money" : 1,
-        },
-        "unlocks": ["mine", "logging"],
-    },
-    "mine": {
-        "on": true,
-        "amount": 0,
-        "base_cost": {
-            "money": 20,
-        },
-        "price_ratio": {
-            "money": 1.2,
-        },
-        "generation": {
-            "money": -1,
-            "stone": 1,
-            "iron_ore": 0.1,
-        },
-        "unlocks": ["furnace", "gold_finder"],
-    },
-    "logging": {
-        "on": true,
-        "amount": 0,
-        "base_cost": {
-            "money": 20,
-        },
-        "price_ratio": {
-            "money": 1.2,
-        },
-        "generation": {
-            "money": -1,
-            "wood": 1,
-            "coal": 0.1,
-        },
-        "unlocks": ["compressor"],
-    },
-    "furnace": {
-        "on": true,
-        "amount": 0,
-        "base_cost": {
-            "money": 15,
-            "stone": 30,
-        },
-        "price_ratio": {
-            "money": 1.1,
-            "stone": 1.2,
-        },
-        "generation": {
-            "iron": 1,
-            "coal": 1,
-            "wood": -5,
-            "iron_ore": -3,
-        },
-        "unlocks": [],
-    },
-    "compressor": {
-        "on": true,
-        "amount": 0,
-        "base_cost": {
-            "money": 100,
-            "stone": 500,
-            "iron" : 200
-        },
-        "price_ratio": {
-            "money": 1.3,
-            "stone": 1.3,
-            "iron" : 1.2,
-        },
-        "generation": {
-            "diamond": 0.1,
-            "coal": -10,
-        },
-        "unlocks": [],
-    },
-    "gold_finder": {
-        "on": true,
-        "amount": 0,
-        "base_cost": {
-            "money": 100,
-            "stone": 500,
-            "wood": 200
-        },
-        "price_ratio": {
-            "money": 1.3,
-            "stone": 1.3,
-            "wood": 1.2,
-        },
-        "generation": {
-            "gold": 0.1,
-            "stone": -20,
-        },
-        "unlocks": ["jeweler"],
-    },
-    "jeweler": {
-        "on": true,
-        "amount": 0,
-        "base_cost": {
-            "money": 200,
-            "stone": 750,
-        },
-        "price_ratio": {
-            "money": 1.3,
-            "stone": 1.3,
-        },
-        "generation": {
-            "gold": -3,
-            "diamond": -1,
-            "jewelry": 1,
-        },
-        "unlocks": ["jewelry_store"],
-    },
-    "jewelry_store": {
-        "on": true,
-        "amount": 0,
-        "base_cost": {
-            "money": 5000,
-            "stone": 500,
-            "wood": 500
-        },
-        "price_ratio": {
-            "money": 1.5,
-            "stone": 1.4,
-            "wood": 1.4,
-        },
-        "generation": {
-            "jewelry": -1,
-            "money": 500,
-        },
-        "unlocks": [],
-    },
-};
-
-
-
+    };
+}
 
 
 function save() {
@@ -180,6 +199,7 @@ function save() {
     Object.keys(buildings).forEach(function (type) {
         document.cookie = "build-" + type + "=" + JSON.stringify(buildings[type]);
     });
+    document.cookie = "upgrades=" + JSON.stringify(purchased_upgrades);
     document.cookie = "save_version=1";
     document.cookie = "expires=Fri, 31 Dec 9999 23:59:59 GMT"
     console.log("Saved");
@@ -215,10 +235,18 @@ function load() {
         let temp_str = getCookie("build-" + type);
         if (temp_str !== "") {
             buildings[type] = JSON.parse(temp_str);
-            /* Show how many buildings they have */
+            /* Show how many buildings they have and set tooltip properly */
             $('#building_' + type + " > .building_amount").html(buildings[type].amount.toString());
+            $('#building_' + type + " > .tooltiptext").html(gen_building_tooltip(type));
+
         }
     });
+    console.log("Loading upgrades...");
+    purchased_upgrades = JSON.parse(getCookie("upgrades"));
+    purchased_upgrades.forEach(function (upg) {
+        delete remaining_upgrades[upg]; /* They shouldn't be able to get the same upgrade twice, so delete what was bought. */
+    });
+
     /* Recalculate earnings. Loop through each building */
     Object.keys(buildings).forEach(function (name) {
         /* See if it's on */
@@ -306,6 +334,39 @@ function update() {
             $("#building_" + build).addClass("building_expensive");
         }
     });
+
+}
+
+/* Not in update as this could change a lot if they have too many unpurchased upgrades. */
+function update_upgrade_list() {
+    /* Remove old upgrade list */
+    $("#upgrades > ul").html('');
+    /* Loop through all remaining upgrades */
+    Object.keys(remaining_upgrades).forEach(function (upg_name) {
+        if (remaining_upgrades[upg_name].unlock()) {
+            let upg_elem: string = "<li id=\"upgrade_" + upg_name +
+                "\" class=\"upgrade tooltip\" onclick=\"purchase_upgrade('" + upg_name + "')\"><span>" +
+                remaining_upgrades[upg_name].name + "</span><span class=\"tooltiptext\">" +
+                remaining_upgrades[upg_name].tooltip + "</span> </li>";
+            $("#upgrades > ul").append(upg_elem);
+        }
+    });
+}
+
+function gen_building_tooltip(name: string) {
+    let gen_text: string = "Generates ";
+    /* Add resource gen, update how much each one generates. */
+    Object.keys(buildings[name].generation).forEach(function (key) {
+        gen_text += Math.round((buildings[name].generation[key]) * 10) / 10 + " " + key.replace("_", " ") + " per second, "
+    });
+
+    let cost_text: string = "Costs ";
+    Object.keys(buildings[name].base_cost).forEach(function (key) {
+        cost_text += Math.ceil(buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount)).toString();
+        cost_text += " " + key + ", ";
+    });
+
+    return gen_text.trim().replace(/.$/, ".") + "<br />" + cost_text.trim().replace(/.$/, ".");
 }
 
 function purchase_building(name: string) {
@@ -323,30 +384,41 @@ function purchase_building(name: string) {
         resources[key] -= buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount); 
     });
 
-    buildings[name].amount++;
-    $('#building_' + name + " > .building_amount").html(buildings[name].amount.toString());
-
-    let gen_text: string = "Generates ";
-    /* Add resource gen, update how much each one generates. */
+    /* Add resource gen */
     Object.keys(buildings[name].generation).forEach(function (key) {
         if (buildings[name].on) { /* Only add resources per sec if on */
             resources_per_sec[key] += buildings[name].generation[key];
-        }    
-        gen_text += Math.round((buildings[name].generation[key])* 10) / 10 + " " + key.replace("_", " ") + " per second, "
+        }
     });
 
-    let cost_text: string = "Costs ";
-    Object.keys(buildings[name].base_cost).forEach(function (key) {
-        cost_text += Math.ceil(buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount)).toString();
-        cost_text += " " + key + ", ";
+    buildings[name].amount++;
+    $('#building_' + name + " > .building_amount").html(buildings[name].amount.toString());
+
+    $('#building_' + name + " > .tooltiptext").html(gen_building_tooltip(name));
+
+
+}
+
+function purchase_upgrade(name: string) {
+    let upg = remaining_upgrades[name];
+
+    /* Check that they have enough */
+    Object.keys(upg.cost).forEach(function (resource) {
+        if (resources[resource] < upg.cost[resource]) { /* Don't have enough to buy upgrade */
+            throw Error("Not enough resources!");
+        }
     });
 
-    $('#building_' + name + " > .tooltiptext").html(
-        gen_text.trim().replace(/.$/, ".") + "<br />" +
-        cost_text.trim().replace(/.$/, ".")
-    );
+    /* Spend it */
+    Object.keys(upg.cost).forEach(function (resource) {
+        resources[resource] -= upg.cost[resource];
+    });
 
-
+    /* Do cleanup. Get benefit from having it, remove it from purchasable upgrades, add it to purchased upgrades, remove from page */
+    upg.purchase();
+    delete remaining_upgrades[name]
+    purchased_upgrades.push(name);
+    $("#upgrade_" + name).remove();
 }
 
 function random_title() {
@@ -355,9 +427,14 @@ function random_title() {
 
 }
 window.onload = () => {
+    set_initial_state();
     load();
     setInterval(update, UPDATE_INTERVAL);
     setInterval(save, 15000);
+
+    update_upgrade_list();
+    setInterval(update_upgrade_list, 500);
+
     random_title();
     setInterval(random_title, 60000);
 };
