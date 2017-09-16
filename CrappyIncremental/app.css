@@ -1,7 +1,103 @@
 ﻿body {
     font-family: 'Segoe UI', sans-serif;
+    background-color: black;
+    color: lightgray;
+    
 }
 
-span {
-    font-style: italic;
+#resource_bar {
+    width: 20em;
+    max-width: 20em;
+    min-width: 20em;
+    border: 1px solid lightgray;
+    border-radius: 3px;
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    position: absolute;
+    top: 1em;
+    left: 1em;
+    
+}
+
+#buildings {
+    position: absolute;
+    top: 1em;
+    left: 22em;
+
+}
+
+.building {
+    border-radius: 3px;
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    border: 1px solid lightgray;
+    display: block;
+
+        width: 20em;
+    max-width: 20em;
+    min-width: 20em;
+}
+
+.building_state_on {
+    background-color: green;
+    position: absolute;
+    border: solid green 1px;
+    border-radius: 3px;
+    left: 21em;
+    top: 0em;
+
+}
+
+.building_state_off {
+    background-color: red;
+    position: absolute;
+    border: solid red 1px;
+    border-radius: 3px;
+    left: 21em;
+    top: 0em;
+
+}
+
+.building_expensive {
+    color: red;
+}
+
+.building_amount {
+    text-align: right;
+    float: right;
+}
+::selection {
+    background-color: inherit;
+}
+
+/* Tooltip container */
+.tooltip {
+    position: relative;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 15em;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 3px;
+
+    /* Position the tooltip text */
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    left: 50%;
+
+}
+
+.hidden {
+    display: none;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
 }

@@ -1,5 +1,4 @@
-﻿// <reference path ="/jquery-3.2.1.js"/>
-
+// <reference path ="/jquery-3.2.1.js"/>
 var resources = {
     "money": 10,
     "stone": 0,
@@ -11,7 +10,6 @@ var resources = {
     "diamond": 0,
     "jewelry": 0,
 };
-
 var resources_per_sec = {
     "money": 0,
     "stone": 0,
@@ -22,21 +20,19 @@ var resources_per_sec = {
     "gold": 0,
     "diamond": 0,
     "jewelry": 0,
-
 };
-
 var buildings = {
     "bank": {
         "on": true,
-        "amount" : 0,
+        "amount": 0,
         "base_cost": {
-            "money" : 10,
+            "money": 10,
         },
         "price_ratio": {
-            "money" : 1.1,
+            "money": 1.1,
         },
         "generation": {
-            "money" : 1,
+            "money": 1,
         },
         "unlocks": ["mine", "logging"],
     },
@@ -97,12 +93,12 @@ var buildings = {
         "base_cost": {
             "money": 100,
             "stone": 500,
-            "iron" : 200
+            "iron": 200
         },
         "price_ratio": {
             "money": 1.3,
             "stone": 1.3,
-            "iron" : 1.2,
+            "iron": 1.2,
         },
         "generation": {
             "diamond": 0.1,
@@ -167,24 +163,18 @@ var buildings = {
         "unlocks": [],
     },
 };
-
-
-
-
-
 function save() {
     document.cookie = "resources=" + JSON.stringify(resources);
     document.cookie = "buildings=" + JSON.stringify(buildings);
     console.log("Saved");
 }
-
 function load() {
     function getCookie(cname) {
-        let name = cname + "=";
-        let decodedCookie = decodeURIComponent(document.cookie);
-        let ca = decodedCookie.split(';');
-        for (let i = 0; i < ca.length; i++) {
-            let c = ca[i];
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
             while (c.charAt(0) == ' ') {
                 c = c.substring(1);
             }
@@ -211,9 +201,8 @@ function load() {
         }
     });
 }
-
-function toggle_building_state(name: string) {
-    if (buildings[name].on) { /* Turn it off */
+function toggle_building_state(name) {
+    if (buildings[name].on) {
         buildings[name].on = false;
         /* Go through each resource it generates... */
         Object.keys(buildings[name].generation).forEach(function (key) {
@@ -223,7 +212,8 @@ function toggle_building_state(name: string) {
         $("#toggle_" + name).addClass("building_state_off");
         $("#toggle_" + name).removeClass("building_state_on");
         $("#toggle_" + name).text("Off");
-    } else { /* Turn it on */
+    }
+    else {
         buildings[name].on = true;
         /* Go through each resource it generates... */
         Object.keys(buildings[name].generation).forEach(function (key) {
@@ -235,9 +225,7 @@ function toggle_building_state(name: string) {
         $("#toggle_" + name).text("On");
     }
 }
-
-
-const UPDATE_INTERVAL = 35;
+var UPDATE_INTERVAL = 35;
 function update() {
     /* Update all resources */
     Object.keys(resources).forEach(function (key) {
@@ -248,18 +236,18 @@ function update() {
         $("#" + key + "_per_sec").text("Making " + resources_per_sec[key].toString() + " per second");
     });
     /* Check for negative resources */
-    Object.keys(resources).forEach(function (res) { /* Loop through all resources, res is current checked resource */
+    Object.keys(resources).forEach(function (res) {
         if (resources[res] > 0) {
             /* Unhide resources we have */
             $("#" + res).removeClass("hidden");
         }
         if (resources[res] <= 0) {
             /* Check all buildings */
-            Object.keys(buildings).forEach(function (build) { /* Loop through all buildings, build is current checked building */
+            Object.keys(buildings).forEach(function (build) {
                 /* Check resource gen */
-               if (buildings[build].generation[res] < 0 && buildings[build].on && buildings[build].amount > 0) {
-                   toggle_building_state(build);
-               }
+                if (buildings[build].generation[res] < 0 && buildings[build].on && buildings[build].amount > 0) {
+                    toggle_building_state(build);
+                }
             });
         }
     });
@@ -270,7 +258,6 @@ function update() {
                 $("#building_" + unlock).parent().removeClass("hidden");
             });
         }
-
         try {
             Object.keys(buildings[build].base_cost).forEach(function (key) {
                 if (buildings[build].base_cost[key] * Math.pow(buildings[build].price_ratio[key], buildings[build].amount) > resources[key]) {
@@ -278,13 +265,13 @@ function update() {
                 }
             });
             $("#building_" + build).removeClass("building_expensive");
-        } catch (e) {
+        }
+        catch (e) {
             $("#building_" + build).addClass("building_expensive");
         }
     });
 }
-
-function purchase_building(name: string) {
+function purchase_building(name) {
     /* Make sure they have enough to buy it */
     Object.keys(buildings[name].base_cost).forEach(function (key) {
         console.log("Checking money");
@@ -292,50 +279,41 @@ function purchase_building(name: string) {
             throw Error("Not enough resources!");
         }
     });
-
     /* Spend money to buy */
     Object.keys(buildings[name].base_cost).forEach(function (key) {
         console.log("Spending money");
-        resources[key] -= buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount); 
+        resources[key] -= buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount);
     });
-
     buildings[name].amount++;
     $('#building_' + name + " > .building_amount").html(buildings[name].amount.toString());
-
-    let gen_text: string = "Generates ";
+    var gen_text = "Generates ";
     /* Add resource gen, update how much each one generates. */
     Object.keys(buildings[name].generation).forEach(function (key) {
         resources_per_sec[key] += buildings[name].generation[key];
-        gen_text += Math.round((buildings[name].generation[key])* 10) / 10 + " " + key.replace("_", " ") + " per second, "
+        gen_text += Math.round((buildings[name].generation[key]) * 10) / 10 + " " + key.replace("_", " ") + " per second, ";
     });
-
-    let cost_text: string = "Costs ";
+    var cost_text = "Costs ";
     Object.keys(buildings[name].base_cost).forEach(function (key) {
         cost_text += Math.ceil(buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount)).toString();
         cost_text += " " + key + ", ";
     });
-
-    $('#building_' + name + " > .tooltiptext").html(
-        gen_text.trim().replace(/.$/, ".") + "<br />" +
-        cost_text.trim().replace(/.$/, ".")
-    );
-
-
+    $('#building_' + name + " > .tooltiptext").html(gen_text.trim().replace(/.$/, ".") + "<br />" +
+        cost_text.trim().replace(/.$/, "."));
 }
-
 function random_title() {
-    const TITLES = ["CrappyClicker v.π²", "Drink Your Ovaltine!", "(!) Not Responding            (I lied)", "17 New Resources That Will Blow Your Mind!", "Ÿ̛̦̯ͬ̔̾̃ͥ͑o͋ͩ̽̓͋̚͘҉̧̰u͚̼̜̞͉͓̹ͦ͒͌̀ ̄͋̉̓҉̖̖̠̤ņ͔̄͟͟e̦̝̻̼̖͖͋̓̔̓͒ͬe̷͈̗̻̘̩̙̖͗ͫͭͮ͌̃́ͬ̔d̥̞ͨ̏͗͆̉ͩ ̨̟̭̻͔̰͓͍̤͍̀ͤͤ̎͐͘͠m͙͈͖̱͍̖̤͑̃͐͋ͪ̐ͯ̏͘ͅȍ̼̭̦͚̥̜͉̥̱ͬ͞r̥̣̰͈̻̰ͮ̓̚e̳͊ͯ͞ ̏ͯ̈́҉̛̮͚̖͈̼g̩͖̙̞̮̟̍ͦͫ̓ͭͥ̀o̧̻̞̰͉̤͇̭̘͓ͨ̆̔ͨl̴͕͉̦̩̟̤̰̃͋̃̉̓͌ͪ͌ͩd̢̨̲̻̿ͫ"];
-    document.title = TITLES.filter(item => item !== document.title)[Math.floor(Math.random() * (TITLES.length - 1))];
-
+    var TITLES = ["CrappyClicker v.π²", "Drink Your Ovaltine!", "(!) Not Responding            (I lied)", "17 New Resources That Will Blow Your Mind!", "Ÿ̛̦̯ͬ̔̾̃ͥ͑o͋ͩ̽̓͋̚͘҉̧̰u͚̼̜̞͉͓̹ͦ͒͌̀ ̄͋̉̓҉̖̖̠̤ņ͔̄͟͟e̦̝̻̼̖͖͋̓̔̓͒ͬe̷͈̗̻̘̩̙̖͗ͫͭͮ͌̃́ͬ̔d̥̞ͨ̏͗͆̉ͩ ̨̟̭̻͔̰͓͍̤͍̀ͤͤ̎͐͘͠m͙͈͖̱͍̖̤͑̃͐͋ͪ̐ͯ̏͘ͅȍ̼̭̦͚̥̜͉̥̱ͬ͞r̥̣̰͈̻̰ͮ̓̚e̳͊ͯ͞ ̏ͯ̈́҉̛̮͚̖͈̼g̩͖̙̞̮̟̍ͦͫ̓ͭͥ̀o̧̻̞̰͉̤͇̭̘͓ͨ̆̔ͨl̴͕͉̦̩̟̤̰̃͋̃̉̓͌ͪ͌ͩd̢̨̲̻̿ͫ"];
+    document.title = TITLES.filter(function (item) { return item !== document.title; })[Math.floor(Math.random() * (TITLES.length - 1))];
 }
-window.onload = () => {
+window.onload = function () {
     try {
         load();
-    } catch (Error) {
-        console.error("Oops!", )
+    }
+    catch (Error) {
+        console.error("Oops!");
     }
     setInterval(update, UPDATE_INTERVAL);
     setInterval(save, 15000);
     random_title();
     setInterval(random_title, 60000);
 };
+//# sourceMappingURL=app.js.map
