@@ -6,6 +6,8 @@ var buildings = {};
 var purchased_upgrades = []; /* Names of all purchased upgrades */
 var remaining_upgrades = {}; /* All remaining upgrades that need to be purchased */
 const UNLOCK_TREE = { /* What buildings unlock */
+    "s_manastone": [],
+
     "bank": ["mine", "logging"],
     "mine": ["furnace", "gold_finder"],
     "logging": ["compressor"],
@@ -37,6 +39,16 @@ function set_initial_state() {
     resources_per_sec = JSON.parse(JSON.stringify(resources)) /* Not just a simple assignment. We want a deep copy */
     resources_per_sec["money"] = 0;
     buildings = {
+        "s_manastone": {
+            "on": true,
+            "amount": 0,
+            "base_cost": { "mana": Infinity },
+            "price_ratio": { "mana" : 1 },
+            "generation": {
+                "mana": 1,
+            },
+        },
+
         "bank": {
             "on": true,
             "amount": 0,
@@ -92,10 +104,10 @@ function set_initial_state() {
                 "stone": 1.2,
             },
             "generation": {
-                "iron": 1,
-                "coal": 1,
                 "wood": -5,
                 "iron_ore": -3,
+                "iron": 1,
+                "coal": 1,
             },
         },
         "compressor": {
@@ -112,8 +124,8 @@ function set_initial_state() {
                 "iron": 1.2,
             },
             "generation": {
-                "diamond": 0.1,
                 "coal": -10,
+                "diamond": 0.1,
             },
         },
         "gold_finder": {
@@ -130,8 +142,8 @@ function set_initial_state() {
                 "wood": 1.2,
             },
             "generation": {
-                "gold": 0.1,
                 "stone": -20,
+                "gold": 0.1,
             },
         },
         "jeweler": {
@@ -248,7 +260,7 @@ function set_initial_state() {
             },
             "tooltip": "Mines produce coal.<br /> Costs 100 money, 100 wood.",
             "name": "Coal Mining <br />",
-            "image": "images/pickaxe.png",
+            "image": "pickaxe.png",
         },
         "better_compressors": {
             "unlock": function () { return buildings["compressor"].amount >= 1; },
@@ -270,7 +282,7 @@ function set_initial_state() {
             },
             "tooltip": "Compressors use 30% less coal. <br /> Costs 100 money, 100 iron.",
             "name": "Improve Compressors",
-            "image": "",
+            "image": "diamond.png",
         },
         "oiled_compressors": {
             "unlock": function () { return buildings["compressor"].amount >= 1 && resources["oil"] > 20; },
@@ -290,7 +302,7 @@ function set_initial_state() {
             },
             "tooltip": "Oil your compressors to have them run more efficiently. <br /> Costs 50 oil.",
             "name": "Oil Compressors",
-            "image": "",
+            "image": "diamond.png",
         },
 
         "cheaper_banks": {
@@ -304,13 +316,29 @@ function set_initial_state() {
                 "iron": 500,
             },
             "tooltip": "Banks are cheaper to buy.<br /> Costs 3000 money, 500 iron.",
-            "name": "Build a vault",
-            "image": "",
+            "name": "Build a vault <br />",
+            "image": "money.png",
         },
 
     };
 }
 
+function prestige() {
+    /* Calculate mana gain */
+    /* First turn off all spells. TODO when spells exist */
+    let total_mana = resources["mana"] + Math.log((resources["money"] + resources["stone"] * .5 + resources["wood"] * .5 + resources["gold"] * 75 + resources["diamond"] * 100 + resources["jewelry"] * 400) / 10000 + 1);
+    total_mana = Math.max(0, Math.floor(total_mana)); /* Bound mana nicely as nonnegative integer */
+    if (total_mana == 0) {
+        alert("You wouldn't gain any mana from resetting now!");
+        return;
+    }
+    if (confirm("You will lose all resources and all buildings but have " + total_mana.toString() + " mana after reset. Proceed?")) {
+        set_initial_state();
+        resources_per_sec["mana"] = total_mana;
+        buildings["s_manastone"].amount = total_mana;
+        $("#spells").removeClass("hidden");
+    }
+}
 
 function save() {
     Object.keys(resources).forEach(function (type) {
@@ -361,12 +389,14 @@ function load() {
 
         }
     });
+    if (buildings["s_manastone"].amount > 0) {
+        $("#spells").removeClass("hidden");
+    }
     console.log("Loading upgrades...");
     if (getCookie("upgrades") == "") {
         purchased_upgrades = [];
     } else {
         purchased_upgrades = JSON.parse(getCookie("upgrades"));
-
     }
     purchased_upgrades.forEach(function (upg) {
         delete remaining_upgrades[upg]; /* They shouldn't be able to get the same upgrade twice, so delete what was bought. */
@@ -476,7 +506,7 @@ function update_upgrade_list() {
         if (remaining_upgrades[upg_name].unlock()) {
             let upg_elem: string = "<li id=\"upgrade_" + upg_name +
                 "\" class=\"upgrade tooltip\" onclick=\"purchase_upgrade('" + upg_name + "')\" style='text-align: center'><span>" +
-                remaining_upgrades[upg_name].name + "<br /> <img src='" + remaining_upgrades[upg_name].image + "' alt='' style='width: 3em; height: 3em; float: bottom;' /></span><span class=\"tooltiptext\">" +
+                remaining_upgrades[upg_name].name + "<br /> <img src='images/" + remaining_upgrades[upg_name].image + "' alt='' style='width: 3em; height: 3em; float: bottom;' /></span><span class=\"tooltiptext\">" +
                 remaining_upgrades[upg_name].tooltip + "</span> </li>";
             $("#upgrades > ul").append(upg_elem);
         }

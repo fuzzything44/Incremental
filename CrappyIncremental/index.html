@@ -28,8 +28,7 @@
     <div id="buildings">
         <div id="spells" class="hidden">
             <div style="position: relative">
-                <span id="spell_cash" class="building tooltip" onclick="purchase_building('');" style="color: mediumpurple"><span class="building_name">MAGIC CASH SPELLS</span><span class="building_amount">0</span><span class="tooltiptext">Generates double money per second.</span></span>
-                <span id="toggle_s_cash" class="building_state_on" onclick="toggle_building_state('')">On</span>
+                <span id="building_s_manastone" class="building tooltip";" style="color: mediumpurple"><span class="building_name">Mana Stone</span><span class="building_amount">0</span><span class="tooltiptext">Generates 1 mana per second.</span></span>
             </div>
             <hr style="margin-top: .8em; margin-bottom: .8em;"/>
         </div>
@@ -77,6 +76,8 @@
     <div id="upgrades">
         <span id="reset" class="tooltip" onclick="if(confirm('Are you sure? This resets EVERYTHING!')) {set_initial_state(); save(); location.reload();}"><span>Reset</span><span class="tooltiptext">Resets ALL progress. There is NO bonus for this!</span></span>
         <span id="save" onclick="save();">Save</span>
+        <span id="prestige" onclick="prestige();">Prestige</span>
+
         <ul>
         </ul>
 

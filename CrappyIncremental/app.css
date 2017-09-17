@@ -95,6 +95,14 @@
     padding-right: .3em;
 }
 
+#prestige {
+    border: solid green 1px;
+    border-radius: 3px;
+    padding-left: .3em;
+    padding-right: .3em;
+}
+
+
 ul{
     list-style-type: none;
 }
