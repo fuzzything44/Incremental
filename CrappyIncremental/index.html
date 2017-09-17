@@ -26,6 +26,13 @@
 
     </div>
     <div id="buildings">
+        <div id="spells" class="hidden">
+            <div style="position: relative">
+                <span id="spell_cash" class="building tooltip" onclick="purchase_building('');" style="color: mediumpurple"><span class="building_name">MAGIC CASH SPELLS</span><span class="building_amount">0</span><span class="tooltiptext">Generates double money per second.</span></span>
+                <span id="toggle_s_cash" class="building_state_on" onclick="toggle_building_state('')">On</span>
+            </div>
+            <hr style="margin-top: .8em; margin-bottom: .8em;"/>
+        </div>
         <div style="position: relative">
             <span id="building_bank" class="building tooltip" onclick="purchase_building('bank');"><span class="building_name">Bank</span><span class="building_amount">0</span><span class="tooltiptext">Generates 1 money per second.<br /> Costs 10 money.</span></span>
             <span id="toggle_bank" class="building_state_on" onclick="toggle_building_state('bank')">On</span>

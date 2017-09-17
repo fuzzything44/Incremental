@@ -5,7 +5,19 @@ var resources_per_sec = {};
 var buildings = {};
 var purchased_upgrades = []; /* Names of all purchased upgrades */
 var remaining_upgrades = {}; /* All remaining upgrades that need to be purchased */
-
+const UNLOCK_TREE = { /* What buildings unlock */
+    "bank": ["mine", "logging"],
+    "mine": ["furnace", "gold_finder"],
+    "logging": ["compressor"],
+    "furnace": [],
+    "compressor": ["oil_well"],
+    "gold_finder": ["jeweler"],
+    "jeweler": ["jewelry_store"],
+    "jewelry_store": [],
+    "oil_well": ["oil_engine"],
+    "oil_engine": [],
+};
+const SPECIAL_RESOURCES = ["energy", "mana"]; /* These are special and buildings will provide static amounts of them */
 function set_initial_state() {
     resources = {
         "energy": 0, /* TODO: Have a better system for energy and mana, treat them separately and have buildings provide static changes to them */
@@ -37,7 +49,6 @@ function set_initial_state() {
             "generation": {
                 "money": 1,
             },
-            "unlocks": ["mine", "logging"],
         },
         "mine": {
             "on": true,
@@ -53,7 +64,6 @@ function set_initial_state() {
                 "stone": 1,
                 "iron_ore": 0.1,
             },
-            "unlocks": ["furnace", "gold_finder"],
         },
         "logging": {
             "on": true,
@@ -69,7 +79,6 @@ function set_initial_state() {
                 "wood": 1,
                 "coal": 0.1,
             },
-            "unlocks": ["compressor"],
         },
         "furnace": {
             "on": true,
@@ -88,7 +97,6 @@ function set_initial_state() {
                 "wood": -5,
                 "iron_ore": -3,
             },
-            "unlocks": [],
         },
         "compressor": {
             "on": true,
@@ -107,7 +115,6 @@ function set_initial_state() {
                 "diamond": 0.1,
                 "coal": -10,
             },
-            "unlocks": ["oil_well"],
         },
         "gold_finder": {
             "on": true,
@@ -126,7 +133,6 @@ function set_initial_state() {
                 "gold": 0.1,
                 "stone": -20,
             },
-            "unlocks": ["jeweler"],
         },
         "jeweler": {
             "on": true,
@@ -144,7 +150,6 @@ function set_initial_state() {
                 "diamond": -1,
                 "jewelry": 1,
             },
-            "unlocks": ["jewelry_store"],
         },
         "jewelry_store": {
             "on": true,
@@ -163,7 +168,6 @@ function set_initial_state() {
                 "jewelry": -1,
                 "money": 500,
             },
-            "unlocks": [],
         },
         "oil_well": {
             "on": true,
@@ -181,7 +185,6 @@ function set_initial_state() {
             "generation": {
                 "oil": 1,
             },
-            "unlocks": ["oil_engine"],
         },
         "oil_engine": {
             "on": true,
@@ -198,7 +201,6 @@ function set_initial_state() {
                 "oil": -1,
                 "energy": 1,
             },
-            "unlocks": [""],
         },
     };
     purchased_upgrades = [];
@@ -286,7 +288,7 @@ function set_initial_state() {
             "cost": {
                 "oil": 50,
             },
-            "tooltip": "Oil compressors to have them run more efficiently. <br /> Costs 50 oil.",
+            "tooltip": "Oil your compressors to have them run more efficiently. <br /> Costs 50 oil.",
             "name": "Oil Compressors",
             "image": "",
         },
@@ -416,7 +418,12 @@ const UPDATE_INTERVAL = 35;
 function update() {
     /* Update all resources */
     Object.keys(resources).forEach(function (key) {
-        resources[key] += resources_per_sec[key] * UPDATE_INTERVAL / 1000;
+        if (SPECIAL_RESOURCES.indexOf(key) == -1) {
+            /* Don't add special resources */
+            resources[key] += resources_per_sec[key] * UPDATE_INTERVAL / 1000;
+        } else { /* We have as much of specialty resources as we generate */
+            resources[key] = resources_per_sec[key];
+        }
         /* Formats it so that it says "Resource name: amount" */
         $("#" + key + " span").first().html((key.charAt(0).toUpperCase() + key.slice(1)).replace("_", " ") + ": " + Math.max(0, Math.floor(resources[key])).toString() + "<br />");
         /* Same for tooltip */
@@ -441,7 +448,7 @@ function update() {
     /* Unhide buildings */
     Object.keys(buildings).forEach(function (build) {
         if (buildings[build].amount > 0) {
-            buildings[build].unlocks.forEach(function (unlock) {
+            UNLOCK_TREE[build].forEach(function (unlock) {
                 $("#building_" + unlock).parent().removeClass("hidden");
             });
         }
@@ -545,7 +552,7 @@ function purchase_upgrade(name: string) {
 }
 
 function random_title() {
-    const TITLES = ["CrappyClicker v.π²", "Drink Your Ovaltine!", "(!) Not Responding            (I lied)", "17 New Resources That Will Blow Your Mind!", "Ÿ̛̦̯ͬ̔̾̃ͥ͑o͋ͩ̽̓͋̚͘҉̧̰u͚̼̜̞͉͓̹ͦ͒͌̀ ̄͋̉̓҉̖̖̠̤ņ͔̄͟͟e̦̝̻̼̖͖͋̓̔̓͒ͬe̷͈̗̻̘̩̙̖͗ͫͭͮ͌̃́ͬ̔d̥̞ͨ̏͗͆̉ͩ ̨̟̭̻͔̰͓͍̤͍̀ͤͤ̎͐͘͠m͙͈͖̱͍̖̤͑̃͐͋ͪ̐ͯ̏͘ͅȍ̼̭̦͚̥̜͉̥̱ͬ͞r̥̣̰͈̻̰ͮ̓̚e̳͊ͯ͞ ̏ͯ̈́҉̛̮͚̖͈̼g̩͖̙̞̮̟̍ͦͫ̓ͭͥ̀o̧̻̞̰͉̤͇̭̘͓ͨ̆̔ͨl̴͕͉̦̩̟̤̰̃͋̃̉̓͌ͪ͌ͩd̢̨̲̻̿ͫ"];
+    const TITLES = ["CrappyIdle v.π²", "Drink Your Ovaltine!", "(!) Not Responding            (I lied)", "17 New Resources That Will Blow Your Mind!", "Ÿ̛̦̯ͬ̔̾̃ͥ͑o͋ͩ̽̓͋̚͘u͚̼̜̞͉͓̹ͦ͒͌̀ ̄͋̉̓҉̖̖̠̤ņ͔̄͟͟e̦̝̻̼̖͖͋̓̔̓͒ͬe̷͈̗̻̘̩̙̖͗ͫͭͮ͌̃́ͬ̔d̥̞ͨ̏͗͆̉ͩ ̨̟̭̻͔̰͓͍̤͍̀ͤͤ̎͐͘͠m͙͈͖̱͍̖̤͑̃͐͋ͪ̐ͯ̏͘ͅȍ̼̭̦͚̥̜͉̥̱ͬ͞r̥̣̰͈̻̰ͮ̓̚e̳͊ͯ͞ ̏ͯ̈́҉̛̮͚̖͈̼g̩͖̙̞̮̟̍ͦͫ̓ͭͥ̀o̧̻̞̰͉̤͇̭̘͓ͨ̆̔ͨl̴͕͉̦̩̟̤̰̃͋̃̉̓͌ͪ͌ͩd̢̨̲̻̿ͫ"];
     document.title = TITLES.filter(item => item !== document.title)[Math.floor(Math.random() * (TITLES.length - 1))];
 
 }
