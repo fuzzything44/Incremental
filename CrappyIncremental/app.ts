@@ -7,6 +7,7 @@ var purchased_upgrades = []; /* Names of all purchased upgrades */
 var remaining_upgrades = {}; /* All remaining upgrades that need to be purchased */
 const UNLOCK_TREE = { /* What buildings unlock */
     "s_manastone": [],
+    "s_goldboost": [],
 
     "bank": ["mine", "logging"],
     "mine": ["furnace", "gold_finder"],
@@ -20,8 +21,21 @@ const UNLOCK_TREE = { /* What buildings unlock */
     "oil_engine": ["paper_mill", "ink_refinery"],
     "paper_mill": ["money_printer"],
     "ink_refinery": [],
-    "money_printer": [],
+    "money_printer": ["book_printer"],
+    "book_printer": [],
 };
+const SPELL_BUILDINGS = [
+    "s_manastone",
+    "s_goldboost",
+  ];
+const SPELL_FUNCTIONS = [
+/*   0 */    function () { },
+/*   1 */    function () {
+                resources["money"] += resources_per_sec["money"] * UPDATE_INTERVAL / 1000;
+                resources["gold"] += resources_per_sec["gold"] * UPDATE_INTERVAL / 1000;
+             },
+
+  ];
 const SPECIAL_RESOURCES = ["energy", "mana"]; /* These are special and buildings will provide static amounts of them */
 function set_initial_state() {
     resources = {
@@ -40,6 +54,7 @@ function set_initial_state() {
         "oil": 0,
         "paper": 0,
         "ink": 0,
+        "book": 0,
     };
     resources_per_sec = JSON.parse(JSON.stringify(resources)) /* Not just a simple assignment. We want a deep copy */
     resources_per_sec["money"] = 0;
@@ -52,6 +67,17 @@ function set_initial_state() {
             "generation": {
                 "mana": 1,
             },
+            "update": 0,
+        },
+        "s_goldboost": {
+            "on": false,
+            "amount": 2,
+            "base_cost": { "mana": Infinity },
+            "price_ratio": { "mana": 1 },
+            "generation": {
+                "mana": -1,
+            },
+            "update": 1,
         },
 
         "bank": {
@@ -277,6 +303,26 @@ function set_initial_state() {
                 "money": 30,
             },
         },
+        "book_printer": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 500,
+                "iron": 500,
+                "oil": 200,
+            },
+            "price_ratio": {
+                "money": 1.2,
+                "iron": 1.2,
+                "oil": 1.3,
+            },
+            "generation": {
+                "energy": -1,
+                "paper": -2,
+                "ink": -1,
+                "book": 0.1,
+            },
+        },
     };
     purchased_upgrades = [];
     remaining_upgrades = {
@@ -389,7 +435,15 @@ function set_initial_state() {
 function prestige() {
     /* Calculate mana gain */
     /* First turn off all spells. TODO when spells exist */
-    let total_mana = resources["mana"] + Math.log((resources["money"] + resources["stone"] * .5 + resources["wood"] * .5 + resources["gold"] * 75 + resources["diamond"] * 100 + resources["jewelry"] * 400) / 10000 + 1);
+    let total_mana = resources["mana"] + Math.log((
+        resources["money"] +
+        resources["stone"] * .5 +
+        resources["wood"] * .5 +
+        resources["gold"] * 75 +
+        resources["diamond"] * 100 +
+        resources["jewelry"] * 400 +
+        resources["book"] * 600
+      ) / 10000 + 1);
     total_mana = Math.max(0, Math.floor(total_mana)); /* Bound mana nicely as nonnegative integer */
     if (total_mana == 0) {
         alert("You wouldn't gain any mana from resetting now!");
@@ -448,8 +502,9 @@ function load() {
             buildings[type] = JSON.parse(temp_str);
             /* Show how many buildings they have and set tooltip properly */
             $('#building_' + type + " > .building_amount").html(buildings[type].amount.toString());
-            $('#building_' + type + " > .tooltiptext").html(gen_building_tooltip(type));
-
+            if (SPELL_BUILDINGS.indexOf(type) == -1) { /* Don't set tooltip of mana buldings */
+                $('#building_' + type + " > .tooltiptext").html(gen_building_tooltip(type));
+            }
         }
     });
     if (buildings["s_manastone"].amount > 0) {
@@ -474,6 +529,10 @@ function load() {
                 /* And increase production */
                 resources_per_sec[key] += buildings[name].amount * buildings[name].generation[key];
             });
+
+            $("#toggle_" + name).addClass("building_state_on");
+            $("#toggle_" + name).removeClass("building_state_off");
+            $("#toggle_" + name).text("On");
         } else {
             $("#toggle_" + name).addClass("building_state_off");
             $("#toggle_" + name).removeClass("building_state_on");
@@ -558,6 +617,12 @@ function update() {
         }
     });
 
+    /* Perform spell actions */
+    SPELL_BUILDINGS.forEach(function (build) {
+        if (buildings[build].on) {
+            SPELL_FUNCTIONS[buildings[build].update]();
+        }
+    });
 }
 
 /* Not in update as this could change a lot if they have too many unpurchased upgrades. */

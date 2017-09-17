@@ -25,15 +25,16 @@
         <span id="oil" class="tooltip hidden"><span>Oil: 0<br /></span><span id="oil_per_sec" class="tooltiptext">Making 1 per second.</span></span>
         <span id="paper" class="tooltip hidden"><span>Paper: 0<br /></span><span id="paper_per_sec" class="tooltiptext">Making 1 per second.</span></span>
         <span id="ink" class="tooltip hidden"><span>Ink: 0<br /></span><span id="ink_per_sec" class="tooltiptext">Making 1 per second.</span></span>
+        <span id="book" class="tooltip hidden"><span>Book: 0<br /></span><span id="book_per_sec" class="tooltiptext">Making 1 per second.</span></span>
 
     </div>
     <div id="buildings">
         <div id="spells" class="hidden">
             <div style="position: relative">
-                <span id="building_s_manastone" class="building tooltip" style="color: mediumpurple;"><span class="building_name">Mana Stone</span><span class="building_amount">0</span><span class="tooltiptext">Generates 100 mana per second.</span></span>
+                <span id="building_s_manastone" class="building tooltip" style="color: mediumpurple;"><span class="building_name">Mana Stone</span><span class="building_amount">0</span><span class="tooltiptext">Each stone generates 1 mana.</span></span>
             </div>
-            <div style="position: relative" class="hidden">
-                <span id="building_s_goldboost" class="building tooltip" style="color: gold;"><span class="building_name">Greed Spell</span><span class="building_amount">3</span><span class="tooltiptext">Generates -3 mana per second. Costs 0 mana.</span></span>
+            <div style="position: relative" class="">
+                <span id="building_s_goldboost" class="building tooltip" style="color: gold;"><span class="building_name">Greed Spell</span><span class="building_amount">3</span><span class="tooltiptext">Uses 2 mana, but doubles gold gains.</span></span>
                 <span id="toggle_s_goldboost" class="building_state_off" onclick="toggle_building_state('s_goldboost')">Off</span>
             </div>
 
@@ -90,6 +91,10 @@
         <div style="position: relative" class="hidden">
             <span id="building_money_printer" class="building tooltip" onclick="purchase_building('money_printer');"><span class="building_name">Money Printer</span><span class="building_amount">0</span><span class="tooltiptext">Generates -1 energy per second, -2 paper per second, -1 ink per second, 30 money per second.<br /> Costs 500 money, 500 iron, 200 oil.</span></span>
             <span id="toggle_money_printer" class="building_state_on" onclick="toggle_building_state('money_printer')">On</span>
+        </div>
+        <div style="position: relative" class="hidden">
+            <span id="building_book_printer" class="building tooltip" onclick="purchase_building('book_printer');"><span class="building_name">Printing Press</span><span class="building_amount">0</span><span class="tooltiptext">Generates -1 energy per second, -2 paper per second, -1 ink per second, 0.1 book per second.<br /> Costs 500 money, 500 iron, 200 oil.</span></span>
+            <span id="toggle_book_printer" class="building_state_on" onclick="toggle_building_state('book_printer')">On</span>
         </div>
     </div>
     <div id="upgrades">
