@@ -29,7 +29,6 @@
     <Content Include="images\pickaxe.png" />
     <Content Include="index.html" />
     <Content Include="jquery-3.2.1.js" />
-    <Content Include="pickaxe.jpg" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>

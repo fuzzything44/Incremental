@@ -1,4 +1,7 @@
 ﻿CrappyIncremental Changelog
 
+v.1.1:
+Added flavor text to some buildings, added a paper mill upgrade.
+
 v.1:
 Created changelog, links to log and wiki. Previous changes not documented.

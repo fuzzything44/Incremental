@@ -64,6 +64,7 @@ function set_initial_state() {
                 "mana": 1,
             },
             "update": 0,
+            "flavor": "A stone made out of pure crystallized mana. Use it to power spells!",
         },
         "s_goldboost": {
             "on": false,
@@ -74,6 +75,7 @@ function set_initial_state() {
                 "mana": -1,
             },
             "update": 1,
+            "flavor": "A magic spell made for tax fraud.",
         },
         "bank": {
             "on": true,
@@ -87,6 +89,7 @@ function set_initial_state() {
             "generation": {
                 "money": 1,
             },
+            "flavor": "It's a pretty small branch bank.",
         },
         "mine": {
             "on": true,
@@ -102,6 +105,7 @@ function set_initial_state() {
                 "stone": 1,
                 "iron_ore": 0.1,
             },
+            "flavor": "IT'S ALL MINE!",
         },
         "logging": {
             "on": true,
@@ -117,6 +121,7 @@ function set_initial_state() {
                 "wood": 1,
                 "coal": 0.1,
             },
+            "flavor": "console.log('Player read tooltip.')",
         },
         "furnace": {
             "on": true,
@@ -135,6 +140,7 @@ function set_initial_state() {
                 "iron": 1,
                 "coal": 1,
             },
+            "flavor": "Come on in! It's a blast!",
         },
         "compressor": {
             "on": true,
@@ -153,6 +159,7 @@ function set_initial_state() {
                 "coal": -10,
                 "diamond": 0.1,
             },
+            "flavor": "",
         },
         "gold_finder": {
             "on": true,
@@ -171,6 +178,7 @@ function set_initial_state() {
                 "stone": -20,
                 "gold": 0.1,
             },
+            "flavor": "",
         },
         "jeweler": {
             "on": true,
@@ -188,6 +196,7 @@ function set_initial_state() {
                 "diamond": -1,
                 "jewelry": 1,
             },
+            "flavor": "A jeweler uses jewels to make jewelry in July.",
         },
         "jewelry_store": {
             "on": true,
@@ -206,6 +215,7 @@ function set_initial_state() {
                 "jewelry": -1,
                 "money": 500,
             },
+            "flavor": "And the cycle repeats...",
         },
         "oil_well": {
             "on": true,
@@ -223,6 +233,7 @@ function set_initial_state() {
             "generation": {
                 "oil": 1,
             },
+            "flavor": "Well, this gets you oil.",
         },
         "oil_engine": {
             "on": true,
@@ -239,6 +250,7 @@ function set_initial_state() {
                 "oil": -1,
                 "energy": 1,
             },
+            "flavor": "",
         },
         "paper_mill": {
             "on": true,
@@ -258,6 +270,7 @@ function set_initial_state() {
                 "wood": -3,
                 "paper": 1,
             },
+            "flavor": "",
         },
         "ink_refinery": {
             "on": true,
@@ -277,6 +290,7 @@ function set_initial_state() {
                 "oil": -3,
                 "ink": 1,
             },
+            "flavor": "",
         },
         "money_printer": {
             "on": true,
@@ -297,6 +311,7 @@ function set_initial_state() {
                 "ink": -1,
                 "money": 30,
             },
+            "flavor": "100% legal. Trust me on this.",
         },
         "book_printer": {
             "on": true,
@@ -317,6 +332,7 @@ function set_initial_state() {
                 "ink": -1,
                 "book": 0.1,
             },
+            "flavor": "It's actually just printing a bunch of copies of <i>My Immortal</i>.",
         },
     };
     purchased_upgrades = [];
@@ -419,6 +435,28 @@ function set_initial_state() {
             "name": "Build a vault <br />",
             "image": "money.png",
         },
+        "better_paper": {
+            "unlock": function () { return buildings["paper_mill"].amount >= 3; },
+            "purchase": function () {
+                var comp_state = buildings["paper_mill"].on;
+                if (comp_state) {
+                    toggle_building_state("paper_mill");
+                }
+                buildings["paper_mill"]["generation"]["paper"] *= 2;
+                if (comp_state) {
+                    toggle_building_state("paper_mill");
+                }
+                $("#building_compressor > .tooltiptext").html(gen_building_tooltip("paper_mill"));
+            },
+            "cost": {
+                "money": 100,
+                "iron": 100,
+                "oil": 100,
+            },
+            "tooltip": "Make thinner paper, creating double the paper per wood.<br /> Costs 100 money, 100 iron, 100 oil.",
+            "name": "Thinner paper",
+            "image": "",
+        },
     };
 }
 function prestige() {
@@ -459,7 +497,7 @@ function save() {
 function load() {
     function getCookie(cname) {
         var name = cname + "=";
-        var decodedCookie = decodeURIComponent(document.cookie);
+        var decodedCookie = document.cookie;
         var ca = decodedCookie.split(';');
         for (var i = 0; i < ca.length; i++) {
             var c = ca[i];
@@ -634,7 +672,11 @@ function gen_building_tooltip(name) {
         cost_text += Math.ceil(buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount)).toString();
         cost_text += " " + key + ", ";
     });
-    return gen_text.trim().replace(/.$/, ".") + "<br />" + cost_text.trim().replace(/.$/, ".");
+    var flavor_text = "<hr><i style='font-size: small'>" + buildings[name].flavor + "</i>";
+    if (buildings[name].flavor == undefined || buildings[name].flavor == "") {
+        flavor_text = "";
+    }
+    return gen_text.trim().replace(/.$/, ".") + "<br />" + cost_text.trim().replace(/.$/, ".") + flavor_text;
 }
 function purchase_building(name) {
     /* Make sure they have enough to buy it */
@@ -693,5 +735,8 @@ window.onload = function () {
 };
 function hack(level) {
     Object.keys(resources).forEach(function (r) { resources[r] = level; });
+}
+function superhack(level) {
+    Object.keys(resources).forEach(function (r) { resources_per_sec[r] = level; });
 }
 //# sourceMappingURL=app.js.map
