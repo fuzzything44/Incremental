@@ -15,7 +15,10 @@ var UNLOCK_TREE = {
     "jeweler": ["jewelry_store"],
     "jewelry_store": [],
     "oil_well": ["oil_engine"],
-    "oil_engine": [],
+    "oil_engine": ["paper_mill", "ink_refinery"],
+    "paper_mill": ["money_printer"],
+    "ink_refinery": [],
+    "money_printer": [],
 };
 var SPECIAL_RESOURCES = ["energy", "mana"]; /* These are special and buildings will provide static amounts of them */
 function set_initial_state() {
@@ -32,6 +35,8 @@ function set_initial_state() {
         "diamond": 0,
         "jewelry": 0,
         "oil": 0,
+        "paper": 0,
+        "ink": 0,
     };
     resources_per_sec = JSON.parse(JSON.stringify(resources)); /* Not just a simple assignment. We want a deep copy */
     resources_per_sec["money"] = 0;
@@ -210,6 +215,64 @@ function set_initial_state() {
                 "energy": 1,
             },
         },
+        "paper_mill": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 200,
+                "iron": 200,
+                "oil": 100,
+            },
+            "price_ratio": {
+                "money": 1.1,
+                "iron": 1.1,
+                "oil": 1.1
+            },
+            "generation": {
+                "energy": -1,
+                "wood": -3,
+                "paper": 1,
+            },
+        },
+        "ink_refinery": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 200,
+                "iron": 200,
+                "oil": 100,
+            },
+            "price_ratio": {
+                "money": 1.1,
+                "iron": 1.1,
+                "oil": 1.1
+            },
+            "generation": {
+                "energy": -1,
+                "oil": -3,
+                "ink": 1,
+            },
+        },
+        "money_printer": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 500,
+                "iron": 500,
+                "oil": 200,
+            },
+            "price_ratio": {
+                "money": 1.2,
+                "iron": 1.2,
+                "oil": 1.3,
+            },
+            "generation": {
+                "energy": -1,
+                "paper": -2,
+                "ink": -1,
+                "money": 30,
+            },
+        },
     };
     purchased_upgrades = [];
     remaining_upgrades = {
@@ -338,6 +401,8 @@ function save() {
         document.cookie = "build-" + type + "=" + JSON.stringify(buildings[type]) + ";expires=Fri, 31 Dec 9999 23:59:59 GMT;";
     });
     document.cookie = "upgrades=" + JSON.stringify(purchased_upgrades) + ";expires=Fri, 31 Dec 9999 23:59:59 GMT;";
+    $('#save_text').css('opacity', '1');
+    setTimeout(function () { return $('#save_text').css({ 'opacity': '0', 'transition': 'opacity 1s' }); }, 1000);
     console.log("Saved");
 }
 function load() {
@@ -451,7 +516,7 @@ function update() {
             /* Unhide resources we have */
             $("#" + res).removeClass("hidden");
         }
-        if (resources[res] <= 0) {
+        if (resources[res] < 0) {
             /* Check all buildings */
             Object.keys(buildings).forEach(function (build) {
                 /* Check resource gen */
@@ -558,7 +623,7 @@ window.onload = function () {
     set_initial_state();
     load();
     setInterval(update, UPDATE_INTERVAL);
-    setInterval(save, 15000);
+    setInterval(save, 30000);
     update_upgrade_list();
     setInterval(update_upgrade_list, 500);
     random_title();

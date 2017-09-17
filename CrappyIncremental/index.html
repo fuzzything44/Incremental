@@ -23,6 +23,8 @@
         <span id="diamond" class="tooltip hidden"><span>Diamond: 0<br /></span><span id="diamond_per_sec" class="tooltiptext">Making 1 per second.</span></span>
         <span id="jewelry" class="tooltip hidden"><span>Jewelry: 0<br /></span><span id="jewelry_per_sec" class="tooltiptext">Making 1 per second.</span></span>
         <span id="oil" class="tooltip hidden"><span>Oil: 0<br /></span><span id="oil_per_sec" class="tooltiptext">Making 1 per second.</span></span>
+        <span id="paper" class="tooltip hidden"><span>Paper: 0<br /></span><span id="paper_per_sec" class="tooltiptext">Making 1 per second.</span></span>
+        <span id="ink" class="tooltip hidden"><span>Ink: 0<br /></span><span id="ink_per_sec" class="tooltiptext">Making 1 per second.</span></span>
 
     </div>
     <div id="buildings">
@@ -77,11 +79,24 @@
             <span id="building_oil_engine" class="building tooltip" onclick="purchase_building('oil_engine');"><span class="building_name">Oil-burning Engine</span><span class="building_amount">0</span><span class="tooltiptext">Generates -1 oil per second, 1 energy per second.<br /> Costs 500 money, 200 iron.</span></span>
             <span id="toggle_oil_engine" class="building_state_on" onclick="toggle_building_state('oil_engine')">On</span>
         </div>
+        <div style="position: relative" class="hidden">
+            <span id="building_paper_mill" class="building tooltip" onclick="purchase_building('paper_mill');"><span class="building_name">Paper Mill</span><span class="building_amount">0</span><span class="tooltiptext">Generates -1 energy per second, -3 wood per second, 1 paper per second.<br /> Costs 200 money, 200 iron, 100 oil.</span></span>
+            <span id="toggle_paper_mill" class="building_state_on" onclick="toggle_building_state('paper_mill')">On</span>
+        </div>
+        <div style="position: relative" class="hidden">
+            <span id="building_ink_refinery" class="building tooltip" onclick="purchase_building('ink_refinery');"><span class="building_name">Ink Refinery</span><span class="building_amount">0</span><span class="tooltiptext">Generates -1 energy per second, -3 oil per second, 1 paper per second.<br /> Costs 200 money, 200 iron, 100 oil.</span></span>
+            <span id="toggle_ink_refinery" class="building_state_on" onclick="toggle_building_state('ink_refinery')">On</span>
+        </div>
+        <div style="position: relative" class="hidden">
+            <span id="building_money_printer" class="building tooltip" onclick="purchase_building('money_printer');"><span class="building_name">Money Printer</span><span class="building_amount">0</span><span class="tooltiptext">Generates -1 energy per second, -2 paper per second, -1 ink per second, 30 money per second.<br /> Costs 500 money, 500 iron, 200 oil.</span></span>
+            <span id="toggle_money_printer" class="building_state_on" onclick="toggle_building_state('money_printer')">On</span>
+        </div>
     </div>
     <div id="upgrades">
         <span id="reset" class="tooltip" onclick="if(confirm('Are you sure? This resets EVERYTHING!')) {set_initial_state(); save(); location.reload();}"><span>Reset</span><span class="tooltiptext">Resets ALL progress. There is NO bonus for this!</span></span>
         <span id="save" onclick="save();">Save</span>
         <span id="prestige" onclick="prestige();">Prestige</span>
+        <span id="save_text">Saved!</span>
 
         <ul>
         </ul>

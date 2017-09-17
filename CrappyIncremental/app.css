@@ -102,6 +102,9 @@
     padding-right: .3em;
 }
 
+#save_text {
+    opacity: 0;
+}
 
 ul{
     list-style-type: none;
