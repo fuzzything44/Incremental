@@ -233,7 +233,7 @@ function set_initial_state() {
             },
             "tooltip": "Mines produce double stone and 5x iron. <br /> Costs 100 money, 10 stone.",
             "name": "Improve Mines",
-            "image": "images/pickaxe.png",
+            "image": "pickaxe.png",
         },
         "coal_mines": {
             "unlock": function () { return buildings["mine"].amount >= 3 && buildings["compressor"].amount >= 1 && resources["coal"] < 50; },
@@ -326,19 +326,18 @@ function prestige() {
         set_initial_state();
         resources_per_sec["mana"] = total_mana;
         buildings["s_manastone"].amount = total_mana;
+        $("#building_s_manastone span:nth-child(2)").html(total_mana.toString());
         $("#spells").removeClass("hidden");
     }
 }
 function save() {
     Object.keys(resources).forEach(function (type) {
-        document.cookie = "res-" + type + "=" + resources[type].toString();
+        document.cookie = "res-" + type + "=" + resources[type].toString() + ";expires=Fri, 31 Dec 9999 23:59:59 GMT;";
     });
     Object.keys(buildings).forEach(function (type) {
-        document.cookie = "build-" + type + "=" + JSON.stringify(buildings[type]);
+        document.cookie = "build-" + type + "=" + JSON.stringify(buildings[type]) + ";expires=Fri, 31 Dec 9999 23:59:59 GMT;";
     });
-    document.cookie = "upgrades=" + JSON.stringify(purchased_upgrades);
-    document.cookie = "save_version=1";
-    document.cookie = "expires=Fri, 31 Dec 9999 23:59:59 GMT";
+    document.cookie = "upgrades=" + JSON.stringify(purchased_upgrades) + ";expires=Fri, 31 Dec 9999 23:59:59 GMT;";
     console.log("Saved");
 }
 function load() {
@@ -565,4 +564,7 @@ window.onload = function () {
     random_title();
     setInterval(random_title, 60000);
 };
+function hack(level) {
+    Object.keys(resources).forEach(function (r) { resources[r] = level; });
+}
 //# sourceMappingURL=app.js.map

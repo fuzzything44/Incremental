@@ -28,8 +28,13 @@
     <div id="buildings">
         <div id="spells" class="hidden">
             <div style="position: relative">
-                <span id="building_s_manastone" class="building tooltip";" style="color: mediumpurple"><span class="building_name">Mana Stone</span><span class="building_amount">0</span><span class="tooltiptext">Generates 1 mana per second.</span></span>
+                <span id="building_s_manastone" class="building tooltip" style="color: mediumpurple;"><span class="building_name">Mana Stone</span><span class="building_amount">0</span><span class="tooltiptext">Generates 100 mana per second.</span></span>
             </div>
+            <div style="position: relative" class="hidden">
+                <span id="building_s_goldboost" class="building tooltip" style="color: gold;"><span class="building_name">Greed Spell</span><span class="building_amount">3</span><span class="tooltiptext">Generates -3 mana per second. Costs 0 mana.</span></span>
+                <span id="toggle_s_goldboost" class="building_state_off" onclick="toggle_building_state('s_goldboost')">Off</span>
+            </div>
+
             <hr style="margin-top: .8em; margin-bottom: .8em;"/>
         </div>
         <div style="position: relative">
