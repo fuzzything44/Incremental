@@ -1,7 +1,10 @@
 ﻿CrappyIncremental Changelog
 
-v.1.1:
+v0.1.2:
+Added fire, gear icon. Added furnace upgrade. Fixed prestige bug where building numbers/costs would still be displayed as old values.
+
+v0.1.1:
 Added flavor text to some buildings, added a paper mill upgrade.
 
-v.1:
+v0.1:
 Created changelog, links to log and wiki. Previous changes not documented.

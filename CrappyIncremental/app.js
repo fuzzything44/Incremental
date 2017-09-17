@@ -455,7 +455,32 @@ function set_initial_state() {
             },
             "tooltip": "Make thinner paper, creating double the paper per wood.<br /> Costs 100 money, 100 iron, 100 oil.",
             "name": "Thinner paper",
-            "image": "",
+            "image": "gear.png",
+        },
+        "better_furnace": {
+            "unlock": function () { return buildings["furnace"].amount >= 3; },
+            "purchase": function () {
+                var comp_state = buildings["furnace"].on;
+                if (comp_state) {
+                    toggle_building_state("furnace");
+                }
+                Object.keys(buildings["furnace"].generation).forEach(function (res) {
+                    buildings["furnace"].generation[res] *= 10;
+                });
+                if (comp_state) {
+                    toggle_building_state("furnace");
+                }
+                $("#building_furnace > .tooltiptext").html(gen_building_tooltip("furnace"));
+            },
+            "cost": {
+                "money": 100,
+                "stone": 300,
+                "wood": 200,
+                "coal": 200,
+            },
+            "tooltip": "Much hotter furnaces run at 10x the previous rate. <br /> Costs 100 money, 300 stone, 200 wood, 200 coal.",
+            "name": "Hotter furnaces",
+            "image": "fire.png",
         },
     };
 }
@@ -481,6 +506,8 @@ function prestige() {
         $("#building_s_manastone span:nth-child(2)").html(total_mana.toString());
         $("#spells").removeClass("hidden");
     }
+    save();
+    location.reload();
 }
 function save() {
     Object.keys(resources).forEach(function (type) {
