@@ -8,6 +8,7 @@ var remaining_upgrades = {}; /* All remaining upgrades that need to be purchased
 const UNLOCK_TREE = { /* What buildings unlock */
     "s_manastone": [],
     "s_goldboost": [],
+    "s_energyboost": [],
 
     "bank": ["mine", "logging"],
     "mine": ["furnace", "gold_finder"],
@@ -18,7 +19,7 @@ const UNLOCK_TREE = { /* What buildings unlock */
     "jeweler": ["jewelry_store"],
     "jewelry_store": [],
     "oil_well": ["oil_engine"],
-    "oil_engine": ["paper_mill", "ink_refinery"],
+    "oil_engine": ["paper_mill", "ink_refinery", "s_energyboost"],
     "paper_mill": ["money_printer"],
     "ink_refinery": [],
     "money_printer": ["book_printer"],
@@ -27,6 +28,7 @@ const UNLOCK_TREE = { /* What buildings unlock */
 const SPELL_BUILDINGS = [
     "s_manastone",
     "s_goldboost",
+    "s_energyboost",
   ];
 const SPELL_FUNCTIONS = [
 /*   0 */    function () { },
@@ -36,6 +38,34 @@ const SPELL_FUNCTIONS = [
              },
 
   ];
+
+function energy_converter_add() {
+    /* Add one converter */
+    buildings["s_energyboost"].amount += 1;
+    $("#building_s_energyboost > .building_amount").html(buildings["s_energyboost"].amount.toString());
+
+    /* Add energy only if on */
+    if (buildings["s_energyboost"].on) {
+        resources_per_sec["energy"] += 1;
+        resources_per_sec["mana"] -= 1;
+    }
+}
+
+function energy_converter_remove() {
+    /* Make sure it can't go negative. Don't want people to trade the other way! */
+    if (buildings["s_energyboost"].amount > 0) {
+        /* Remove a converter */
+        buildings["s_energyboost"].amount -= 1;
+        $("#building_s_energyboost > .building_amount").html(buildings["s_energyboost"].amount.toString());
+
+        /* Remove energy only if on */
+        if (buildings["s_energyboost"].on) {
+            resources_per_sec["energy"] -= 1;
+            resources_per_sec["mana"] += 1;
+        }
+    }
+}
+
 const SPECIAL_RESOURCES = ["energy", "mana"]; /* These are special and buildings will provide static amounts of them */
 function set_initial_state() {
     resources = {
@@ -80,6 +110,18 @@ function set_initial_state() {
             },
             "update": 1,
             "flavor": "A magic spell made for tax fraud.",
+        },
+        "s_energyboost": {
+            "on": false,
+            "amount": 2,
+            "base_cost": { "mana": Infinity },
+            "price_ratio": { "mana": 1 },
+            "generation": {
+                "mana": -1,
+                "energy": 1,
+            },
+            "update": 0,
+            "flavor": "This is actually a much simpler spell than the name implies.",
         },
 
         "bank": {
@@ -497,8 +539,7 @@ function set_initial_state() {
 
 function prestige() {
     /* Calculate mana gain */
-    /* First turn off all spells. TODO when spells exist */
-    let total_mana = resources["mana"] + Math.log((
+    let mana_gain =Math.max(0, Math.floor(Math.log((
         resources["money"] +
         resources["stone"] * .5 +
         resources["wood"] * .5 +
@@ -506,13 +547,15 @@ function prestige() {
         resources["diamond"] * 100 +
         resources["jewelry"] * 400 +
         resources["book"] * 600
-      ) / 10000 + 1);
-    total_mana = Math.max(0, Math.floor(total_mana)); /* Bound mana nicely as nonnegative integer */
-    if (total_mana == 0) {
-        alert("You wouldn't gain any mana from resetting now!");
-        return;
-    }
-    if (confirm("You will lose all resources and all buildings but have " + total_mana.toString() + " mana after reset. Proceed?")) {
+      ) / 10000 + 1)));
+
+    if (confirm("You will lose all resources and all buildings but gain " + mana_gain.toString() + " mana after reset. Proceed?")) {
+        SPELL_BUILDINGS.forEach(function (build) { /* Turn off all spells */
+            if (buildings[build].on) {
+                toggle_building_state(build);
+            }
+        });
+        let total_mana = buildings["s_manastone"].amount + mana_gain;
         set_initial_state();
         resources_per_sec["mana"] = total_mana;
         buildings["s_manastone"].amount = total_mana;

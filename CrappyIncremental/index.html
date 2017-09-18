@@ -10,7 +10,7 @@
 </head>
 <body>
     <div style="font-size: small; position:absolute; top: 0;">
-        v0.1.2 | 
+        v0.2.0 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none; color: lightgray;">Changelog</a> |
         <a href="https://github.com/fuzzything44/Incremental/wiki" target="_blank" style="text-decoration: none; color: lightgray;">Wiki</a> 
     </div>
@@ -38,9 +38,19 @@
             <div style="position: relative">
                 <span id="building_s_manastone" class="building tooltip" style="color: mediumpurple;"><span class="building_name">Mana Stone</span><span class="building_amount">0</span><span class="tooltiptext">Each stone generates 1 mana.</span></span>
             </div>
-            <div style="position: relative" class="">
+            <div style="position: relative">
                 <span id="building_s_goldboost" class="building tooltip" style="color: gold;"><span class="building_name">Greed Spell</span><span class="building_amount">3</span><span class="tooltiptext">Uses 2 mana, but doubles gold gains.</span></span>
                 <span id="toggle_s_goldboost" class="building_state_off" onclick="toggle_building_state('s_goldboost')">Off</span>
+            </div>
+            <div style="position: relative" class="hidden">
+                <span id="building_s_energyboost" class="building tooltip" style="color: plum;">
+                    <span class="building_name">Thaumaturgic Converter</span>
+                    <span class="building_amount">0</span>
+                    <span style="float: right; color: green;" onclick="energy_converter_add();">&nbsp;+&nbsp;</span>
+                    <span style="float: right; color: red;" onclick="energy_converter_remove();">&nbsp;-&nbsp;</span>
+                    <span class="tooltiptext">Converts mana to energy</span>
+                </span>
+                <span id="toggle_s_energyboost" class="building_state_off" onclick="toggle_building_state('s_energyboost')">Off</span>
             </div>
 
             <hr />

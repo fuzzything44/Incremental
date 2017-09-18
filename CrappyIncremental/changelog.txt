@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v0.2.0:
+Added prestige spell to convert spare mana to energy. Fixed prestiging bugs involving resetting with active spells removing mana.
+
 v0.1.2:
 Added fire, gear icon. Added furnace upgrade. Fixed prestige bug where building numbers/costs would still be displayed as old values.
 
