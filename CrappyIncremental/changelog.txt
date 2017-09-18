@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v0.3.2:
+Slight portal tuning: sets max based on mana left instead of total mana. Fix bugs with potentially getting negative resources, add offline gen.
+
 v0.3.1:
 Trading bugfix. You can now buy and sell items instead of just sell.
 

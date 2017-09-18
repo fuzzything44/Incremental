@@ -59,7 +59,7 @@ var SPELL_FUNCTIONS = [
         if (remaining_upgrades["trade"] == undefined && to_next_trade < 0) {
             remaining_upgrades["trade"] = trade_upgrade;
             /* Roll money amount. Random between 10 and your money + 10, bounded between 0 and number depending on your mana. Rounded to integer */
-            var money_value = Math.round(Math.min(Math.pow(1.5, buildings["s_manastone"].amount) * 10, Math.max(0, Math.random() * resources["money"] * 2 + 10)));
+            var money_value = Math.round(Math.min(Math.pow(1.5, resources["mana"]) * 10, Math.max(0, Math.random() * resources["money"] * 2 + 10)));
             /* Choose resources to be about the same money worth. */
             var resource_value = Math.round((money_value * 5 / 6) + (Math.random() * money_value * 1 / 3));
             /* Choose a resource */
@@ -616,6 +616,7 @@ function save() {
         document.cookie = "build-" + type + "=" + JSON.stringify(buildings[type]) + ";expires=Fri, 31 Dec 9999 23:59:59 GMT;";
     });
     document.cookie = "upgrades=" + JSON.stringify(purchased_upgrades) + ";expires=Fri, 31 Dec 9999 23:59:59 GMT;";
+    document.cookie = "last_save=" + Date.now() + ";expires=Fri, 31 Dec 9999 23:59:59 GMT;";
     $('#save_text').css('opacity', '1');
     setTimeout(function () { return $('#save_text').css({ 'opacity': '0', 'transition': 'opacity 1s' }); }, 1000);
     console.log("Saved");
@@ -666,6 +667,10 @@ function load() {
     }
     else {
         purchased_upgrades = JSON.parse(getCookie("upgrades"));
+    }
+    console.log("Loading last update");
+    if (getCookie("last_save") != "") {
+        last_update = parseInt(getCookie("last_save"));
     }
     purchased_upgrades.forEach(function (upg) {
         delete remaining_upgrades[upg]; /* They shouldn't be able to get the same upgrade twice, so delete what was bought. */
@@ -719,6 +724,22 @@ function update() {
     /* Find time since last update. */
     var delta_time = Date.now() - last_update;
     last_update = Date.now();
+    /* Check for negative resources or resources that will run out. */
+    Object.keys(resources).forEach(function (res) {
+        if (resources[res] > 0) {
+            /* Unhide resources we have */
+            $("#" + res).removeClass("hidden");
+        }
+        if (resources[res] < -resources_per_sec[res] * delta_time / 1000) {
+            /* Check all buildings */
+            Object.keys(buildings).forEach(function (build) {
+                /* Check resource gen */
+                if (buildings[build].generation[res] < 0 && buildings[build].on && buildings[build].amount > 0) {
+                    toggle_building_state(build);
+                }
+            });
+        }
+    });
     /* Update all resources */
     Object.keys(resources).forEach(function (key) {
         if (SPECIAL_RESOURCES.indexOf(key) == -1) {
@@ -732,22 +753,6 @@ function update() {
         $("#" + key + " span").first().html((key.charAt(0).toUpperCase() + key.slice(1)).replace("_", " ") + ": " + Math.max(0, Math.floor(resources[key])).toString() + "<br />");
         /* Same for tooltip */
         $("#" + key + "_per_sec").text("Making " + (Math.round(resources_per_sec[key] * 10) / 10).toString() + " per second");
-    });
-    /* Check for negative resources */
-    Object.keys(resources).forEach(function (res) {
-        if (resources[res] > 0) {
-            /* Unhide resources we have */
-            $("#" + res).removeClass("hidden");
-        }
-        if (resources[res] < 0) {
-            /* Check all buildings */
-            Object.keys(buildings).forEach(function (build) {
-                /* Check resource gen */
-                if (buildings[build].generation[res] < 0 && buildings[build].on && buildings[build].amount > 0) {
-                    toggle_building_state(build);
-                }
-            });
-        }
     });
     /* Unhide buildings */
     Object.keys(buildings).forEach(function (build) {
