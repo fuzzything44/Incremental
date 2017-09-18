@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v0.3.3:
+Trading portal tuning (now realizes that some resources are more valuable than others), slightly easier to get mana (every resource counts towards mana!), fix bug with trading portal hanging game if only limited resources and money are owned.
+
 v0.3.2:
 Slight portal tuning: sets max based on mana left instead of total mana. Fix bugs with potentially getting negative resources, add offline gen.
 

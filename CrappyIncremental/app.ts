@@ -35,8 +35,8 @@ const SPELL_BUILDINGS = [
 const SPELL_FUNCTIONS = [
 /*   0 */    function (delta_time: number) { },
 /*   1 */    function (delta_time: number) {
-                resources["money"] += resources_per_sec["money"] * delta_time / 1000;
-                resources["gold"] += resources_per_sec["gold"] * delta_time / 1000;
+                resources["money"].amount += resources_per_sec["money"] * delta_time / 1000;
+                resources["gold"].amount += resources_per_sec["gold"] * delta_time / 1000;
 },
 /*   2 */    function (delta_time: number) {
                  let trade_upgrade = {
@@ -60,16 +60,17 @@ const SPELL_FUNCTIONS = [
                  to_next_trade -= delta_time;
                  if (remaining_upgrades["trade"] == undefined && to_next_trade < 0) {
                      remaining_upgrades["trade"] = trade_upgrade;
-                     /* Roll money amount. Random between 10 and your money + 10, bounded between 0 and number depending on your mana. Rounded to integer */
-                     let money_value = Math.round(Math.min(Math.pow(1.5, resources["mana"]) * 10, Math.max(0, Math.random() * resources["money"] * 2 + 10)));
+                     /* Roll money amount. Horrible arbitrary formula, takes your money and max mana into account for upper bound. */
+                     let money_value = Math.round(Math.max(1, Math.random() * Math.min(Math.pow(1.5, resources["mana"].amount) * 10, resources["money"].amount) * 2 + 10));
                      /* Choose resources to be about the same money worth. */
                      let resource_value = Math.round((money_value * 5 / 6) + (Math.random() * money_value * 1 / 3));
                      /* Choose a resource */
                      let chosen_resource = Object.keys(resources)[Math.floor(Math.random() * Object.keys(resources).length)];
-                     /* Don't choose special resource or money. */
-                     while (SPECIAL_RESOURCES.indexOf(chosen_resource) != -1 || chosen_resource == "money" || resources[chosen_resource] == 0) {
+                     /* Don't choose special resource or money. Make sure they have some (unless it's stone. You can always get stone) */
+                     while (resources[chosen_resource].value == 0 || chosen_resource == "money" || (resources[chosen_resource].amount == 0 && chosen_resource != "stone")) {
                          chosen_resource = Object.keys(resources)[Math.floor(Math.random() * Object.keys(resources).length)];
                      }
+                     resource_value = Math.max(1, Math.round(resource_value / resources[chosen_resource].value)); /* Reduce resource gain to better line up with different valued resources */
                      /* See if we're buying or selling */
                      if (Math.random() > 0.5) {
                          /* We're buying it */
@@ -116,28 +117,29 @@ function energy_converter_remove() {
     }
 }
 
-const SPECIAL_RESOURCES = ["energy", "mana"]; /* These are special and buildings will provide static amounts of them */
 function set_initial_state() {
     resources = {
-        "energy": 0, /* TODO: Have a better system for energy and mana, treat them separately and have buildings provide static changes to them */
-        "mana" : 0,
+        "energy": { "amount": 0, "value": 0 }, /* TODO: Have a better system for energy and mana, treat them separately and have buildings provide static changes to them */
+        "mana": { "amount": 0, "value": 0 },
 
-        "money": 10,
-        "stone": 0,
-        "wood": 0,
-        "iron_ore": 0,
-        "coal": 0,
-        "iron": 0,
-        "gold": 0,
-        "diamond": 0,
-        "jewelry": 0,
-        "oil": 0,
-        "paper": 0,
-        "ink": 0,
-        "book": 0,
+        "money": { "amount": 10, "value": 1 },
+        "stone": { "amount": 0, "value": 0.5 },
+        "wood": { "amount": 0, "value": 0.5 },
+        "iron_ore": { "amount": 0, "value": 1 },
+        "coal": { "amount": 0, "value": 1 },
+        "iron": { "amount": 0, "value": 4 },
+        "gold": { "amount": 0, "value": 75 },
+        "diamond": { "amount": 0, "value": 100 },
+        "jewelry": { "amount": 0, "value": 400 },
+        "oil": { "amount": 0, "value": 2 },
+        "paper": { "amount": 0, "value": 4 },
+        "ink": { "amount": 0, "value": 10 },
+        "book": { "amount": 0, "value": 600 },
     };
-    resources_per_sec = JSON.parse(JSON.stringify(resources)) /* Not just a simple assignment. We want a deep copy */
-    resources_per_sec["money"] = 0;
+    /* Set resources_per_sec */
+    Object.keys(resources).forEach(function (res) {
+        resources_per_sec[res] = 0;
+    });
     buildings = {
         "s_manastone": {
             "on": true,
@@ -469,7 +471,7 @@ function set_initial_state() {
             "image": "pickaxe.png",
         },
         "coal_mines": {
-            "unlock": function () { return buildings["mine"].amount >= 3 && buildings["compressor"].amount >= 1 && resources["coal"] < 50; },
+            "unlock": function () { return buildings["mine"].amount >= 3 && buildings["compressor"].amount >= 1 && resources["coal"].amount < 50; },
             "purchase": function () { /* When bought, turn all mines off, increase generation, and turn them back on again. Turns off first to get generation from them properly calculated */
                 let mines_state = buildings["mine"].on;
                 if (mines_state) {
@@ -513,7 +515,7 @@ function set_initial_state() {
             "image": "diamond.png",
         },
         "oiled_compressors": {
-            "unlock": function () { return buildings["compressor"].amount >= 1 && resources["oil"] > 20; },
+            "unlock": function () { return buildings["compressor"].amount >= 1 && resources["oil"].amount > 20; },
             "purchase": function () { /* When bought, turn all compressors off, increase generation, and turn them back on again. Turns off first to get generation from them properly calculated */
                 let comp_state = buildings["compressor"].on;
                 if (comp_state) {
@@ -533,7 +535,7 @@ function set_initial_state() {
             "image": "diamond.png",
         },
         "cheaper_banks": {
-            "unlock": function () { return resources["money"] >= 2500 && buildings["bank"].amount > 20; },
+            "unlock": function () { return resources["money"].amount >= 2500 && buildings["bank"].amount > 20; },
             "purchase": function () { /* When bought, turn all mines off, increase generation, and turn them back on again. Turns off first to get generation from them properly calculated */
                 buildings["bank"].price_ratio["money"] = (buildings["bank"].price_ratio["money"] - 1) * .7 + 1;
                 $("#building_bank > .tooltiptext").html(gen_building_tooltip("bank"));
@@ -600,15 +602,9 @@ function set_initial_state() {
 
 function prestige() {
     /* Calculate mana gain */
-    let mana_gain =Math.max(0, Math.floor(Math.log((
-        resources["money"] +
-        resources["stone"] * .5 +
-        resources["wood"] * .5 +
-        resources["gold"] * 75 +
-        resources["diamond"] * 100 +
-        resources["jewelry"] * 400 +
-        resources["book"] * 600
-      ) / 10000 + 1)));
+    let prestige_points = 0;
+    Object.keys(resources).forEach((res) => prestige_points += resources[res].amount * resources[res].value);
+    let mana_gain = Math.max(0, Math.floor(Math.log((prestige_points) / 10000 + 1)));
 
     if (confirm("You will lose all resources and all buildings but gain " + mana_gain.toString() + " mana after reset. Proceed?")) {
         SPELL_BUILDINGS.forEach(function (build) { /* Turn off all spells */
@@ -629,7 +625,7 @@ function prestige() {
 
 function save() {
     Object.keys(resources).forEach(function (type) {
-        document.cookie = "res-" + type + "=" + resources[type].toString() + ";expires=Fri, 31 Dec 9999 23:59:59 GMT;";
+        document.cookie = "res-" + type + "=" + resources[type].amount.toString() + ";expires=Fri, 31 Dec 9999 23:59:59 GMT;";
     });
     Object.keys(buildings).forEach(function (type) {
         document.cookie = "build-" + type + "=" + JSON.stringify(buildings[type]) +";expires=Fri, 31 Dec 9999 23:59:59 GMT;";
@@ -662,7 +658,7 @@ function load() {
         /* Store in temp string because we need to check if it exists */
         let temp_str = getCookie("res-" + type);
         if (temp_str !== "") {
-            resources[type] = parseFloat(temp_str);
+            resources[type].amount = parseFloat(temp_str);
         }
     });
     console.log("Loading buildings...");
@@ -747,11 +743,11 @@ function update() {
 
     /* Check for negative resources or resources that will run out. */
     Object.keys(resources).forEach(function (res) { /* Loop through all resources, res is current checked resource */
-        if (resources[res] > 0) {
+        if (resources[res].amount > 0) {
             /* Unhide resources we have */
             $("#" + res).removeClass("hidden");
         }
-        if (resources[res] < -resources_per_sec[res] * delta_time / 1000) {
+        if (resources[res].amount < -resources_per_sec[res] * delta_time / 1000) {
             /* Check all buildings */
             Object.keys(buildings).forEach(function (build) { /* Loop through all buildings, build is current checked building */
                 /* Check resource gen */
@@ -764,14 +760,14 @@ function update() {
 
     /* Update all resources */
     Object.keys(resources).forEach(function (key) {
-        if (SPECIAL_RESOURCES.indexOf(key) == -1) {
+        if (resources[key].value != 0) {
             /* Don't add special resources */
-            resources[key] += resources_per_sec[key] * delta_time / 1000;
+            resources[key].amount += resources_per_sec[key] * delta_time / 1000;
         } else { /* We have as much of specialty resources as we generate */
-            resources[key] = resources_per_sec[key];
+            resources[key].amount = resources_per_sec[key];
         }
         /* Formats it so that it says "Resource name: amount" */
-        $("#" + key + " span").first().html((key.charAt(0).toUpperCase() + key.slice(1)).replace("_", " ") + ": " + Math.max(0, Math.floor(resources[key])).toString() + "<br />");
+        $("#" + key + " span").first().html((key.charAt(0).toUpperCase() + key.slice(1)).replace("_", " ") + ": " + Math.max(0, Math.floor(resources[key].amount)).toString() + "<br />");
         /* Same for tooltip */
         $("#" + key + "_per_sec").text("Making " + (Math.round(resources_per_sec[key] * 10) /10).toString() + " per second");
     });
@@ -786,7 +782,7 @@ function update() {
 
         try {
             Object.keys(buildings[build].base_cost).forEach(function (key) {
-                if (buildings[build].base_cost[key] * Math.pow(buildings[build].price_ratio[key], buildings[build].amount) > resources[key]) {
+                if (buildings[build].base_cost[key] * Math.pow(buildings[build].price_ratio[key], buildings[build].amount) > resources[key].amount) {
                     throw Error("Not enough resources!");
                 }
             });
@@ -844,7 +840,7 @@ function purchase_building(name: string) {
     /* Make sure they have enough to buy it */
     Object.keys(buildings[name].base_cost).forEach(function (key) {
         console.log("Checking money");
-        if (buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount) > resources[key]) {
+        if (buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount) > resources[key].amount) {
             throw Error("Not enough resources!");
         }
     });
@@ -852,7 +848,7 @@ function purchase_building(name: string) {
     /* Spend money to buy */
     Object.keys(buildings[name].base_cost).forEach(function (key) {
         console.log("Spending money");
-        resources[key] -= buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount); 
+        resources[key].amount -= buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount); 
     });
 
     /* Add resource gen */
@@ -875,14 +871,14 @@ function purchase_upgrade(name: string) {
 
     /* Check that they have enough */
     Object.keys(upg.cost).forEach(function (resource) {
-        if (resources[resource] < upg.cost[resource]) { /* Don't have enough to buy upgrade */
+        if (resources[resource].amount < upg.cost[resource]) { /* Don't have enough to buy upgrade */
             throw Error("Not enough resources!");
         }
     });
 
     /* Spend it */
     Object.keys(upg.cost).forEach(function (resource) {
-        resources[resource] -= upg.cost[resource];
+        resources[resource].amount -= upg.cost[resource];
     });
 
     /* Do cleanup. Get benefit from having it, remove it from purchasable upgrades, add it to purchased upgrades, remove from page */
@@ -911,7 +907,7 @@ window.onload = () => {
 };
 
 function hack(level: number) {
-    Object.keys(resources).forEach(function (r) { resources[r] = level });
+    Object.keys(resources).forEach(function (r) { resources[r].amount = level });
 }
 function superhack(level: number) {
     Object.keys(resources).forEach(function (r) { resources_per_sec[r] = level });
