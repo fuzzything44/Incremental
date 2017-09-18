@@ -9,6 +9,7 @@ const UNLOCK_TREE = { /* What buildings unlock */
     "s_manastone": [],
     "s_goldboost": [],
     "s_energyboost": [],
+    "s_trade": [],
 
     "bank": ["mine", "logging"],
     "mine": ["furnace", "gold_finder"],
@@ -29,15 +30,64 @@ const SPELL_BUILDINGS = [
     "s_manastone",
     "s_goldboost",
     "s_energyboost",
+    "s_trade",
   ];
 const SPELL_FUNCTIONS = [
-/*   0 */    function () { },
-/*   1 */    function () {
-                resources["money"] += resources_per_sec["money"] * UPDATE_INTERVAL / 1000;
-                resources["gold"] += resources_per_sec["gold"] * UPDATE_INTERVAL / 1000;
-             },
+/*   0 */    function (delta_time: number) { },
+/*   1 */    function (delta_time: number) {
+                resources["money"] += resources_per_sec["money"] * delta_time / 1000;
+                resources["gold"] += resources_per_sec["gold"] * delta_time / 1000;
+},
+/*   2 */    function (delta_time: number) {
+                 let trade_upgrade = {
+                     "unlock": function () {
+                         if (Date.now() > trade_expires) {
+                             delete remaining_upgrades["trade"];
+                             to_next_trade = 45000;
+                             return false;
+                         }
+                         return buildings["s_trade"].on;
+                     },
+                     "purchase": function () {
+                         purchased_upgrades.pop();
+                         to_next_trade = 60000;
+                     },
+                     "cost": {},
+                     "tooltip": "",
+                     "name": "Trade Items <br />",
+                     "image": "money.png",
+                 };
+                 to_next_trade -= delta_time;
+                 if (remaining_upgrades["trade"] == undefined && to_next_trade < 0) {
+                     remaining_upgrades["trade"] = trade_upgrade;
+                     /* Roll money amount. Random between 10 and your money + 10, bounded between 0 and number depending on your mana. Rounded to integer */
+                     let money_value = Math.round(Math.min(Math.pow(1.5, buildings["s_manastone"].amount) * 10, Math.max(0, Math.random() * resources["money"] * 2 + 10)));
+                     /* Choose resources to be about the same money worth. */
+                     let resource_value = Math.round((money_value * 5 / 6) + (Math.random() * money_value * 1 / 3));
+                     /* Choose a resource */
+                     let chosen_resource = Object.keys(resources)[Math.floor(Math.random() * Object.keys(resources).length)];
+                     /* Don't choose special resource or money. */
+                     while (SPECIAL_RESOURCES.indexOf(chosen_resource) != -1 || chosen_resource == "money" || resources[chosen_resource] == 0) {
+                         chosen_resource = Object.keys(resources)[Math.floor(Math.random() * Object.keys(resources).length)];
+                     }
+                     /* See if we're buying or selling */
+                     if (Math.random() > 1) {
+                         /* We're buying it */
+                         remaining_upgrades["trade"].cost["money"] = money_value;
+                         remaining_upgrades["trade"].cost[chosen_resource] = Math.round(resource_value * -0.75); /* Negative so we get the resource */
+                         remaining_upgrades["trade"].tooltip += "Spend " + money_value.toString() + " money to buy " + Math.round(resource_value * 0.75).toString() + " " + chosen_resource.replace('_', ' ');
+                     } else {
+                         /* Selling */
+                         remaining_upgrades["trade"].cost["money"] = Math.round(money_value * -.75);
+                         remaining_upgrades["trade"].cost[chosen_resource] = resource_value; /* Negative so we get the resource */
+                         remaining_upgrades["trade"].tooltip += "Sell " + resource_value.toString() + " " + chosen_resource.replace('_', ' ') + " for " + Math.round(money_value * 0.75).toString() + " money";
+                     }
+                     var trade_expires = Date.now() + 15000;
+                 }
+              },
+    ];
 
-  ];
+var to_next_trade = 60000;
 
 function energy_converter_add() {
     /* Add one converter */
@@ -122,6 +172,17 @@ function set_initial_state() {
             },
             "update": 0,
             "flavor": "This is actually a much simpler spell than the name implies.",
+        },
+        "s_trade": {
+            "on": false,
+            "amount": 6,
+            "base_cost": { "mana": Infinity },
+            "price_ratio": { "mana": 1 },
+            "generation": {
+                "mana": -1,
+            },
+            "update": 2,
+            "flavor": "With an infinite variety of things, you would think you could find some apples for sale. But you can't.",
         },
 
         "bank": {
@@ -673,14 +734,17 @@ function toggle_building_state(name: string) {
     }
 }
 
-
-const UPDATE_INTERVAL = 35;
+var last_update: number = Date.now();
 function update() {
+    /* Find time since last update. */
+    let delta_time: number = Date.now() - last_update;
+    last_update = Date.now();
+
     /* Update all resources */
     Object.keys(resources).forEach(function (key) {
         if (SPECIAL_RESOURCES.indexOf(key) == -1) {
             /* Don't add special resources */
-            resources[key] += resources_per_sec[key] * UPDATE_INTERVAL / 1000;
+            resources[key] += resources_per_sec[key] * delta_time / 1000;
         } else { /* We have as much of specialty resources as we generate */
             resources[key] = resources_per_sec[key];
         }
@@ -728,7 +792,7 @@ function update() {
     /* Perform spell actions */
     SPELL_BUILDINGS.forEach(function (build) {
         if (buildings[build].on) {
-            SPELL_FUNCTIONS[buildings[build].update]();
+            SPELL_FUNCTIONS[buildings[build].update](delta_time);
         }
     });
 }
@@ -829,7 +893,7 @@ function random_title() {
 window.onload = () => {
     set_initial_state();
     load();
-    setInterval(update, UPDATE_INTERVAL);
+    setInterval(update, 35);
     setInterval(save, 30000);
 
     update_upgrade_list();
