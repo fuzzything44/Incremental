@@ -69,7 +69,7 @@ var SPELL_FUNCTIONS = [
                 chosen_resource = Object.keys(resources)[Math.floor(Math.random() * Object.keys(resources).length)];
             }
             /* See if we're buying or selling */
-            if (Math.random() > 1) {
+            if (Math.random() > 0.5) {
                 /* We're buying it */
                 remaining_upgrades["trade"].cost["money"] = money_value;
                 remaining_upgrades["trade"].cost[chosen_resource] = Math.round(resource_value * -0.75); /* Negative so we get the resource */

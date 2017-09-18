@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v0.3.1:
+Trading bugfix. You can now buy and sell items instead of just sell.
+
 v0.3.0:
 Added new prestige spell: market! You can now get special offers to buy and sell resources for money! Also game now works in background. Offline progression coming soon!
 
