@@ -10,6 +10,7 @@ const UNLOCK_TREE = { /* What buildings unlock */
     "s_goldboost": [],
     "s_energyboost": [],
     "s_trade": [],
+    "s_startboost": [],
 
     "bank": ["mine", "logging"],
     "mine": ["furnace", "gold_finder"],
@@ -31,6 +32,7 @@ const SPELL_BUILDINGS = [
     "s_goldboost",
     "s_energyboost",
     "s_trade",
+    "s_startboost",
   ];
 const SPELL_FUNCTIONS = [
 /*   0 */    function (delta_time: number) { },
@@ -185,6 +187,22 @@ function set_initial_state() {
             },
             "update": 2,
             "flavor": "With an infinite variety of things, you would think you could find some apples for sale. But you can't.",
+        },
+        "s_startboost": {
+            "on": false,
+            "amount": 25,
+            "base_cost": { "mana": Infinity },
+            "price_ratio": { "mana": 1 },
+            "generation": {
+                "mana": -1,
+                "money": 1,
+                "stone": 2,
+                "wood": 2,
+                "iron_ore": 10/25,
+                "oil": 5/25,
+            },
+            "update": 0,
+            "flavor": "I HAVE THE POWER!",
         },
 
         "bank": {
