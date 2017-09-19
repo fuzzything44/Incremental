@@ -48,7 +48,7 @@ const SPELL_FUNCTIONS = [
                      this.boost = resources_per_sec["money"];
                      resources_per_sec["money"] += this.boost;
                  }
-                 let normal_gold_gain = resources_per_sec["gold"];
+                 let normal_gold_gain = resources_per_sec["gold"] - this.boost_gold;
                  if (this.boost_gold != normal_gold_gain) { /* Gold gain changed, we need to alter our boost to match. */
                      resources_per_sec["gold"] -= this.boost_gold;
                      this.boost_gold = resources_per_sec["gold"];

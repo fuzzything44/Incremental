@@ -1,7 +1,10 @@
 ﻿CrappyIncremental Changelog
 
-v0.5.1
-You can no longer destroy banks. Goldboost now properly updates tooltips.
+v0.5.1:
+Greed doesn't give extra gold even when it shouldn't.
+
+v0.5.1:
+You can no longer destroy banks. Greed now properly updates tooltips.
 
 v0.5.0:
 Added Gold sifter upgrade, upgrade count so you know how many you're missing, hides spells you can't pay for yet. Added building destruction.
