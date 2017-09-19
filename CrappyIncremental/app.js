@@ -35,8 +35,33 @@ var SPELL_BUILDINGS = [
 var SPELL_FUNCTIONS = [
     /*   0 */ function (delta_time) { },
     /*   1 */ function (delta_time) {
-        resources["money"].amount += resources_per_sec["money"] * delta_time / 1000;
-        resources["gold"].amount += resources_per_sec["gold"] * delta_time / 1000;
+        var _this = this;
+        if (typeof this.boost == "undefined") {
+            this.boost = 0;
+            this.boost_gold = 0;
+        }
+        /* Calc native money gain */
+        var normal_gain = resources_per_sec["money"] - this.boost;
+        if (this.boost != normal_gain) {
+            resources_per_sec["money"] -= this.boost;
+            this.boost = resources_per_sec["money"];
+            resources_per_sec["money"] += this.boost;
+        }
+        var normal_gold_gain = resources_per_sec["gold"];
+        if (this.boost_gold != normal_gold_gain) {
+            resources_per_sec["gold"] -= this.boost_gold;
+            this.boost_gold = resources_per_sec["gold"];
+            resources_per_sec["gold"] += this.boost_gold;
+        }
+        /* Checks if building was turned off */
+        setTimeout(function () {
+            if (!buildings["s_goldboost"].on) {
+                resources_per_sec["money"] -= _this.boost;
+                resources_per_sec["gold"] -= _this.boost_gold;
+                _this.boost = 0;
+                _this.boost_gold = 0;
+            }
+        }, 50);
     },
     /*   2 */ function (delta_time) {
         var trade_upgrade = {

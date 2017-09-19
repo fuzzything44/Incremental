@@ -37,9 +37,33 @@ const SPELL_BUILDINGS = [
 const SPELL_FUNCTIONS = [
 /*   0 */    function (delta_time: number) { },
 /*   1 */    function (delta_time: number) {
-                resources["money"].amount += resources_per_sec["money"] * delta_time / 1000;
-                resources["gold"].amount += resources_per_sec["gold"] * delta_time / 1000;
-},
+                 if (typeof this.boost == "undefined") {
+                     this.boost = 0;
+                     this.boost_gold = 0;
+                 }
+                 /* Calc native money gain */
+                 let normal_gain = resources_per_sec["money"] - this.boost;
+                 if (this.boost != normal_gain) { /* Money gain changed, we need to alter our boost to match. */
+                     resources_per_sec["money"] -= this.boost;
+                     this.boost = resources_per_sec["money"];
+                     resources_per_sec["money"] += this.boost;
+                 }
+                 let normal_gold_gain = resources_per_sec["gold"];
+                 if (this.boost_gold != normal_gold_gain) { /* Gold gain changed, we need to alter our boost to match. */
+                     resources_per_sec["gold"] -= this.boost_gold;
+                     this.boost_gold = resources_per_sec["gold"];
+                     resources_per_sec["gold"] += this.boost_gold;
+                 }
+                 /* Checks if building was turned off */
+                 setTimeout(() => {
+                     if (!buildings["s_goldboost"].on) {
+                         resources_per_sec["money"] -= this.boost;
+                         resources_per_sec["gold"] -= this.boost_gold;
+                         this.boost = 0;
+                         this.boost_gold = 0;
+                     }
+                 }, 50);
+             },
 /*   2 */    function (delta_time: number) {
                  let trade_upgrade = {
                      "unlock": function () {
