@@ -117,29 +117,32 @@ const SPELL_FUNCTIONS = [
 var to_next_trade = 60000;
 
 function energy_converter_add() {
+    let num_to_add = parseInt($("#buy_amount").val());
     /* Add one converter */
-    buildings["s_energyboost"].amount += 1;
+    buildings["s_energyboost"].amount += num_to_add;
     $("#building_s_energyboost > .building_amount").html(buildings["s_energyboost"].amount.toString());
 
     /* Add energy only if on */
     if (buildings["s_energyboost"].on) {
-        resources_per_sec["energy"] += 1;
-        resources_per_sec["mana"] -= 1;
+        resources_per_sec["energy"] += num_to_add;
+        resources_per_sec["mana"] -= num_to_add;
     }
 }
 
 function energy_converter_remove() {
+    let num_to_remove = parseInt($("#buy_amount").val());
     /* Make sure it can't go negative. Don't want people to trade the other way! */
-    if (buildings["s_energyboost"].amount > 0) {
-        /* Remove a converter */
-        buildings["s_energyboost"].amount -= 1;
-        $("#building_s_energyboost > .building_amount").html(buildings["s_energyboost"].amount.toString());
+    if (buildings["s_energyboost"].amount - num_to_remove < 0) {
+        num_to_remove = buildings["s_energyboost"].amount;
+    }
+    /* Remove a converter */
+    buildings["s_energyboost"].amount -= num_to_remove;
+    $("#building_s_energyboost > .building_amount").html(buildings["s_energyboost"].amount.toString());
 
-        /* Remove energy only if on */
-        if (buildings["s_energyboost"].on) {
-            resources_per_sec["energy"] -= 1;
-            resources_per_sec["mana"] += 1;
-        }
+    /* Remove energy only if on */
+    if (buildings["s_energyboost"].on) {
+        resources_per_sec["energy"] -= 1;
+        resources_per_sec["mana"] += 1;
     }
 }
 
@@ -913,8 +916,14 @@ function update_upgrade_list() {
     /* Loop through all remaining upgrades */
     Object.keys(remaining_upgrades).forEach(function (upg_name) {
         if (remaining_upgrades[upg_name].unlock()) {
+            let color = "lightgray"; /* Set color to lightgray or red depending on if they can afford it */
+            Object.keys(remaining_upgrades[upg_name].cost).forEach(function (res) {
+                if (resources[res].amount < remaining_upgrades[upg_name].cost[res]) {
+                    color = "red";
+                }
+            });
             let upg_elem: string = "<li id=\"upgrade_" + upg_name +
-                "\" class=\"upgrade tooltip\" onclick=\"purchase_upgrade('" + upg_name + "')\" style='text-align: center'><span>" +
+                "\" class=\"upgrade tooltip\" onclick=\"purchase_upgrade('" + upg_name + "')\" style='text-align: center; color: " + color + "'><span>" +
                 remaining_upgrades[upg_name].name + "<br /> <img src='images/" + remaining_upgrades[upg_name].image + "' alt='' style='width: 3em; height: 3em; float: bottom;' /></span><span class=\"tooltiptext\">" +
                 remaining_upgrades[upg_name].tooltip + "</span> </li>";
             $("#upgrades > ul").append(upg_elem);

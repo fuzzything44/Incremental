@@ -1,6 +1,9 @@
 ﻿CrappyIncremental Changelog
 
-v0.5.1:
+v0.5.3:
+Energy converter -/+ buttons now add or remove based on build amount setting. Upgrades turn red when you can't buy them.
+
+v0.5.2:
 Greed doesn't give extra gold even when it shouldn't.
 
 v0.5.1:
