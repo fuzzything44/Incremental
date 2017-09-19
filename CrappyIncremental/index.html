@@ -10,7 +10,7 @@
 </head>
 <body>
     <div style="font-size: small; position:absolute; top: 0;">
-        v0.5.3 | 
+        v0.5.4 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none; color: lightgray;">Changelog</a> |
         <a href="https://github.com/fuzzything44/Incremental/wiki" target="_blank" style="text-decoration: none; color: lightgray;">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none; color: lightgray;">Discord</a> |
@@ -20,22 +20,23 @@
         <span id="upgrade_count" style="position: absolute; left: 54.6em; top: -.2em; white-space: nowrap;">Upgrades: 0/100</span>
     </div>
     <div id="resource_bar">
-        <span id="energy" class="tooltip hidden" style="color: gold"><span>Energy: 0<br /></span><span id="energy_per_sec" class="tooltiptext">Making 1 per second.</span></span>
-        <span id="mana" class="tooltip hidden" style="color: mediumpurple"><span>Mana: 0<br /></span><span id="mana_per_sec" class="tooltiptext">Making 1 per second.</span></span>
+        <span id="energy" class="tooltip hidden" style="color: gold"><span>Energy: 0<br /></span><br /></span>
+        <span id="mana" class="tooltip hidden" style="color: mediumpurple"><span>Mana: 0<br /></span><br /></span>
 
-        <span id="money" class="tooltip hidden"><span>Money: 0<br /></span><span id="money_per_sec" class="tooltiptext">Making 1 per second.</span></span>
-        <span id="stone" class="tooltip hidden"><span>Stone: 0<br /></span><span id="stone_per_sec" class="tooltiptext">Making 0 per second.</span></span>
-        <span id="wood" class="tooltip hidden"><span>Wood: 0<br /></span><span id="wood_per_sec" class="tooltiptext">Making 0 per second.</span></span>
-        <span id="iron_ore" class="tooltip hidden"><span>Iron Ore: 0<br /></span><span id="iron_ore_per_sec" class="tooltiptext">Making 0 per second.</span></span>
-        <span id="coal" class="tooltip hidden"><span>Coal: 0<br /></span><span id="coal_per_sec" class="tooltiptext">Making 0 per second.</span></span>
-        <span id="iron" class="tooltip hidden"><span>Iron: 0<br /></span><span id="iron_per_sec" class="tooltiptext">Making 1 per second.</span></span>
-        <span id="gold" class="tooltip hidden"><span>Gold: 0<br /></span><span id="gold_per_sec" class="tooltiptext">Making 1 per second.</span></span>
-        <span id="diamond" class="tooltip hidden"><span>Diamond: 0<br /></span><span id="diamond_per_sec" class="tooltiptext">Making 1 per second.</span></span>
-        <span id="jewelry" class="tooltip hidden"><span>Jewelry: 0<br /></span><span id="jewelry_per_sec" class="tooltiptext">Making 1 per second.</span></span>
-        <span id="oil" class="tooltip hidden"><span>Oil: 0<br /></span><span id="oil_per_sec" class="tooltiptext">Making 1 per second.</span></span>
-        <span id="paper" class="tooltip hidden"><span>Paper: 0<br /></span><span id="paper_per_sec" class="tooltiptext">Making 1 per second.</span></span>
-        <span id="ink" class="tooltip hidden"><span>Ink: 0<br /></span><span id="ink_per_sec" class="tooltiptext">Making 1 per second.</span></span>
-        <span id="book" class="tooltip hidden"><span>Book: 0<br /></span><span id="book_per_sec" class="tooltiptext">Making 1 per second.</span></span>
+        <span id="money" class="hidden"><span>Money: 0</span><span id="money_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
+        <span id="stone" class="tooltip hidden"><span>Stone: 0<br /></span><span id="stone_per_sec" class="res_gen">Making 0 per second.</span><br /></span>
+        <span id="wood" class="tooltip hidden"><span>Wood: 0<br /></span><span id="wood_per_sec" class="res_gen">Making 0 per second.</span><br /></span>
+        <span id="iron_ore" class="tooltip hidden"><span>Iron Ore: 0<br /></span><span id="iron_ore_per_sec" class="res_gen">Making 0 per second.</span><br /></span>
+        <span id="coal" class="tooltip hidden"><span>Coal: 0<br /></span><span id="coal_per_sec" class="res_gen">Making 0 per second.</span><br /></span>
+        <span id="iron" class="tooltip hidden"><span>Iron: 0<br /></span><span id="iron_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
+        <span id="gold" class="tooltip hidden"><span>Gold: 0<br /></span><span id="gold_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
+        <span id="diamond" class="tooltip hidden"><span>Diamond: 0<br /></span><span id="diamond_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
+        <span id="jewelry" class="tooltip hidden"><span>Jewelry: 0<br /></span><span id="jewelry_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
+        <span id="oil" class="tooltip hidden"><span>Oil: 0<br /></span><span id="oil_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
+        <span id="paper" class="tooltip hidden"><span>Paper: 0<br /></span><span id="paper_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
+        <span id="ink" class="tooltip hidden"><span>Ink: 0<br /></span><span id="ink_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
+        <span id="book" class="tooltip hidden"><span>Book: 0<br /></span><span id="book_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
+        <span id="sand" class="tooltip hidden"><span>Sand: 0<br /></span><span id="sand_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
 
     </div>
     <div id="buildings">

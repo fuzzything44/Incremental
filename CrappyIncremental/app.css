@@ -25,6 +25,9 @@
     
 }
 
+.res_gen {
+    float: right;
+}
 #buildings {
     position: absolute;
     top: 1em;

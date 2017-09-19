@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v0.5.4:
+Resource gain now displayed inline with the resource instead of in a tooltip.
+
 v0.5.3:
 Energy converter -/+ buttons now add or remove based on build amount setting. Upgrades turn red when you can't buy them.
 

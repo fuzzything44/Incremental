@@ -157,6 +157,7 @@ function set_initial_state() {
         "paper": { "amount": 0, "value": 4 },
         "ink": { "amount": 0, "value": 10 },
         "book": { "amount": 0, "value": 600 },
+        "sand": { "amount": 0, "value": 1 },
     };
     /* Set resources_per_sec */
     Object.keys(resources).forEach(function (res) {
@@ -653,6 +654,29 @@ function set_initial_state() {
             "name": "Gold magnet <br />",
             "image": "money.png",
         },
+        "gold_crusher": {
+            "unlock": function () { return buildings["gold_finder"].amount >= 5 && buildings["s_manastone"] >= 10 && false; },
+            "purchase": function () {
+                var comp_state = buildings["gold_finder"].on;
+                if (comp_state) {
+                    toggle_building_state("gold_finder");
+                }
+                buildings["gold_finder"].generation["sand"] = 2;
+                buildings["gold_finder"].generation["gold"] *= 2;
+                if (comp_state) {
+                    toggle_building_state("gold_finder");
+                }
+                $("#building_gold_finder > .tooltiptext").html(gen_building_tooltip("gold_finder"));
+            },
+            "cost": {
+                "money": 250,
+                "iron": 200,
+                "stone": 750,
+            },
+            "tooltip": "Crushes stone into sand, improving gold find rate. <br /> Costs 250 money, 200 iron, 750 stone.",
+            "name": "Destructive Sifter",
+            "image": "sand.png",
+        },
     };
     $("#buy_amount").val(1);
 }
@@ -856,9 +880,9 @@ function update() {
             resources[key].amount = resources_per_sec[key];
         }
         /* Formats it so that it says "Resource name: amount" */
-        $("#" + key + " span").first().html((key.charAt(0).toUpperCase() + key.slice(1)).replace("_", " ") + ": " + Math.max(0, Math.floor(resources[key].amount)).toString() + "<br />");
+        $("#" + key + " span").first().html((key.charAt(0).toUpperCase() + key.slice(1)).replace("_", " ") + ": " + Math.max(0, Math.floor(resources[key].amount)).toString());
         /* Same for tooltip */
-        $("#" + key + "_per_sec").text("Making " + (Math.round(resources_per_sec[key] * 10) / 10).toString() + " per second");
+        $("#" + key + "_per_sec").text((resources_per_sec[key] > 0 ? "+" : "") + (Math.round(resources_per_sec[key] * 10) / 10).toString() + "/s");
     });
     /* Unhide buildings */
     Object.keys(buildings).forEach(function (build) {
