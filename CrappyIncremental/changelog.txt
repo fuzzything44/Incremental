@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v.0.4.1:
+Added more random titles. Added external save/load. Added buy multiple.
+
 v0.4.0:
 Should stop selection on more browsers. Add new expensive spell (more for getting started).
 

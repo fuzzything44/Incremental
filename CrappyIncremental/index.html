@@ -10,9 +10,13 @@
 </head>
 <body>
     <div style="font-size: small; position:absolute; top: 0;">
-        v0.4.0 | 
+        v0.4.1 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none; color: lightgray;">Changelog</a> |
-        <a href="https://github.com/fuzzything44/Incremental/wiki" target="_blank" style="text-decoration: none; color: lightgray;">Wiki</a> 
+        <a href="https://github.com/fuzzything44/Incremental/wiki" target="_blank" style="text-decoration: none; color: lightgray;">Wiki</a> |
+        <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none; color: lightgray;">Discord</a> |
+        <span onclick="save_to_clip()">Export</span> |
+        <span onclick="load_from_clip()">Import</span>
+        <span style="position: absolute; left: 45em; top: -.3em; white-space: nowrap">Buy Amount: <input id="buy_amount" style="font-size: 10px; background-color: #333; color: lightgray; border: none; width: 4em;" type="number" placeholder="1"/></span>
     </div>
     <div id="resource_bar">
         <span id="energy" class="tooltip hidden" style="color: gold"><span>Energy: 0<br /></span><span id="energy_per_sec" class="tooltiptext">Making 1 per second.</span></span>

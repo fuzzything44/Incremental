@@ -602,6 +602,7 @@ function set_initial_state() {
             "image": "fire.png",
         },
     };
+    $("#buy_amount").val(1);
 }
 function prestige() {
     /* Calculate mana gain */
@@ -710,6 +711,43 @@ function load() {
             $("#toggle_" + name).text("Off");
         }
     });
+}
+function save_to_clip() {
+    save();
+    var text = btoa(document.cookie);
+    var textArea = document.createElement("textarea");
+    /* Styling to make sure it doesn't do much if the element gets rendered */
+    /* Place in top-left corner of screen regardless of scroll position. */
+    textArea.style.position = 'fixed';
+    textArea.style.top = 0;
+    textArea.style.left = 0;
+    textArea.style.width = '2em';
+    textArea.style.height = '2em';
+    textArea.style.padding = 0;
+    textArea.style.border = 'none';
+    textArea.style.outline = 'none';
+    textArea.style.boxShadow = 'none';
+    textArea.style.background = 'transparent';
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.select();
+    try {
+        var successful = document.execCommand('copy');
+        if (successful) {
+            alert("Save copied to clipboard.");
+        }
+    }
+    catch (err) {
+        console.log('Oops, unable to copy');
+    }
+    document.body.removeChild(textArea);
+}
+function load_from_clip() {
+    var loaded_data = atob(prompt("Paste your save data here."));
+    loaded_data.split(";").forEach(function (data) {
+        document.cookie = data;
+    });
+    location.reload();
 }
 function toggle_building_state(name) {
     if (buildings[name].on) {
@@ -829,27 +867,33 @@ function gen_building_tooltip(name) {
     return gen_text.trim().replace(/.$/, ".") + "<br />" + cost_text.trim().replace(/.$/, ".") + flavor_text;
 }
 function purchase_building(name) {
-    /* Make sure they have enough to buy it */
-    Object.keys(buildings[name].base_cost).forEach(function (key) {
-        console.log("Checking money");
-        if (buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount) > resources[key].amount) {
-            throw Error("Not enough resources!");
-        }
-    });
-    /* Spend money to buy */
-    Object.keys(buildings[name].base_cost).forEach(function (key) {
-        console.log("Spending money");
-        resources[key].amount -= buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount);
-    });
-    /* Add resource gen */
-    Object.keys(buildings[name].generation).forEach(function (key) {
-        if (buildings[name].on) {
-            resources_per_sec[key] += buildings[name].generation[key];
-        }
-    });
-    buildings[name].amount++;
-    $('#building_' + name + " > .building_amount").html(buildings[name].amount.toString());
-    $('#building_' + name + " > .tooltiptext").html(gen_building_tooltip(name));
+    var amount = parseInt($("#buy_amount").val());
+    if (isNaN(amount)) {
+        amount = 1;
+    }
+    for (var i = 0; i < amount; i++) {
+        /* Make sure they have enough to buy it */
+        Object.keys(buildings[name].base_cost).forEach(function (key) {
+            console.log("Checking money");
+            if (buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount) > resources[key].amount) {
+                throw Error("Not enough resources!");
+            }
+        });
+        /* Spend money to buy */
+        Object.keys(buildings[name].base_cost).forEach(function (key) {
+            console.log("Spending money");
+            resources[key].amount -= buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount);
+        });
+        /* Add resource gen */
+        Object.keys(buildings[name].generation).forEach(function (key) {
+            if (buildings[name].on) {
+                resources_per_sec[key] += buildings[name].generation[key];
+            }
+        });
+        buildings[name].amount++;
+        $('#building_' + name + " > .building_amount").html(buildings[name].amount.toString());
+        $('#building_' + name + " > .tooltiptext").html(gen_building_tooltip(name));
+    }
 }
 function purchase_upgrade(name) {
     var upg = remaining_upgrades[name];
@@ -870,7 +914,16 @@ function purchase_upgrade(name) {
     upg.purchase();
 }
 function random_title() {
-    var TITLES = ["CrappyIdle v.π²", "Drink Your Ovaltine!", "(!) Not Responding            (I lied)", "17 New Resources That Will Blow Your Mind!", "Ÿ̛̦̯ͬ̔̾̃ͥ͑o͋ͩ̽̓͋̚͘u͚̼̜̞͉͓̹ͦ͒͌̀ ̄͋̉̓҉̖̖̠̤ņ͔̄͟͟e̦̝̻̼̖͖͋̓̔̓͒ͬe̷͈̗̻̘̩̙̖͗ͫͭͮ͌̃́ͬ̔d̥̞ͨ̏͗͆̉ͩ ̨̟̭̻͔̰͓͍̤͍̀ͤͤ̎͐͘͠m͙͈͖̱͍̖̤͑̃͐͋ͪ̐ͯ̏͘ͅȍ̼̭̦͚̥̜͉̥̱ͬ͞r̥̣̰͈̻̰ͮ̓̚e̳͊ͯ͞ ̏ͯ̈́҉̛̮͚̖͈̼g̩͖̙̞̮̟̍ͦͫ̓ͭͥ̀o̧̻̞̰͉̤͇̭̘͓ͨ̆̔ͨl̴͕͉̦̩̟̤̰̃͋̃̉̓͌ͪ͌ͩd̢̨̲̻̿ͫ"];
+    var TITLES = [
+        "CrappyIdle v.π²",
+        "Drink Your Ovaltine!",
+        "(!) Not Responding (I lied)",
+        "17 New Resources That Will Blow Your Mind!",
+        "Ÿ̛̦̯ͬ̔̾̃ͥ͑o͋ͩ̽̓͋̚͘u͚̼̜̞͉͓̹ͦ͒͌̀ ̄͋̉̓҉̖̖̠̤ņ͔̄͟͟e̦̝̻̼̖͖͋̓̔̓͒ͬe̷͈̗̻̘̩̙̖͗ͫͭͮ͌̃́ͬ̔d̥̞ͨ̏͗͆̉ͩ ̨̟̭̻͔̰͓͍̤͍̀ͤͤ̎͐͘͠m͙͈͖̱͍̖̤͑̃͐͋ͪ̐ͯ̏͘ͅȍ̼̭̦͚̥̜͉̥̱ͬ͞r̥̣̰͈̻̰ͮ̓̚e̳͊ͯ͞ ̏ͯ̈́҉̛̮͚̖͈̼g̩͖̙̞̮̟̍ͦͫ̓ͭͥ̀o̧̻̞̰͉̤͇̭̘͓ͨ̆̔ͨl̴͕͉̦̩̟̤̰̃͋̃̉̓͌ͪ͌ͩd̢̨̲̻̿ͫ",
+        "Help im trapped in an html factory",
+        "Totally no malware here",
+        "Try Foodbits! They're super tasty*! *ᴾᵃʳᵗ ᵒᶠ ᵃ ᶜᵒᵐᵖˡᵉᵗᵉ ᵇʳᵉᵃᵏᶠᵃˢᵗ⋅ ᴺᵒᵗ ᶠᵒʳ ʰᵘᵐᵃⁿ ᶜᵒⁿˢᵘᵐᵖᵗᶦᵒⁿ⋅ ᴰᵒ ⁿᵒᵗ ᶜᵒⁿˢᵘᵐᵉ ʷʰᶦˡᵉ ᵘⁿᵈᵉʳ ᵗʰᵉ ᶦⁿᶠˡᵘᵉⁿᶜᵉ ᵒᶠ ᵈʳᵘᵍˢ ᵒʳ ᵃˡᶜᵒʰᵒˡ⋅ ᴼʳ ᵃᶦʳ⋅",
+    ];
     document.title = TITLES.filter(function (item) { return item !== document.title; })[Math.floor(Math.random() * (TITLES.length - 1))];
 }
 window.onload = function () {
