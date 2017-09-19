@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v0.4.3:
+All on/off buttons now ignore spells.
+
 v0.4.2:
 Can't set multibuy to less than 0. Added all on/ all off buttons.
 

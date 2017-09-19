@@ -10,7 +10,7 @@
 </head>
 <body>
     <div style="font-size: small; position:absolute; top: 0;">
-        v0.4.2 | 
+        v0.4.3 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none; color: lightgray;">Changelog</a> |
         <a href="https://github.com/fuzzything44/Incremental/wiki" target="_blank" style="text-decoration: none; color: lightgray;">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none; color: lightgray;">Discord</a> |
@@ -128,8 +128,8 @@
         <span id="reset" class="tooltip" onclick="if(confirm('Are you sure? This resets EVERYTHING!') && prompt('If you\'re absolutely sure, enter \'reset\'.') == 'reset') {set_initial_state(); save(); location.reload();}"><span>Reset</span><span class="tooltiptext">Resets ALL progress. There is NO bonus for this!</span></span>
         <span id="save" onclick="save();">Save</span>
         <span id="prestige" onclick="prestige();">Prestige</span>
-        <span id="all_on" onclick="Object.keys(buildings).forEach(function (build) { if (!buildings[build].on) { toggle_building_state(build); }});">All On</span>
-        <span id="all_off" onclick="Object.keys(buildings).forEach(function (build) { if (buildings[build].on) { toggle_building_state(build); } toggle_building_state('s_manastone'); });">All off</span>
+        <span id="all_on" onclick="Object.keys(buildings).forEach(function (build) { if (!buildings[build].on && SPELL_BUILDINGS.indexOf(build) == -1) { toggle_building_state(build);}});">All On</span>
+        <span id="all_off" onclick="Object.keys(buildings).forEach(function (build) { if (buildings[build].on && SPELL_BUILDINGS.indexOf(build) == -1) { toggle_building_state(build);}});">All off</span>
         <span id="save_text">Saved!</span>
 
 
