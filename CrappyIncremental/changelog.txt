@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v0.5.0:
+Added Gold sifter upgrade, upgrade count so you know how many you're missing, hides spells you can't pay for yet. Added building destruction.
+
 v0.4.3:
 All on/off buttons now ignore spells.
 

@@ -451,7 +451,7 @@ function set_initial_state() {
                 "ink": -1,
                 "book": 0.1,
             },
-            "flavor": "It's actually just printing a bunch of copies of <i>My Immortal</i>.",
+            "flavor": "It's actually just printing a bunch of copies of My Immortal.",
         },
     };
     purchased_upgrades = [];
@@ -600,6 +600,30 @@ function set_initial_state() {
             "tooltip": "Much hotter furnaces run at 10x the previous rate. <br /> Costs 100 money, 300 stone, 200 wood, 200 coal.",
             "name": "Hotter furnaces",
             "image": "fire.png",
+        },
+        "better_gold": {
+            "unlock": function () { return buildings["gold_finder"].amount >= 3; },
+            "purchase": function () {
+                var comp_state = buildings["gold_finder"].on;
+                if (comp_state) {
+                    toggle_building_state("gold_finder");
+                }
+                buildings["gold_finder"].generation["gold"] *= 2;
+                buildings["gold_finder"].generation["iron"] = 0.05;
+                if (comp_state) {
+                    toggle_building_state("gold_finder");
+                }
+                $("#building_gold_finder > .tooltiptext").html(gen_building_tooltip("gold_finder"));
+            },
+            "cost": {
+                "money": 250,
+                "gold": 50,
+                "iron": 200,
+                "coal": 200,
+            },
+            "tooltip": "Special gold-plated magnets that attract only gold. And a bit of iron. <br /> Costs 250 money, 50 gold, 200 iron.",
+            "name": "Gold magnet <br />",
+            "image": "money.png",
         },
     };
     $("#buy_amount").val(1);
@@ -810,7 +834,8 @@ function update() {
     });
     /* Unhide buildings */
     Object.keys(buildings).forEach(function (build) {
-        if (buildings[build].amount > 0) {
+        if (buildings[build].amount > 0 && SPELL_BUILDINGS.indexOf(build) == -1) {
+            $("#building_" + build).parent().removeClass("hidden"); /* Any owned building is unlocked. Needed in case they sell previous ones and reload. */
             UNLOCK_TREE[build].forEach(function (unlock) {
                 $("#building_" + unlock).parent().removeClass("hidden");
             });
@@ -848,6 +873,8 @@ function update_upgrade_list() {
             $("#upgrades > ul").append(upg_elem);
         }
     });
+    /* Update upgrade total */
+    $("#upgrade_count").html("Upgrades: " + purchased_upgrades.length.toString() + "/" + (purchased_upgrades.length + Object.keys(remaining_upgrades).length).toString());
 }
 function gen_building_tooltip(name) {
     var gen_text = "Generates ";
@@ -895,6 +922,26 @@ function purchase_building(name) {
         $('#building_' + name + " > .tooltiptext").html(gen_building_tooltip(name));
     }
 }
+function destroy_building(name) {
+    var amount = parseInt($("#buy_amount").val());
+    if (isNaN(amount)) {
+        amount = 1;
+    }
+    for (var i = 0; i < amount; i++) {
+        if (buildings[name].amount < 1) {
+            return; /* Can't sell last building */
+        }
+        /* Remove resource gen */
+        Object.keys(buildings[name].generation).forEach(function (key) {
+            if (buildings[name].on) {
+                resources_per_sec[key] -= buildings[name].generation[key];
+            }
+        });
+        buildings[name].amount--;
+        $('#building_' + name + " > .building_amount").html(buildings[name].amount.toString());
+        $('#building_' + name + " > .tooltiptext").html(gen_building_tooltip(name));
+    }
+}
 function purchase_upgrade(name) {
     var upg = remaining_upgrades[name];
     /* Check that they have enough */
@@ -935,6 +982,11 @@ window.onload = function () {
     setInterval(update_upgrade_list, 500);
     random_title();
     setInterval(random_title, 60000);
+    SPELL_BUILDINGS.forEach(function (build) {
+        if (buildings["s_manastone"].amount < buildings[build].amount * -buildings[build].generation["mana"]) {
+            $("#building_" + build).parent().addClass("hidden");
+        }
+    });
 };
 function hack(level) {
     Object.keys(resources).forEach(function (r) { resources[r].amount = level; });

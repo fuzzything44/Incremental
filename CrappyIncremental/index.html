@@ -10,13 +10,14 @@
 </head>
 <body>
     <div style="font-size: small; position:absolute; top: 0;">
-        v0.4.3 | 
+        v0.5.0 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none; color: lightgray;">Changelog</a> |
         <a href="https://github.com/fuzzything44/Incremental/wiki" target="_blank" style="text-decoration: none; color: lightgray;">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none; color: lightgray;">Discord</a> |
         <span onclick="save_to_clip()">Export</span> |
         <span onclick="load_from_clip()">Import</span>
         <span style="position: absolute; left: 45em; top: -.3em; white-space: nowrap">Buy Amount: <input id="buy_amount" style="font-size: 10px; background-color: #333; color: lightgray; border: none; width: 4em;" type="number" min="0"/></span>
+        <span id="upgrade_count" style="position: absolute; left: 54.6em; top: -.2em; white-space: nowrap;">Upgrades: 0/100</span>
     </div>
     <div id="resource_bar">
         <span id="energy" class="tooltip hidden" style="color: gold"><span>Energy: 0<br /></span><span id="energy_per_sec" class="tooltiptext">Making 1 per second.</span></span>
@@ -68,58 +69,72 @@
             <hr />
         </div>
         <div style="position: relative">
+            <span onclick="destroy_building('bank')" class="building_remove">X</span>
             <span id="building_bank" class="building tooltip" onclick="purchase_building('bank');"><span class="building_name">Bank</span><span class="building_amount">0</span><span class="tooltiptext">Generates 1 money per second.<br /> Costs 10 money.</span></span>
             <span id="toggle_bank" class="building_state_on" onclick="toggle_building_state('bank')">On</span>
         </div>
         <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('mine')" class="building_remove">X</span>
             <span id="building_mine" class="building tooltip" onclick="purchase_building('mine');"><span class="building_name">Mine</span><span class="building_amount">0</span><span class="tooltiptext">Generates -1 money per second, 1 Stone per second.<br /> Costs 20 money.</span></span>
             <span id="toggle_mine" class="building_state_on" onclick="toggle_building_state('mine')">On</span>
         </div>
         <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('logging')" class="building_remove">X</span>
             <span id="building_logging" class="building tooltip" onclick="purchase_building('logging');"><span class="building_name">Logging Camp</span><span class="building_amount">0</span><span class="tooltiptext">Generates -1 money per second, 1 Wood per second.<br /> Costs 20 money.</span></span>
             <span id="toggle_logging" class="building_state_on" onclick="toggle_building_state('logging')">On</span>
         </div>
         <div style="position: relative" class="hidden" >
+            <span onclick="destroy_building('furnace')" class="building_remove">X</span>
             <span id="building_furnace" class="building tooltip" onclick="purchase_building('furnace');"><span class="building_name">Blast Furnace</span><span class="building_amount">0</span><span class="tooltiptext">Generates 1 iron per second, 1 Coal per second, -5 Wood per second, -3 Iron ore per second.<br /> Costs 15 money, 30 stone.</span></span>
             <span id="toggle_furnace" class="building_state_on" onclick="toggle_building_state('furnace')">On</span>
         </div>
         <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('gold_finder')" class="building_remove">X</span>
             <span id="building_gold_finder" class="building tooltip" onclick="purchase_building('gold_finder');"><span class="building_name">Gold Sifter</span><span class="building_amount">0</span><span class="tooltiptext">Generates 0.1 gold per second, -20 stone per second.<br />Costs 100 money, 500 stone, 200 wood.</span></span>
             <span id="toggle_gold_finder" class="building_state_on" onclick="toggle_building_state('gold_finder')">On</span>
         </div>
         <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('compressor')" class="building_remove">X</span>
             <span id="building_compressor" class="building tooltip" onclick="purchase_building('compressor');"><span class="building_name">Diamond Compressor</span><span class="building_amount">0</span><span class="tooltiptext">Generates 0.1 diamond per second, -10 coal per second. <br />Costs 100 money, 500 stone, 200 iron.</span></span>
             <span id="toggle_compressor" class="building_state_on" onclick="toggle_building_state('compressor')">On</span>
         </div>
         <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('jeweler')" class="building_remove">X</span>
             <span id="building_jeweler" class="building tooltip" onclick="purchase_building('jeweler');"><span class="building_name">Jeweler</span><span class="building_amount">0</span><span class="tooltiptext">Generates -3 gold per second, -1 diamond per second, 1 jewelry per second.<br /> Costs 200 money, 750 stone</span></span>
             <span id="toggle_jeweler" class="building_state_on" onclick="toggle_building_state('jeweler')">On</span>
         </div>
         <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('jewelry_store')" class="building_remove">X</span>
             <span id="building_jewelry_store" class="building tooltip" onclick="purchase_building('jewelry_store');"><span class="building_name">Jewelry Store</span><span class="building_amount">0</span><span class="tooltiptext">Generates -1 jewelry per second, 500 money per second.<br /> Costs 5000 money, 500 stone, 500 wood.</span></span>
             <span id="toggle_jewelry_store" class="building_state_on" onclick="toggle_building_state('jewelry_store')">On</span>
         </div>
         <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('oil_well')" class="building_remove">X</span>
             <span id="building_oil_well" class="building tooltip" onclick="purchase_building('oil_well');"><span class="building_name">Oil Well</span><span class="building_amount">0</span><span class="tooltiptext">Generates 1 oil per second.<br /> Costs 1000 money, 100 stone, 500 iron.</span></span>
             <span id="toggle_oil_well" class="building_state_on" onclick="toggle_building_state('oil_well')">On</span>
         </div>
         <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('oil_engine')" class="building_remove">X</span>
             <span id="building_oil_engine" class="building tooltip" onclick="purchase_building('oil_engine');"><span class="building_name">Oil-burning Engine</span><span class="building_amount">0</span><span class="tooltiptext">Generates -1 oil per second, 1 energy per second.<br /> Costs 500 money, 200 iron.</span></span>
             <span id="toggle_oil_engine" class="building_state_on" onclick="toggle_building_state('oil_engine')">On</span>
         </div>
         <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('paper_mill')" class="building_remove">X</span>
             <span id="building_paper_mill" class="building tooltip" onclick="purchase_building('paper_mill');"><span class="building_name">Paper Mill</span><span class="building_amount">0</span><span class="tooltiptext">Generates -1 energy per second, -3 wood per second, 1 paper per second.<br /> Costs 200 money, 200 iron, 100 oil.</span></span>
             <span id="toggle_paper_mill" class="building_state_on" onclick="toggle_building_state('paper_mill')">On</span>
         </div>
         <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('ink_refinery')" class="building_remove">X</span>
             <span id="building_ink_refinery" class="building tooltip" onclick="purchase_building('ink_refinery');"><span class="building_name">Ink Refinery</span><span class="building_amount">0</span><span class="tooltiptext">Generates -1 energy per second, -3 oil per second, 1 paper per second.<br /> Costs 200 money, 200 iron, 100 oil.</span></span>
             <span id="toggle_ink_refinery" class="building_state_on" onclick="toggle_building_state('ink_refinery')">On</span>
         </div>
         <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('money_printer')" class="building_remove">X</span>
             <span id="building_money_printer" class="building tooltip" onclick="purchase_building('money_printer');"><span class="building_name">Money Printer</span><span class="building_amount">0</span><span class="tooltiptext">Generates -1 energy per second, -2 paper per second, -1 ink per second, 30 money per second.<br /> Costs 500 money, 500 iron, 200 oil.</span></span>
             <span id="toggle_money_printer" class="building_state_on" onclick="toggle_building_state('money_printer')">On</span>
         </div>
         <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('book_printer')" class="building_remove">X</span>
             <span id="building_book_printer" class="building tooltip" onclick="purchase_building('book_printer');"><span class="building_name">Printing Press</span><span class="building_amount">0</span><span class="tooltiptext">Generates -1 energy per second, -2 paper per second, -1 ink per second, 0.1 book per second.<br /> Costs 500 money, 500 iron, 200 oil.</span></span>
             <span id="toggle_book_printer" class="building_state_on" onclick="toggle_building_state('book_printer')">On</span>
         </div>
@@ -131,7 +146,7 @@
         <span id="all_on" onclick="Object.keys(buildings).forEach(function (build) { if (!buildings[build].on && SPELL_BUILDINGS.indexOf(build) == -1) { toggle_building_state(build);}});">All On</span>
         <span id="all_off" onclick="Object.keys(buildings).forEach(function (build) { if (buildings[build].on && SPELL_BUILDINGS.indexOf(build) == -1) { toggle_building_state(build);}});">All off</span>
         <span id="save_text">Saved!</span>
-
+        
 
         <ul>
         </ul>

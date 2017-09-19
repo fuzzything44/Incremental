@@ -28,7 +28,7 @@
 #buildings {
     position: absolute;
     top: 1em;
-    left: 22em;
+    left: 24em;
 
 }
 
@@ -40,9 +40,9 @@
     border: 1px solid lightgray;
     display: block;
 
-        width: 20em;
-    max-width: 20em;
-    min-width: 20em;
+        width: 18em;
+    max-width: 18em;
+    min-width: 18em;
 }
 
 .building_state_on {
@@ -50,7 +50,7 @@
     position: absolute;
     border: solid green 1px;
     border-radius: 3px;
-    left: 21em;
+    left: 19em;
     top: 0em;
 
 }
@@ -60,9 +60,19 @@
     position: absolute;
     border: solid red 1px;
     border-radius: 3px;
-    left: 21em;
+    left: 19em;
     top: 0em;
 
+}
+
+.building_remove {
+    position: absolute;
+    left: -2em;
+    border: solid red 1px;
+    border-radius: 3px;
+    color: red;
+    padding-left: .5em;
+    padding-right: .5em;
 }
 
 .building_expensive {
