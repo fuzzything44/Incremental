@@ -10,7 +10,7 @@
 </head>
 <body>
     <div style="font-size: small; position:absolute; top: 0;">
-        v0.5.4 | 
+        v0.6.0 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none; color: lightgray;">Changelog</a> |
         <a href="https://github.com/fuzzything44/Incremental/wiki" target="_blank" style="text-decoration: none; color: lightgray;">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none; color: lightgray;">Discord</a> |
@@ -20,8 +20,9 @@
         <span id="upgrade_count" style="position: absolute; left: 54.6em; top: -.2em; white-space: nowrap;">Upgrades: 0/100</span>
     </div>
     <div id="resource_bar">
-        <span id="energy" class="tooltip hidden" style="color: gold"><span>Energy: 0<br /></span><br /></span>
         <span id="mana" class="tooltip hidden" style="color: mediumpurple"><span>Mana: 0<br /></span><br /></span>
+        <span id="energy" class="tooltip hidden" style="color: gold"><span>Energy: 0<br /></span><br /></span>
+        <span id="research" class="tooltip hidden" style="color: deepskyblue;"><span>Research: 0<br /></span><br /></span>
 
         <span id="money" class="hidden"><span>Money: 0</span><span id="money_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
         <span id="stone" class="tooltip hidden"><span>Stone: 0<br /></span><span id="stone_per_sec" class="res_gen">Making 0 per second.</span><br /></span>
@@ -37,6 +38,9 @@
         <span id="ink" class="tooltip hidden"><span>Ink: 0<br /></span><span id="ink_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
         <span id="book" class="tooltip hidden"><span>Book: 0<br /></span><span id="book_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
         <span id="sand" class="tooltip hidden"><span>Sand: 0<br /></span><span id="sand_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
+        <span id="glass" class="tooltip hidden"><span>Glass: 0<br /></span><span id="glass_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
+        <span id="water" class="tooltip hidden"><span>Water: 0<br /></span><span id="water_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
+        <span id="hydrogen" class="tooltip hidden"><span>Hydrogen: 0<br /></span><span id="hydrogen_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
 
     </div>
     <div id="buildings">
@@ -137,6 +141,26 @@
             <span onclick="destroy_building('book_printer')" class="building_remove">X</span>
             <span id="building_book_printer" class="building tooltip" onclick="purchase_building('book_printer');"><span class="building_name">Printing Press</span><span class="building_amount">0</span><span class="tooltiptext">Generates -1 energy per second, -2 paper per second, -1 ink per second, 0.1 book per second.<br /> Costs 500 money, 500 iron, 200 oil.</span></span>
             <span id="toggle_book_printer" class="building_state_on" onclick="toggle_building_state('book_printer')">On</span>
+        </div>
+        <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('library')" class="building_remove">X</span>
+            <span id="building_library" class="building tooltip" onclick="purchase_building('library');"><span class="building_name">Library</span><span class="building_amount">0</span><span class="tooltiptext">Generates 1 research per second.<br /> Costs 500 money, 500 wood, 50 iron, 10 book.</span></span>
+            <span id="toggle_library" class="building_state_on" onclick="toggle_building_state('library')">On</span>
+        </div>
+        <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('water_purifier')" class="building_remove">X</span>
+            <span id="building_water_purifier" class="building tooltip" onclick="purchase_building('water_purifier');"><span class="building_name">Water Purifier</span><span class="building_amount">0</span><span class="tooltiptext">Generates 1 water per second.<br /> Costs 500 money, 500 stone, 500 sand, 100 glass.</span></span>
+            <span id="toggle_water_purifier" class="building_state_on" onclick="toggle_building_state('water_purifier')">On</span>
+        </div>
+        <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('hydrogen_gen')" class="building_remove">X</span>
+            <span id="building_hydrogen_gen" class="building tooltip" onclick="purchase_building('hydrogen_gen');"><span class="building_name">Electrolysis Machine</span><span class="building_amount">0</span><span class="tooltiptext">Generates -2 energy per second, -1 water per second, 2 hydrogen per second.<br /> Costs 2500 money, 500 glass.</span></span>
+            <span id="toggle_hydrogen_gen" class="building_state_on" onclick="toggle_building_state('hydrogen_gen')">On</span>
+        </div>
+        <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('hydrogen_burner')" class="building_remove">X</span>
+            <span id="building_hydrogen_burner" class="building tooltip" onclick="purchase_building('hydrogen_burner');"><span class="building_name">Hydrogen Engine</span><span class="building_amount">0</span><span class="tooltiptext">Generates -20 hydrogen per second, 10 energy per second, 7 water per second.<br /> Costs 2500 money, 500 iron.</span></span>
+            <span id="toggle_hydrogen_burner" class="building_state_on" onclick="toggle_building_state('hydrogen_burner')">On</span>
         </div>
     </div>
     <div id="upgrades">

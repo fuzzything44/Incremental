@@ -23,7 +23,11 @@ var UNLOCK_TREE = {
     "paper_mill": ["money_printer"],
     "ink_refinery": [],
     "money_printer": ["book_printer"],
-    "book_printer": [],
+    "book_printer": ["library"],
+    "library": ["water_purifier"],
+    "water_purifier": ["hydrogen_gen", "hydrogen_burner"],
+    "hydrogen_gen": [],
+    "hydrogen_burner": [],
 };
 var SPELL_BUILDINGS = [
     "s_manastone",
@@ -96,18 +100,22 @@ var SPELL_FUNCTIONS = [
                 chosen_resource = Object.keys(resources)[Math.floor(Math.random() * Object.keys(resources).length)];
             }
             resource_value = Math.max(1, Math.round(resource_value / resources[chosen_resource].value)); /* Reduce resource gain to better line up with different valued resources */
+            var trade_advantage = 0.75; /* How much prices tip in our favor. If < 1, out of favor. */
+            if (buildings["s_moneyboost"].on) {
+                trade_advantage += 0.25;
+            } /* Obviously being greedy makes prices better */
             /* See if we're buying or selling */
             if (Math.random() > 0.5) {
                 /* We're buying it */
                 remaining_upgrades["trade"].cost["money"] = money_value;
-                remaining_upgrades["trade"].cost[chosen_resource] = Math.round(resource_value * -0.75); /* Negative so we get the resource */
-                remaining_upgrades["trade"].tooltip += "Spend " + money_value.toString() + " money to buy " + Math.round(resource_value * 0.75).toString() + " " + chosen_resource.replace('_', ' ');
+                remaining_upgrades["trade"].cost[chosen_resource] = Math.round(resource_value * -trade_advantage); /* Negative so we get the resource */
+                remaining_upgrades["trade"].tooltip += "Spend " + money_value.toString() + " money to buy " + Math.round(resource_value * trade_advantage).toString() + " " + chosen_resource.replace('_', ' ');
             }
             else {
                 /* Selling */
-                remaining_upgrades["trade"].cost["money"] = Math.round(money_value * -.75);
+                remaining_upgrades["trade"].cost["money"] = Math.round(money_value * -trade_advantage);
                 remaining_upgrades["trade"].cost[chosen_resource] = resource_value; /* Negative so we get the resource */
-                remaining_upgrades["trade"].tooltip += "Sell " + resource_value.toString() + " " + chosen_resource.replace('_', ' ') + " for " + Math.round(money_value * 0.75).toString() + " money";
+                remaining_upgrades["trade"].tooltip += "Sell " + resource_value.toString() + " " + chosen_resource.replace('_', ' ') + " for " + Math.round(money_value * trade_advantage).toString() + " money";
             }
             var trade_expires = Date.now() + 15000;
         }
@@ -142,8 +150,9 @@ function energy_converter_remove() {
 }
 function set_initial_state() {
     resources = {
-        "energy": { "amount": 0, "value": 0 },
         "mana": { "amount": 0, "value": 0 },
+        "energy": { "amount": 0, "value": 0 },
+        "research": { "amount": 0, "value": 0 },
         "money": { "amount": 10, "value": 1 },
         "stone": { "amount": 0, "value": 0.5 },
         "wood": { "amount": 0, "value": 0.5 },
@@ -158,6 +167,9 @@ function set_initial_state() {
         "ink": { "amount": 0, "value": 10 },
         "book": { "amount": 0, "value": 600 },
         "sand": { "amount": 0, "value": 1 },
+        "glass": { "amount": 0, "value": 1.5 },
+        "water": { "amount": 0, "value": 2 },
+        "hydrogen": { "amount": 0, "value": 1 },
     };
     /* Set resources_per_sec */
     Object.keys(resources).forEach(function (res) {
@@ -482,6 +494,82 @@ function set_initial_state() {
             },
             "flavor": "It's actually just printing a bunch of copies of My Immortal.",
         },
+        "library": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 500,
+                "wood": 500,
+                "iron": 50,
+                "book": 10,
+            },
+            "price_ratio": {
+                "money": 1.2,
+                "iron": 1.4,
+                "wood": .95,
+                "book": 1.1,
+            },
+            "generation": {
+                "research": 1,
+            },
+            "flavor": "They do very important research here. <br />DO NOT DISTURB THE LIBRARIANS.",
+        },
+        "water_purifier": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 500,
+                "stone": 500,
+                "sand": 500,
+                "glass": 100,
+            },
+            "price_ratio": {
+                "money": 1.1,
+                "stone": 1.1,
+                "sand": 1.1,
+                "glass": 1.1,
+            },
+            "generation": {
+                "water": 1,
+            },
+            "flavor": "Turns out sand can be used to purify water. Who knew?",
+        },
+        "hydrogen_gen": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 2500,
+                "glass": 500,
+            },
+            "price_ratio": {
+                "money": 1.1,
+                "glass": 1.2,
+            },
+            "generation": {
+                "energy": -2,
+                "water": -1,
+                "hydrogen": 2,
+            },
+            "flavor": "Runs electricity through water...",
+        },
+        "hydrogen_burner": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 2500,
+                "iron": 500,
+            },
+            "price_ratio": {
+                "money": 1.1,
+                "iron": 1.2,
+            },
+            "generation": {
+                "hydrogen": -20,
+                "energy": 10,
+                "water": 7,
+            },
+            "flavor": "...And lights it on fire!",
+        },
     };
     purchased_upgrades = [];
     remaining_upgrades = {
@@ -508,7 +596,7 @@ function set_initial_state() {
             "image": "pickaxe.png",
         },
         "coal_mines": {
-            "unlock": function () { return buildings["mine"].amount >= 3 && buildings["compressor"].amount >= 1 && resources["coal"].amount < 50; },
+            "unlock": function () { return buildings["mine"].amount >= 3 && buildings["compressor"].amount >= 1 && (resources["coal"].amount < 50 || resources["research"].amount > 5); },
             "purchase": function () {
                 var mines_state = buildings["mine"].on;
                 if (mines_state) {
@@ -523,8 +611,9 @@ function set_initial_state() {
             "cost": {
                 "money": 100,
                 "stone": 10,
+                "research": 3,
             },
-            "tooltip": "Mines produce coal.<br /> Costs 100 money, 100 wood.",
+            "tooltip": "Mines produce coal.<br /> Costs 100 money, 100 wood. <br /> Requires research level of 3.",
             "name": "Coal Mining <br />",
             "image": "pickaxe.png",
         },
@@ -600,8 +689,9 @@ function set_initial_state() {
                 "money": 100,
                 "iron": 100,
                 "oil": 100,
+                "research": 5,
             },
-            "tooltip": "Make thinner paper, creating double the paper per wood.<br /> Costs 100 money, 100 iron, 100 oil.",
+            "tooltip": "Make thinner paper, creating double the paper per wood.<br /> Costs 100 money, 100 iron, 100 oil. <br /> Requires research level of 5.",
             "name": "Thinner paper",
             "image": "gear.png",
         },
@@ -655,7 +745,7 @@ function set_initial_state() {
             "image": "money.png",
         },
         "gold_crusher": {
-            "unlock": function () { return buildings["gold_finder"].amount >= 5 && buildings["s_manastone"] >= 10 && false; },
+            "unlock": function () { return buildings["gold_finder"].amount >= 5 && buildings["s_manastone"].amount >= 10; },
             "purchase": function () {
                 var comp_state = buildings["gold_finder"].on;
                 if (comp_state) {
@@ -675,6 +765,29 @@ function set_initial_state() {
             },
             "tooltip": "Crushes stone into sand, improving gold find rate. <br /> Costs 250 money, 200 iron, 750 stone.",
             "name": "Destructive Sifter",
+            "image": "sand.png",
+        },
+        "glass_furnace": {
+            "unlock": function () { return buildings["furnace"].amount >= 5 && resources["sand"].amount >= 10 && purchased_upgrades.indexOf("better_furnace") != -1; },
+            "purchase": function () {
+                var comp_state = buildings["furnace"].on;
+                if (comp_state) {
+                    toggle_building_state("furnace");
+                }
+                buildings["furnace"].generation["sand"] = -1;
+                buildings["furnace"].generation["glass"] = 1;
+                if (comp_state) {
+                    toggle_building_state("furnace");
+                }
+                $("#building_furnace > .tooltiptext").html(gen_building_tooltip("furnace"));
+            },
+            "cost": {
+                "money": 250,
+                "iron": 200,
+                "wood": 500,
+            },
+            "tooltip": "Furnaces now smelt sand into glass at a rate of 1/s. <br /> Costs 250 money, 200 iron, 500 wood.",
+            "name": "Glass Furnace",
             "image": "sand.png",
         },
     };
