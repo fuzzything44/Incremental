@@ -111,6 +111,20 @@
 #save_text {
     opacity: 0;
 }
+#all_off {
+    border: solid red 1px;
+    border-radius: 3px;
+    background: red;
+    padding-left: .3em;
+    padding-right: .3em;
+}
+#all_on {
+    border: solid green 1px;
+    border-radius: 3px;
+    background: green;
+    padding-left: .3em;
+    padding-right: .3em;
+}
 
 ul{
     list-style-type: none;

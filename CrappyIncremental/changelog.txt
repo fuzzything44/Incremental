@@ -1,6 +1,9 @@
 ﻿CrappyIncremental Changelog
 
-v.0.4.1:
+v0.4.2:
+Can't set multibuy to less than 0. Added all on/ all off buttons.
+
+v0.4.1:
 Added more random titles. Added external save/load. Added buy multiple.
 
 v0.4.0:
@@ -27,5 +30,5 @@ Added fire, gear icon. Added furnace upgrade. Fixed prestige bug where building 
 v0.1.1:
 Added flavor text to some buildings, added a paper mill upgrade.
 
-v0.1:
+v0.1.0:
 Created changelog, links to log and wiki. Previous changes not documented.
