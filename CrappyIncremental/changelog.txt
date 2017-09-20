@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v0.6.3:
+Tooltip bugfix with upgrades.
+
 v0.6.2:
 Banks can now be destroyed again. You can't destroy your last building of a type. Coal mines don't take research to buy. Some changes to hopefully make tooltips better.
 

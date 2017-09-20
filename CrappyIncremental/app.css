@@ -199,6 +199,6 @@ hr {
     opacity: 1;
 }
 
-.tooltip >.tooltiptext:hover {
+.tooltip > .tooltiptext:hover {
     visibility: hidden;
 }

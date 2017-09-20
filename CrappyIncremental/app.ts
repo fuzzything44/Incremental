@@ -1076,7 +1076,7 @@ function update() {
 /* Not in update as this could change a lot if they have too many unpurchased upgrades. */
 function update_upgrade_list() {
     /* Remove old upgrade list */
-    $("#upgrades > ul").html('');
+    let new_list: string = "";
     /* Loop through all remaining upgrades */
     Object.keys(remaining_upgrades).forEach(function (upg_name) {
         if (remaining_upgrades[upg_name].unlock()) {
@@ -1088,11 +1088,12 @@ function update_upgrade_list() {
             });
             let upg_elem: string = "<li id=\"upgrade_" + upg_name +
                 "\" class=\"upgrade tooltip\" onclick=\"purchase_upgrade('" + upg_name + "')\" style='text-align: center; color: " + color + "'><span>" +
-                remaining_upgrades[upg_name].name + "<br /> <img src='images/" + remaining_upgrades[upg_name].image + "' alt='' style='width: 3em; height: 3em; float: bottom;' /></span><span class=\"tooltiptext\">" +
+                remaining_upgrades[upg_name].name + "<br /> <img src='images/" + remaining_upgrades[upg_name].image + "' alt='' style='width: 3em; height: 3em; float: bottom;' /></span><span class=\"tooltiptext\" style='opacity: 1;'>" +
                 remaining_upgrades[upg_name].tooltip + "</span> </li>";
-            $("#upgrades > ul").append(upg_elem);
+            new_list += upg_elem;
         }
     });
+    $("#upgrades > ul").html(new_list);
     /* Update upgrade total */
     $("#upgrade_count").html("Upgrades: " + purchased_upgrades.length.toString() + "/" + (purchased_upgrades.length + Object.keys(remaining_upgrades).length).toString());
 }
