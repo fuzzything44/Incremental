@@ -101,7 +101,7 @@ var SPELL_FUNCTIONS = [
             }
             resource_value = Math.max(1, Math.round(resource_value / resources[chosen_resource].value)); /* Reduce resource gain to better line up with different valued resources */
             var trade_advantage = 0.75; /* How much prices tip in our favor. If < 1, out of favor. */
-            if (buildings["s_moneyboost"].on) {
+            if (buildings["s_goldboost"].on) {
                 trade_advantage += 0.25;
             } /* Obviously being greedy makes prices better */
             /* See if we're buying or selling */

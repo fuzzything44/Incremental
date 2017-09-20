@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v0.6.1:
+Greed is now clearer in what it does. Fixed bug with trading not giving actual offers.
+
 v0.6.0:
 Add research, libraries, 3 new resources, 4 new buildings. There's now hydrogen engines: save up hydrogen and burn it for a short burst of energy! Trading is now slightly better if Greed is active. A few new upgrades.
 
