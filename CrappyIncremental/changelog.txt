@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.0.1:
+Coal mining tooltip now properly reflects not needing research. Energy/research generation no longer says per second. Events now happen much less often (as they should have, I missed a 0) and investing gives a slight range.
+
 v1.0.0:
 Randomly generated events! You can now hit it rich on the stock market! Also added tooltip for purchased upgrades.
 

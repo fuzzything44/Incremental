@@ -2,8 +2,8 @@
     {
         "condition": function () { return true; },
         "run_event": function () {
-            /* Gain 15s of bank raw money production + 10 money for those with few banks*/
-            let money_gain = buildings["bank"].amount * buildings["bank"].generation["money"] * 15 + 10;
+            /* Gain 0-29s of bank raw money production + 10 money for those with few banks. Capped at 200-250. */
+            let money_gain = Math.min(Math.round(200 + Math.random() * 50), Math.round(buildings["bank"].amount * buildings["bank"].generation["money"] * 20 * Math.random() + 10));
             resources["money"].amount += money_gain;
             
             let investment_types = ["gold", "beer", "uranium", "bread", "rugs", "beds", "wool", "toothpicks", "cookies", "toothpaste", "salad"];
@@ -16,7 +16,7 @@
 ];
 
 function handle_event() {
-    setTimeout(handle_event, 2 * 6000 + Math.random() * 6000 * 2);
+    setTimeout(handle_event, 2 * 60000 + Math.random() * 60000 * 2);
 
     /* Must have some mana to get events */
     if (buildings["s_manastone"].amount < 1) { return; }

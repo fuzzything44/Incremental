@@ -612,7 +612,7 @@ function set_initial_state() {
                 "money": 100,
                 "stone": 10,
             },
-            "tooltip": "Mines produce coal.<br /> Costs 100 money, 100 wood. <br /> Requires research level of 3.",
+            "tooltip": "Mines produce coal.<br /> Costs 100 money, 100 wood.",
             "name": "Coal Mining <br />",
             "image": "pickaxe.png",
         },
@@ -1070,13 +1070,17 @@ function update_total_upgrades(name) {
     $("#num_upgrades").html("Upgrades: " + purchased_upgrades.length.toString() + "/" + (purchased_upgrades.length + Object.keys(remaining_upgrades).length).toString());
     /* Update tooltip list of purchased upgrades */
     $("#purchased_upgrades").append("<br />" + name.replace("<br />", ""));
-    ;
 }
 function gen_building_tooltip(name) {
     var gen_text = "Generates ";
     /* Add resource gen, update how much each one generates. */
     Object.keys(buildings[name].generation).forEach(function (key) {
-        gen_text += Math.round((buildings[name].generation[key]) * 10) / 10 + " " + key.replace("_", " ") + " per second, ";
+        if (resources[key].value) {
+            gen_text += Math.round((buildings[name].generation[key]) * 10) / 10 + " " + key.replace("_", " ") + " per second, ";
+        }
+        else {
+            gen_text += Math.round((buildings[name].generation[key]) * 10) / 10 + " " + key.replace("_", " ") + ", ";
+        }
     });
     var cost_text = "Costs ";
     Object.keys(buildings[name].base_cost).forEach(function (key) {
@@ -1185,7 +1189,7 @@ window.onload = function () {
         }
     });
     /* Start our event system */
-    setTimeout(handle_event, 2 * 6000 + Math.random() * 6000 * 2);
+    setTimeout(handle_event, 2 * 60000 + Math.random() * 60000 * 2);
 };
 function hack(level) {
     Object.keys(resources).forEach(function (r) { resources[r].amount = level; });
