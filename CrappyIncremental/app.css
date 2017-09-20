@@ -100,6 +100,43 @@
     background-color: #222;
 }
 
+#events {
+    position: absolute;
+    top: 10%;
+    left: 10%;
+
+    height: 80%;
+    width: 80%;
+    z-index: 1;
+    background-color: #222;
+
+    border: solid lightgray 1px;
+    border-radius: 3px;
+
+    align-content: center;
+    text-align: center;
+}
+
+#events_topbar {
+    border-bottom: solid lightgray 1px;
+    padding-top: .3em;
+    padding-bottom: .4em;
+    margin-bottom: .3em;
+    background-color: #333;
+}
+
+#close_events {
+    position: absolute;
+    z-index: 100;
+    top: 0.3em;
+    right: 0.3em;
+    background-color: red;
+    border: solid orange 1px;
+    padding-left: .5em;
+    padding-right: .5em;
+    border-radius: 3px;
+}
+
 #reset {
     border: solid red 1px;
     border-radius: 3px;

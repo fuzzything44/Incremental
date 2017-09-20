@@ -1,4 +1,5 @@
-﻿// <reference path ="/jquery-3.2.1.js"/>
+﻿/// <reference path ="events.ts" />
+declare var $: any;
 
 var resources = {};
 var resources_per_sec = {};
@@ -808,7 +809,7 @@ function set_initial_state() {
             "image": "sand.png",
         },
         "TODO": {
-            "unlock": function () { return false; buildings["furnace"].amount >= 5 && resources["sand"].amount >= 10 && purchased_upgrades.indexOf("better_furnace") != -1; },
+            "unlock": function () { return false; /*buildings["furnace"].amount >= 5 && resources["sand"].amount >= 10 && purchased_upgrades.indexOf("better_furnace") != -1; */ },
             "purchase": function () { /* When bought, turn all buildings off, increase generation, and turn them back on again. Turns off first to get generation from them properly calculated */
                 let comp_state = buildings["furnace"].on;
                 if (comp_state) {
@@ -851,13 +852,11 @@ function prestige() {
         });
         let total_mana = buildings["s_manastone"].amount + mana_gain;
         set_initial_state();
-        resources_per_sec["mana"] = total_mana;
         buildings["s_manastone"].amount = total_mana;
-        $("#building_s_manastone span:nth-child(2)").html(total_mana.toString());
-        $("#spells").removeClass("hidden");
+        save();
+        location.reload();
     }
-    save();
-    location.reload();
+
 }
 
 function save() {
@@ -924,6 +923,7 @@ function load() {
         last_update = parseInt(getCookie("last_save"));
     }
     purchased_upgrades.forEach(function (upg) {
+        update_total_upgrades(remaining_upgrades[upg].name);
         delete remaining_upgrades[upg]; /* They shouldn't be able to get the same upgrade twice, so delete what was bought. */
     });
 
@@ -1094,8 +1094,15 @@ function update_upgrade_list() {
         }
     });
     $("#upgrades > ul").html(new_list);
+
+}
+
+function update_total_upgrades(name: string) {
     /* Update upgrade total */
-    $("#upgrade_count").html("Upgrades: " + purchased_upgrades.length.toString() + "/" + (purchased_upgrades.length + Object.keys(remaining_upgrades).length).toString());
+    $("#num_upgrades").html("Upgrades: " + purchased_upgrades.length.toString() + "/" + (purchased_upgrades.length + Object.keys(remaining_upgrades).length).toString());
+    /* Update tooltip list of purchased upgrades */
+    $("#purchased_upgrades").append("<br />" + name.replace("<br />", ""));
+);
 }
 
 function gen_building_tooltip(name: string) {
@@ -1190,6 +1197,7 @@ function purchase_upgrade(name: string) {
 
     /* Do cleanup. Get benefit from having it, remove it from purchasable upgrades, add it to purchased upgrades, remove from page */
     purchased_upgrades.push(name);
+    update_total_upgrades(remaining_upgrades[name].name);
     delete remaining_upgrades[name]
     $("#upgrade_" + name).remove();
     upg.purchase();
@@ -1227,6 +1235,8 @@ window.onload = () => {
             $("#building_" + build).parent().addClass("hidden");
         }
     });
+    /* Start our event system */
+    setTimeout(handle_event, 2 * 6000 + Math.random() * 6000 * 2);
 };
 
 function hack(level: number) {

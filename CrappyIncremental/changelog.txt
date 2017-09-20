@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.0.0:
+Randomly generated events! You can now hit it rich on the stock market! Also added tooltip for purchased upgrades.
+
 v0.6.3:
 Tooltip bugfix with upgrades.
 

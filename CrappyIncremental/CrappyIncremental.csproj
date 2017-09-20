@@ -25,11 +25,12 @@
     <Content Include="app.css" />
     <Content Include="changelog.txt" />
     <Content Include="index.html" />
-    <Content Include="jquery-3.2.1.js" />
+    <Content Include="jquery.js" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
+    <TypeScriptCompile Include="events.ts" />
   </ItemGroup>
   <ItemGroup>
     <None Include="web.Debug.config">

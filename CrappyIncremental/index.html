@@ -5,19 +5,20 @@
     <meta charset="utf-8" />
     <title>CrappyClicker v.π²</title>
     <link rel="stylesheet" href="app.css" type="text/css" />
-    <script src="jquery-3.2.1.js"></script>
+    <script src="jquery.js"></script>
+    <script src="events.js"></script>
     <script src="app.js"></script>
 </head>
 <body>
     <div style="font-size: small; position:absolute; top: 0;">
-        v0.6.3 | 
+        v1.0.0 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none; color: lightgray;">Changelog</a> |
         <a href="https://github.com/fuzzything44/Incremental/wiki" target="_blank" style="text-decoration: none; color: lightgray;">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none; color: lightgray;">Discord</a> |
         <span onclick="save_to_clip()">Export</span> |
         <span onclick="load_from_clip()">Import</span>
         <span style="position: absolute; left: 45em; top: -.3em; white-space: nowrap">Buy Amount: <input id="buy_amount" style="font-size: 10px; background-color: #333; color: lightgray; border: none; width: 4em;" type="number" min="0"/></span>
-        <span id="upgrade_count" style="position: absolute; left: 54.6em; top: -.2em; white-space: nowrap;">Upgrades: 0/100</span>
+        <span id="upgrade_count" class="tooltip" style="position: absolute; left: 54.6em; top: -.2em; white-space: nowrap;"><span id="num_upgrades"></span><span id="purchased_upgrades" class="tooltiptext">Purchased Upgrades:</span></span>
     </div>
     <div id="resource_bar">
         <span id="mana" class="tooltip hidden" style="color: mediumpurple"><span>Mana: 0<br /></span><br /></span>
@@ -253,6 +254,11 @@
 
 
 
+    </div>
+    <div id="events" class="hidden">
+        <div id="events_topbar">Something Happened</div>
+        <span id="close_events" onclick="$('#events').addClass('hidden');">X</span>
+        <div id="events_content"></div>
     </div>
 </body>
 </html>
