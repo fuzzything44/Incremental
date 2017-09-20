@@ -185,6 +185,8 @@ hr {
     top: 100%;
     left: 10%;
 
+    opacity: 0;
+    transition: opacity .3s;
 }
 
 .hidden {
@@ -195,4 +197,8 @@ hr {
 .tooltip:hover .tooltiptext {
     visibility: visible;
     opacity: 1;
+}
+
+.tooltip >.tooltiptext:hover {
+    visibility: hidden;
 }

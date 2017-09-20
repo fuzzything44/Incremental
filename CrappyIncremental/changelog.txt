@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v0.6.2:
+Banks can now be destroyed again. You can't destroy your last building of a type. Coal mines don't take research to buy. Some changes to hopefully make tooltips better.
+
 v0.6.1:
 Greed is now clearer in what it does. Fixed bug with trading not giving actual offers.
 

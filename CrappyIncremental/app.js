@@ -611,7 +611,6 @@ function set_initial_state() {
             "cost": {
                 "money": 100,
                 "stone": 10,
-                "research": 3,
             },
             "tooltip": "Mines produce coal.<br /> Costs 100 money, 100 wood. <br /> Requires research level of 3.",
             "name": "Coal Mining <br />",
@@ -780,6 +779,28 @@ function set_initial_state() {
                     toggle_building_state("furnace");
                 }
                 $("#building_furnace > .tooltiptext").html(gen_building_tooltip("furnace"));
+            },
+            "cost": {
+                "money": 250,
+                "iron": 200,
+                "wood": 500,
+            },
+            "tooltip": "Furnaces now smelt sand into glass at a rate of 1/s. <br /> Costs 250 money, 200 iron, 500 wood.",
+            "name": "Glass Furnace",
+            "image": "sand.png",
+        },
+        "TODO": {
+            "unlock": function () { return false; buildings["furnace"].amount >= 5 && resources["sand"].amount >= 10 && purchased_upgrades.indexOf("better_furnace") != -1; },
+            "purchase": function () {
+                var comp_state = buildings["furnace"].on;
+                if (comp_state) {
+                    toggle_building_state("furnace");
+                }
+                buildings["furnace"].amount = 1;
+                if (comp_state) {
+                    toggle_building_state("furnace");
+                }
+                $("#building_ > .tooltiptext").html(gen_building_tooltip("furnace"));
             },
             "cost": {
                 "money": 250,
@@ -1099,7 +1120,7 @@ function destroy_building(name) {
         amount = 1;
     }
     for (var i = 0; i < amount; i++) {
-        if (buildings[name].amount < 1) {
+        if (buildings[name].amount <= 1) {
             return; /* Can't sell last building */
         }
         /* Remove resource gen */
