@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.2.1:
+Reordered buildings to hopefully make a bit more sense.
+
 v1.2.0:
 Add time warping spell. Increase mana cost of energy converter. Add finding oil reserves to make oil wells cost less iron.
 

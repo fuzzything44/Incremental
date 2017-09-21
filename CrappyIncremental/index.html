@@ -11,7 +11,7 @@
 </head>
 <body>
     <div style="font-size: small; position:absolute; top: 0;">
-        v1.2.0 | 
+        v1.2.1 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none; color: lightgray;">Changelog</a> |
         <a href="https://github.com/fuzzything44/Incremental/wiki" target="_blank" style="text-decoration: none; color: lightgray;">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none; color: lightgray;">Discord</a> |
@@ -88,6 +88,45 @@
             <span id="toggle_bank" class="building_state_on" onclick="toggle_building_state('bank')">On</span>
         </div>
         <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('oil_well')" class="building_remove">X</span>
+            <span id="building_oil_well" class="building tooltip" onclick="purchase_building('oil_well');">
+                <span class="building_name">Oil Well</span>
+                <span class="building_amount">0</span>
+                <span class="tooltiptext" onclick="event.stopPropagation()">Generates 1 oil per second.<br /> Costs 1000 money, 100 stone, 500 iron.</span>
+            </span>
+            <span id="toggle_oil_well" class="building_state_on" onclick="toggle_building_state('oil_well')">On</span>
+        </div>
+        <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('library')" class="building_remove">X</span>
+            <span id="building_library" class="building tooltip" onclick="purchase_building('library');">
+                <span class="building_name">Library</span>
+                <span class="building_amount">0</span>
+                <span class="tooltiptext" onclick="event.stopPropagation()">Generates 1 research per second.<br /> Costs 500 money, 500 wood, 50 iron, 10 book.</span>
+            </span>
+            <span id="toggle_library" class="building_state_on" onclick="toggle_building_state('library')">On</span>
+        </div>
+        <br />
+        <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('oil_engine')" class="building_remove">X</span>
+            <span id="building_oil_engine" class="building tooltip" onclick="purchase_building('oil_engine');">
+                <span class="building_name">Oil-burning Engine</span>
+                <span class="building_amount">0</span>
+                <span class="tooltiptext" onclick="event.stopPropagation()">Generates -1 oil per second, 1 energy per second.<br /> Costs 500 money, 200 iron.</span>
+            </span>
+            <span id="toggle_oil_engine" class="building_state_on" onclick="toggle_building_state('oil_engine')">On</span>
+        </div>
+        <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('hydrogen_burner')" class="building_remove">X</span>
+            <span id="building_hydrogen_burner" class="building tooltip" onclick="purchase_building('hydrogen_burner');">
+                <span class="building_name">Hydrogen Engine</span>
+                <span class="building_amount">0</span>
+                <span class="tooltiptext" onclick="event.stopPropagation()">Generates -20 hydrogen per second, 10 energy per second, 7 water per second.<br /> Costs 2500 money, 500 iron.</span>
+            </span>
+            <span id="toggle_hydrogen_burner" class="building_state_on" onclick="toggle_building_state('hydrogen_burner')">On</span>
+        </div>
+        <br />
+
+        <div style="position: relative" class="hidden">
             <span onclick="destroy_building('mine')" class="building_remove">X</span>
             <span id="building_mine" class="building tooltip" onclick="purchase_building('mine');">
                 <span class="building_name">Mine</span>
@@ -153,24 +192,7 @@
             </span>
             <span id="toggle_jewelry_store" class="building_state_on" onclick="toggle_building_state('jewelry_store')">On</span>
         </div>
-        <div style="position: relative" class="hidden">
-            <span onclick="destroy_building('oil_well')" class="building_remove">X</span>
-            <span id="building_oil_well" class="building tooltip" onclick="purchase_building('oil_well');">
-                <span class="building_name">Oil Well</span>
-                <span class="building_amount">0</span>
-                <span class="tooltiptext" onclick="event.stopPropagation()">Generates 1 oil per second.<br /> Costs 1000 money, 100 stone, 500 iron.</span>
-            </span>
-            <span id="toggle_oil_well" class="building_state_on" onclick="toggle_building_state('oil_well')">On</span>
-        </div>
-        <div style="position: relative" class="hidden">
-            <span onclick="destroy_building('oil_engine')" class="building_remove">X</span>
-            <span id="building_oil_engine" class="building tooltip" onclick="purchase_building('oil_engine');">
-                <span class="building_name">Oil-burning Engine</span>
-                <span class="building_amount">0</span>
-                <span class="tooltiptext" onclick="event.stopPropagation()">Generates -1 oil per second, 1 energy per second.<br /> Costs 500 money, 200 iron.</span>
-            </span>
-            <span id="toggle_oil_engine" class="building_state_on" onclick="toggle_building_state('oil_engine')">On</span>
-        </div>
+        <br />
         <div style="position: relative" class="hidden">
             <span onclick="destroy_building('paper_mill')" class="building_remove">X</span>
             <span id="building_paper_mill" class="building tooltip" onclick="purchase_building('paper_mill');">
@@ -208,15 +230,6 @@
             <span id="toggle_book_printer" class="building_state_on" onclick="toggle_building_state('book_printer')">On</span>
         </div>
         <div style="position: relative" class="hidden">
-            <span onclick="destroy_building('library')" class="building_remove">X</span>
-            <span id="building_library" class="building tooltip" onclick="purchase_building('library');">
-                <span class="building_name">Library</span>
-                <span class="building_amount">0</span>
-                <span class="tooltiptext" onclick="event.stopPropagation()">Generates 1 research per second.<br /> Costs 500 money, 500 wood, 50 iron, 10 book.</span>
-            </span>
-            <span id="toggle_library" class="building_state_on" onclick="toggle_building_state('library')">On</span>
-        </div>
-        <div style="position: relative" class="hidden">
             <span onclick="destroy_building('water_purifier')" class="building_remove">X</span>
             <span id="building_water_purifier" class="building tooltip" onclick="purchase_building('water_purifier');">
                 <span class="building_name">Water Purifier</span>
@@ -234,15 +247,7 @@
             </span>
             <span id="toggle_hydrogen_gen" class="building_state_on" onclick="toggle_building_state('hydrogen_gen')">On</span>
         </div>
-        <div style="position: relative" class="hidden">
-            <span onclick="destroy_building('hydrogen_burner')" class="building_remove">X</span>
-            <span id="building_hydrogen_burner" class="building tooltip" onclick="purchase_building('hydrogen_burner');">
-                <span class="building_name">Hydrogen Engine</span>
-                <span class="building_amount">0</span>
-                <span class="tooltiptext" onclick="event.stopPropagation()">Generates -20 hydrogen per second, 10 energy per second, 7 water per second.<br /> Costs 2500 money, 500 iron.</span>
-            </span>
-            <span id="toggle_hydrogen_burner" class="building_state_on" onclick="toggle_building_state('hydrogen_burner')">On</span>
-        </div>
+
     </div>
     <div id="upgrades">
         <span id="reset" class="tooltip" onclick="if(confirm('Are you sure? This resets EVERYTHING!') && prompt('If you\'re absolutely sure, enter \'reset\'.') == 'reset') {set_initial_state(); save(); location.reload();}"><span>Reset</span><span class="tooltiptext">Resets ALL progress. There is NO bonus for this!</span></span>
