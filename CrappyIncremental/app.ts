@@ -540,7 +540,7 @@ function set_initial_state() {
             "generation": {
                 "water": 1,
             },
-            "flavor": "Turns out sand can be used to purify water. Who knew?",
+            "flavor": "To find sand, first you must collect enough mana.",
         },
         "hydrogen_gen": {
             "on": true,
@@ -694,7 +694,7 @@ function set_initial_state() {
                 if (comp_state) { /* Only turn on if it already was on */
                     toggle_building_state("paper_mill");
                 }
-                $("#building_compressor > .tooltiptext").html(gen_building_tooltip("paper_mill"));
+                $("#building_paper_mill > .tooltiptext").html(gen_building_tooltip("paper_mill"));
             },
             "cost": {
                 "money": 100,
@@ -923,8 +923,9 @@ function load() {
         last_update = parseInt(getCookie("last_save"));
     }
     purchased_upgrades.forEach(function (upg) {
-        update_total_upgrades(remaining_upgrades[upg].name);
+        let upg_name = remaining_upgrades[upg].name;
         delete remaining_upgrades[upg]; /* They shouldn't be able to get the same upgrade twice, so delete what was bought. */
+        update_total_upgrades(upg_name);
     });
 
     /* Recalculate earnings. Loop through each building */
@@ -1201,8 +1202,9 @@ function purchase_upgrade(name: string) {
 
     /* Do cleanup. Get benefit from having it, remove it from purchasable upgrades, add it to purchased upgrades, remove from page */
     purchased_upgrades.push(name);
-    update_total_upgrades(remaining_upgrades[name].name);
+    let upg_name = remaining_upgrades[name].name;
     delete remaining_upgrades[name]
+    update_total_upgrades(upg_name);
     $("#upgrade_" + name).remove();
     upg.purchase();
 }
