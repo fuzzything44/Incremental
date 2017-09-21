@@ -8,7 +8,7 @@ var events = [
         "rejection": 0,
     },
     {
-        "condition": function () { return buildings["bank"].amount > 0; },
+        "condition": function () { return buildings["bank"].amount > 3; },
         "run_event": function () {
             /* Gain 0-29s of bank raw money production + 10 money for those with few banks. Capped at 200-250. */
             var money_gain = Math.round(buildings["bank"].amount * buildings["bank"].generation["money"] * 20 * Math.random() + 10);
@@ -18,7 +18,7 @@ var events = [
             $("#events_content").html("Investing in " + invested_in + " paid off! <br />You gained " + money_gain.toString() + " money from that sweet deal!");
         },
         "name": "Stock Investments Pay Off!",
-        "rejection": 0,
+        "rejection": 10,
     },
     {
         "condition": function () { return true; },
@@ -40,6 +40,16 @@ var events = [
         },
         "name": "Meteor!",
         "rejection": 30,
+    },
+    {
+        "condition": function () { return buildings["oil_well"].amount > (Math.log(buildings["oil_well"].base_cost["iron"] / 500) / Math.log(.95)); },
+        "run_event": function () {
+            buildings["oil_well"].base_cost["iron"] *= .95; /* Make oil cheaper */
+            $("#building_oil_well > .tooltiptext").html(gen_building_tooltip("oil_well")); /* Set tooltip */
+            $("#events_content").html("You found an oil reserve!<br /><i style='font-size: small'>Oil wells are now cheaper</i>");
+        },
+        "name": "Oil Reserve",
+        "rejection": 50,
     },
 ];
 function handle_event() {

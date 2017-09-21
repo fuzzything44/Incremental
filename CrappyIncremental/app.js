@@ -10,6 +10,7 @@ var UNLOCK_TREE = {
     "s_energyboost": [],
     "s_trade": [],
     "s_startboost": [],
+    "s_time_magic": [],
     "bank": ["mine", "logging"],
     "mine": ["furnace", "gold_finder"],
     "logging": ["compressor"],
@@ -35,6 +36,7 @@ var SPELL_BUILDINGS = [
     "s_energyboost",
     "s_trade",
     "s_startboost",
+    "s_time_magic",
 ];
 var SPELL_FUNCTIONS = [
     /*   0 */ function (delta_time) { },
@@ -120,34 +122,16 @@ var SPELL_FUNCTIONS = [
             var trade_expires = Date.now() + 15000;
         }
     },
+    /*   3 */ function (delta_time) {
+        var last_dt = this.last_dt; /* How much time "elapsed" last loop */
+        this.last_dt = delta_time; /* Save for next iteration */
+        if (typeof last_dt == "undefined") {
+            return;
+        }
+        last_update -= 0.5 * delta_time; /* Reverse the clock a bit */
+    },
 ];
 var to_next_trade = 60000;
-function energy_converter_add() {
-    var num_to_add = parseInt($("#buy_amount").val());
-    /* Add one converter */
-    buildings["s_energyboost"].amount += num_to_add;
-    $("#building_s_energyboost > .building_amount").html(buildings["s_energyboost"].amount.toString());
-    /* Add energy only if on */
-    if (buildings["s_energyboost"].on) {
-        resources_per_sec["energy"] += num_to_add;
-        resources_per_sec["mana"] -= num_to_add;
-    }
-}
-function energy_converter_remove() {
-    var num_to_remove = parseInt($("#buy_amount").val());
-    /* Make sure it can't go negative. Don't want people to trade the other way! */
-    if (buildings["s_energyboost"].amount - num_to_remove < 0) {
-        num_to_remove = buildings["s_energyboost"].amount;
-    }
-    /* Remove a converter */
-    buildings["s_energyboost"].amount -= num_to_remove;
-    $("#building_s_energyboost > .building_amount").html(buildings["s_energyboost"].amount.toString());
-    /* Remove energy only if on */
-    if (buildings["s_energyboost"].on) {
-        resources_per_sec["energy"] -= 1;
-        resources_per_sec["mana"] += 1;
-    }
-}
 function set_initial_state() {
     resources = {
         "mana": { "amount": 0, "value": 0 },
@@ -201,10 +185,10 @@ function set_initial_state() {
         "s_energyboost": {
             "on": false,
             "amount": 2,
-            "base_cost": { "mana": Infinity },
-            "price_ratio": { "mana": 1 },
+            "base_cost": {},
+            "price_ratio": {},
             "generation": {
-                "mana": -1,
+                "mana": -3,
                 "energy": 1,
             },
             "update": 0,
@@ -235,6 +219,17 @@ function set_initial_state() {
                 "oil": 5 / 25,
             },
             "update": 0,
+            "flavor": "I HAVE THE POWER!",
+        },
+        "s_time_magic": {
+            "on": false,
+            "amount": 30,
+            "base_cost": { "mana": Infinity },
+            "price_ratio": { "mana": 1 },
+            "generation": {
+                "mana": -1,
+            },
+            "update": 3,
             "flavor": "I HAVE THE POWER!",
         },
         "bank": {

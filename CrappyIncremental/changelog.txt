@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.2.0:
+Add time warping spell. Increase mana cost of energy converter. Add finding oil reserves to make oil wells cost less iron.
+
 v1.1.0:
 New event: meteor! A meteor can fall in your backyard! Events slightly less common. Removed arbitrary cap on investment gains. Events timeout after a minute.
 
