@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.1.0:
+New event: meteor! A meteor can fall in your backyard! Events slightly less common. Removed arbitrary cap on investment gains. Events timeout after a minute.
+
 v1.0.2:
 Water purifier hints that prestige is required. Total upgrades now shows the actual number, not one higher.
 
