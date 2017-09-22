@@ -52,13 +52,13 @@ const SPELL_FUNCTIONS = [
                  let normal_gain = resources_per_sec["money"] - this.boost;
                  if (this.boost != normal_gain) { /* Money gain changed, we need to alter our boost to match. */
                      resources_per_sec["money"] -= this.boost;
-                     this.boost = resources_per_sec["money"];
+                     this.boost = Math.max(0, resources_per_sec["money"]);
                      resources_per_sec["money"] += this.boost;
                  }
                  let normal_gold_gain = resources_per_sec["gold"] - this.boost_gold;
                  if (this.boost_gold != normal_gold_gain) { /* Gold gain changed, we need to alter our boost to match. */
                      resources_per_sec["gold"] -= this.boost_gold;
-                     this.boost_gold = resources_per_sec["gold"];
+                     this.boost_gold = Math.max(0, resources_per_sec["gold"]);
                      resources_per_sec["gold"] += this.boost_gold;
                  }
                  /* Checks if building was turned off */

@@ -11,7 +11,7 @@
 </head>
 <body>
     <div style="font-size: small; position:absolute; top: 0;">
-        v1.2.1 | 
+        v1.2.2 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none; color: lightgray;">Changelog</a> |
         <a href="https://github.com/fuzzything44/Incremental/wiki" target="_blank" style="text-decoration: none; color: lightgray;">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none; color: lightgray;">Discord</a> |
@@ -50,7 +50,7 @@
                 <span id="building_s_manastone" class="building tooltip" style="color: mediumpurple;"><span class="building_name">Mana Stone</span><span class="building_amount">0</span><span class="tooltiptext">Each stone generates 1 mana.</span></span>
             </div>
             <div style="position: relative">
-                <span id="building_s_goldboost" class="building tooltip" style="color: gold;"><span class="building_name">Greed Spell</span><span class="building_amount">3</span><span class="tooltiptext">Uses 2 mana, but doubles money and gold gains.</span></span>
+                <span id="building_s_goldboost" class="building tooltip" style="color: gold;"><span class="building_name">Greed Spell</span><span class="building_amount">3</span><span class="tooltiptext">Uses 2 mana, but doubles net money and gold gains.</span></span>
                 <span id="toggle_s_goldboost" class="building_state_off" onclick="toggle_building_state('s_goldboost')">Off</span>
             </div>
             <div style="position: relative" class="hidden">
@@ -105,7 +105,18 @@
             </span>
             <span id="toggle_library" class="building_state_on" onclick="toggle_building_state('library')">On</span>
         </div>
+        <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('water_purifier')" class="building_remove">X</span>
+            <span id="building_water_purifier" class="building tooltip" onclick="purchase_building('water_purifier');">
+                <span class="building_name">Water Purifier</span>
+                <span class="building_amount">0</span>
+                <span class="tooltiptext" onclick="event.stopPropagation()">Generates 1 water per second.<br /> Costs 500 money, 500 stone, 500 sand, 100 glass.</span>
+            </span>
+            <span id="toggle_water_purifier" class="building_state_on" onclick="toggle_building_state('water_purifier')">On</span>
+        </div>
         <br />
+
+
         <div style="position: relative" class="hidden">
             <span onclick="destroy_building('oil_engine')" class="building_remove">X</span>
             <span id="building_oil_engine" class="building tooltip" onclick="purchase_building('oil_engine');">
@@ -207,7 +218,7 @@
             <span id="building_ink_refinery" class="building tooltip" onclick="purchase_building('ink_refinery');">
                 <span class="building_name">Ink Refinery</span>
                 <span class="building_amount">0</span>
-                <span class="tooltiptext" onclick="event.stopPropagation()">Generates -1 energy per second, -3 oil per second, 1 paper per second.<br /> Costs 200 money, 200 iron, 100 oil.</span>
+                <span class="tooltiptext" onclick="event.stopPropagation()">Generates -1 energy per second, -3 oil per second, 1 ink per second.<br /> Costs 200 money, 200 iron, 100 oil.</span>
             </span>
             <span id="toggle_ink_refinery" class="building_state_on" onclick="toggle_building_state('ink_refinery')">On</span>
         </div>
@@ -230,15 +241,6 @@
             <span id="toggle_book_printer" class="building_state_on" onclick="toggle_building_state('book_printer')">On</span>
         </div>
         <div style="position: relative" class="hidden">
-            <span onclick="destroy_building('water_purifier')" class="building_remove">X</span>
-            <span id="building_water_purifier" class="building tooltip" onclick="purchase_building('water_purifier');">
-                <span class="building_name">Water Purifier</span>
-                <span class="building_amount">0</span>
-                <span class="tooltiptext" onclick="event.stopPropagation()">Generates 1 water per second.<br /> Costs 500 money, 500 stone, 500 sand, 100 glass.</span>
-            </span>
-            <span id="toggle_water_purifier" class="building_state_on" onclick="toggle_building_state('water_purifier')">On</span>
-        </div>
-        <div style="position: relative" class="hidden">
             <span onclick="destroy_building('hydrogen_gen')" class="building_remove">X</span>
             <span id="building_hydrogen_gen" class="building tooltip" onclick="purchase_building('hydrogen_gen');">
                 <span class="building_name">Electrolysis Machine</span>
@@ -252,7 +254,7 @@
     <div id="upgrades">
         <span id="reset" class="tooltip" onclick="if(confirm('Are you sure? This resets EVERYTHING!') && prompt('If you\'re absolutely sure, enter \'reset\'.') == 'reset') {set_initial_state(); save(); location.reload();}"><span>Reset</span><span class="tooltiptext">Resets ALL progress. There is NO bonus for this!</span></span>
         <span id="save" onclick="save();">Save</span>
-        <span id="prestige" onclick="prestige();">Prestige</span>
+        <span id="prestige" onclick="prestige();" class="tooltip">Prestige<span class="tooltiptext">Mana gains from prestige are based on how many resources you have and what kinds they are. <br /> Mana provides many different unique buildings!</span></span>
         <span id="all_on" onclick="Object.keys(buildings).forEach(function (build) { if (!buildings[build].on && SPELL_BUILDINGS.indexOf(build) == -1) { toggle_building_state(build);}});">All On</span>
         <span id="all_off" onclick="Object.keys(buildings).forEach(function (build) { if (buildings[build].on && SPELL_BUILDINGS.indexOf(build) == -1) { toggle_building_state(build);}});">All off</span>
         <span id="save_text">Saved!</span>
