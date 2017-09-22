@@ -87,6 +87,11 @@
     float: right;
 }
 
+#log {
+    margin: .5em;
+    background: transparent;
+    width: inherit;
+}
 #upgrades {
     position: absolute;
     top: 1em;
@@ -183,7 +188,7 @@ ul{
 li{
     position: relative;
     left: -2em;
-    top: -1em;
+    top: -.5em;
     background-color: #222;
     float: left;
     margin: .1em;

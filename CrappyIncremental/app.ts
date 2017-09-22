@@ -709,6 +709,7 @@ function set_initial_state() {
                 Object.keys(buildings["furnace"].generation).forEach(function (res) {
                     buildings["furnace"].generation[res] *= 10;
                 });
+                buildings["furnace"].generation["wood"] *= .7;
                 if (comp_state) { /* Only turn on if it already was on */
                     toggle_building_state("furnace");
                 }
@@ -720,7 +721,7 @@ function set_initial_state() {
                 "wood": 200,
                 "coal": 200,
             },
-            "tooltip": "Much hotter furnaces run at 10x the previous rate. <br /> Costs 100 money, 300 stone, 200 wood, 200 coal.",
+            "tooltip": "Much hotter furnaces run at 10x the previous rate and consume slightly less wood. <br /> Costs 100 money, 300 stone, 200 wood, 200 coal.",
             "name": "Hotter furnaces",
             "image": "fire.png",
         },
@@ -851,6 +852,13 @@ function prestige() {
 
 }
 
+function add_log_elem(to_add: string) {
+    while ($("#log > span").length >= 10) { /* We want to remove the last element(s) to bring length to 9.*/
+        $("#log > span").last().remove(); /* Remove last child. Repeat until no more. */
+    }
+    $("#log").prepend("<span>" + to_add + "<br />" + "</span>");
+}
+
 function save() {
     Object.keys(resources).forEach(function (type) {
         document.cookie = "res-" + type + "=" + resources[type].amount.toString() + ";expires=Fri, 31 Dec 9999 23:59:59 GMT;";
@@ -862,6 +870,7 @@ function save() {
     document.cookie = "last_save=" + Date.now() + ";expires=Fri, 31 Dec 9999 23:59:59 GMT;";
     $('#save_text').css('opacity', '1'); setTimeout(() => $('#save_text').css({ 'opacity': '0', 'transition': 'opacity 1s' }), 1000);
     console.log("Saved");
+    add_log_elem("Saved!");
 }
 
 function load() {
@@ -1130,6 +1139,7 @@ function purchase_building(name: string) {
         Object.keys(buildings[name].base_cost).forEach(function (key) {
             console.log("Checking money");
             if (buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount) > resources[key].amount) {
+                add_log_elem("You can't afford that. Missing: " + key.replace("_", " "));
                 throw Error("Not enough resources!");
             }
         });
@@ -1160,6 +1170,7 @@ function destroy_building(name: string) {
     if (isNaN(amount)) { amount = 1; }
     for (let i = 0; i < amount; i++) {
         if (buildings[name].amount <= 1) {
+            add_log_elem("You can't destroy your last building.");
             return; /* Can't sell last building */
         }
         /* Remove resource gen */
@@ -1183,6 +1194,7 @@ function purchase_upgrade(name: string) {
     /* Check that they have enough */
     Object.keys(upg.cost).forEach(function (resource) {
         if (resources[resource].amount < upg.cost[resource]) { /* Don't have enough to buy upgrade */
+            add_log_elem("Not enough resources! Missing: " + resource.replace("_", " "));
             throw Error("Not enough resources!");
         }
     });
@@ -1238,8 +1250,10 @@ window.onload = () => {
 };
 
 function hack(level: number) {
+    add_log_elem("You cheater :(");
     Object.keys(resources).forEach(function (r) { resources[r].amount = level });
 }
 function superhack(level: number) {
+    add_log_elem("You filthy cheater :(. You make me sad.");
     Object.keys(resources).forEach(function (r) { resources_per_sec[r] = level });
 }

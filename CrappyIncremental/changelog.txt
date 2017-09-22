@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.2.3:
+Add log so you can see past events. Hotter furnaces don't use quite as much wood. Oh, and a new event! Make sure to play with volume on!
+
 v1.2.2:
 Greed now doesn't double negative net production and has a better tooltip. Water purifier moved to correct position. Ink refinery has the proper tooltip. Prestige has a tooltip giving some explanation.
 

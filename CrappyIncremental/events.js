@@ -51,6 +51,15 @@ var events = [
         "name": "Oil Reserve",
         "rejection": 50,
     },
+    {
+        "condition": function () { return true; },
+        "run_event": function () {
+            resources["gold"].amount += 35;
+            $("#events_content").html('<iframe id="ytplayer" type="text/ html" width="640" height="360"src= "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"frameborder= "0"> </iframe>');
+        },
+        "name": "Tree Fiddy",
+        "rejection": 90,
+    },
 ];
 function handle_event() {
     /* Reset our handle_event timeout */
