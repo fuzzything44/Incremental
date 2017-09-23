@@ -745,7 +745,6 @@ function set_initial_state() {
                 "money": 250,
                 "gold": 50,
                 "iron": 200,
-                "coal": 200,
             },
             "tooltip": "Special gold-plated magnets that attract only gold. And a bit of iron. <br /> Costs 250 money, 50 gold, 200 iron.",
             "name": "Gold magnet <br />",
@@ -1208,7 +1207,9 @@ function purchase_upgrade(name: string) {
     purchased_upgrades.push(name);
     let upg_name = remaining_upgrades[name].name;
     delete remaining_upgrades[name]
-    update_total_upgrades(upg_name);
+    if (name != "trade") {
+        update_total_upgrades(upg_name);
+    }
     $("#upgrade_" + name).remove();
     upg.purchase();
 }

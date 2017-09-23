@@ -16,6 +16,7 @@
             
             let investment_types = ["gold", "beer", "uranium", "bread", "rugs", "beds", "wool", "toothpicks", "cookies", "toothpaste", "salad"];
             let invested_in = investment_types[Math.floor(Math.random() * investment_types.length)];
+            add_log_elem("You made " + money_gain.toString() + " money from investing!");
             $("#events_content").html("Investing in " + invested_in + " paid off! <br />You gained " + money_gain.toString() + " money from that sweet deal!");
         },
         "name": "Stock Investments Pay Off!",
@@ -34,9 +35,9 @@
                 content += "<span onclick='resources.gold.amount += 50; $(\"#events\").addClass(\"hidden\");'" + styling + ">Look for gold</span><br>";
             }
             if (resources["energy"].amount > 0) {
-                content += "<span onclick='resources_per_sec.energy += 3; $(\"#events\").addClass(\"hidden\");'" + styling + ">Capture the heat</span><br>";
-                setTimeout(() => resources_per_sec["energy"] -= 3, 60000);
+                content += "<span onclick='resources_per_sec.energy += 3; setTimeout(() => resources_per_sec[\"energy\"] -= 3, 60000); $(\"#events\").addClass(\"hidden\");'" + styling + ">Capture the heat</span><br>";
             }
+            add_log_elem("A meteor fell!");
             $("#events_content").html(content);
 
         },
@@ -48,6 +49,7 @@
         "run_event": function () {
             buildings["oil_well"].base_cost["iron"] *= .95; /* Make oil cheaper */
             $("#building_oil_well > .tooltiptext").html(gen_building_tooltip("oil_well")); /* Set tooltip */
+            add_log_elem("Oil reserve discovered!");
             $("#events_content").html("You found an oil reserve!<br /><i style='font-size: small'>Oil wells are now cheaper</i>");
         },
         "name": "Oil Reserve",
@@ -57,6 +59,7 @@
         "condition": function () { return true; },
         "run_event": function () {
             resources["gold"].amount += 35;
+            add_log_elem("We're no strangers to love!");
             $("#events_content").html('<iframe id="ytplayer" type="text/ html" width="640" height="360"src= "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"frameborder= "0"> </iframe>');
         },
         "name": "Tree Fiddy",

@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.2.4:
+Gold magnets no longer secretly take coal. Trading no longer messes up the upgrade tooltip. Events are logged. Meteors now no longer slowly deplete your energy until you refresh. Greed spell renamed to Greed.
+
 v1.2.3:
 Add log so you can see past events. Hotter furnaces don't use quite as much wood. Oh, and a new event! Make sure to play with volume on!
 
