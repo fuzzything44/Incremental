@@ -160,7 +160,7 @@ function set_initial_state() {
                 "mana": -1,
             },
             "update": "nop",
-            "mode": "plate",
+            "mode": "iron",
             "flavor": "You can't buy anything at this shop.",
         },
 
