@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.3.0:
+Add new building: workshop! Meteors should now say what you get in the log. Reorganized spell buildings. You need to prestige to have some function again.
+
 v1.2.4:
 Gold magnets no longer secretly take coal. Trading no longer messes up the upgrade tooltip. Events are logged. Meteors now no longer slowly deplete your energy until you refresh. Greed spell renamed to Greed.
 

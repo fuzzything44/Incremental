@@ -7,11 +7,12 @@
     <link rel="stylesheet" href="app.css" type="text/css" />
     <script src="jquery.js"></script>
     <script src="events.js"></script>
+    <script src="spells.js"></script>
     <script src="app.js"></script>
 </head>
 <body>
     <div style="font-size: small; position:absolute; top: 0;">
-        v1.2.4 | 
+        v1.3.0 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none; color: lightgray;">Changelog</a> |
         <a href="https://github.com/fuzzything44/Incremental/wiki" target="_blank" style="text-decoration: none; color: lightgray;">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none; color: lightgray;">Discord</a> |
@@ -74,6 +75,26 @@
             <div style="position: relative">
                 <span id="building_s_time_magic" class="building tooltip" style="color: cyan;"><span class="building_name">Time Rewind</span><span class="building_amount">25</span><span class="tooltiptext">Uses 30 mana to make time pass quicker.</span></span>
                 <span id="toggle_s_time_magic" class="building_state_off" onclick="toggle_building_state('s_time_magic')">Off</span>
+            </div>
+            <div style="position: relative">
+                <span id="building_s_workshop" class="building" style="color: dimgrey;">
+                    <span class="building_name">Workshop</span>
+                    <span class="tooltip">
+                        (?)
+                        <span class="tooltiptext">
+                            Can build a variety of different items. <hr />
+                            <span id="workshop_prod">???</span>
+                        </span>
+                    </span>
+                    <select id="workshop_select" onchange="s_workshop(this.value);">
+                        <option value="iron">Make iron</option>
+                        <option value="wood">Make wood</option>
+                        <option value="glass">Make glass</option>
+
+                    </select>
+                    <span class="building_amount">50</span>
+                </span>
+                <span id="toggle_s_workshop" class="building_state_off" onclick="toggle_building_state('s_workshop')">Off</span>
             </div>
             <hr />
         </div>

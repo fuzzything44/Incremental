@@ -26,15 +26,15 @@ var events = [
         "run_event": function () {
             var styling = "style='color: white; border: solid white 1px; border-radius: 3px; padding-left: .3em; padding-right: .3em; display: inline-block; margin: .2em;'";
             var content = "<span>Woah, a meteor just hit in your backyard!</span><br>";
-            content += "<span onclick='resources.stone.amount += 1000; $(\"#events\").addClass(\"hidden\");'" + styling + ">Gather stone</span><br>";
+            content += "<span onclick='resources.stone.amount += 1000; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 1000 stone\");'" + styling + ">Gather stone</span><br>";
             if (resources["iron"].amount > 0) {
-                content += "<span onclick='resources.iron.amount += 500; $(\"#events\").addClass(\"hidden\");'" + styling + ">Recover iron</span><br>";
+                content += "<span onclick='resources.iron.amount += 500; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 500 iron\");'" + styling + ">Recover iron</span><br>";
             }
             if (resources["gold"].amount > 0) {
-                content += "<span onclick='resources.gold.amount += 50; $(\"#events\").addClass(\"hidden\");'" + styling + ">Look for gold</span><br>";
+                content += "<span onclick='resources.gold.amount += 50; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 50 gold\");'" + styling + ">Look for gold</span><br>";
             }
             if (resources["energy"].amount > 0) {
-                content += "<span onclick='resources_per_sec.energy += 3; setTimeout(() => resources_per_sec[\"energy\"] -= 3, 60000); $(\"#events\").addClass(\"hidden\");'" + styling + ">Capture the heat</span><br>";
+                content += "<span onclick='resources_per_sec.energy += 3; setTimeout(() => resources_per_sec[\"energy\"] -= 3, 60000); $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 3 energy for 1 minute\");'" + styling + ">Capture the heat</span><br>";
             }
             add_log_elem("A meteor fell!");
             $("#events_content").html(content);
