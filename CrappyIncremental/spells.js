@@ -104,23 +104,29 @@ function s_workshop(newopt) {
     }
     /* Tooltips for each option */
     var workshop_tooltips = {
-        "iron": "Finds 20 iron from 100 stone per second.",
-        "wood": "Grows and chops down trees for 50 wood per second.",
+        "iron": "Finds 10 iron from 50 stone per second.",
+        "wood": "Grows and chops down trees for 75 wood per second.",
         "glass": "Melts 10 sand into 10 glass per second.",
+        "steel": "Uses 100 iron ore and 30 coal to make 1 steel beam per second.",
     };
     /* What option corresponds to what production */
     var workshop_items = {
         "iron": {
-            "stone": -100 / 50,
-            "iron": 20 / 50,
+            "stone": -50 / 50,
+            "iron": 10 / 50,
         },
         "wood": {
-            "wood": 1,
+            "wood": 75 / 50,
         },
         "glass": {
             "sand": -10 / 50,
             "glass": 10 / 50,
-        }
+        },
+        "steel": {
+            "iron_ore": -100 / 50,
+            "coal": -30 / 50,
+            "steel_beam": 1 / 50,
+        },
     };
     /* Set production to match */
     buildings["s_workshop"].generation = workshop_items[newopt];

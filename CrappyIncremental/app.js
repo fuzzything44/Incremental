@@ -31,6 +31,7 @@ var UNLOCK_TREE = {
     "water_purifier": ["hydrogen_gen", "hydrogen_burner"],
     "hydrogen_gen": [],
     "hydrogen_burner": [],
+    "skyscraper": [],
 };
 var SPELL_BUILDINGS = [
     "s_manastone",
@@ -47,6 +48,7 @@ function set_initial_state() {
         "mana": { "amount": 0, "value": 0 },
         "energy": { "amount": 0, "value": 0 },
         "research": { "amount": 0, "value": 0 },
+        "manager": { "amount": 0, "value": 0 },
         "money": { "amount": 10, "value": 1 },
         "stone": { "amount": 0, "value": 0.5 },
         "wood": { "amount": 0, "value": 0.5 },
@@ -60,10 +62,11 @@ function set_initial_state() {
         "paper": { "amount": 0, "value": 4 },
         "ink": { "amount": 0, "value": 10 },
         "book": { "amount": 0, "value": 600 },
-        "sand": { "amount": 0, "value": 1 },
-        "glass": { "amount": 0, "value": 1.5 },
+        "sand": { "amount": 0, "value": 3 },
+        "glass": { "amount": 0, "value": 5 },
         "water": { "amount": 0, "value": 2 },
-        "hydrogen": { "amount": 0, "value": 1 },
+        "hydrogen": { "amount": 0, "value": 5 },
+        "steel_beam": { "amount": 0, "value": 150 },
     };
     /* Set resources_per_sec */
     Object.keys(resources).forEach(function (res) {
@@ -487,6 +490,24 @@ function set_initial_state() {
             },
             "flavor": "...And lights it on fire!",
         },
+        "skyscraper": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 5000,
+                "steel_beam": 10,
+                "glass": 50,
+            },
+            "price_ratio": {
+                "money": 1.09,
+                "steel_beam": 1.1,
+                "glass": 1.1,
+            },
+            "generation": {
+                "manager": 1,
+            },
+            "flavor": "Only one per floor so they don't get in each others' ways.",
+        },
     };
     purchased_upgrades = [];
     remaining_upgrades = {
@@ -511,6 +532,28 @@ function set_initial_state() {
             "tooltip": "Mines produce double stone and 5x iron. <br /> Costs 100 money, 10 stone.",
             "name": "Improve Mines",
             "image": "pickaxe.png",
+        },
+        "better_logging": {
+            "unlock": function () { return buildings["logging"].amount >= 3 && buildings["s_manastone"].amount > 5; },
+            "purchase": function () {
+                var build_state = buildings["logging"].on;
+                if (build_state) {
+                    toggle_building_state("logging");
+                }
+                buildings["logging"]["generation"]["wood"] *= 2;
+                buildings["logging"]["generation"]["coal"] *= 3;
+                if (build_state) {
+                    toggle_building_state("logging");
+                }
+                $("#building_logging > .tooltiptext").html(gen_building_tooltip("logging"));
+            },
+            "cost": {
+                "money": 100,
+                "wood": 42,
+            },
+            "tooltip": "console.err('Upgrade not purchased, player needs to buy it!'); <br /> Costs 100 money, 42 wood.",
+            "name": "Magical Trees",
+            "image": "",
         },
         "coal_mines": {
             "unlock": function () { return buildings["mine"].amount >= 3 && buildings["compressor"].amount >= 1 && (resources["coal"].amount < 50 || resources["research"].amount > 5); },
@@ -706,27 +749,25 @@ function set_initial_state() {
             "name": "Glass Furnace",
             "image": "sand.png",
         },
-        "TODO": {
-            "unlock": function () { return false; /*buildings["furnace"].amount >= 5 && resources["sand"].amount >= 10 && purchased_upgrades.indexOf("better_furnace") != -1; */ },
+        "skyscraper": {
+            "unlock": function () { return resources["steel_beam"].amount > 5 && buildings["skyscraper"].amount < 1; },
             "purchase": function () {
-                var comp_state = buildings["furnace"].on;
-                if (comp_state) {
-                    toggle_building_state("furnace");
-                }
-                buildings["furnace"].amount = 1;
-                if (comp_state) {
-                    toggle_building_state("furnace");
-                }
-                $("#building_ > .tooltiptext").html(gen_building_tooltip("furnace"));
+                /* Give them the first skyscraper. */
+                /* So to do this we give them enough resources to buy and then just buy it */
+                /* That keeps all the nasty issues of updating everything away */
+                Object.keys(buildings["skyscraper"].base_cost).forEach(function (res) {
+                    resources[res].amount += buildings["skyscraper"].base_cost[res];
+                });
+                purchase_building("skyscraper");
             },
             "cost": {
-                "money": 250,
-                "iron": 200,
-                "wood": 500,
+                "money": 2500,
+                "steel_beam": 5,
+                "glass": 25,
             },
-            "tooltip": "Furnaces now smelt sand into glass at a rate of 1/s. <br /> Costs 250 money, 200 iron, 500 wood.",
-            "name": "Glass Furnace",
-            "image": "sand.png",
+            "tooltip": "Build the first floor of a skyscraper for some managers to live in. <br /> Costs 2500 money, 5 steel beam, 25 glass.",
+            "name": "Skyscrapers",
+            "image": "",
         },
     };
     $("#buy_amount").val(1);
@@ -1011,7 +1052,7 @@ function gen_building_tooltip(name) {
     var cost_text = "Costs ";
     Object.keys(buildings[name].base_cost).forEach(function (key) {
         cost_text += Math.ceil(buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount)).toString();
-        cost_text += " " + key + ", ";
+        cost_text += " " + key.replace("_", " ") + ", ";
     });
     var flavor_text = "<hr><i style='font-size: small'>" + buildings[name].flavor + "</i>";
     if (buildings[name].flavor == undefined || buildings[name].flavor == "") {

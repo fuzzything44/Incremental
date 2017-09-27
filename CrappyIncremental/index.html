@@ -12,7 +12,7 @@
 </head>
 <body>
     <div style="font-size: small; position:absolute; top: 0;">
-        v1.3.0 | 
+        v1.4.0 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none; color: lightgray;">Changelog</a> |
         <a href="https://github.com/fuzzything44/Incremental/wiki" target="_blank" style="text-decoration: none; color: lightgray;">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none; color: lightgray;">Discord</a> |
@@ -25,6 +25,7 @@
         <span id="mana" class="tooltip hidden" style="color: mediumpurple"><span>Mana: 0<br /></span><br /></span>
         <span id="energy" class="tooltip hidden" style="color: gold"><span>Energy: 0<br /></span><br /></span>
         <span id="research" class="tooltip hidden" style="color: deepskyblue;"><span>Research: 0<br /></span><br /></span>
+        <span id="manager" class="tooltip hidden" style="color: tan;"><span>Manager: 0<br /></span><br /></span>
 
         <span id="money" class="hidden"><span>Money: 0</span><span id="money_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
         <span id="stone" class="tooltip hidden"><span>Stone: 0<br /></span><span id="stone_per_sec" class="res_gen">Making 0 per second.</span><br /></span>
@@ -43,6 +44,7 @@
         <span id="glass" class="tooltip hidden"><span>Glass: 0<br /></span><span id="glass_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
         <span id="water" class="tooltip hidden"><span>Water: 0<br /></span><span id="water_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
         <span id="hydrogen" class="tooltip hidden"><span>Hydrogen: 0<br /></span><span id="hydrogen_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
+        <span id="steel_beam" class="tooltip hidden"><span>Steel beam: 0<br /></span><span id="steel_beam_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
 
     </div>
     <div id="buildings">
@@ -87,9 +89,10 @@
                         </span>
                     </span>
                     <select id="workshop_select" onchange="s_workshop(this.value);">
-                        <option value="iron">Make iron</option>
-                        <option value="wood">Make wood</option>
-                        <option value="glass">Make glass</option>
+                        <option value="iron">Extract iron</option>
+                        <option value="wood">Grow wood</option>
+                        <option value="glass">Smelt glass</option>
+                        <option value="steel">Forge Steel</option>
 
                     </select>
                     <span class="building_amount">50</span>
@@ -132,6 +135,15 @@
                 <span class="building_name">Water Purifier</span>
                 <span class="building_amount">0</span>
                 <span class="tooltiptext" onclick="event.stopPropagation()">Generates 1 water per second.<br /> Costs 500 money, 500 stone, 500 sand, 100 glass.</span>
+            </span>
+            <span id="toggle_water_purifier" class="building_state_on" onclick="toggle_building_state('water_purifier')">On</span>
+        </div>
+        <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('skyscraper')" class="building_remove">X</span>
+            <span id="building_skyscraper" class="building tooltip" onclick="purchase_building('skyscraper');">
+                <span class="building_name">Skyscraper</span>
+                <span class="building_amount">0</span>
+                <span class="tooltiptext" onclick="event.stopPropagation()">Generates 1 manager.<br /> Should be auto-filled here </span>
             </span>
             <span id="toggle_water_purifier" class="building_state_on" onclick="toggle_building_state('water_purifier')">On</span>
         </div>

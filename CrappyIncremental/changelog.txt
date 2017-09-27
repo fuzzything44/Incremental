@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.4.0:
+Added skyscrapers and managers (currently they do nothing :( ). Sand, glass, hydrogen values increased. Steel beams added. Logging camp upgrade. Events no longer disappear. Workshop options slightly renamed. Workshop productions changed slightly.
+
 v1.3.0:
 Add new building: workshop! Meteors should now say what you get in the log. Reorganized spell buildings. You need to prestige to have some function again.
 

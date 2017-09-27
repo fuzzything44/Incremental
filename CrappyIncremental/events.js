@@ -67,10 +67,6 @@ var events = [
 function handle_event() {
     /* Reset our handle_event timeout */
     setTimeout(handle_event, 2 * 60000 + Math.random() * 60000 * 2);
-    /* Events can go away after a minute. */
-    setTimeout(function () {
-        $("#events").addClass("hidden");
-    }, 60000);
     /* Must have some mana to get events */
     if (buildings["s_manastone"].amount < 1) {
         return;
