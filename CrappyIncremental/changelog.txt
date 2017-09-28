@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.5.0:
+Changed prestige formula to make long runs much more rewarding.
+
 v1.4.0:
 Added skyscrapers and managers (currently they do nothing :( ). Sand, glass, hydrogen values increased. Steel beams added. Logging camp upgrade. Events no longer disappear. Workshop options slightly renamed. Workshop productions changed slightly.
 
