@@ -12,7 +12,7 @@
 </head>
 <body>
     <div style="font-size: small; position:absolute; top: 0;">
-        v1.7.2 | 
+        v1.8.0 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none; color: lightgray;">Changelog</a> |
         <a href="https://github.com/fuzzything44/Incremental/wiki" target="_blank" style="text-decoration: none; color: lightgray;">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none; color: lightgray;">Discord</a> |
@@ -22,13 +22,13 @@
         <span id="upgrade_count" class="tooltip" style="position: absolute; left: 54.6em; top: -.2em; white-space: nowrap;"><span id="num_upgrades"></span><span id="purchased_upgrades" class="tooltiptext">Purchased Upgrades:</span></span>
     </div>
     <div id="resource_bar">
-        <span id="time" class="hidden">
-            <span style="color: blue; text-shadow: coral 1px 0px 15px;">Time: 0</span>
+        <div id="time" class="hidden" style="margin-bottom: .3em;">
+            <span style="color: blue; text-shadow: coral 1px 0px 15px; vertical-align: middle;">Time: 0</span>
             <span id="time_toggle" class="res_gen" onclick="toggle_time()" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid white; border-radius: 3px;">
                 Speed Time
             </span>
             <br />
-        </span>
+        </div>
         <span id="refined_mana" class="hidden" style="color: red; text-shadow: deepskyblue 1px 0px 10px;"><span>Refined Mana: 0</span><br /></span>
         <span id="mana" class="hidden" style="color: mediumpurple"><span></span><br /></span>
         <span id="energy" class="hidden" style="color: gold"><span></span><br /></span>
@@ -343,7 +343,7 @@
     </div>
     <div id="events" class="hidden">
         <div id="events_topbar">Something Happened</div>
-        <span id="close_events" onclick="$('#events').addClass('hidden');">X</span>
+        <span id="close_events" onclick="$('#events').addClass('hidden'); $('#events_content').html('');">X</span>
         <div id="events_content"></div>
     </div>
 </body>

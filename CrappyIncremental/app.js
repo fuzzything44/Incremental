@@ -135,8 +135,8 @@ function set_initial_state() {
                 "money": 1,
                 "stone": 2,
                 "wood": 2,
-                "iron_ore": 10 / 25,
-                "oil": 1 / 25,
+                "iron_ore": 5 / 25,
+                "oil": .5 / 25,
             },
             "update": "nop",
             "flavor": "I HAVE THE POWER!",
@@ -196,7 +196,7 @@ function set_initial_state() {
                 "money": 20,
             },
             "price_ratio": {
-                "money": 1.2,
+                "money": 1.15,
             },
             "generation": {
                 "money": -1,
@@ -212,7 +212,7 @@ function set_initial_state() {
                 "money": 20,
             },
             "price_ratio": {
-                "money": 1.2,
+                "money": 1.15,
             },
             "generation": {
                 "money": -1,
@@ -225,8 +225,8 @@ function set_initial_state() {
             "on": true,
             "amount": 0,
             "base_cost": {
-                "money": 15,
-                "stone": 30,
+                "money": 20,
+                "stone": 50,
             },
             "price_ratio": {
                 "money": 1.1,
@@ -245,13 +245,13 @@ function set_initial_state() {
             "amount": 0,
             "base_cost": {
                 "money": 100,
-                "stone": 500,
-                "iron": 200
+                "stone": 300,
+                "iron": 100
             },
             "price_ratio": {
                 "money": 1.3,
                 "stone": 1.3,
-                "iron": 1.2,
+                "iron": 1.3,
             },
             "generation": {
                 "coal": -10,
@@ -282,8 +282,8 @@ function set_initial_state() {
             "on": true,
             "amount": 0,
             "base_cost": {
-                "money": 200,
-                "stone": 750,
+                "money": 750,
+                "stone": 1000,
             },
             "price_ratio": {
                 "money": 1.3,
@@ -300,8 +300,8 @@ function set_initial_state() {
             "on": true,
             "amount": 0,
             "base_cost": {
-                "money": 500,
-                "glass": 200,
+                "money": 2500,
+                "glass": 300,
             },
             "price_ratio": {
                 "money": 1.3,
@@ -319,7 +319,7 @@ function set_initial_state() {
             "base_cost": {
                 "money": 5000,
                 "stone": 500,
-                "wood": 500
+                "wood": 750
             },
             "price_ratio": {
                 "money": 1.5,
@@ -577,14 +577,14 @@ function set_initial_state() {
             },
             "generation": {
                 "manager": -1,
-                "money": -150,
-                "stone": 50,
+                "money": -100,
+                "stone": 30,
                 "iron_ore": 10,
                 "coal": 3,
                 "iron": 2,
                 "gold": .5,
                 "diamond": .1,
-                "sand": 20,
+                "sand": 10,
             },
             "flavor": "Seriouser business",
         },
@@ -914,6 +914,50 @@ function set_initial_state() {
             "name": "Sleazy Managers",
             "image": "",
         },
+        "better_trades": {
+            "unlock": function () { return resources["refined_mana"].amount >= 1000 && buildings["s_trade"].on; },
+            "purchase": function () {
+                var comp_state = buildings["jewelry_store"].on;
+                if (comp_state) {
+                    toggle_building_state("jewelry_store");
+                }
+                buildings["jewelry_store"]["generation"]["money"] *= 2;
+                buildings["jewelry_store"]["generation"]["manager"] = -1;
+                if (comp_state) {
+                    toggle_building_state("jewelry_store");
+                }
+                $("#building_jewelry_store > .tooltiptext").html(gen_building_tooltip("jewelry_store"));
+            },
+            "cost": {
+                "refined_mana": 5000,
+                "gold": 100,
+            },
+            "tooltip": "Your portals cover more of the market, letting you get better deals. <br /> Costs 5000 refined mana, 100 gold.",
+            "name": "Mystic Portals",
+            "image": "money.png",
+        },
+        "better_trades_2": {
+            "unlock": function () { return purchased_upgrades.indexOf("better_trades") != -1; },
+            "purchase": function () {
+                var comp_state = buildings["jewelry_store"].on;
+                if (comp_state) {
+                    toggle_building_state("jewelry_store");
+                }
+                buildings["jewelry_store"]["generation"]["money"] *= 2;
+                buildings["jewelry_store"]["generation"]["manager"] = -1;
+                if (comp_state) {
+                    toggle_building_state("jewelry_store");
+                }
+                $("#building_jewelry_store > .tooltiptext").html(gen_building_tooltip("jewelry_store"));
+            },
+            "cost": {
+                "refined_mana": 10000,
+                "diamond": 100,
+            },
+            "tooltip": "Your portals cover more of the market, letting you get better deals. <br /> Costs 10000 refined mana, 100 diamond.",
+            "name": "Arcane Portals",
+            "image": "diamond.png",
+        },
     };
     $("#buy_amount").val(1);
 }
@@ -995,9 +1039,10 @@ function load() {
             buildings[type] = JSON.parse(temp_str);
             /* Show how many buildings they have and set tooltip properly */
             $('#building_' + type + " > .building_amount").html(buildings[type].amount.toString());
-            if (SPELL_BUILDINGS.indexOf(type) == -1) {
-                $('#building_' + type + " > .tooltiptext").html(gen_building_tooltip(type));
-            }
+        }
+        /* Set tooltip of building, even if they don't have any. */
+        if (SPELL_BUILDINGS.indexOf(type) == -1) {
+            $('#building_' + type + " > .tooltiptext").html(gen_building_tooltip(type));
         }
     });
     if (buildings["s_manastone"].amount > 0) {
@@ -1079,6 +1124,9 @@ function load_from_clip() {
 }
 function toggle_building_state(name) {
     if (buildings[name].on) {
+        if (name == "s_mana_refinery") {
+            return; /* Can't turn off the refinery */
+        }
         buildings[name].on = false;
         /* Go through each resource it generates... */
         Object.keys(buildings[name].generation).forEach(function (key) {
@@ -1112,15 +1160,9 @@ function update() {
     var delta_time = Date.now() - last_update;
     last_update = Date.now();
     if (delta_time > 5000) {
-        resources["time"].amount += (delta_time / 1000) - 1; /* 1 sec of production, rest goes to time. */
-        delta_time = 1000;
+        resources["time"].amount += delta_time / 1000; /* 1 sec of production, rest goes to time. */
+        return;
     }
-    /* Perform spell actions */
-    SPELL_BUILDINGS.forEach(function (build) {
-        if (buildings[build].on) {
-            spell_funcs[buildings[build].update](delta_time);
-        }
-    });
     if (time_on) {
         /* Find how much time they will use up */
         if (resources["time"].amount < 5) {
@@ -1134,6 +1176,12 @@ function update() {
             resources["time"].amount -= 5;
         }
     }
+    /* Perform spell actions */
+    SPELL_BUILDINGS.forEach(function (build) {
+        if (buildings[build].on) {
+            spell_funcs[buildings[build].update](delta_time);
+        }
+    });
     /* Check for negative resources or resources that will run out. */
     Object.keys(resources).forEach(function (res) {
         if (resources[res].amount > 0) {

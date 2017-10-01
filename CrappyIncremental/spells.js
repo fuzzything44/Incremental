@@ -72,6 +72,12 @@ function s_trade(delta_time) {
         if (buildings["s_goldboost"].on) {
             trade_advantage += 0.25;
         } /* Obviously being greedy makes prices better */
+        if (purchased_upgrades.indexOf("better_trades") != -1) {
+            trade_advantage += .5;
+        }
+        if (purchased_upgrades.indexOf("better_trades_2") != -1) {
+            trade_advantage += .75;
+        }
         /* See if we're buying or selling */
         if (Math.random() > 0.5) {
             /* We're buying it */
@@ -138,6 +144,9 @@ function s_workshop(newopt) {
     $("#workshop_prod").html(workshop_tooltips[newopt]); /* Set tooltip to new val */
 }
 function s_refinery(amount) {
+    if (isNaN(amount)) {
+        amount = 1;
+    }
     if (!confirm("Are you sure you want to refine " + amount.toString() + " mana? It will be lost until next prestige!")) {
         return;
     }

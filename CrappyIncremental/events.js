@@ -32,17 +32,19 @@ var events = [
     {
         "condition": function () { return true; },
         "run_event": function () {
-            var styling = "style='color: white; border: solid white 1px; border-radius: 3px; padding-left: .3em; padding-right: .3em; display: inline-block; margin: .2em;'";
             var content = "<span>Woah, a meteor just hit in your backyard!</span><br>";
-            content += "<span onclick='resources.stone.amount += 1000; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 1000 stone\");'" + styling + ">Gather stone</span><br>";
+            content += "<span onclick='resources.stone.amount += 1000; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 1000 stone\");' class='clickable'>Gather stone</span><br>";
             if (resources["iron"].amount > 0) {
-                content += "<span onclick='resources.iron.amount += 500; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 500 iron\");'" + styling + ">Recover iron</span><br>";
+                content += "<span onclick='resources.iron.amount += 500; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 500 iron\");' class='clickable'>Recover iron</span><br>";
             }
             if (resources["gold"].amount > 0) {
-                content += "<span onclick='resources.gold.amount += 50; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 50 gold\");'" + styling + ">Look for gold</span><br>";
+                content += "<span onclick='resources.gold.amount += 50; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 50 gold\");' class='clickable'>Look for gold</span><br>";
             }
             if (resources["energy"].amount > 0) {
-                content += "<span onclick='resources_per_sec.energy += 3; setTimeout(() => resources_per_sec[\"energy\"] -= 3, 60000); $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 3 energy for 1 minute\");'" + styling + ">Capture the heat</span><br>";
+                content += "<span onclick='resources_per_sec.energy += 3; setTimeout(() => resources_per_sec[\"energy\"] -= 3, 60000); $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 3 energy for 1 minute\");' class='clickable'>Capture the heat</span><br>";
+            }
+            if (buildings["big_mine"].amount >= 3 && buildings["big_mine"].on && Math.random() > .7 && buildings["library"].amount >= 5) {
+                content += "<span onclick='resources.diamond.amount += 10; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 10 diamond\");' class='clickable'>Wait, what's that?</span><br>";
             }
             add_log_elem("A meteor fell!");
             $("#events_content").html(content);
@@ -70,6 +72,21 @@ var events = [
         },
         "name": "Tree Fiddy",
         "rejection": 90,
+    },
+    {
+        "condition": function () { return buildings["big_mine"].amount >= 1 && buildings["big_mine"].on; },
+        "run_event": function () {
+            var content = "<span>Your strip mines have Uncovered an artifact</span><br>";
+            content += "<span onclick='resources.money.amount += 10000; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 10000 money\");' class='clickable'>Sell it</span><br>";
+            content += "<span onclick='resources.gold.amount += 100; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 100 gold\");' class='clickable'>Melt it down</span><br>";
+            if (resources["refined_mana"].amount > 500) {
+                content += "<span onclick='resources.refined_mana.amount += 500; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 500 refined mana\");' class='clickable'>Extract magic</span><br>";
+            }
+            add_log_elem("You found an artifact!");
+            $("#events_content").html(content);
+        },
+        "name": "Artifact",
+        "rejection": 50,
     },
 ];
 function handle_event() {

@@ -248,3 +248,13 @@ select {
 .tooltip > .tooltiptext:hover {
     visibility: hidden;
 }
+
+.clickable {
+    color: white;
+    border: solid white 1px; 
+    border-radius: 3px; 
+    padding-left: .3em; 
+    padding-right: .3em; 
+    display: inline-block; 
+    margin: .2em;
+}

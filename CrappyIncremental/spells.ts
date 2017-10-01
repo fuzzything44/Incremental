@@ -72,6 +72,9 @@ function s_trade(delta_time: number) {
         resource_value = Math.max(1, Math.round(resource_value / resources[chosen_resource].value)); /* Reduce resource gain to better line up with different valued resources */
         let trade_advantage = 0.75; /* How much prices tip in our favor. If < 1, out of favor. */
         if (buildings["s_goldboost"].on) { trade_advantage += 0.25; } /* Obviously being greedy makes prices better */
+        if (purchased_upgrades.indexOf("better_trades") != -1) { trade_advantage += .5; }
+        if (purchased_upgrades.indexOf("better_trades_2") != -1) { trade_advantage += .75; }
+
         /* See if we're buying or selling */
         if (Math.random() > 0.5) {
             /* We're buying it */
@@ -147,6 +150,7 @@ function s_workshop(newopt: string) {
 }
 
 function s_refinery(amount: number) {
+    if (isNaN(amount)) { amount = 1; }
     if (!confirm("Are you sure you want to refine " + amount.toString() + " mana? It will be lost until next prestige!")) {
         return;
     }
