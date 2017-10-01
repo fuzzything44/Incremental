@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.8.1:
+You can once again prestige for 0 mana.
+
 v1.8.0:
 Slight nerf to boost. Mines and logging scale better. Various buildings have costs changed. Strip mines slightly nerfed. Two upgrades that improve trading portal. Mana refinery works as it should now (if it broke, please prestige to fix it). Speed time works with mana buildings. Meteors have another resource they can make. New event added.
 
