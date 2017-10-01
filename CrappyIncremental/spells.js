@@ -3,6 +3,7 @@ var spell_funcs = {
     "goldboost": s_goldboost,
     "trade": s_trade,
     "time": s_time,
+    "refinery": s_refinery_buff,
 };
 function nop(delta_time) { }
 function s_goldboost(delta_time) {
@@ -63,7 +64,7 @@ function s_trade(delta_time) {
         /* Choose a resource */
         var chosen_resource = Object.keys(resources)[Math.floor(Math.random() * Object.keys(resources).length)];
         /* Don't choose special resource or money. Make sure they have some (unless it's stone. You can always get stone) */
-        while (resources[chosen_resource].value == 0 || chosen_resource == "money" || (resources[chosen_resource].amount == 0 && chosen_resource != "stone")) {
+        while (resources[chosen_resource].value <= 0 || chosen_resource == "money" || (resources[chosen_resource].amount == 0 && chosen_resource != "stone")) {
             chosen_resource = Object.keys(resources)[Math.floor(Math.random() * Object.keys(resources).length)];
         }
         resource_value = Math.max(1, Math.round(resource_value / resources[chosen_resource].value)); /* Reduce resource gain to better line up with different valued resources */
@@ -135,5 +136,36 @@ function s_workshop(newopt) {
         toggle_building_state("s_workshop");
     }
     $("#workshop_prod").html(workshop_tooltips[newopt]); /* Set tooltip to new val */
+}
+function s_refinery(amount) {
+    if (!confirm("Are you sure you want to refine " + amount.toString() + " mana? It will be lost until next prestige!")) {
+        return;
+    }
+    /* Check to make sure we have enough mana before refining. */
+    if (resources["mana"].amount < amount) {
+        amount = resources["mana"].amount; /* Only make as much as we can */
+    }
+    resources_per_sec["mana"] -= amount;
+    resources["refined_mana"].amount += amount * 1000;
+    buildings["s_mana_refinery"].generation["mana"] -= amount; /* Take away per sec right now and add per sec cost to building for reloads.*/
+}
+var refinery_countdown = 30000;
+function s_refinery_buff(delta_time) {
+    /* Give some of a random resource based off of refined mana */
+    refinery_countdown -= delta_time;
+    if (refinery_countdown < 0) {
+        refinery_countdown = 30000;
+        /* Give resources! */
+        var chosen_resource = Object.keys(resources)[Math.floor(Math.random() * Object.keys(resources).length)];
+        /* Make sure they have some (unless it's money. You can always get money) */
+        while (resources[chosen_resource].value == 0 || chosen_resource == "refined_mana" || (resources[chosen_resource].amount == 0 && chosen_resource != "money")) {
+            chosen_resource = Object.keys(resources)[Math.floor(Math.random() * Object.keys(resources).length)];
+        }
+        /* How much of it to give. We give 10 value per mana they spent for this. */
+        var to_give = resources["refined_mana"].amount / 100;
+        to_give = Math.ceil(to_give / Math.abs(resources[chosen_resource].value)); /* Give approx value */
+        resources[chosen_resource].amount += to_give;
+        add_log_elem("Refined mana warped " + to_give.toString() + " " + chosen_resource + " into reality.");
+    }
 }
 //# sourceMappingURL=spells.js.map

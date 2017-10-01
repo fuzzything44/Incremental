@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.7.0:
+Added mana refinery. Changed value of time and removed it from trading.
+
 v1.6.2:
 Jewelry stores should NOT give managers. They should use them.
 

@@ -12,11 +12,19 @@ var events = [
         "run_event": function () {
             /* Gain 0-29s of bank raw money production + 10 money for those with few banks. Capped at 200-250. */
             var money_gain = Math.round(buildings["bank"].amount * buildings["bank"].generation["money"] * 20 * Math.random() + 10);
+            if (buildings["big_bank"].amount > 0 && buildings["big_bank"].on) {
+                /* If they have some big banks and they're on, give some extra */
+                money_gain += buildings["big_bank"].generation["money"] * buildings["big_bank"].amount * 45;
+            }
             resources["money"].amount += money_gain;
             var investment_types = ["gold", "beer", "uranium", "bread", "rugs", "beds", "wool", "toothpicks", "cookies", "toothpaste", "salad"];
             var invested_in = investment_types[Math.floor(Math.random() * investment_types.length)];
             add_log_elem("You made " + money_gain.toString() + " money from investing!");
             $("#events_content").html("Investing in " + invested_in + " paid off! <br />You gained " + money_gain.toString() + " money from that sweet deal!");
+            if (buildings["big_bank"].amount > 0 && buildings["big_bank"].on) {
+                /* If they got extra */
+                $("#events_content").append("<br />Thank your investment bankers for the tip!");
+            }
         },
         "name": "Stock Investments Pay Off!",
         "rejection": 10,
@@ -58,7 +66,7 @@ var events = [
         "run_event": function () {
             resources["gold"].amount += 35;
             add_log_elem("We're no strangers to love!");
-            $("#events_content").html('<iframe id="ytplayer" type="text/ html" width="640" height="360"src= "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"frameborder= "0"> </iframe>');
+            $("#events_content").html('<iframe id="ytplayer" type="text/ html" width="640" height="360" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" frameborder="0"> </iframe>');
         },
         "name": "Tree Fiddy",
         "rejection": 90,

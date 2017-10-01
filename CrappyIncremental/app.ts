@@ -15,6 +15,7 @@ const UNLOCK_TREE = { /* What buildings unlock */
     "s_startboost": [],
     "s_time_magic": [],
     "s_workshop": [],
+    "s_mana_refinery": [],
 
     "bank": ["mine", "logging"],
     "mine": ["furnace", "gold_finder"],
@@ -47,6 +48,7 @@ const SPELL_BUILDINGS = [
     "s_startboost",
     "s_time_magic",
     "s_workshop",
+    "s_mana_refinery",
   ];
 
 
@@ -55,7 +57,7 @@ var to_next_trade = 60000;
 
 function set_initial_state() {
     resources = {
-        "time": { "amount": 0, "value": 1 },
+        "time": { "amount": 0, "value": -1 },
 
         "mana": { "amount": 0, "value": 0 },
         "energy": { "amount": 0, "value": 0 }, 
@@ -80,7 +82,7 @@ function set_initial_state() {
         "water": { "amount": 0, "value": 2 },
         "hydrogen": { "amount": 0, "value": 5 },
         "steel_beam": { "amount": 0, "value": 150 },
-
+        "refined_mana": { "amount": 0, "value": -1 },
 
     };
     /* Set resources_per_sec */
@@ -172,6 +174,18 @@ function set_initial_state() {
             "mode": "iron",
             "flavor": "You can't buy anything at this shop.",
         },
+        "s_mana_refinery": {
+            "on": true,
+            "amount": 1,
+            "base_cost": { "mana": Infinity },
+            "price_ratio": { "mana": 1 },
+            "generation": {
+                "mana": 0,
+            },
+            "update": "refinery",
+            "flavor": "That's some fine mana.",
+        },
+
 
         "bank": {
             "on": true,
@@ -937,7 +951,7 @@ function prestige() {
     /* Calculate mana gain */
     let prestige_points = 0;
     let mana = buildings["s_manastone"].amount;
-    Object.keys(resources).forEach((res) => prestige_points += resources[res].amount * resources[res].value);
+    Object.keys(resources).forEach((res) => prestige_points += resources[res].amount * Math.max(0, resources[res].value));
 
     let mana_gain = prestige_points / 20000 - Math.pow(mana, 1.3) * .5; /* One for every 20k pp, and apply reduction based off of current mana */
     mana_gain = mana_gain / (1 + Math.floor(mana / 50) * .5 ); /* Then divide gain by a number increasing every 50 mana. */
@@ -1359,6 +1373,7 @@ function random_title() {
         "Help im trapped in an html factory",
         "Totally no malware here",
         "Try Foodbits! They're super tasty*! *ᴾᵃʳᵗ ᵒᶠ ᵃ ᶜᵒᵐᵖˡᵉᵗᵉ ᵇʳᵉᵃᵏᶠᵃˢᵗ⋅ ᴺᵒᵗ ᶠᵒʳ ʰᵘᵐᵃⁿ ᶜᵒⁿˢᵘᵐᵖᵗᶦᵒⁿ⋅ ᴰᵒ ⁿᵒᵗ ᶜᵒⁿˢᵘᵐᵉ ʷʰᶦˡᵉ ᵘⁿᵈᵉʳ ᵗʰᵉ ᶦⁿᶠˡᵘᵉⁿᶜᵉ ᵒᶠ ᵈʳᵘᵍˢ ᵒʳ ᵃˡᶜᵒʰᵒˡ⋅ ᴼʳ ᵃᶦʳ⋅",
+        "BUY ME MORE JEWELRY!",
 
     ];
     document.title = TITLES.filter(item => item !== document.title)[Math.floor(Math.random() * (TITLES.length - 1))];

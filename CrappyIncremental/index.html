@@ -12,7 +12,7 @@
 </head>
 <body>
     <div style="font-size: small; position:absolute; top: 0;">
-        v1.6.2 | 
+        v1.7.0 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none; color: lightgray;">Changelog</a> |
         <a href="https://github.com/fuzzything44/Incremental/wiki" target="_blank" style="text-decoration: none; color: lightgray;">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none; color: lightgray;">Discord</a> |
@@ -29,10 +29,12 @@
             </span>
             <br />
         </span>
+        <span id="refined_mana" class="hidden" style="color: red; text-shadow: deepskyblue 1px 0px 10px;"><span>Refined Mana: 0</span><br /></span>
         <span id="mana" class="hidden" style="color: mediumpurple"><span></span><br /></span>
         <span id="energy" class="hidden" style="color: gold"><span></span><br /></span>
         <span id="research" class="hidden" style="color: deepskyblue;"><span></span><br /></span>
         <span id="manager" class="hidden" style="color: tan;"><span></span><br /></span>
+
 
         <span id="money" class="hidden"><span>Money: 0</span><span id="money_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
         <span id="stone" class="hidden"><span>Stone: 0<br /></span><span id="stone_per_sec" class="res_gen">Making 0 per second.</span><br /></span>
@@ -105,6 +107,9 @@
                     <span class="building_amount">50</span>
                 </span>
                 <span id="toggle_s_workshop" class="building_state_off" onclick="toggle_building_state('s_workshop')">Off</span>
+            </div>
+            <div style="position: relative">
+                <span id="building_s_mana_refinery" class="building tooltip" style="color: blue;" onclick="s_refinery(parseInt($('#buy_amount').val()))"><span class="building_name">Mana Refinery</span><span class="building_amount">1</span><span class="tooltiptext">Refine your mana into a crystalline form.</span></span>
             </div>
             <hr />
         </div>
