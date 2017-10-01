@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.7.2:
+Warping items in now shows their names properly.
+
 v1.7.1:
 You now don't get bothered if refined mana makes nothing. Fixed prestige to say mana stone.
 

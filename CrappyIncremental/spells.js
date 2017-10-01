@@ -168,7 +168,7 @@ function s_refinery_buff(delta_time) {
         var to_give = resources["refined_mana"].amount / 100;
         to_give = Math.ceil(to_give / Math.abs(resources[chosen_resource].value)); /* Give approx value */
         resources[chosen_resource].amount += to_give;
-        add_log_elem("Refined mana warped " + to_give.toString() + " " + chosen_resource + " into reality.");
+        add_log_elem("Refined mana warped " + to_give.toString() + " " + chosen_resource.replace("_", " ") + " into reality.");
     }
 }
 //# sourceMappingURL=spells.js.map
