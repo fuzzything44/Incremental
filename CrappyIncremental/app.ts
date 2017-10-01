@@ -914,7 +914,7 @@ function set_initial_state() {
                 }
 
                 buildings["jewelry_store"]["generation"]["money"] *= 2;
-                buildings["jewelry_store"]["generation"]["manager"] = 1;
+                buildings["jewelry_store"]["generation"]["manager"] = -1;
                 if (comp_state) { /* Only turn on if it already was on */
                     toggle_building_state("jewelry_store");
                 }

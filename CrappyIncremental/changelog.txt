@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.6.2:
+Jewelry stores should NOT give managers. They should use them.
+
 v1.6.1:
 Investment banks and strip mines should now no longer show up early.
 
