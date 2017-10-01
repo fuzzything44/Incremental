@@ -12,7 +12,7 @@
 </head>
 <body>
     <div style="font-size: small; position:absolute; top: 0;">
-        v1.5.0 | 
+        v1.6.0 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none; color: lightgray;">Changelog</a> |
         <a href="https://github.com/fuzzything44/Incremental/wiki" target="_blank" style="text-decoration: none; color: lightgray;">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none; color: lightgray;">Discord</a> |
@@ -22,29 +22,36 @@
         <span id="upgrade_count" class="tooltip" style="position: absolute; left: 54.6em; top: -.2em; white-space: nowrap;"><span id="num_upgrades"></span><span id="purchased_upgrades" class="tooltiptext">Purchased Upgrades:</span></span>
     </div>
     <div id="resource_bar">
-        <span id="mana" class="tooltip hidden" style="color: mediumpurple"><span>Mana: 0<br /></span><br /></span>
-        <span id="energy" class="tooltip hidden" style="color: gold"><span>Energy: 0<br /></span><br /></span>
-        <span id="research" class="tooltip hidden" style="color: deepskyblue;"><span>Research: 0<br /></span><br /></span>
-        <span id="manager" class="tooltip hidden" style="color: tan;"><span>Manager: 0<br /></span><br /></span>
+        <span id="time" class="hidden">
+            <span style="color: blue; text-shadow: coral 1px 0px 15px;">Time: 0</span>
+            <span id="time_toggle" class="res_gen" onclick="toggle_time()" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid white; border-radius: 3px;">
+                Speed Time
+            </span>
+            <br />
+        </span>
+        <span id="mana" class="hidden" style="color: mediumpurple"><span></span><br /></span>
+        <span id="energy" class="hidden" style="color: gold"><span></span><br /></span>
+        <span id="research" class="hidden" style="color: deepskyblue;"><span></span><br /></span>
+        <span id="manager" class="hidden" style="color: tan;"><span></span><br /></span>
 
         <span id="money" class="hidden"><span>Money: 0</span><span id="money_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
-        <span id="stone" class="tooltip hidden"><span>Stone: 0<br /></span><span id="stone_per_sec" class="res_gen">Making 0 per second.</span><br /></span>
-        <span id="wood" class="tooltip hidden"><span>Wood: 0<br /></span><span id="wood_per_sec" class="res_gen">Making 0 per second.</span><br /></span>
-        <span id="iron_ore" class="tooltip hidden"><span>Iron Ore: 0<br /></span><span id="iron_ore_per_sec" class="res_gen">Making 0 per second.</span><br /></span>
-        <span id="coal" class="tooltip hidden"><span>Coal: 0<br /></span><span id="coal_per_sec" class="res_gen">Making 0 per second.</span><br /></span>
-        <span id="iron" class="tooltip hidden"><span>Iron: 0<br /></span><span id="iron_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
-        <span id="gold" class="tooltip hidden"><span>Gold: 0<br /></span><span id="gold_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
-        <span id="diamond" class="tooltip hidden"><span>Diamond: 0<br /></span><span id="diamond_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
-        <span id="jewelry" class="tooltip hidden"><span>Jewelry: 0<br /></span><span id="jewelry_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
-        <span id="oil" class="tooltip hidden"><span>Oil: 0<br /></span><span id="oil_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
-        <span id="paper" class="tooltip hidden"><span>Paper: 0<br /></span><span id="paper_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
-        <span id="ink" class="tooltip hidden"><span>Ink: 0<br /></span><span id="ink_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
-        <span id="book" class="tooltip hidden"><span>Book: 0<br /></span><span id="book_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
-        <span id="sand" class="tooltip hidden"><span>Sand: 0<br /></span><span id="sand_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
-        <span id="glass" class="tooltip hidden"><span>Glass: 0<br /></span><span id="glass_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
-        <span id="water" class="tooltip hidden"><span>Water: 0<br /></span><span id="water_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
-        <span id="hydrogen" class="tooltip hidden"><span>Hydrogen: 0<br /></span><span id="hydrogen_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
-        <span id="steel_beam" class="tooltip hidden"><span>Steel beam: 0<br /></span><span id="steel_beam_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
+        <span id="stone" class="hidden"><span>Stone: 0<br /></span><span id="stone_per_sec" class="res_gen">Making 0 per second.</span><br /></span>
+        <span id="wood" class="hidden"><span>Wood: 0<br /></span><span id="wood_per_sec" class="res_gen">Making 0 per second.</span><br /></span>
+        <span id="iron_ore" class="hidden"><span>Iron Ore: 0<br /></span><span id="iron_ore_per_sec" class="res_gen">Making 0 per second.</span><br /></span>
+        <span id="coal" class="hidden"><span>Coal: 0<br /></span><span id="coal_per_sec" class="res_gen">Making 0 per second.</span><br /></span>
+        <span id="iron" class="hidden"><span>Iron: 0<br /></span><span id="iron_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
+        <span id="gold" class="hidden"><span>Gold: 0<br /></span><span id="gold_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
+        <span id="diamond" class="hidden"><span>Diamond: 0<br /></span><span id="diamond_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
+        <span id="jewelry" class="hidden"><span>Jewelry: 0<br /></span><span id="jewelry_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
+        <span id="oil" class="hidden"><span>Oil: 0<br /></span><span id="oil_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
+        <span id="paper" class="hidden"><span>Paper: 0<br /></span><span id="paper_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
+        <span id="ink" class="hidden"><span>Ink: 0<br /></span><span id="ink_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
+        <span id="book" class="hidden"><span>Book: 0<br /></span><span id="book_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
+        <span id="sand" class="hidden"><span>Sand: 0<br /></span><span id="sand_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
+        <span id="glass" class="hidden"><span>Glass: 0<br /></span><span id="glass_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
+        <span id="water" class="hidden"><span>Water: 0<br /></span><span id="water_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
+        <span id="hydrogen" class="hidden"><span>Hydrogen: 0<br /></span><span id="hydrogen_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
+        <span id="steel_beam" class="hidden"><span>Steel beam: 0<br /></span><span id="steel_beam_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
 
     </div>
     <div id="buildings">
@@ -145,7 +152,7 @@
                 <span class="building_amount">0</span>
                 <span class="tooltiptext" onclick="event.stopPropagation()">Generates 1 manager.<br /> Should be auto-filled here </span>
             </span>
-            <span id="toggle_water_purifier" class="building_state_on" onclick="toggle_building_state('water_purifier')">On</span>
+            <span id="toggle_skyscraper" class="building_state_on" onclick="toggle_building_state('skyscraper')">On</span>
         </div>
         <br />
 
@@ -228,11 +235,20 @@
             <span id="toggle_jeweler" class="building_state_on" onclick="toggle_building_state('jeweler')">On</span>
         </div>
         <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('glass_jeweler')" class="building_remove">X</span>
+            <span id="building_glass_jeweler" class="building tooltip" onclick="purchase_building('glass_jeweler');">
+                <span class="building_name">Glassblower</span>
+                <span class="building_amount">0</span>
+                <span class="tooltiptext" onclick="event.stopPropagation()">  TOOLTIP  </span>
+            </span>
+            <span id="toggle_glass_jeweler" class="building_state_on" onclick="toggle_building_state('glass_jeweler')">On</span>
+        </div>
+        <div style="position: relative" class="hidden">
             <span onclick="destroy_building('jewelry_store')" class="building_remove">X</span>
             <span id="building_jewelry_store" class="building tooltip" onclick="purchase_building('jewelry_store');">
                 <span class="building_name">Jewelry Store</span>
                 <span class="building_amount">0</span>
-                <span class="tooltiptext" onclick="event.stopPropagation()">Generates -1 jewelry per second, 500 money per second.<br /> Costs 5000 money, 500 stone, 500 wood.</span>
+                <span class="tooltiptext" onclick="event.stopPropagation()">Generates -1 jewelry per second, 400 money per second.<br /> Costs 5000 money, 500 stone, 500 wood.</span>
             </span>
             <span id="toggle_jewelry_store" class="building_state_on" onclick="toggle_building_state('jewelry_store')">On</span>
         </div>
@@ -282,7 +298,26 @@
             </span>
             <span id="toggle_hydrogen_gen" class="building_state_on" onclick="toggle_building_state('hydrogen_gen')">On</span>
         </div>
+        <br />
 
+        <div style="position: relative">
+            <span onclick="destroy_building('big_bank')" class="building_remove">X</span>
+            <span id="building_big_bank" class="building tooltip" onclick="purchase_building('big_bank');">
+                <span class="building_name">Investment Company</span>
+                <span class="building_amount">0</span>
+                <span class="tooltiptext" onclick="event.stopPropagation()">Generates -1 manager, 50 money per second.<br />Costs 5000 money, 5000 stone, 100 glass.<hr><i style='font-size: small'>Serious business</i></span>
+            </span>
+            <span id="toggle_big_bank" class="building_state_on" onclick="toggle_building_state('big_bank')">On</span>
+        </div>
+        <div style="position: relative">
+            <span onclick="destroy_building('big_mine')" class="building_remove">X</span>
+            <span id="building_big_mine" class="building tooltip" onclick="purchase_building('big_mine');">
+                <span class="building_name">Strip Mine</span>
+                <span class="building_amount">0</span>
+                <span class="tooltiptext" onclick="event.stopPropagation()">Generates -1 manager, -150 money per second, 50 stone per second, 10 iron ore per second, 3 coal per second, 2 iron per second, 0.5 gold per second, 0.1 diamond per second, 20 sand per second.<br />Costs 10000 money, 100 steel beam, 10000 wood.</span>
+            </span>
+            <span id="toggle_big_mine" class="building_state_on" onclick="toggle_building_state('big_mine')">On</span>
+        </div>
     </div>
     <div id="upgrades">
         <span id="reset" class="tooltip" onclick="if(confirm('Are you sure? This resets EVERYTHING!') && prompt('If you\'re absolutely sure, enter \'reset\'.') == 'reset') {set_initial_state(); save(); location.reload();}"><span>Reset</span><span class="tooltiptext">Resets ALL progress. There is NO bonus for this!</span></span>

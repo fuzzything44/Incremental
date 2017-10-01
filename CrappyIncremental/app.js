@@ -20,6 +20,7 @@ var UNLOCK_TREE = {
     "compressor": ["oil_well"],
     "gold_finder": ["jeweler"],
     "jeweler": ["jewelry_store"],
+    "glass_jeweler": ["jewelry_store"],
     "jewelry_store": [],
     "oil_well": ["oil_engine"],
     "oil_engine": ["paper_mill", "ink_refinery", "s_energyboost"],
@@ -31,7 +32,9 @@ var UNLOCK_TREE = {
     "water_purifier": ["hydrogen_gen", "hydrogen_burner"],
     "hydrogen_gen": [],
     "hydrogen_burner": [],
-    "skyscraper": [],
+    "skyscraper": ["big_bank"],
+    "big_bank": ["big_mine"],
+    "big_mine": [],
 };
 var SPELL_BUILDINGS = [
     "s_manastone",
@@ -45,6 +48,7 @@ var SPELL_BUILDINGS = [
 var to_next_trade = 60000;
 function set_initial_state() {
     resources = {
+        "time": { "amount": 0, "value": 1 },
         "mana": { "amount": 0, "value": 0 },
         "energy": { "amount": 0, "value": 0 },
         "research": { "amount": 0, "value": 0 },
@@ -55,13 +59,13 @@ function set_initial_state() {
         "iron_ore": { "amount": 0, "value": 1 },
         "coal": { "amount": 0, "value": 1 },
         "iron": { "amount": 0, "value": 4 },
-        "gold": { "amount": 0, "value": 75 },
-        "diamond": { "amount": 0, "value": 100 },
-        "jewelry": { "amount": 0, "value": 400 },
+        "gold": { "amount": 0, "value": 50 },
+        "diamond": { "amount": 0, "value": 75 },
+        "jewelry": { "amount": 0, "value": 300 },
         "oil": { "amount": 0, "value": 2 },
         "paper": { "amount": 0, "value": 4 },
         "ink": { "amount": 0, "value": 10 },
-        "book": { "amount": 0, "value": 600 },
+        "book": { "amount": 0, "value": 400 },
         "sand": { "amount": 0, "value": 3 },
         "glass": { "amount": 0, "value": 5 },
         "water": { "amount": 0, "value": 2 },
@@ -278,6 +282,23 @@ function set_initial_state() {
             },
             "flavor": "A jeweler uses jewels to make jewelry in July.",
         },
+        "glass_jeweler": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 500,
+                "glass": 200,
+            },
+            "price_ratio": {
+                "money": 1.3,
+                "glass": 1.3,
+            },
+            "generation": {
+                "glass": -10,
+                "jewelry": .5,
+            },
+            "flavor": "Oooooh.... shiny!",
+        },
         "jewelry_store": {
             "on": true,
             "amount": 0,
@@ -293,7 +314,7 @@ function set_initial_state() {
             },
             "generation": {
                 "jewelry": -1,
-                "money": 500,
+                "money": 400,
             },
             "flavor": "And the cycle repeats...",
         },
@@ -507,6 +528,51 @@ function set_initial_state() {
                 "manager": 1,
             },
             "flavor": "Only one per floor so they don't get in each others' ways.",
+        },
+        "big_bank": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 5000,
+                "stone": 5000,
+                "glass": 100,
+            },
+            "price_ratio": {
+                "money": 1.2,
+                "stone": 1.1,
+                "glass": 1.2,
+            },
+            "generation": {
+                "manager": -1,
+                "money": 50,
+            },
+            "flavor": "Serious business",
+        },
+        "big_mine": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 10000,
+                "steel_beam": 100,
+                "wood": 10000,
+            },
+            "price_ratio": {
+                "money": 1.1,
+                "steel_beam": 1.03,
+                "wood": 1.1,
+            },
+            "generation": {
+                "manager": -1,
+                "money": -150,
+                "stone": 50,
+                "iron_ore": 10,
+                "coal": 3,
+                "iron": 2,
+                "gold": .5,
+                "diamond": .1,
+                "sand": 20,
+            },
+            "flavor": "Seriouser business",
         },
     };
     purchased_upgrades = [];
@@ -769,6 +835,71 @@ function set_initial_state() {
             "name": "Skyscrapers",
             "image": "",
         },
+        "glassblowing": {
+            "unlock": function () { return resources["glass"].amount > 5; },
+            "purchase": function () {
+                /* Give them the first building. */
+                /* So to do this we give them enough resources to buy and then just buy it */
+                /* That keeps all the nasty issues of updating everything away */
+                Object.keys(buildings["glass_jeweler"].base_cost).forEach(function (res) {
+                    resources[res].amount += buildings["glass_jeweler"].base_cost[res];
+                });
+                purchase_building("glass_jeweler");
+            },
+            "cost": {
+                "money": 2500,
+                "glass": 250,
+                "research": 7,
+            },
+            "tooltip": "Research how to blow glass into jewelry. <br /> Costs 2500 money, 250 glass. <br />Requires 7 research.",
+            "name": "Glassblowing",
+            "image": "",
+        },
+        "better_jeweler": {
+            "unlock": function () { return resources["sand"].amount > 0 && resources["paper"].amount > 0; },
+            "purchase": function () {
+                var comp_state = buildings["jeweler"].on;
+                if (comp_state) {
+                    toggle_building_state("jeweler");
+                }
+                buildings["jeweler"]["generation"]["diamond"] *= .8;
+                if (comp_state) {
+                    toggle_building_state("jeweler");
+                }
+                $("#building_jeweler > .tooltiptext").html(gen_building_tooltip("jeweler"));
+            },
+            "cost": {
+                "money": 2500,
+                "sand": 250,
+                "paper": 100,
+                "research": 10,
+            },
+            "tooltip": "Sand diamonds for a bright polish! <br /> Costs 2500 money, 250 sand, 100 paper. <br />Requires 10 research.",
+            "name": "Sandpaper",
+            "image": "",
+        },
+        "better_jewelry_store": {
+            "unlock": function () { return resources["jewelry"].amount > 100 && resources["manager"].amount > 0; },
+            "purchase": function () {
+                var comp_state = buildings["jewelry_store"].on;
+                if (comp_state) {
+                    toggle_building_state("jewelry_store");
+                }
+                buildings["jewelry_store"]["generation"]["money"] *= 2;
+                buildings["jewelry_store"]["generation"]["manager"] = 1;
+                if (comp_state) {
+                    toggle_building_state("jewelry_store");
+                }
+                $("#building_jewelry_store > .tooltiptext").html(gen_building_tooltip("jewelry_store"));
+            },
+            "cost": {
+                "money": 10000,
+                "research": 8,
+            },
+            "tooltip": "High-pressure sales tactics let you sell jewelry for more. But you'll need managers to keep employees in line. <br /> Costs 10000 money. <br />Requires 8 research.",
+            "name": "Sleazy Managers",
+            "image": "",
+        },
     };
     $("#buy_amount").val(1);
 }
@@ -956,11 +1087,39 @@ function toggle_building_state(name) {
         $("#toggle_" + name).text("On");
     }
 }
+var time_on = false;
+function toggle_time() {
+    time_on = !time_on;
+    $("#time_toggle").html((time_on ? "Slow" : "Speed") + " time");
+}
 var last_update = Date.now();
 function update() {
     /* Find time since last update. */
     var delta_time = Date.now() - last_update;
     last_update = Date.now();
+    if (delta_time > 5000) {
+        resources["time"].amount += (delta_time / 1000) - 1; /* 1 sec of production, rest goes to time. */
+        delta_time = 1000;
+    }
+    /* Perform spell actions */
+    SPELL_BUILDINGS.forEach(function (build) {
+        if (buildings[build].on) {
+            spell_funcs[buildings[build].update](delta_time);
+        }
+    });
+    if (time_on) {
+        /* Find how much time they will use up */
+        if (resources["time"].amount < 5) {
+            delta_time += resources["time"].amount * 1000; /* Give extra production for however much they can get, and remove that much time. */
+            time_on = false;
+            $("#time").addClass("hidden");
+            resources["time"].amount = 0;
+        }
+        else {
+            delta_time += 5000;
+            resources["time"].amount -= 5;
+        }
+    }
     /* Check for negative resources or resources that will run out. */
     Object.keys(resources).forEach(function (res) {
         if (resources[res].amount > 0) {
@@ -1009,12 +1168,6 @@ function update() {
         }
         catch (e) {
             $("#building_" + build).addClass("building_expensive");
-        }
-    });
-    /* Perform spell actions */
-    SPELL_BUILDINGS.forEach(function (build) {
-        if (buildings[build].on) {
-            spell_funcs[buildings[build].update](delta_time);
         }
     });
 }
