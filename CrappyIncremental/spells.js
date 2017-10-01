@@ -155,6 +155,9 @@ function s_refinery_buff(delta_time) {
     refinery_countdown -= delta_time;
     if (refinery_countdown < 0) {
         refinery_countdown = 30000;
+        if (resources["refined_mana"].amount < 100) {
+            return;
+        } /* Not enough to do stuff, so don't bother with a message. */
         /* Give resources! */
         var chosen_resource = Object.keys(resources)[Math.floor(Math.random() * Object.keys(resources).length)];
         /* Make sure they have some (unless it's money. You can always get money) */

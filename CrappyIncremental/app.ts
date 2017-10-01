@@ -959,7 +959,7 @@ function prestige() {
 
     if (mana_gain < 1) {
         let percent_through = Math.max(0, Math.min(100, Math.floor((prestige_points / 20000) / (Math.pow(mana, 1.3) * .5 + 1) * 100)));
-        alert("Prestige now wouldn't produce mana! As you get more mana, it gets harder to make your first stone in a run. You are currently " + percent_through.toString() + "% of the way to your first mana.");
+        alert("Prestige now wouldn't produce mana! As you get more mana, it gets harder to make your first mana stone in a run. You are currently " + percent_through.toString() + "% of the way to your first mana.");
         return;
     }
     if (confirm("You will lose all resources and all buildings but gain " + mana_gain.toString() + " mana after reset. Proceed?")) {
