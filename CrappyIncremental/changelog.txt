@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.6.1:
+Investment banks and strip mines should now no longer show up early.
+
 v1.6.0:
 Added glass jeweler, investment bank, strip mine. Changed how offline generation works. Slightly reduced value of gold, diamond, jewelry, and books and reduced money gain from jewelry stores. Added a few new jewelry-related upgrades.
 
