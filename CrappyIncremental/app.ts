@@ -944,19 +944,7 @@ function set_initial_state() {
         },
         "better_trades": {
             "unlock": function () { return resources["refined_mana"].amount >= 1000 && buildings["s_trade"].on; },
-            "purchase": function () {
-                let comp_state = buildings["jewelry_store"].on;
-                if (comp_state) {
-                    toggle_building_state("jewelry_store");
-                }
-
-                buildings["jewelry_store"]["generation"]["money"] *= 2;
-                buildings["jewelry_store"]["generation"]["manager"] = -1;
-                if (comp_state) { /* Only turn on if it already was on */
-                    toggle_building_state("jewelry_store");
-                }
-                $("#building_jewelry_store > .tooltiptext").html(gen_building_tooltip("jewelry_store"));
-            },
+            "purchase": function () {},
             "cost": {
                 "refined_mana": 5000,
                 "gold": 100,
@@ -967,19 +955,7 @@ function set_initial_state() {
         },
         "better_trades_2": {
             "unlock": function () { return purchased_upgrades.indexOf("better_trades") != -1; },
-            "purchase": function () {
-                let comp_state = buildings["jewelry_store"].on;
-                if (comp_state) {
-                    toggle_building_state("jewelry_store");
-                }
-
-                buildings["jewelry_store"]["generation"]["money"] *= 2;
-                buildings["jewelry_store"]["generation"]["manager"] = -1;
-                if (comp_state) { /* Only turn on if it already was on */
-                    toggle_building_state("jewelry_store");
-                }
-                $("#building_jewelry_store > .tooltiptext").html(gen_building_tooltip("jewelry_store"));
-            },
+            "purchase": function () {},
             "cost": {
                 "refined_mana": 10000,
                 "diamond": 100,
