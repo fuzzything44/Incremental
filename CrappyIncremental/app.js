@@ -947,6 +947,9 @@ function prestige() {
     Object.keys(resources).forEach(function (res) { return prestige_points += resources[res].amount * Math.max(0, resources[res].value); });
     var mana_gain = prestige_points / 20000 - Math.pow(mana, 1.3) * .5; /* One for every 20k pp, and apply reduction based off of current mana */
     mana_gain = mana_gain / (1 + Math.floor(mana / 50) * .5); /* Then divide gain by a number increasing every 50 mana. */
+    if (mana_gain > 50) {
+        mana_gain = 50 + (mana_gain - 50) / (1 + Math.floor(mana_gain / 50));
+    }
     mana_gain = Math.floor(Math.pow(Math.max(0, mana_gain), .4)); /* Finally, raise to .4 power and apply some rounding/checking */
     if (mana_gain < 1) {
         var percent_through = Math.max(0, Math.min(100, Math.floor((prestige_points / 20000) / (Math.pow(mana, 1.3) * .5 + 1) * 100)));

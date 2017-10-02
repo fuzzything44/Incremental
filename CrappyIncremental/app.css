@@ -207,10 +207,6 @@ select {
 }
 
 
-::selection {
-    background-color: inherit;
-}
-
 /* Tooltip container */
 .tooltip {
     position: relative;
@@ -245,8 +241,22 @@ select {
     opacity: 1;
 }
 
+
 .tooltip > .tooltiptext:hover {
     visibility: hidden;
+}
+
+/* The upgrade tooltip should specifically stay if hovered over .*/
+#upgrade_count > .tooltiptext:hover {
+             visibility: visible;
+  -webkit-touch-callout: initial; /* iOS Safari */
+    -webkit-user-select: initial; /* Safari */
+     -khtml-user-select: initial; /* Konqueror HTML */
+       -moz-user-select: initial; /* Firefox */
+        -ms-user-select: initial; /* Internet Explorer/Edge */
+            user-select: initial; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+       
 }
 
 .clickable {

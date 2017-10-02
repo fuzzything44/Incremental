@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.10.1:
+Gaining > 50 mana at once is now a bit harder. Slight visual improvement to upgrade list (tooltip doesn't go away on hover and you can highlight upgrades).
+
 v1.10.0:
 Added an option to force events. Demons now punish being greedy. Trading upgrades nerfed.
 
