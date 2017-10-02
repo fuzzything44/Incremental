@@ -1,13 +1,15 @@
-﻿let events = [
-    { /* Filler event to make everything else slightly less common. Becomes less important the more eligible events we have. */
+﻿let event_flags = {};
+
+let events = [
+    ({ /* Filler event to make everything else slightly less common. Becomes less important the more eligible events we have. */
         "condition": function () { return true; },
         "run_event": function () {
             throw Error("Nope, we're not doing an event.");
         },
         "name": "",
         "rejection": 0,
-    },
-    {
+    }), /* End lack of event */
+    ({
         "condition": function () { return buildings["bank"].amount > 3; },
         "run_event": function () {
             /* Gain 0-29s of bank raw money production + 10 money for those with few banks. Capped at 200-250. */
@@ -28,8 +30,8 @@
             }        },
         "name": "Stock Investments Pay Off!",
         "rejection": 10,
-    },
-    { 
+    }), /* End stock investments */
+    ({ 
         "condition": function () { return true; },
         "run_event": function () {
             let content = "<span>Woah, a meteor just hit in your backyard!</span><br>";
@@ -52,8 +54,8 @@
         },
         "name": "Meteor!",
         "rejection": 30,
-    },
-    {
+    }), /* End meteor */
+    ({
         "condition": function () { return buildings["oil_well"].amount > (Math.log(buildings["oil_well"].base_cost["iron"]/500)/Math.log(.95)); },
         "run_event": function () {
             buildings["oil_well"].base_cost["iron"] *= .95; /* Make oil cheaper */
@@ -63,8 +65,8 @@
         },
         "name": "Oil Reserve",
         "rejection": 50,
-    },
-    {
+    }), /* End oil reserve */
+    ({
         "condition": function () { return true; },
         "run_event": function () {
             resources["gold"].amount += 35;
@@ -73,25 +75,115 @@
         },
         "name": "Tree Fiddy",
         "rejection": 90,
-    },
-    {
+    }), /* End rickroll */
+    ({
         "condition": function () { return buildings["big_mine"].amount >= 1 && buildings["big_mine"].on; },
         "run_event": function () {
-            let content = "<span>Your strip mines have Uncovered an artifact</span><br>";
-            content += "<span onclick='resources.money.amount += 10000; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 10000 money\");' class='clickable'>Sell it</span><br>";
-            content += "<span onclick='resources.gold.amount += 100; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 100 gold\");' class='clickable'>Melt it down</span><br>";
+            if (typeof event_flags["artifacts_found"] == "undefined") {
+                event_flags["artifacts_found"] = 0;
+            }
+            event_flags["artifacts_found"] += 1;
+            let content = "<span>Your strip mines have uncovered an artifact</span><br>";
+            let money_amount = (10000 * event_flags["artifacts_found"]).toString();
+            content += "<span onclick='resources.money.amount += " + money_amount + "; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained " + money_amount + " money\");' class='clickable'>Sell it</span><br>";
+            let gold_amount = (100 * event_flags["artifacts_found"]).toString();
+            content += "<span onclick='resources.gold.amount += " + gold_amount + "; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained " + gold_amount + " gold\");' class='clickable'>Melt it down</span><br>";
             if (resources["refined_mana"].amount > 500) {
                 content += "<span onclick='resources.refined_mana.amount += 500; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 500 refined mana\");' class='clickable'>Extract magic</span><br>";
             }
-
             add_log_elem("You found an artifact!");
             $("#events_content").html(content);
 
         },
         "name": "Artifact",
         "rejection": 50,
-    },
+    }), /* End artifact */
+    ({
+        "condition": function () { return purchased_upgrades.indexOf("better_trades_2") != -1; },
+        "run_event": function () {
+            if (typeof event_flags["demon_trades"] == "undefined") {
+                event_flags["demon_trades"] = 0;
+            }
+            events[6].rejection = Math.min(50 - event_flags["demon_trades"] * 5, 80); /* The more trades you make, the more likely this is. */
+            let content = "<span>Demon Traders have come to visit you.</span><br>";
+            if (event_flags["demon_trades"] >= 10) {
+                content += "<span style='color: red'>You bleed as they approach. </span><br />"
+            }
+            content += "<span onclick=' " +
+                "resources.diamond.amount += 300;" +
+                "event_flags[\"demon_trades\"] += 1;" +
+                "$(\"#events\").addClass(\"hidden\"); " +
+                "add_log_elem(\"Gained 300 diamond... at what cost?\");'" +
+                "class='clickable'>Buy Diamond</span><br>";
+            if (event_flags["demon_trades"] > 5) {
+                content += "<span onclick='" +
+                    "resources.gold.amount += 1000;" +
+                    "event_flags[\"demon_trades\"] += 15;" +
+                    "$(\"#events\").addClass(\"hidden\"); " +
+                    "add_log_elem(\"You sold your soul. I hope you&rsquo;re happy.\");'" +
+                    "class='clickable'>Sign Demon Pact</span><br>";
+            }
+            content += "<span onclick=' " +
+                "resources.iron.amount -= 500;" +
+                "event_flags[\"demon_trades\"] -= 1;" +
+                "$(\"#events\").addClass(\"hidden\"); " +
+                "add_log_elem(\"Demons killed using 500 iron as weapons.\");'" +
+                "class='clickable'>Fight them!</span><br>";
+
+            add_log_elem("Demons came to trade with you.");
+            $("#events_content").html(content);
+
+            /* If they're corrupted enough, potentially skip this and go directly to pact*/
+            if (Math.random() < (event_flags["demon_trades"] - 15) / 10) {
+                event_flags["demon_trades"] -= 1; /* Reduce corruption */
+                force_event(7);
+            }
+        },
+        "name": "Demonic Trading",
+        "rejection": 50,
+    }), /* End demon trading */
+    ({
+        "condition": function () { return typeof event_flags["demon_trades"] != "undefined" && event_flags["demon_trades"] > 10; },
+        "run_event": function () {
+            let content = "<span>Demon Traders have come for you.</span><br>";
+            /* Choose a resource */
+            let chosen_resource = Object.keys(resources)[Math.floor(Math.random() * Object.keys(resources).length)];
+            /* Don't choose special resource or money. Make sure they have some (unless it's money. You can always lose money) */
+            while (resources[chosen_resource].value == 0 || (resources[chosen_resource].amount == 0 && chosen_resource != "money")) {
+                chosen_resource = Object.keys(resources)[Math.floor(Math.random() * Object.keys(resources).length)];
+            }
+            content += "<span>They took " + Math.ceil(resources[chosen_resource].amount / 2).toString() + " " + chosen_resource.replace("_", " ") + " from you.</span><br />";
+            if (event_flags["demon_trades"] >= 25) {
+                content += "<span style='color: red'>You are still very deep in debt.</span>"
+            } else if (event_flags["demon_trades"] >= 15) {
+                content += "<span style='color: red'>You are still deep in debt.</span>"
+            } else if (event_flags["demon_trades"] >= 10) {
+                content += "<span style='color: red'>You are still in debt.</span>"
+            }
+            resources[chosen_resource].amount -= Math.ceil(resources[chosen_resource].amount / 2);
+            add_log_elem("Demons came for your " + chosen_resource.replace("_", " ") + ".");
+            $("#events_content").html(content);
+
+        },
+        "name": "Demonic Pact",
+        "rejection": 0,
+    }), /* End demon trading */
 ];
+
+function force_event(id: number) {
+    /* Only start a new event if the old one finished. */
+    if ($("#events").hasClass("hidden")) {
+        if (id >= events.length) { throw "Error forcing event: No such event exists.";}
+        let chosen_event = events[id];
+
+        /* Set name */
+        $("#events_topbar").html(chosen_event.name);
+        /* Run event function */
+        chosen_event.run_event();
+        /* Only show our event box when we're done */
+        $("#events").removeClass("hidden");
+    }
+}
 
 function handle_event() {
     /* Reset our handle_event timeout */

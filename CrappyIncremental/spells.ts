@@ -180,6 +180,10 @@ function s_refinery_buff(delta_time: number) {
         /* How much of it to give. We give 10 value per mana they spent for this. */
         let to_give = resources["refined_mana"].amount / 100;
         to_give = Math.ceil(to_give / Math.abs(resources[chosen_resource].value)); /* Give approx value */
+        if (resources[chosen_resource].value < 0) {
+            /* Specialty resource chosen. So cap it.*/
+            to_give = Math.min(to_give, 50);
+        }
         resources[chosen_resource].amount += to_give;
         add_log_elem("Refined mana warped " + to_give.toString() + " " + chosen_resource.replace("_", " ") + " into reality.")
     }

@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.9.0:
+Added new events: trading with demons. But please be careful! Also fixed a bug with being able to go at fast speed infinitely with enough refined mana. Good catch!
+
 v1.8.2:
 Better trades no longer buff jewelry stores.
 

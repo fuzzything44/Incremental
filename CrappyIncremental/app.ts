@@ -966,7 +966,7 @@ function set_initial_state() {
         },
 
     };
-
+    event_flags = {};
     $("#buy_amount").val(1);
 }
 
@@ -1015,6 +1015,7 @@ function save() {
     Object.keys(buildings).forEach(function (type) {
         document.cookie = "build-" + type + "=" + JSON.stringify(buildings[type]) +";expires=Fri, 31 Dec 9999 23:59:59 GMT;";
     });
+    document.cookie = "flags=" + JSON.stringify(event_flags) + ";expires=Fri, 31 Dec 9999 23:59:59 GMT;";
     document.cookie = "upgrades=" + JSON.stringify(purchased_upgrades) + ";expires=Fri, 31 Dec 9999 23:59:59 GMT;";
     document.cookie = "last_save=" + Date.now() + ";expires=Fri, 31 Dec 9999 23:59:59 GMT;";
     $('#save_text').css('opacity', '1'); setTimeout(() => $('#save_text').css({ 'opacity': '0', 'transition': 'opacity 1s' }), 1000);
@@ -1061,6 +1062,11 @@ function load() {
             $('#building_' + type + " > .tooltiptext").html(gen_building_tooltip(type));
         }
     });
+    console.log("Loading flags...");
+    let temp_str = getCookie("flags");
+    if (temp_str !== "") {
+        event_flags = JSON.parse(temp_str);
+    } 
     if (buildings["s_manastone"].amount > 0) {
         $("#spells").removeClass("hidden");
         s_workshop(buildings["s_workshop"].mode); /* Load workshop option */
