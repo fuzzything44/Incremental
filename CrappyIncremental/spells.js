@@ -73,10 +73,10 @@ function s_trade(delta_time) {
             trade_advantage += 0.25;
         } /* Obviously being greedy makes prices better */
         if (purchased_upgrades.indexOf("better_trades") != -1) {
-            trade_advantage += .5;
+            trade_advantage += .25;
         }
         if (purchased_upgrades.indexOf("better_trades_2") != -1) {
-            trade_advantage += .75;
+            trade_advantage += .3;
         }
         /* See if we're buying or selling */
         if (Math.random() > 0.5) {

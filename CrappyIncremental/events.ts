@@ -4,6 +4,7 @@ let events = [
     ({ /* Filler event to make everything else slightly less common. Becomes less important the more eligible events we have. */
         "condition": function () { return true; },
         "run_event": function () {
+            add_log_elem("Nothing interesting happened.");
             throw Error("Nope, we're not doing an event.");
         },
         "name": "",
@@ -152,7 +153,11 @@ let events = [
             while (resources[chosen_resource].value == 0 || (resources[chosen_resource].amount == 0 && chosen_resource != "money")) {
                 chosen_resource = Object.keys(resources)[Math.floor(Math.random() * Object.keys(resources).length)];
             }
-            content += "<span>They took " + Math.ceil(resources[chosen_resource].amount / 2).toString() + " " + chosen_resource.replace("_", " ") + " from you.</span><br />";
+            let resource_loss = Math.ceil(resources[chosen_resource].amount / 2);
+            if (buildings["s_goldboost"].on) {
+                resource_loss = Math.ceil(resource_loss * 4 / 3);
+            }
+            content += "<span>They took " + resource_loss.toString() + " " + chosen_resource.replace("_", " ") + " from you.</span><br />";
             if (event_flags["demon_trades"] >= 25) {
                 content += "<span style='color: red'>You are still very deep in debt.</span>"
             } else if (event_flags["demon_trades"] >= 15) {
@@ -160,7 +165,7 @@ let events = [
             } else if (event_flags["demon_trades"] >= 10) {
                 content += "<span style='color: red'>You are still in debt.</span>"
             }
-            resources[chosen_resource].amount -= Math.ceil(resources[chosen_resource].amount / 2);
+            resources[chosen_resource].amount -= resource_loss;
             add_log_elem("Demons came for your " + chosen_resource.replace("_", " ") + ".");
             $("#events_content").html(content);
 
@@ -185,10 +190,11 @@ function force_event(id: number) {
     }
 }
 
-function handle_event() {
+function handle_event(set_timer: boolean = true) {
     /* Reset our handle_event timeout */
-    setTimeout(handle_event, 2 * 60000 + Math.random() * 60000 * 2);
-    
+    if (set_timer) {
+        setTimeout(handle_event, 2 * 60000 + Math.random() * 60000 * 2);
+    }    
     /* Must have some mana to get events */
     if (buildings["s_manastone"].amount < 1) { return; }
 

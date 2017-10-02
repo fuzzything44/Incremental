@@ -12,7 +12,7 @@
 </head>
 <body>
     <div style="font-size: small; position:absolute; top: 0;">
-        v1.9.0 | 
+        v1.10.0 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none; color: lightgray;">Changelog</a> |
         <a href="https://github.com/fuzzything44/Incremental/wiki" target="_blank" style="text-decoration: none; color: lightgray;">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none; color: lightgray;">Discord</a> |
@@ -29,7 +29,13 @@
             </span>
             <br />
         </div>
-        <span id="refined_mana" class="hidden" style="color: red; text-shadow: deepskyblue 1px 0px 10px;"><span>Refined Mana: 0</span><br /></span>
+        <div id="refined_mana" class="hidden" style="margin-bottom: .3em;">
+            <span style="color: red; text-shadow: deepskyblue 1px 0px 15px; vertical-align: middle;">Refined mana: 0</span>
+            <span class="res_gen" onclick="if(resources['refined_mana'].amount < 250) {alert('You need 250 refined mana.');return;} if (confirm('Try to force an event to occur for 250 refined mana?')) { resources['refined_mana'].amount -= 250; handle_event(false); }" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid white; border-radius: 3px;">
+                Force Event
+            </span>
+            <br />
+        </div>
         <span id="mana" class="hidden" style="color: mediumpurple"><span></span><br /></span>
         <span id="energy" class="hidden" style="color: gold"><span></span><br /></span>
         <span id="research" class="hidden" style="color: deepskyblue;"><span></span><br /></span>
