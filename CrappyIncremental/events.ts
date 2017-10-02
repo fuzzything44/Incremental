@@ -71,8 +71,13 @@ let events = [
         "condition": function () { return true; },
         "run_event": function () {
             resources["gold"].amount += 35;
+            event_flags["rickroll"] = true;
             add_log_elem("We're no strangers to love!");
-            $("#events_content").html('<iframe id="ytplayer" type="text/ html" width="640" height="360" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" frameborder="0"> </iframe>');
+            if (typeof event_flags["rickroll"] == "undefined") {
+                $("#events_content").html('<iframe id="ytplayer" type="text/ html" width="640" height="360" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" frameborder="0"> </iframe>');
+            } else {
+                $("#events_content").html('<iframe id="ytplayer" type="text/ html" width="640" height="360" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0" frameborder="0"> </iframe>');
+            }
         },
         "name": "Tree Fiddy",
         "rejection": 90,
@@ -172,7 +177,7 @@ let events = [
         },
         "name": "Demonic Pact",
         "rejection": 0,
-    }), /* End demon trading */
+    }), /* End demon stealing */
 ];
 
 function force_event(id: number) {

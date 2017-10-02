@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.10.2:
+Energy boost starts at a default of 1 instead of 2. Logging camp upgrade takes >= 5 mana instead of > 5. Bank upgrade takes >= 20 instead of > 20. You can actually gain more than 6 mana (reduction of >50 gains were mistakenly applied too early.) Rickrolling autoplays once per prestige now.
+
 v1.10.1:
 Gaining > 50 mana at once is now a bit harder. Slight visual improvement to upgrade list (tooltip doesn't go away on hover and you can highlight upgrades).
 

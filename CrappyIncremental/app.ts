@@ -114,7 +114,7 @@ function set_initial_state() {
         },
         "s_energyboost": {
             "on": false,
-            "amount": 2,
+            "amount": 1,
             "base_cost": {  },
             "price_ratio": {  },
             "generation": {
@@ -627,7 +627,7 @@ function set_initial_state() {
             "image": "pickaxe.png",
         },
         "better_logging": {
-            "unlock": function () { return buildings["logging"].amount >= 3 && buildings["s_manastone"].amount > 5; },
+            "unlock": function () { return buildings["logging"].amount >= 3 && buildings["s_manastone"].amount >= 5; },
             "purchase": function () { /* When bought, turn all mines off, increase generation, and turn them back on again. Turns off first to get generation from them properly calculated */
                 let build_state = buildings["logging"].on;
                 if (build_state) {
@@ -714,7 +714,7 @@ function set_initial_state() {
             "image": "diamond.png",
         },
         "cheaper_banks": {
-            "unlock": function () { return resources["money"].amount >= 2500 && buildings["bank"].amount > 20; },
+            "unlock": function () { return resources["money"].amount >= 2500 && buildings["bank"].amount >= 20; },
             "purchase": function () { /* When bought, turn all mines off, increase generation, and turn them back on again. Turns off first to get generation from them properly calculated */
                 buildings["bank"].price_ratio["money"] = (buildings["bank"].price_ratio["money"] - 1) * .7 + 1;
                 $("#building_bank > .tooltiptext").html(gen_building_tooltip("bank"));
@@ -978,11 +978,10 @@ function prestige() {
 
     let mana_gain = prestige_points / 20000 - Math.pow(mana, 1.3) * .5; /* One for every 20k pp, and apply reduction based off of current mana */
     mana_gain = mana_gain / (1 + Math.floor(mana / 50) * .5); /* Then divide gain by a number increasing every 50 mana. */
-    if (mana_gain > 50) {
-        mana_gain = 50 + (mana_gain - 50) / ( 1 + Math.floor(mana_gain / 50))
-    }
     mana_gain = Math.floor(Math.pow(Math.max(0, mana_gain), .4)); /* Finally, raise to .4 power and apply some rounding/checking */
-
+    if (mana_gain > 50) { /* If they're getting a ton, they get less*/
+        mana_gain = Math.ceil(50 + (mana_gain - 50) / (1 + Math.floor(mana_gain / 50) * .3));
+    }
     if (mana_gain < 1) {
         let percent_through = Math.max(0, Math.min(100, Math.floor((prestige_points / 20000) / (Math.pow(mana, 1.3) * .5 + 1) * 100)));
         if (!confirm("Prestige now wouldn't produce mana! As you get more mana, it gets harder to make your first mana stone in a run. You are currently " + percent_through.toString() + "% of the way to your first mana. Prestige anyway?")) {
