@@ -178,6 +178,26 @@ let events = [
         "name": "Demonic Pact",
         "rejection": 0,
     }), /* End demon stealing */
+    ({
+        "condition": function () { return typeof event_flags["bribed_politician"] == "undefined" && buildings["big_bank"].amount >= 5 && buildings["bank"].amount >= 125 && purchased_upgrades.indexOf("coal_mines") != -1 && resources["money"].amount >= 1000000; },
+        "run_event": function () {
+            let content = "<span>Business isn't doing well. Regulations are really holding you back.</span><br>";
+            content += "<span>Why not bribe a politician to change something for you?</span><br />";
+            content += "<i>Bribing costs 1,000,000 money and is available once per prestige. Choose wisely.</i><br /><br />";
+
+            /* Bribe investment regulations. Lets them have more money from banks. */
+            content += "<span onclick='bribe_finance();' class='clickable'>Remove Financial Regulations</span><i style='text: small'>This provides a massive boost to banks and investment companies.</i><br>";
+
+            /* No environmental regulations. Mines and logging camps much stronger. */
+            content += "<span onclick='bribe_environment();' class='clickable'>Remove Environmental Regulations</span><i style='text: small'>This provides a massive boost to mines and logging camps.</i><br>";
+
+            $("#events_content").html(content);
+
+        },
+        "name": "Bribe a Politician",
+        "rejection": 20,
+    }), /* End politician bribing */
+
 ];
 
 function force_event(id: number) {
@@ -185,6 +205,9 @@ function force_event(id: number) {
     if ($("#events").hasClass("hidden")) {
         if (id >= events.length) { throw "Error forcing event: No such event exists.";}
         let chosen_event = events[id];
+        if (!chosen_event.condition()) {
+            console.error("Warning: Prerequisites not satisfied!");
+        }
 
         /* Set name */
         $("#events_topbar").html(chosen_event.name);
@@ -231,3 +254,75 @@ function handle_event(set_timer: boolean = true) {
     }
 }
 
+
+/* Functions because putting all of this in an onclick is too much. */
+function bribe_finance() {
+    /* Pay bribe */
+    resources["money"].amount -= 1000000;
+    /* Boost banks */
+    let build_state = buildings["bank"].on;
+    if (build_state) {
+        toggle_building_state("bank");
+    }
+    buildings["bank"].generation["money"] *= 50;
+    if (build_state) { /* Only turn on if it already was on */
+        toggle_building_state("bank");
+    }
+
+    /* Boost investments */
+    build_state = buildings["big_bank"].on;
+    if (build_state) {
+        toggle_building_state("big_bank");
+    }
+    buildings["big_bank"].generation["money"] *= 10;
+    if (build_state) { /* Only turn on if it already was on */
+        toggle_building_state("big_bank");
+    }
+
+    /* Boost printers */
+    build_state = buildings["money_printer"].on;
+    if (build_state) {
+        toggle_building_state("money_printer");
+    }
+    buildings["money_printer"].generation["money"] *= 3;
+    if (build_state) { /* Only turn on if it already was on */
+        toggle_building_state("money_printer");
+    }
+    event_flags["bribed_politician"] = "money";
+    $("#building_bank > .tooltiptext").html(gen_building_tooltip("bank"));
+    $("#building_big_bank > .tooltiptext").html(gen_building_tooltip("big_bank"));
+    $("#building_money_printer > .tooltiptext").html(gen_building_tooltip("money_printer"));
+
+    $("#events").addClass("hidden");
+    add_log_elem("Removed all financial regulations.");
+}
+
+function bribe_environment() {
+    /* Pay bribe */
+    resources["money"].amount -= 1000000;
+
+    let build_state = buildings["mine"].on;
+    if (build_state) {
+        toggle_building_state("mine");
+    }
+    buildings["mine"].generation["coal"] *= 10;
+    buildings["mine"].generation["stone"] *= 10;
+    buildings["mine"].generation["iron_ore"] *= 10;
+    if (build_state) { /* Only turn on if it already was on */
+        toggle_building_state("mine");
+    }
+
+    build_state = buildings["logging"].on;
+    if (build_state) {
+        toggle_building_state("logging");
+    }
+    buildings["logging"].generation["wood"] *= 25;
+    if (build_state) { /* Only turn on if it already was on */
+        toggle_building_state("logging");
+    }
+    event_flags["bribed_politician"] = "environment";
+    $("#building_mine > .tooltiptext").html(gen_building_tooltip("mine"));
+    $("#building_logging > .tooltiptext").html(gen_building_tooltip("logging"));
+    $("#events").addClass("hidden");
+    add_log_elem("Removed all environmental regulations.");
+}
