@@ -2,7 +2,13 @@
 /// <reference path ="spells.ts" />
 declare var $: any;
 
-var num_formatter = new numberformat.Formatter({ format: 'standard', flavor: 'short', sigfigs: 5 })
+function format_num(num: number): string {
+    if (num < 100000) { /* Show more precise values if we aren't going to numberformat*/
+        return (Math.round(num * 1000) / 1000).toString();
+    } else {
+        return numberformat.formatShort(num, { sigfigs: 5 });
+    }
+}
 var resources = {};
 var resources_per_sec = {};
 var buildings = {};
@@ -1329,9 +1335,9 @@ function update() {
             resources[key].amount = resources_per_sec[key];
         }
         /* Formats it so that it says "Resource name: amount" */
-        $("#" + key + " span").first().html((key.charAt(0).toUpperCase() + key.slice(1)).replace("_", " ") + ": " + num_formatter.format(Math.max(0, resources[key].amount)));
+        $("#" + key + " span").first().html((key.charAt(0).toUpperCase() + key.slice(1)).replace("_", " ") + ": " + format_num(Math.max(0, resources[key].amount)));
         /* Same for tooltip */
-        $("#" + key + "_per_sec").text((resources_per_sec[key] > 0 ? "+" : "") + num_formatter.format(resources_per_sec[key]) + "/s");
+        $("#" + key + "_per_sec").text((resources_per_sec[key] > 0 ? "+" : "") + format_num(resources_per_sec[key]) + "/s");
     });
 
     /* Unhide buildings */
@@ -1396,9 +1402,9 @@ function gen_building_tooltip(name: string) {
     /* Add resource gen, update how much each one generates. */
     Object.keys(buildings[name].generation).forEach(function (key) {
         if (resources[key].value) { /* Add X per second for regular resources */
-            gen_text += Math.round((buildings[name].generation[key]) * 10) / 10 + " " + key.replace("_", " ") + " per second, "
+            gen_text += format_num(buildings[name].generation[key]) + " " + key.replace("_", " ") + " per second, "
         } else {
-            gen_text += Math.round((buildings[name].generation[key]) * 10) / 10 + " " + key.replace("_", " ") + ", "
+            gen_text +=format_num(buildings[name].generation[key]) + " " + key.replace("_", " ") + ", "
         }
     });
 
@@ -1410,7 +1416,7 @@ function gen_building_tooltip(name: string) {
         } else {
             cost_text += "<span>"
         }
-        cost_text += cost.toString() + " " + key.replace("_", " ") + "</span>, ";
+        cost_text += format_num(cost) + " " + key.replace("_", " ") + "</span>, ";
     });
 
     let flavor_text: string = "<hr><i style='font-size: small'>" + buildings[name].flavor + "</i>";

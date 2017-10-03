@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.15.3:
+Small numbers should show properly. Building costs are now formatted.
+
 v1.15.2:
 Start transition to new number formatter, fix bug where building tooltips weren't colored correctly.
 
