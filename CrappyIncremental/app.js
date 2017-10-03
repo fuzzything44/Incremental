@@ -1,11 +1,22 @@
 /// <reference path ="events.ts" />
 /// <reference path ="spells.ts" />
-function format_num(num) {
+function format_num(num, show_decimals) {
+    if (show_decimals === void 0) { show_decimals = true; }
     if (num < 100000) {
-        return (Math.round(num * 1000) / 1000).toString();
+        if (show_decimals) {
+            return (Math.round(num * 1000) / 1000).toString();
+        }
+        else {
+            return Math.round(num).toString();
+        }
     }
     else {
-        return numberformat.formatShort(num, { sigfigs: 5 });
+        if (show_decimals) {
+            return numberformat.formatShort(num, { sigfigs: 5 });
+        }
+        else {
+            return numberformat.formatShort(num, { sigfigs: 3 });
+        }
     }
 }
 var resources = {};
@@ -1297,7 +1308,7 @@ function update() {
             resources[key].amount = resources_per_sec[key];
         }
         /* Formats it so that it says "Resource name: amount" */
-        $("#" + key + " span").first().html((key.charAt(0).toUpperCase() + key.slice(1)).replace("_", " ") + ": " + format_num(Math.max(0, resources[key].amount)));
+        $("#" + key + " span").first().html((key.charAt(0).toUpperCase() + key.slice(1)).replace("_", " ") + ": " + format_num(Math.max(0, resources[key].amount), false));
         /* Same for tooltip */
         $("#" + key + "_per_sec").text((resources_per_sec[key] > 0 ? "+" : "") + format_num(resources_per_sec[key]) + "/s");
     });
