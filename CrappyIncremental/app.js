@@ -632,7 +632,7 @@ function set_initial_state() {
                 "energy": -75,
                 "uranium": -0.1,
                 "hydrogen": -150,
-                "refined_mana": 1,
+                "refined_mana": -1,
                 "fuel": 0.01,
             },
             "flavor": "This fuel is... not healthy.",
