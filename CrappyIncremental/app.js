@@ -14,6 +14,7 @@ var UNLOCK_TREE = {
     "s_time_magic": [],
     "s_workshop": [],
     "s_mana_refinery": [],
+    "s_workshop_2": [],
     "bank": ["mine", "logging"],
     "mine": ["furnace", "gold_finder"],
     "logging": ["compressor"],
@@ -48,6 +49,7 @@ var SPELL_BUILDINGS = [
     "s_time_magic",
     "s_workshop",
     "s_mana_refinery",
+    "s_workshop_2",
 ];
 var to_next_trade = 60000;
 function set_initial_state() {
@@ -178,6 +180,17 @@ function set_initial_state() {
             },
             "update": "refinery",
             "flavor": "That's some fine mana.",
+        },
+        "s_workshop_2": {
+            "on": true,
+            "amount": 200,
+            "base_cost": { "mana": Infinity },
+            "price_ratio": { "mana": 1 },
+            "generation": {
+                "mana": -1,
+            },
+            "update": "workshop",
+            "flavor": "Work. Work. Work. Work. Shop.",
         },
         "bank": {
             "on": true,

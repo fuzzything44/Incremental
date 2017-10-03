@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.14.0:
+Added workshop. This one you actually have to craft things manually. 
+
 v1.13.1:
 Fuel maker now uses refined mana as it should.
 

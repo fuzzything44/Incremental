@@ -232,7 +232,7 @@ select {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 /* Show the tooltip text when you mouse over the tooltip container */

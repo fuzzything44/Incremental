@@ -12,7 +12,7 @@
 </head>
 <body>
     <div style="font-size: small; position:absolute; top: 0;">
-        v1.13.1 | 
+        v1.14.0 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none; color: lightgray;">Changelog</a> |
         <a href="https://github.com/fuzzything44/Incremental/wiki" target="_blank" style="text-decoration: none; color: lightgray;">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none; color: lightgray;">Discord</a> |
@@ -125,25 +125,29 @@
                 </span>
                 <span id="toggle_s_workshop" class="building_state_off" onclick="toggle_building_state('s_workshop')">Off</span>
             </div>
-            <!-- TODO
-                Alright, new workshop. Remove the hidden class to see how I plan for it to work.
-                    The green bar is a progress bar. If the building's on, it goes up. If it's off, nothing happens.
-                    The option below it can be toggled on/off by clicking the workshop. Clicking a button it will start crafting that (removes materials, starts progress bar)
-                    When progress bar finishes, you get whatever you were making. Forces a more active playstyle for some stuff.
-                 -->
-            <div style="position: relative" class="hidden">
-                <div id="building_s_workshop_2" class="building" style="color: lightslategrey; height: 2.5em;" onclick="">
+            <div style="position: relative" class="">
+                <div id="building_s_workshop_2" class="building" style="color: lightslategrey; height: 2.5em;" onclick="$('#workshop_option_bar').toggleClass('hidden');">
                     <span class="building_name">Workshop</span>
                     <span class="building_amount">200</span>
-                    <span id="workshop_progress_bar" class="clickable" style="position: absolute; left: 0; top: 1.7em; width: 5em; height: .5em; background-color: green;"></span>
-                    <div id="workshop_option_bar" class="clickable" style="position: absolute; top: 2.5em; left: 0; background: #222; z-index: 1;">
+                    <span id="workshop_progress_bar" class="clickable" style="position: absolute; left: 0; top: 1.7em; width: 17.5em; height: .5em; background-color: green;"></span>
+                    <div id="workshop_option_bar" class="clickable hidden" onclick="event.stopPropagation()" style="position: absolute; top: 2.5em; left: 0; background: #222; z-index: 1;">
                         <table>
                             <tr>
-                                <td class="clickable">Super Alloy</td>
-                                <td>100 Iron <br /> 100 gold</td>
+                                <td class="clickable" onclick="s_workshop_set('glass')">(50) Glass</td>
+                                <td>100 Sand</td>
                             </tr>
                             <tr>
-                                <td class="clickable">abc</td>
+                                <td class="clickable" onclick="s_workshop_set('steel_beam')">(25) Steel Beam</td>
+                                <td>500 Iron</td>
+                                <td>500 Coal</td>
+                            </tr>
+                            <tr>
+                                <td class="clickable" onclick="s_workshop_set('ink')">(50) Ink</td>
+                                <td>50 Oil</td>
+                            </tr>
+                            <tr>
+                                <td class="clickable" onclick="s_workshop_set('money')">(1500) Money</td>
+                                <td>10 Gold</td>
                             </tr>
                         </table>
                     </div>

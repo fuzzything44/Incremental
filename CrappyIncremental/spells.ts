@@ -4,6 +4,7 @@
     "trade": s_trade,
     "time": s_time,
     "refinery": s_refinery_buff,
+    "workshop": s_workshop_update,
 }
 
 function nop(delta_time: number) { }
@@ -189,5 +190,87 @@ function s_refinery_buff(delta_time: number) {
         }
         resources[chosen_resource].amount += to_give;
         add_log_elem("Refined mana warped " + to_give.toString() + " " + chosen_resource.replace("_", " ") + " into reality.")
+    }
+}
+
+let workshop_item = "";
+let workshop_time_total = 1;
+let workshop_elapsed_time = 0;
+let craftable_items = { /* What all they can craft and the specifications on it. */
+    "glass": { /* Our example base item is glass, which is now needed for hydrogen. */
+        "time": 5000, /* 5000 milliseconds to craft. */
+        "adventure_item": false, /* Adventuring items are handled differently than regular ones. */
+        "costs": { /* What it removes when they hit craft. */
+            "sand": 100,
+        },
+        "return": 50, /* How much they get out of it.*/
+    },
+    "steel_beam": {
+        "time": 10000,
+        "adventure_item": false,
+        "costs": {
+            "iron": 500,
+            "coal": 500,
+        },
+        "return": 25,
+    },
+    "ink": {
+        "time": 10000,
+        "adventure_item": false,
+        "costs": {
+            "oil": 50,
+        },
+        "return": 50,
+    },
+    "money": {
+        "time": 15000,
+        "adventure_item": false,
+        "costs": {
+            "gold": 10,
+        },
+        "return": 1500,
+    },
+};
+function s_workshop_set(item: string) {
+    /* Make sure they have enough to buy it */
+    Object.keys(craftable_items[item].costs).forEach(function (key) {
+        if (craftable_items[item].costs[key] > resources[key].amount) {
+            add_log_elem("You can't afford that. Missing: " + key.replace("_", " "));
+            throw Error("Not enough resources!");
+        }
+    });
+
+    /* Spend money to buy */
+    Object.keys(craftable_items[item].costs).forEach(function (key) {
+        resources[key].amount -= craftable_items[item].costs[key]
+    });
+
+    workshop_time_total = craftable_items[item].time;
+    workshop_elapsed_time = 0;
+    workshop_item = item;
+    $("#workshop_progress_bar").css("width", "0");
+}
+
+function s_workshop_update(delta_time: number) {
+    if (workshop_item == "") { /* No item set. Progress bar full. */
+        workshop_elapsed_time = 0;
+        $("#workshop_progress_bar").css("width", "17.5em");
+    } else {
+        workshop_elapsed_time += delta_time;
+        /* Set width. 17.5em is full bar. */
+        let width = 17.5 * Math.min(1, workshop_elapsed_time / workshop_time_total)
+        $("#workshop_progress_bar").css("width", width.toString() + "em");
+
+        /* Item finished! */
+        if (workshop_elapsed_time >= workshop_time_total) {
+            add_log_elem("Finished crafting " + workshop_item.replace("_", " "))
+            /* Give them the item */
+            if (craftable_items[workshop_item].adventure_item) {
+                /* TODO: Handle adventure mode items. Once adventure mode exists. */
+            } else {
+                resources[workshop_item].amount += craftable_items[workshop_item].return;
+            }
+            workshop_item = "";
+        }
     }
 }
