@@ -325,10 +325,6 @@ function bribe_finance() {
     }
     event_flags["bribed_politician"] = "money";
 
-    $("#building_bank > .tooltiptext").html(gen_building_tooltip("bank"));
-    $("#building_big_bank > .tooltiptext").html(gen_building_tooltip("big_bank"));
-    $("#building_money_printer > .tooltiptext").html(gen_building_tooltip("money_printer"));
-
     $("#events").addClass("hidden");
     add_log_elem("Removed all financial regulations.");
 }
@@ -357,8 +353,6 @@ function bribe_environment() {
         toggle_building_state("logging");
     }
     event_flags["bribed_politician"] = "environment";
-    $("#building_mine > .tooltiptext").html(gen_building_tooltip("mine"));
-    $("#building_logging > .tooltiptext").html(gen_building_tooltip("logging"));
     $("#events").addClass("hidden");
     add_log_elem("Removed all environmental regulations.");
 }

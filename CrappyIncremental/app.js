@@ -665,7 +665,6 @@ function set_initial_state() {
                 if (mines_state) {
                     toggle_building_state("mine");
                 }
-                $("#building_mine > .tooltiptext").html(gen_building_tooltip("mine"));
             },
             "cost": {
                 "money": 100,
@@ -687,7 +686,6 @@ function set_initial_state() {
                 if (build_state) {
                     toggle_building_state("logging");
                 }
-                $("#building_logging > .tooltiptext").html(gen_building_tooltip("logging"));
             },
             "cost": {
                 "money": 100,
@@ -708,7 +706,6 @@ function set_initial_state() {
                 if (mines_state) {
                     toggle_building_state("mine");
                 }
-                $("#building_mine > .tooltiptext").html(gen_building_tooltip("mine"));
             },
             "cost": {
                 "money": 100,
@@ -729,7 +726,6 @@ function set_initial_state() {
                 if (comp_state) {
                     toggle_building_state("compressor");
                 }
-                $("#building_compressor > .tooltiptext").html(gen_building_tooltip("compressor"));
             },
             "cost": {
                 "money": 100,
@@ -750,7 +746,6 @@ function set_initial_state() {
                 if (comp_state) {
                     toggle_building_state("compressor");
                 }
-                $("#building_compressor > .tooltiptext").html(gen_building_tooltip("compressor"));
             },
             "cost": {
                 "oil": 50,
@@ -763,7 +758,6 @@ function set_initial_state() {
             "unlock": function () { return resources["money"].amount >= 2500 && buildings["bank"].amount >= 20; },
             "purchase": function () {
                 buildings["bank"].price_ratio["money"] = (buildings["bank"].price_ratio["money"] - 1) * .7 + 1;
-                $("#building_bank > .tooltiptext").html(gen_building_tooltip("bank"));
             },
             "cost": {
                 "money": 3000,
@@ -784,7 +778,6 @@ function set_initial_state() {
                 if (comp_state) {
                     toggle_building_state("paper_mill");
                 }
-                $("#building_paper_mill > .tooltiptext").html(gen_building_tooltip("paper_mill"));
             },
             "cost": {
                 "money": 100,
@@ -810,7 +803,6 @@ function set_initial_state() {
                 if (comp_state) {
                     toggle_building_state("furnace");
                 }
-                $("#building_furnace > .tooltiptext").html(gen_building_tooltip("furnace"));
             },
             "cost": {
                 "money": 100,
@@ -834,7 +826,6 @@ function set_initial_state() {
                 if (comp_state) {
                     toggle_building_state("gold_finder");
                 }
-                $("#building_gold_finder > .tooltiptext").html(gen_building_tooltip("gold_finder"));
             },
             "cost": {
                 "money": 250,
@@ -857,7 +848,6 @@ function set_initial_state() {
                 if (comp_state) {
                     toggle_building_state("gold_finder");
                 }
-                $("#building_gold_finder > .tooltiptext").html(gen_building_tooltip("gold_finder"));
             },
             "cost": {
                 "money": 250,
@@ -880,7 +870,6 @@ function set_initial_state() {
                 if (comp_state) {
                     toggle_building_state("furnace");
                 }
-                $("#building_furnace > .tooltiptext").html(gen_building_tooltip("furnace"));
             },
             "cost": {
                 "money": 250,
@@ -942,7 +931,6 @@ function set_initial_state() {
                 if (comp_state) {
                     toggle_building_state("jeweler");
                 }
-                $("#building_jeweler > .tooltiptext").html(gen_building_tooltip("jeweler"));
             },
             "cost": {
                 "money": 2500,
@@ -966,7 +954,6 @@ function set_initial_state() {
                 if (comp_state) {
                     toggle_building_state("jewelry_store");
                 }
-                $("#building_jewelry_store > .tooltiptext").html(gen_building_tooltip("jewelry_store"));
             },
             "cost": {
                 "money": 10000,
@@ -1020,7 +1007,6 @@ function set_initial_state() {
                 if (comp_state) {
                     toggle_building_state("big_mine");
                 }
-                $("#building_big_mine > .tooltiptext").html(gen_building_tooltip("big_mine"));
             },
             "cost": {
                 "money": 5000000,
@@ -1133,10 +1119,6 @@ function load() {
             buildings[type] = JSON.parse(temp_str);
             /* Show how many buildings they have and set tooltip properly */
             $('#building_' + type + " > .building_amount").html(buildings[type].amount.toString());
-        }
-        /* Set tooltip of building, even if they don't have any. */
-        if (SPELL_BUILDINGS.indexOf(type) == -1) {
-            $('#building_' + type + " > .tooltiptext").html(gen_building_tooltip(type));
         }
     });
     console.log("Loading flags...");
@@ -1314,6 +1296,7 @@ function update() {
     /* Unhide buildings */
     Object.keys(buildings).forEach(function (build) {
         if (buildings[build].amount > 0 && SPELL_BUILDINGS.indexOf(build) == -1) {
+            $('#building_' + build + " > .tooltiptext").html(gen_building_tooltip(build)); /* Generate tooltip for it. */
             $("#building_" + build).parent().removeClass("hidden"); /* Any owned building is unlocked. Needed in case they sell previous ones and reload. */
             UNLOCK_TREE[build].forEach(function (unlock) {
                 $("#building_" + unlock).parent().removeClass("hidden");
@@ -1373,8 +1356,14 @@ function gen_building_tooltip(name) {
     });
     var cost_text = "Costs ";
     Object.keys(buildings[name].base_cost).forEach(function (key) {
-        cost_text += Math.ceil(buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount)).toString();
-        cost_text += " " + key.replace("_", " ") + ", ";
+        var cost = Math.round(buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount));
+        if (cost > resources[key].amount) {
+            cost_text += "<span style='color: red'>";
+        }
+        else {
+            cost_text += "<span>";
+        }
+        cost_text += cost.toString() + " " + key.replace("_", " ") + "</span>, ";
     });
     var flavor_text = "<hr><i style='font-size: small'>" + buildings[name].flavor + "</i>";
     if (buildings[name].flavor == undefined || buildings[name].flavor == "") {
@@ -1409,7 +1398,6 @@ function purchase_building(name) {
         });
         buildings[name].amount++;
         $('#building_' + name + " > .building_amount").html(buildings[name].amount.toString());
-        $('#building_' + name + " > .tooltiptext").html(gen_building_tooltip(name));
     }
 }
 function destroy_building(name) {
@@ -1430,7 +1418,6 @@ function destroy_building(name) {
         });
         buildings[name].amount--;
         $('#building_' + name + " > .building_amount").html(buildings[name].amount.toString());
-        $('#building_' + name + " > .tooltiptext").html(gen_building_tooltip(name));
     }
 }
 function purchase_upgrade(name) {
