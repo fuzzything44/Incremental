@@ -12,7 +12,7 @@
 </head>
 <body>
     <div style="font-size: small; position:absolute; top: 0;">
-        v1.12.0 | 
+        v1.13.0 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none; color: lightgray;">Changelog</a> |
         <a href="https://github.com/fuzzything44/Incremental/wiki" target="_blank" style="text-decoration: none; color: lightgray;">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none; color: lightgray;">Discord</a> |
@@ -38,7 +38,7 @@
         </div>
         <div id="fuel" class="hidden" style="margin-bottom: .3em;">
             <span style="color: greenyellow; text-shadow: yellow 1px 0px 10px; vertical-align: middle;">Refined mana: 0</span>
-            <span class="res_gen" onclick="if (resources['fuel'].amount < 1) { alert('You need more fuel.'); } else { alert('Not even close to done yet'); }" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid white; border-radius: 3px;">
+            <span class="res_gen" onclick="if (resources['fuel'].amount < 10) { alert('You need more fuel.'); } else { alert('I\'m glad you want to adventure, but this feature is still a long ways from being finished. Please message me on discord if you manage to get this far though!'); }" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid white; border-radius: 3px;">
                 Adventure
             </span>
             <br />
@@ -76,6 +76,9 @@
                 <span id="building_s_manastone" class="building tooltip" style="color: mediumpurple;"><span class="building_name">Mana Stone</span><span class="building_amount">0</span><span class="tooltiptext">Each stone generates 1 mana.</span></span>
             </div>
             <div style="position: relative">
+                <span id="building_s_mana_refinery" class="building tooltip" style="color: #33f;" onclick="s_refinery(parseInt($('#buy_amount').val()))"><span class="building_name">Mana Refinery</span><span class="building_amount">1</span><span class="tooltiptext">Refine your mana into a crystalline form.</span></span>
+            </div>
+            <div style="position: relative">
                 <span id="building_s_goldboost" class="building tooltip" style="color: gold;"><span class="building_name">Greed</span><span class="building_amount">3</span><span class="tooltiptext">Uses 2 mana, but doubles net money and gold gains.</span></span>
                 <span id="toggle_s_goldboost" class="building_state_off" onclick="toggle_building_state('s_goldboost')">Off</span>
             </div>
@@ -103,7 +106,7 @@
             </div>
             <div style="position: relative">
                 <span id="building_s_workshop" class="building" style="color: dimgrey;">
-                    <span class="building_name">Workshop</span>
+                    <span class="building_name">Manufacturing</span>
                     <span class="tooltip">
                         (?)
                         <span class="tooltiptext">
@@ -122,8 +125,30 @@
                 </span>
                 <span id="toggle_s_workshop" class="building_state_off" onclick="toggle_building_state('s_workshop')">Off</span>
             </div>
-            <div style="position: relative">
-                <span id="building_s_mana_refinery" class="building tooltip" style="color: #33f;" onclick="s_refinery(parseInt($('#buy_amount').val()))"><span class="building_name">Mana Refinery</span><span class="building_amount">1</span><span class="tooltiptext">Refine your mana into a crystalline form.</span></span>
+            <!-- TODO
+                Alright, new workshop. Remove the hidden class to see how I plan for it to work.
+                    The green bar is a progress bar. If the building's on, it goes up. If it's off, nothing happens.
+                    The option below it can be toggled on/off by clicking the workshop. Clicking a button it will start crafting that (removes materials, starts progress bar)
+                    When progress bar finishes, you get whatever you were making. Forces a more active playstyle for some stuff.
+                 -->
+            <div style="position: relative" class="hidden">
+                <div id="building_s_workshop_2" class="building" style="color: lightslategrey; height: 2.5em;" onclick="">
+                    <span class="building_name">Workshop</span>
+                    <span class="building_amount">200</span>
+                    <span id="workshop_progress_bar" class="clickable" style="position: absolute; left: 0; top: 1.7em; width: 5em; height: .5em; background-color: green;"></span>
+                    <div id="workshop_option_bar" class="clickable" style="position: absolute; top: 2.5em; left: 0; background: #222; z-index: 1;">
+                        <table>
+                            <tr>
+                                <td class="clickable">Super Alloy</td>
+                                <td>100 Iron <br /> 100 gold</td>
+                            </tr>
+                            <tr>
+                                <td class="clickable">abc</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <span id="toggle_s_workshop_2" class="building_state_off" onclick="toggle_building_state('s_workshop_2')">Off</span>
             </div>
             <hr />
         </div>

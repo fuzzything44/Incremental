@@ -39,7 +39,8 @@ const UNLOCK_TREE = { /* What buildings unlock */
     "skyscraper": ["big_bank"],
     "big_bank": ["big_mine"],
     "big_mine": [],
-    "reactor": [],
+    "reactor": ["fuel_maker"],
+    "fuel_maker": [],
 };
 const SPELL_BUILDINGS = [
     "s_manastone",
@@ -624,6 +625,31 @@ function set_initial_state() {
             },
             "flavor": "Don't let it go boom!",
         },
+        "fuel_maker": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 1500000,
+                "steel_beam": 100,
+                "iron": 5000,
+                "gold": 3000,
+            },
+            "price_ratio": {
+                "money": 1.1,
+                "steel_beam": 1.07,
+                "iron": 1.2,
+                "gold": 1.1,
+            },
+            "generation": {
+                "energy": -75,
+                "uranium": -0.1,
+                "hydrogen": -150,
+                "refined_mana": 1,
+                "fuel": 0.01,
+            },
+            "flavor": "This fuel is... not healthy.",
+        },
+
 
     };
     purchased_upgrades = [];
@@ -1039,8 +1065,6 @@ function set_initial_state() {
             "name": "Uranium Research",
             "image": "uranium.png",
         },
-
-
     };
     event_flags = {};
     $("#buy_amount").val(1);

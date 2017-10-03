@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.13.0:
+You can now use uranium to make fuel! Mana refinery moved to above greed as it can cost less. Workshop renamed to Manufacturing. Mana now caps trades much quicker. With both upgrades, you can still get steel beams. You need a ton of mana to bribe politicians.
+
 v1.12.0:
 Event box is now more annoying (it scrolls with you). Nuclear reactor added. Steel is worth more. Added uranium for your reactors. Trading portal upgrades are more expensive. Total upgrades no longer show. Slight prestige formula fix.
 

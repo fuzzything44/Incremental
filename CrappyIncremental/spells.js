@@ -58,15 +58,15 @@ function s_trade(delta_time) {
     if (remaining_upgrades["trade"] == undefined && to_next_trade < 0) {
         remaining_upgrades["trade"] = trade_upgrade;
         /* Roll money amount. Horrible arbitrary formula, takes your money and max mana into account for upper bound. */
-        var money_value = Math.round(Math.max(1, Math.random() * Math.min(Math.pow(1.5, resources["mana"].amount) * 10, resources["money"].amount) * 2 + 10));
+        var money_value = Math.round(Math.max(1, Math.random() * Math.min(Math.pow(resources["mana"].amount, 3) * 10, resources["money"].amount) * 2 + 10));
         /* Choose resources to be about the same money worth. */
         var resource_value = Math.round((money_value * 5 / 6) + (Math.random() * money_value * 1 / 3));
         /* Choose a resource */
         var chosen_resource = Object.keys(resources)[Math.floor(Math.random() * Object.keys(resources).length)];
-        /* They can only get resources with a value of < 100 each, increased by 50 with each better trade upgrade. */
+        /* They can only get resources with a value of <= 100 each, increased by 50 with each better trade upgrade. */
         var value_cap = 100 + (purchased_upgrades.indexOf("better_trades") != -1 ? 50 : 0) + (purchased_upgrades.indexOf("better_trades_2s") != -1 ? 50 : 0);
         /* Don't choose special resource or money. Make sure they have some (unless it's stone. You can always get stone) */
-        while (resources[chosen_resource].value <= 0 || chosen_resource == "money" || (resources[chosen_resource].amount == 0 && chosen_resource != "stone") || resources[chosen_resource].value >= value_cap) {
+        while (resources[chosen_resource].value <= 0 || chosen_resource == "money" || (resources[chosen_resource].amount == 0 && chosen_resource != "stone") || resources[chosen_resource].value > value_cap) {
             chosen_resource = Object.keys(resources)[Math.floor(Math.random() * Object.keys(resources).length)];
         }
         resource_value = Math.max(1, Math.round(resource_value / resources[chosen_resource].value)); /* Reduce resource gain to better line up with different valued resources */
