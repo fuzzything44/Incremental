@@ -12,7 +12,7 @@
 </head>
 <body>
     <div style="font-size: small; position:absolute; top: 0;">
-        v1.14.0 | 
+        v1.15.0 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none; color: lightgray;">Changelog</a> |
         <a href="https://github.com/fuzzything44/Incremental/wiki" target="_blank" style="text-decoration: none; color: lightgray;">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none; color: lightgray;">Discord</a> |
@@ -130,26 +130,28 @@
                     <span class="building_name">Workshop</span>
                     <span class="building_amount">200</span>
                     <span id="workshop_progress_bar" class="clickable" style="position: absolute; left: 0; top: 1.7em; width: 17.5em; height: .5em; background-color: green;"></span>
-                    <div id="workshop_option_bar" class="clickable hidden" onclick="event.stopPropagation()" style="position: absolute; top: 2.5em; left: 0; background: #222; z-index: 1;">
-                        <table>
-                            <tr>
-                                <td class="clickable" onclick="s_workshop_set('glass')">(50) Glass</td>
-                                <td>100 Sand</td>
-                            </tr>
-                            <tr>
-                                <td class="clickable" onclick="s_workshop_set('steel_beam')">(25) Steel Beam</td>
-                                <td>500 Iron</td>
-                                <td>500 Coal</td>
-                            </tr>
-                            <tr>
-                                <td class="clickable" onclick="s_workshop_set('ink')">(50) Ink</td>
-                                <td>50 Oil</td>
-                            </tr>
-                            <tr>
-                                <td class="clickable" onclick="s_workshop_set('money')">(1500) Money</td>
-                                <td>10 Gold</td>
-                            </tr>
-                        </table>
+                    <div id="workshop_option_bar" class="hidden" onclick="event.stopPropagation()" style="position: absolute; top: 2.5em; left: 0; background: #222; z-index: 1;">
+                        <div class="clickable">
+                            <table>
+                                <tr>
+                                    <td class="clickable" onclick="s_workshop_set('glass')">(50) Glass</td>
+                                    <td>100 Sand</td>
+                                </tr>
+                                <tr>
+                                    <td class="clickable" onclick="s_workshop_set('steel_beam')">(25) Steel Beam</td>
+                                    <td>500 Iron</td>
+                                    <td>500 Coal</td>
+                                </tr>
+                                <tr>
+                                    <td class="clickable" onclick="s_workshop_set('ink')">(50) Ink</td>
+                                    <td>50 Oil</td>
+                                </tr>
+                                <tr>
+                                    <td class="clickable" onclick="s_workshop_set('money')">(1500) Money</td>
+                                    <td>10 Gold</td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <span id="toggle_s_workshop_2" class="building_state_off" onclick="toggle_building_state('s_workshop_2')">Off</span>

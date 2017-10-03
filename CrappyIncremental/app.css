@@ -108,10 +108,10 @@
 #events {
     position: fixed;
     top: 10%;
-    left: 10%;
+    left: 25%;
 
     height: 80%;
-    width: 80%;
+    width: 66%;
     z-index: 1;
     background-color: #222;
 
@@ -232,7 +232,7 @@ select {
 }
 
 .hidden {
-    display: none !important;
+    display: none;
 }
 
 /* Show the tooltip text when you mouse over the tooltip container */

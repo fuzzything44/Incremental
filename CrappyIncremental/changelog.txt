@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.15.0:
+Workshop is no longer default on. Glass furnace is easier to get. Title changed. New event added for those with < 50 mana. Rickrolling no longer autoplays. Hopefully fixed a strange bug with workshop menu always showing.
+
 v1.14.0:
 Added workshop. This one you actually have to craft things manually. 
 

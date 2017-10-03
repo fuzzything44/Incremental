@@ -85,6 +85,16 @@ let events = [
         "rejection": 30,
     }), /* End meteor */
     ({
+        "condition": function () { return buildings["s_manastone"].amount < 50; },
+        "run_event": function () {
+            resources["time"].amount += 300;
+            add_log_elem("Time warp.");
+            $("#events_content").html("Time warps around you, giving an additional 300 seconds of production.");
+        },
+        "name": "Timewarp",
+        "rejection": 95,
+    }), /* End rickroll */
+    ({
         "condition": function () { return buildings["oil_well"].amount > (Math.log(buildings["oil_well"].base_cost["iron"]/500)/Math.log(.95)); },
         "run_event": function () {
             buildings["oil_well"].base_cost["iron"] *= .95; /* Make oil cheaper */
@@ -101,11 +111,7 @@ let events = [
             resources["gold"].amount += 35;
             event_flags["rickroll"] = true;
             add_log_elem("We're no strangers to love!");
-            if (typeof event_flags["rickroll"] == "undefined") {
-                $("#events_content").html('<iframe id="ytplayer" type="text/ html" width="640" height="360" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" frameborder="0"> </iframe>');
-            } else {
-                $("#events_content").html('<iframe id="ytplayer" type="text/ html" width="640" height="360" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0" frameborder="0"> </iframe>');
-            }
+            $("#events_content").html('<iframe id="ytplayer" type="text/ html" width="640" height="360" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0" frameborder="0"> </iframe>');
         },
         "name": "Tree Fiddy",
         "rejection": 90,

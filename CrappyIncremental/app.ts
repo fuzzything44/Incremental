@@ -178,7 +178,7 @@ function set_initial_state() {
             },
             "update": "nop",
             "mode": "iron",
-            "flavor": "You can't buy anything at this shop.",
+            "flavor": "Yay, you can read my code.",
         },
         "s_mana_refinery": {
             "on": true,
@@ -192,7 +192,7 @@ function set_initial_state() {
             "flavor": "That's some fine mana.",
         },
         "s_workshop_2": {
-            "on": true,
+            "on": false,
             "amount": 200,
             "base_cost": { "mana": Infinity },
             "price_ratio": { "mana": 1 },
@@ -894,7 +894,7 @@ function set_initial_state() {
             "image": "sand.png",
         },
         "glass_furnace": {
-            "unlock": function () { return buildings["furnace"].amount >= 5 && resources["sand"].amount >= 10 && purchased_upgrades.indexOf("better_furnace") != -1; },
+            "unlock": function () { return buildings["furnace"].amount >= 2 && resources["sand"].amount >= 10 && purchased_upgrades.indexOf("better_furnace") != -1; },
             "purchase": function () { /* When bought, turn all buildings off, increase generation, and turn them back on again. Turns off first to get generation from them properly calculated */
                 let comp_state = buildings["furnace"].on;
                 if (comp_state) {
@@ -1522,7 +1522,7 @@ function random_title() {
         "17 New Resources That Will Blow Your Mind!",
         "Ÿ̛̦̯ͬ̔̾̃ͥ͑o͋ͩ̽̓͋̚͘u͚̼̜̞͉͓̹ͦ͒͌̀ ̄͋̉̓҉̖̖̠̤ņ͔̄͟͟e̦̝̻̼̖͖͋̓̔̓͒ͬe̷͈̗̻̘̩̙̖͗ͫͭͮ͌̃́ͬ̔d̥̞ͨ̏͗͆̉ͩ ̨̟̭̻͔̰͓͍̤͍̀ͤͤ̎͐͘͠m͙͈͖̱͍̖̤͑̃͐͋ͪ̐ͯ̏͘ͅȍ̼̭̦͚̥̜͉̥̱ͬ͞r̥̣̰͈̻̰ͮ̓̚e̳͊ͯ͞ ̏ͯ̈́҉̛̮͚̖͈̼g̩͖̙̞̮̟̍ͦͫ̓ͭͥ̀o̧̻̞̰͉̤͇̭̘͓ͨ̆̔ͨl̴͕͉̦̩̟̤̰̃͋̃̉̓͌ͪ͌ͩd̢̨̲̻̿ͫ",
         "Help im trapped in an html factory",
-        "Totally no malware here",
+        "This title dedicated to /u/GitFlucked who really didn't like the previous one.",
         "Try Foodbits! They're super tasty*! *ᴾᵃʳᵗ ᵒᶠ ᵃ ᶜᵒᵐᵖˡᵉᵗᵉ ᵇʳᵉᵃᵏᶠᵃˢᵗ⋅ ᴺᵒᵗ ᶠᵒʳ ʰᵘᵐᵃⁿ ᶜᵒⁿˢᵘᵐᵖᵗᶦᵒⁿ⋅ ᴰᵒ ⁿᵒᵗ ᶜᵒⁿˢᵘᵐᵉ ʷʰᶦˡᵉ ᵘⁿᵈᵉʳ ᵗʰᵉ ᶦⁿᶠˡᵘᵉⁿᶜᵉ ᵒᶠ ᵈʳᵘᵍˢ ᵒʳ ᵃˡᶜᵒʰᵒˡ⋅ ᴼʳ ᵃᶦʳ⋅",
         "BUY ME MORE JEWELRY!",
 
