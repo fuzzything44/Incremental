@@ -36,6 +36,7 @@ var UNLOCK_TREE = {
     "skyscraper": ["big_bank"],
     "big_bank": ["big_mine"],
     "big_mine": [],
+    "reactor": [],
 };
 var SPELL_BUILDINGS = [
     "s_manastone",
@@ -72,8 +73,10 @@ function set_initial_state() {
         "glass": { "amount": 0, "value": 5 },
         "water": { "amount": 0, "value": 2 },
         "hydrogen": { "amount": 0, "value": 5 },
-        "steel_beam": { "amount": 0, "value": 150 },
+        "steel_beam": { "amount": 0, "value": 200 },
         "refined_mana": { "amount": 0, "value": -1 },
+        "uranium": { "amount": 0, "value": 500 },
+        "fuel": { "amount": 0, "value": -1000 },
     };
     /* Set resources_per_sec */
     Object.keys(resources).forEach(function (res) {
@@ -588,6 +591,27 @@ function set_initial_state() {
             },
             "flavor": "Seriouser business",
         },
+        "reactor": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 1000000,
+                "steel_beam": 100,
+                "iron": 5000,
+            },
+            "price_ratio": {
+                "money": 1.1,
+                "steel_beam": 1.07,
+                "iron": 1.2,
+            },
+            "generation": {
+                "manager": -3,
+                "uranium": -0.1,
+                "water": -15,
+                "energy": 50,
+            },
+            "flavor": "Don't let it go boom!",
+        },
     };
     purchased_upgrades = [];
     remaining_upgrades = {
@@ -918,10 +942,10 @@ function set_initial_state() {
             "unlock": function () { return resources["refined_mana"].amount >= 1000 && buildings["s_trade"].on; },
             "purchase": function () { },
             "cost": {
-                "refined_mana": 5000,
+                "refined_mana": 10000,
                 "gold": 100,
             },
-            "tooltip": "Your portals cover more of the market, letting you get better deals. <br /> Costs 5000 refined mana, 100 gold.",
+            "tooltip": "Your portals cover more of the market, letting you get better deals. <br /> Costs 10000 refined mana, 100 gold.",
             "name": "Mystic Portals",
             "image": "money.png",
         },
@@ -929,12 +953,60 @@ function set_initial_state() {
             "unlock": function () { return purchased_upgrades.indexOf("better_trades") != -1; },
             "purchase": function () { },
             "cost": {
-                "refined_mana": 10000,
+                "refined_mana": 30000,
                 "diamond": 100,
             },
-            "tooltip": "Your portals cover more of the market, letting you get better deals. <br /> Costs 10000 refined mana, 100 diamond.",
+            "tooltip": "Your portals cover more of the market, letting you get better deals. <br /> Costs 30000 refined mana, 100 diamond.",
             "name": "Arcane Portals",
             "image": "diamond.png",
+        },
+        "uranium_finance": {
+            "unlock": function () { return typeof event_flags["bribed_politician"] != "undefined" && event_flags["bribed_politician"] == "money"; },
+            "purchase": function () { },
+            "cost": {
+                "money": 5000000,
+                "research": 15,
+            },
+            "tooltip": "Get some of what you invest in. Sometimes. <br /> Costs 5,000,000 money. <br /> Requires 15 research.",
+            "name": "Investment Embezzling",
+            "image": "uranium.png",
+        },
+        "uranium_environment": {
+            "unlock": function () { return typeof event_flags["bribed_politician"] != "undefined" && event_flags["bribed_politician"] == "environment"; },
+            "purchase": function () {
+                var comp_state = buildings["big_mine"].on;
+                if (comp_state) {
+                    toggle_building_state("big_mine");
+                }
+                buildings["big_mine"]["generation"]["uranium"] = .01;
+                if (comp_state) {
+                    toggle_building_state("big_mine");
+                }
+                $("#building_big_mine > .tooltiptext").html(gen_building_tooltip("big_mine"));
+            },
+            "cost": {
+                "money": 5000000,
+                "research": 15,
+            },
+            "tooltip": "Huh, what's this metal your strip mines are finding? <br /> Costs 5,000,000 money. <br /> Requires 15 research.",
+            "name": "Deeper mines",
+            "image": "uranium.png",
+        },
+        "uranium_power": {
+            "unlock": function () { return resources["uranium"].amount > 10; },
+            "purchase": function () {
+                Object.keys(buildings["reactor"].base_cost).forEach(function (res) {
+                    resources[res].amount += buildings["reactor"].base_cost[res];
+                });
+                purchase_building("reactor");
+            },
+            "cost": {
+                "money": 10000000,
+                "research": 20,
+            },
+            "tooltip": "Research how to use uranium for energy. <br /> Costs 10,000,000 money. <br /> Requires 20 research.",
+            "name": "Uranium Research",
+            "image": "uranium.png",
         },
     };
     event_flags = {};
@@ -949,7 +1021,7 @@ function prestige() {
     mana_gain = mana_gain / (1 + Math.floor(mana / 50) * .5); /* Then divide gain by a number increasing every 50 mana. */
     mana_gain = Math.floor(Math.pow(Math.max(0, mana_gain), .4)); /* Finally, raise to .4 power and apply some rounding/checking */
     if (mana_gain > 50) {
-        mana_gain = Math.ceil(50 + (mana_gain - 50) / (1 + Math.floor(mana_gain / 50) * .3));
+        mana_gain = Math.round(50 + (mana_gain - 50) / 2);
     }
     if (mana_gain < 1) {
         var percent_through = Math.max(0, Math.min(100, Math.floor((prestige_points / 20000) / (Math.pow(mana, 1.3) * .5 + 1) * 100)));
@@ -1246,7 +1318,7 @@ function update_upgrade_list() {
 }
 function update_total_upgrades(name) {
     /* Update upgrade total */
-    $("#num_upgrades").html("Upgrades: " + purchased_upgrades.length.toString() + "/" + (purchased_upgrades.length + Object.keys(remaining_upgrades).length).toString());
+    $("#num_upgrades").html("Upgrades: " + purchased_upgrades.length.toString());
     /* Update tooltip list of purchased upgrades */
     $("#purchased_upgrades").append("<br />" + name.replace("<br />", ""));
 }

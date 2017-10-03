@@ -28,7 +28,35 @@ let events = [
             if (buildings["big_bank"].amount > 0 && buildings["big_bank"].on) {
                 /* If they got extra */
                 $("#events_content").append("<br />Thank your investment bankers for the tip!");
-            }        },
+            }
+            if (purchased_upgrades.indexOf("uranium_finance") != -1) {
+                /* Give them some of what they invested in. */
+                switch (invested_in) {
+                    case "gold": {
+                        resources["gold"].amount += 10;
+                        $("#events_content").append("<br />You embezzled 10 gold.");
+                        break;
+                    }
+                    case "uranium": {
+                        resources["uranium"].amount += 1;
+                        $("#events_content").append("<br />You embezzled some uranium.");
+                        break;
+                    }
+                    case "bread": {
+                        resources["stone"].amount += 1000;
+                        $("#events_content").append("<br />Man, this bread is as hard as rock.");
+                        break;
+                    }
+                    case "toothpicks": { }
+                    case "beds": {
+                        resources["wood"].amount += 1000;
+                        $("#events_content").append("<br />You turn some extras into wood.");
+                        break;
+                    }
+                } /* End switch*/
+
+            } /* End run_event */
+        },
         "name": "Stock Investments Pay Off!",
         "rejection": 10,
     }), /* End stock investments */
@@ -179,7 +207,7 @@ let events = [
         "rejection": 0,
     }), /* End demon stealing */
     ({
-        "condition": function () { return typeof event_flags["bribed_politician"] == "undefined" && buildings["big_bank"].amount >= 5 && buildings["bank"].amount >= 125 && purchased_upgrades.indexOf("coal_mines") != -1 && resources["money"].amount >= 1000000; },
+        "condition": function () { return typeof event_flags["bribed_politician"] == "undefined" && buildings["big_bank"].amount >= 5 && buildings["bank"].amount >= 125 && purchased_upgrades.indexOf("coal_mines") != -1 && resources["money"].amount >= 1000000 && buildings["s_manastone"].amount >= 150; },
         "run_event": function () {
             let content = "<span>Business isn't doing well. Regulations are really holding you back.</span><br>";
             content += "<span>Why not bribe a politician to change something for you?</span><br />";
@@ -200,6 +228,7 @@ let events = [
 
 ];
 
+/* Literally only for testing purposes. */
 function force_event(id: number) {
     /* Only start a new event if the old one finished. */
     if ($("#events").hasClass("hidden")) {
@@ -289,6 +318,7 @@ function bribe_finance() {
         toggle_building_state("money_printer");
     }
     event_flags["bribed_politician"] = "money";
+
     $("#building_bank > .tooltiptext").html(gen_building_tooltip("bank"));
     $("#building_big_bank > .tooltiptext").html(gen_building_tooltip("big_bank"));
     $("#building_money_printer > .tooltiptext").html(gen_building_tooltip("money_printer"));

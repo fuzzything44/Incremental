@@ -65,8 +65,11 @@ function s_trade(delta_time: number) {
         let resource_value = Math.round((money_value * 5 / 6) + (Math.random() * money_value * 1 / 3));
         /* Choose a resource */
         let chosen_resource = Object.keys(resources)[Math.floor(Math.random() * Object.keys(resources).length)];
+
+        /* They can only get resources with a value of < 100 each, increased by 50 with each better trade upgrade. */
+        let value_cap = 100 + (purchased_upgrades.indexOf("better_trades") != -1 ? 50 : 0) + (purchased_upgrades.indexOf("better_trades_2s") != -1 ? 50 : 0);
         /* Don't choose special resource or money. Make sure they have some (unless it's stone. You can always get stone) */
-        while (resources[chosen_resource].value <= 0 || chosen_resource == "money" || (resources[chosen_resource].amount == 0 && chosen_resource != "stone")) {
+        while (resources[chosen_resource].value <= 0 || chosen_resource == "money" || (resources[chosen_resource].amount == 0 && chosen_resource != "stone") || resources[chosen_resource].value >= value_cap) {
             chosen_resource = Object.keys(resources)[Math.floor(Math.random() * Object.keys(resources).length)];
         }
         resource_value = Math.max(1, Math.round(resource_value / resources[chosen_resource].value)); /* Reduce resource gain to better line up with different valued resources */
@@ -182,7 +185,7 @@ function s_refinery_buff(delta_time: number) {
         to_give = Math.ceil(to_give / Math.abs(resources[chosen_resource].value)); /* Give approx value */
         if (resources[chosen_resource].value < 0) {
             /* Specialty resource chosen. So cap it.*/
-            to_give = Math.min(to_give, 50);
+            to_give = Math.min(to_give, -50 / resources[chosen_resource].value);
         }
         resources[chosen_resource].amount += to_give;
         add_log_elem("Refined mana warped " + to_give.toString() + " " + chosen_resource.replace("_", " ") + " into reality.")

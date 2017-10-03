@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.12.0:
+Event box is now more annoying (it scrolls with you). Nuclear reactor added. Steel is worth more. Added uranium for your reactors. Trading portal upgrades are more expensive. Total upgrades no longer show. Slight prestige formula fix.
+
 v1.11.0:
 Go bribe some politicians now. It can do things.
 

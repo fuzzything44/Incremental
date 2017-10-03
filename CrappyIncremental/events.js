@@ -27,6 +27,32 @@ var events = [
                 /* If they got extra */
                 $("#events_content").append("<br />Thank your investment bankers for the tip!");
             }
+            if (purchased_upgrades.indexOf("uranium_finance") != -1) {
+                /* Give them some of what they invested in. */
+                switch (invested_in) {
+                    case "gold": {
+                        resources["gold"].amount += 10;
+                        $("#events_content").append("<br />You embezzled 10 gold.");
+                        break;
+                    }
+                    case "uranium": {
+                        resources["uranium"].amount += 1;
+                        $("#events_content").append("<br />You embezzled some uranium.");
+                        break;
+                    }
+                    case "bread": {
+                        resources["stone"].amount += 1000;
+                        $("#events_content").append("<br />Man, this bread is as hard as rock.");
+                        break;
+                    }
+                    case "toothpicks": { }
+                    case "beds": {
+                        resources["wood"].amount += 1000;
+                        $("#events_content").append("<br />You turn some extras into wood.");
+                        break;
+                    }
+                } /* End switch*/
+            } /* End run_event */
         },
         "name": "Stock Investments Pay Off!",
         "rejection": 10,
@@ -176,7 +202,7 @@ var events = [
         "rejection": 0,
     }),
     ({
-        "condition": function () { return typeof event_flags["bribed_politician"] == "undefined" && buildings["big_bank"].amount >= 5 && buildings["bank"].amount >= 125 && purchased_upgrades.indexOf("coal_mines") != -1 && resources["money"].amount >= 1000000; },
+        "condition": function () { return typeof event_flags["bribed_politician"] == "undefined" && buildings["big_bank"].amount >= 5 && buildings["bank"].amount >= 125 && purchased_upgrades.indexOf("coal_mines") != -1 && resources["money"].amount >= 1000000 && buildings["s_manastone"].amount >= 150; },
         "run_event": function () {
             var content = "<span>Business isn't doing well. Regulations are really holding you back.</span><br>";
             content += "<span>Why not bribe a politician to change something for you?</span><br />";
@@ -191,6 +217,7 @@ var events = [
         "rejection": 20,
     }),
 ];
+/* Literally only for testing purposes. */
 function force_event(id) {
     /* Only start a new event if the old one finished. */
     if ($("#events").hasClass("hidden")) {

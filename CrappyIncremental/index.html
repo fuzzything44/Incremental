@@ -12,7 +12,7 @@
 </head>
 <body>
     <div style="font-size: small; position:absolute; top: 0;">
-        v1.11.0 | 
+        v1.12.0 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none; color: lightgray;">Changelog</a> |
         <a href="https://github.com/fuzzything44/Incremental/wiki" target="_blank" style="text-decoration: none; color: lightgray;">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none; color: lightgray;">Discord</a> |
@@ -33,6 +33,13 @@
             <span style="color: red; text-shadow: deepskyblue 1px 0px 15px; vertical-align: middle;">Refined mana: 0</span>
             <span class="res_gen" onclick="if(resources['refined_mana'].amount < 250) {alert('You need 250 refined mana.');return;} if (confirm('Try to force an event to occur for 250 refined mana?')) { resources['refined_mana'].amount -= 250; handle_event(false); }" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid white; border-radius: 3px;">
                 Force Event
+            </span>
+            <br />
+        </div>
+        <div id="fuel" class="hidden" style="margin-bottom: .3em;">
+            <span style="color: greenyellow; text-shadow: yellow 1px 0px 10px; vertical-align: middle;">Refined mana: 0</span>
+            <span class="res_gen" onclick="if (resources['fuel'].amount < 1) { alert('You need more fuel.'); } else { alert('Not even close to done yet'); }" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid white; border-radius: 3px;">
+                Adventure
             </span>
             <br />
         </div>
@@ -60,6 +67,7 @@
         <span id="water" class="hidden"><span>Water: 0<br /></span><span id="water_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
         <span id="hydrogen" class="hidden"><span>Hydrogen: 0<br /></span><span id="hydrogen_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
         <span id="steel_beam" class="hidden"><span>Steel beam: 0<br /></span><span id="steel_beam_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
+        <span id="uranium" class="hidden"><span>Uranium: 0<br /></span><span id="uranium_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
 
     </div>
     <div id="buildings">
@@ -120,6 +128,7 @@
             <hr />
         </div>
 
+        <!-- Base production -->
         <div style="position: relative">
             <span onclick="destroy_building('bank')" class="building_remove">X</span>
             <span id="building_bank" class="building tooltip" onclick="purchase_building('bank');">
@@ -167,7 +176,7 @@
         </div>
         <br />
 
-
+        <!-- Energy Generators -->
         <div style="position: relative" class="hidden">
             <span onclick="destroy_building('oil_engine')" class="building_remove">X</span>
             <span id="building_oil_engine" class="building tooltip" onclick="purchase_building('oil_engine');">
@@ -186,8 +195,19 @@
             </span>
             <span id="toggle_hydrogen_burner" class="building_state_on" onclick="toggle_building_state('hydrogen_burner')">On</span>
         </div>
+        <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('reactor')" class="building_remove">X</span>
+            <span id="building_reactor" class="building tooltip" onclick="purchase_building('reactor');">
+                <span class="building_name">Nuclear Reactor</span>
+                <span class="building_amount">0</span>
+                <span class="tooltiptext" onclick="event.stopPropagation()"></span>
+            </span>
+            <span id="toggle_reactor" class="building_state_on" onclick="toggle_building_state('reactor')">On</span>
+        </div>
+
         <br />
 
+        <!-- Converters (uses a resource to run)-->
         <div style="position: relative" class="hidden">
             <span onclick="destroy_building('mine')" class="building_remove">X</span>
             <span id="building_mine" class="building tooltip" onclick="purchase_building('mine');">
@@ -264,6 +284,8 @@
             <span id="toggle_jewelry_store" class="building_state_on" onclick="toggle_building_state('jewelry_store')">On</span>
         </div>
         <br />
+
+        <!-- Machines (use energy) -->
         <div style="position: relative" class="hidden">
             <span onclick="destroy_building('paper_mill')" class="building_remove">X</span>
             <span id="building_paper_mill" class="building tooltip" onclick="purchase_building('paper_mill');">
@@ -309,8 +331,19 @@
             </span>
             <span id="toggle_hydrogen_gen" class="building_state_on" onclick="toggle_building_state('hydrogen_gen')">On</span>
         </div>
+        <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('fuel_maker')" class="building_remove">X</span>
+            <span id="building_fuel_maker" class="building tooltip" onclick="purchase_building('fuel_maker');">
+                <span class="building_name">Fuel Synthesizer</span>
+                <span class="building_amount">0</span>
+                <span class="tooltiptext" onclick="event.stopPropagation()"></span>
+            </span>
+            <span id="toggle_fuel_maker" class="building_state_on" onclick="toggle_building_state('fuel_maker')">On</span>
+        </div>
+
         <br />
 
+        <!-- Managed Buildings -->
         <div style="position: relative" class="hidden">
             <span onclick="destroy_building('big_bank')" class="building_remove">X</span>
             <span id="building_big_bank" class="building tooltip" onclick="purchase_building('big_bank');">
