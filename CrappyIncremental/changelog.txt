@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.15.4:
+Slight endgame change. Framework set up for me to actually maybe make adventuring a thing soon.
+
 v1.15.3:
 Small numbers should show properly. Building costs are now formatted.
 
