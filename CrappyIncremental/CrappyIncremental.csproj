@@ -29,6 +29,7 @@
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="adventure.ts" />
     <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="events.ts" />
     <TypeScriptCompile Include="spells.ts" />

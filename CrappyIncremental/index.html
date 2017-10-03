@@ -5,14 +5,16 @@
     <meta charset="utf-8" />
     <title>CrappyClicker v.π²</title>
     <link rel="stylesheet" href="app.css" type="text/css" />
-    <script src="jquery.js"></script>
-    <script src="events.js"></script>
-    <script src="spells.js"></script>
-    <script src="app.js"></script>
+    <script src="jquery.js" ></script>
+    <script src="events.js" ></script>
+    <script src="spells.js" ></script>
+    <script src="adventure.js" ></script>
+    <script src="//cdn.rawgit.com/erosson/swarm-numberformat/v0.1.0/dist/swarm-numberformat.min.js"></script>
+    <script src="app.js" ></script>
 </head>
 <body>
     <div style="font-size: small; position:absolute; top: 0;">
-        v1.15.1 | 
+        v1.15.2 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none; color: lightgray;">Changelog</a> |
         <a href="https://github.com/fuzzything44/Incremental/wiki" target="_blank" style="text-decoration: none; color: lightgray;">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none; color: lightgray;">Discord</a> |
@@ -412,9 +414,18 @@
 
     </div>
     <div id="events" class="hidden">
-        <div id="events_topbar">Something Happened</div>
-        <span id="close_events" onclick="$('#events').addClass('hidden'); $('#events_content').html('');">X</span>
+        <div id="events_topbar" class="window_topbar">Something Happened</div>
+        <span id="close_events" onclick="$('#events').addClass('hidden'); $('#events_content').html(''); $('#character').addClass('hidden');">X</span>
         <div id="events_content"></div>
+    </div>
+    <div id="character" class="hidden">
+        <div class="window_topbar">Your stuff</div>
+        <div id="character_content" onmouseover="document.body.style.overflow='hidden';" onmouseout="document.body.style.overflow='auto';">
+            abc<br />
+            abc<br />
+            abc<br />
+            abc<br />
+        </div>
     </div>
 </body>
 </html>

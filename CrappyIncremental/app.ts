@@ -2,6 +2,7 @@
 /// <reference path ="spells.ts" />
 declare var $: any;
 
+var num_formatter = new numberformat.Formatter({ format: 'standard', flavor: 'short', sigfigs: 5 })
 var resources = {};
 var resources_per_sec = {};
 var buildings = {};
@@ -1328,15 +1329,17 @@ function update() {
             resources[key].amount = resources_per_sec[key];
         }
         /* Formats it so that it says "Resource name: amount" */
-        $("#" + key + " span").first().html((key.charAt(0).toUpperCase() + key.slice(1)).replace("_", " ") + ": " + Math.max(0, Math.floor(resources[key].amount)).toString());
+        $("#" + key + " span").first().html((key.charAt(0).toUpperCase() + key.slice(1)).replace("_", " ") + ": " + num_formatter.format(Math.max(0, resources[key].amount)));
         /* Same for tooltip */
-        $("#" + key + "_per_sec").text((resources_per_sec[key] > 0 ? "+" : "") + (Math.round(resources_per_sec[key] * 10) / 10).toString() + "/s");
+        $("#" + key + "_per_sec").text((resources_per_sec[key] > 0 ? "+" : "") + num_formatter.format(resources_per_sec[key]) + "/s");
     });
 
     /* Unhide buildings */
     Object.keys(buildings).forEach(function (build) {
-        if (buildings[build].amount > 0 && SPELL_BUILDINGS.indexOf(build) == -1) {
+        if (SPELL_BUILDINGS.indexOf(build) == -1) {
             $('#building_' + build + " > .tooltiptext").html(gen_building_tooltip(build)); /* Generate tooltip for it. */
+        }
+        if (buildings[build].amount > 0 && SPELL_BUILDINGS.indexOf(build) == -1) {
             $("#building_" + build).parent().removeClass("hidden"); /* Any owned building is unlocked. Needed in case they sell previous ones and reload. */
             UNLOCK_TREE[build].forEach(function (unlock) {
                 $("#building_" + unlock).parent().removeClass("hidden");

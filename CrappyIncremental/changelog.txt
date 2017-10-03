@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.15.2:
+Start transition to new number formatter, fix bug where building tooltips weren't colored correctly.
+
 v1.15.1:
 Event window is now smaller. Not as small as some people would like though. Building tooltips show what resource you need.
 

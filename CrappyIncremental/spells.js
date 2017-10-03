@@ -86,13 +86,13 @@ function s_trade(delta_time) {
             /* We're buying it */
             remaining_upgrades["trade"].cost["money"] = money_value;
             remaining_upgrades["trade"].cost[chosen_resource] = Math.round(resource_value * -trade_advantage); /* Negative so we get the resource */
-            remaining_upgrades["trade"].tooltip += "Spend " + money_value.toString() + " money to buy " + Math.round(resource_value * trade_advantage).toString() + " " + chosen_resource.replace('_', ' ');
+            remaining_upgrades["trade"].tooltip += "Spend " + num_formatter.format(money_value) + " money to buy " + num_formatter.format(resource_value * trade_advantage) + " " + chosen_resource.replace('_', ' ');
         }
         else {
             /* Selling */
             remaining_upgrades["trade"].cost["money"] = Math.round(money_value * -trade_advantage);
             remaining_upgrades["trade"].cost[chosen_resource] = resource_value; /* Negative so we get the resource */
-            remaining_upgrades["trade"].tooltip += "Sell " + resource_value.toString() + " " + chosen_resource.replace('_', ' ') + " for " + Math.round(money_value * trade_advantage).toString() + " money";
+            remaining_upgrades["trade"].tooltip += "Sell " + num_formatter.format(resource_value) + " " + chosen_resource.replace('_', ' ') + " for " + num_formatter.format(money_value * trade_advantage) + " money";
         }
         var trade_expires = Date.now() + 15000;
     }
