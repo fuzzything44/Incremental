@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.15.7:
+Removed link to the wiki. It was horribly out of date.
+
 v1.15.6:
 Bugfixes: Time speed turns off visibly when you run out of time. You can't spam click mana buildings to use them. You can't force an event when you have one. Energy converter is clearer about costs.
 

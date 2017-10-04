@@ -107,13 +107,13 @@
 
 #events {
     position: fixed;
-    top: 10%;
+    top: 8%;
     left: 25%;
 
     height: 80%;
     width: 66%;
-    min-height: 40em;
-    min-width: 60em;
+    min-height: 35em;
+    min-width: 45em;
     z-index: 1;
     background-color: #222;
 
@@ -146,11 +146,11 @@
 
 #character {
     position: fixed;
-    top: 10%;
+    top: 8%;
     left: 2%;
 
     height: 80%;
-    min-height: 40em;
+    min-height: 35em;
     width: 22.9%;
     z-index: 1;
     background-color: #222;
