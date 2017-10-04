@@ -1300,7 +1300,7 @@ function update() {
         /* Find how much time they will use up */
         if (resources["time"].amount < 5) { /* Not enough for a full addition to the tick. */
             delta_time += resources["time"].amount * 1000; /* Give extra production for however much they can get, and remove that much time. */
-            time_on = false;
+            toggle_time();
             $("#time").addClass("hidden");
             resources["time"].amount = 0;
         } else { /* Add 5s of production to this tick and remove the time. This caps ticks at 10s of production.*/
@@ -1308,14 +1308,6 @@ function update() {
             resources["time"].amount -= 5;
         }
     }
-
-    /* Perform spell actions */
-    SPELL_BUILDINGS.forEach(function (build) {
-        if (buildings[build].on) {
-            spell_funcs[buildings[build].update](delta_time);
-        }
-    });
-
 
     /* Check for negative resources or resources that will run out. */
     Object.keys(resources).forEach(function (res) { /* Loop through all resources, res is current checked resource */
@@ -1333,6 +1325,14 @@ function update() {
             });
         }
     });
+
+    /* Perform spell actions */
+    SPELL_BUILDINGS.forEach(function (build) {
+        if (buildings[build].on) {
+            spell_funcs[buildings[build].update](delta_time);
+        }
+    });
+
 
     /* Update all resources */
     Object.keys(resources).forEach(function (key) {

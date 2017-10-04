@@ -14,7 +14,7 @@
 </head>
 <body>
     <div style="font-size: small; position:absolute; top: 0;">
-        v1.15.5 | 
+        v1.15.6 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none; color: lightgray;">Changelog</a> |
         <a href="https://github.com/fuzzything44/Incremental/wiki" target="_blank" style="text-decoration: none; color: lightgray;">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none; color: lightgray;">Discord</a> |
@@ -33,7 +33,7 @@
         </div>
         <div id="refined_mana" class="hidden" style="margin-bottom: .3em;">
             <span style="color: red; text-shadow: deepskyblue 1px 0px 15px; vertical-align: middle;">Refined mana: 0</span>
-            <span class="res_gen" onclick="if(resources['refined_mana'].amount < 250) {alert('You need 250 refined mana.');return;} if (confirm('Try to force an event to occur for 250 refined mana?')) { resources['refined_mana'].amount -= 250; handle_event(false); }" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid white; border-radius: 3px;">
+            <span class="res_gen" onclick="if(resources['refined_mana'].amount < 250) {alert('You need 250 refined mana.');return;} else if (!$('#events').hasClass('hidden')) { alert('There\'s already an event going on!'); return; } if (confirm('Try to force an event to occur for 250 refined mana?')) { resources['refined_mana'].amount -= 250; handle_event(false); }" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid white; border-radius: 3px;">
                 Force Event
             </span>
             <br />
@@ -90,7 +90,7 @@
                     <span class="building_amount">1</span>
                     <span style="float: right; color: green;" onclick="purchase_building('s_energyboost');">&nbsp;+&nbsp;</span>
                     <span style="float: right; color: red;" onclick="destroy_building('s_energyboost');">&nbsp;-&nbsp;</span>
-                    <span class="tooltiptext">Converts mana to energy</span>
+                    <span class="tooltiptext">Converts mana to energy. <br />Every energy takes 3 mana. </span>
                 </span>
                 <span id="toggle_s_energyboost" class="building_state_off" onclick="toggle_building_state('s_energyboost')">Off</span>
             </div>
@@ -414,9 +414,11 @@
 
     </div>
     <div id="events" class="hidden">
-        <div id="events_topbar" class="window_topbar">Something Happened</div>
-        <span id="close_events" onclick="$('#events').addClass('hidden'); $('#events_content').html(''); $('#character').addClass('hidden');">X</span>
-        <div id="events_content"></div>
+        <div class="window_topbar">
+            <span id="events_topbar">Something Happened</span>
+            <span id="close_events" onclick="$('#events').addClass('hidden'); $('#events_content').html(''); $('#character').addClass('hidden');">X</span>
+        </div>
+        <div id="events_content" style="height: 94%;"></div>
     </div>
     <div id="character" class="hidden">
         <div class="window_topbar">Your stuff</div>
