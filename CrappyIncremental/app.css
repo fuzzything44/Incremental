@@ -112,6 +112,8 @@
 
     height: 80%;
     width: 66%;
+    min-height: 40em;
+    min-width: 60em;
     z-index: 1;
     background-color: #222;
 
@@ -148,6 +150,7 @@
     left: 2%;
 
     height: 80%;
+    min-height: 40em;
     width: 22.9%;
     z-index: 1;
     background-color: #222;
@@ -288,4 +291,22 @@ select {
     padding-right: .3em; 
     display: inline-block; 
     margin: .2em;
+}
+
+
+.energy_box_off {
+    height: 1em;
+    border: 1px solid gray;
+    background-color: darkgray;
+}
+
+.energy_box_on {
+    height: 1em;
+    border: 1px solid darkgreen;
+    background-color: green;
+}
+.energy_box_disabled {
+    height: 1em;
+    border: 1px solid darkred;
+    background-color: red;
 }
