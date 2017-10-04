@@ -22,7 +22,15 @@ function setup_combat() {
     }
     $("#combat_energy_9").toggleClass('energy_box_off energy_box_disabled');
     $("#combat_energy_0").toggleClass('energy_box_off energy_box_on');
-    $("#combat_stats").append("<div style='position: relative; top: -14em; width: 30em; margin: auto;'>Stats. So this contains all your power usage and resources. Above is combat where you attack and see your shield level. The number in the box to the left is how many actions you have left before the enemy acts. The green/grey/red boxes to the left are your energy: green is available, gray is used, and red is locked.</div>");
+    $("#combat_stats").append("<div style='position: relative; top: -14em; width: 30em; margin: auto;'>Stats. So this contains all your power usage and resources. The number in the box to the left is how many actions you have left before the enemy acts. The green/grey/red boxes to the left are your energy: green is available, gray is used, and red is locked.</div>");
+    /* Setup shields */
+    $("#combat_attack").html("<div id='combat_shield' style='height: 14em; width: 2em; vertical-align: bottom; display: table-cell;'></div>");
+    for (var i = 4; i >= 0; i--) {
+        $("#combat_shield").append("<img id='combat_shield_" + i.toString() + "' src='images/shield_on.png' style='height: 2.5em; width: 2.5em;' />");
+    }
+    $("#combat_shield_4").attr("src", "images/shield_off.png");
+    $("#combat_shield_0").attr("src", "images/shield_power.png");
+    $("#combat_attack").append("<div style='position: relative; top: -14em; width: 30em; margin: auto;'>Combat. Use your weapons here. Shields are to the left. Blue means they're on and working. Red means they're down (you took a hit). Green means they're on and won't go down when you take a hit.<br><span class='clickable' onclick='$(\"#combat_shield_3\").attr(\"src\", \"images/shield_off.png\");'>Ow!</span></div>");
     // $("#combat").append("<div id='combat_shield' style='position: relative; height: 12em; top: -12em;    width: 2em; background-color: blue;'></div>");
 }
 //# sourceMappingURL=adventure.js.map
