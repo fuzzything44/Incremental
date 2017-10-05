@@ -19,12 +19,18 @@ let events = [
                 /* If they have some big banks and they're on, give some extra */
                 money_gain += buildings["big_bank"].generation["money"] * buildings["big_bank"].amount * 45
             }
+            let antique_item = "";
+            if (buildings["s_time_magic"].on && Math.random() > .5) {
+                antique_item = "antique ";
+                money_gain *= 2;
+            }
+
             resources["money"].amount += money_gain;
 
-            let investment_types = ["gold", "beer", "uranium", "bread", "rugs", "beds", "wool", "toothpicks", "cookies", "toothpaste", "salad"];
+            let investment_types = ["gold", "beer", "uranium", "bread", "beds", "wool", "toothpicks", "cookies", "toothpaste", "salad"];
             let invested_in = investment_types[Math.floor(Math.random() * investment_types.length)];
             add_log_elem("You made " + money_gain.toString() + " money from investing!");
-            $("#events_content").html("Investing in " + invested_in + " paid off! <br />You gained " + money_gain.toString() + " money from that sweet deal!");
+            $("#events_content").html("Investing in " + antique_item + invested_in + " paid off! <br />You gained " + money_gain.toString() + " money from that sweet deal!");
             if (buildings["big_bank"].amount > 0 && buildings["big_bank"].on) {
                 /* If they got extra */
                 $("#events_content").append("<br />Thank your investment bankers for the tip!");
@@ -39,6 +45,9 @@ let events = [
                     }
                     case "uranium": {
                         resources["uranium"].amount += 1;
+                        if (antique_item != "") {
+                            resources["uranium"].amount += .5;
+                        }
                         $("#events_content").append("<br />You embezzled some uranium.");
                         break;
                     }
@@ -72,10 +81,14 @@ let events = [
                 content += "<span onclick='resources.gold.amount += 50; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 50 gold\");' class='clickable'>Look for gold</span><br>";
             }
             if (resources["energy"].amount > 0) {
-                content += "<span onclick='resources_per_sec.energy += 3; setTimeout(() => resources_per_sec[\"energy\"] -= 3, 60000); $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 3 energy for 1 minute\");' class='clickable'>Capture the heat</span><br>";
+                content += "<span onclick='resources_per_sec.energy += 10; setTimeout(() => resources_per_sec[\"energy\"] -= 10, 5 *60000); $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 10 energy for 5 minutes\");' class='clickable'>Capture the heat</span><br>";
             }
             if (buildings["big_mine"].amount >= 3 && buildings["big_mine"].on && Math.random() > .7 && buildings["library"].amount >= 5) {
-                content += "<span onclick='resources.diamond.amount += 10; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 10 diamond\");' class='clickable'>Wait, what's that?</span><br>";
+                if (resources["uranium"].amount > 0) {
+                    content += "<span onclick='resources.uranium.amount += 3; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 3 uranium\");' class='clickable'>Wait, what's that?</span><br>";
+                } else {
+                    content += "<span onclick='resources.diamond.amount += 10; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 10 diamond\");' class='clickable'>Wait, what's that?</span><br>";
+                }
             }
             add_log_elem("A meteor fell!");
             $("#events_content").html(content);

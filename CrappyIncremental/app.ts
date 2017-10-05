@@ -1,6 +1,7 @@
 ﻿/// <reference path ="events.ts" />
 /// <reference path ="spells.ts" />
 declare var $: any;
+declare var numberformat: any;
 
 function format_num(num: number, show_decimals: boolean = true): string {
     if (num < 100000) { /* Show more precise values if we aren't going to numberformat*/
@@ -217,8 +218,6 @@ function set_initial_state() {
             "update": "workshop",
             "flavor": "Work. Work. Work. Work. Shop.",
         },
-
-
 
         "bank": {
             "on": true,
