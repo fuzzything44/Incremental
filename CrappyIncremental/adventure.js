@@ -42,13 +42,13 @@ function setup_combat() {
     $("#combat_stats").append("<div id='stats_area' style='position: relative; top: -14em; left: 2.5em; width: 35em; height: 15em; margin: auto;'></div>");
     $("#combat_attack").append("<div id='attack_area' style='position: relative; top: -14em; left: 2.5em; width: 35em; height: 15em; margin: auto;'></div>");
     /* Setup weapons */
-    $("#attack_area").append("<span id='weapon' class='clickable' onclick='attack()'>Fire Laser</span>");
+    $("#attack_area").append("<span id='weapon' class='clickable' onclick='attack()'>(0) Fire Laser [2]</span>");
     combat_data["weapon_charge"] = 0;
     /* Setup power use */
-    $("#stats_area").append("<span id='shields' class='clickable' onclick='allocate_energy(\"shields\")'>Boost Shields</span>");
-    $("#stats_area").append("<span id='shields' class='clickable' onclick='allocate_energy(\"weapons\")'>Power Laser</span>");
+    $("#stats_area").append("<span id='shields' class='clickable' onclick='allocate_energy(\"shields\")'>Boost Shields [1]</span><br />");
+    $("#stats_area").append("<span id='shields' class='clickable' onclick='allocate_energy(\"weapons\")'>Power Laser [1]</span>");
     /* Setup enemy. Probably will be done in it's own function, but we need a fake enemy for now. */
-    enemy_data = { "shields": 3, "attack": 1, "moves": 3 };
+    enemy_data = { "shields": 3, "attack": 2, "actions_per_turn": 1 };
     update_combat(0);
 }
 function attack() {
@@ -58,6 +58,7 @@ function attack() {
     }
     else if (combat_data["actions_left"] < 2) {
         $("#combat_log").text("Not enough actions!");
+        return;
     }
     if (combat_data["weapon_charge"] > 0) {
         combat_data["weapon_charge"] -= 1;
@@ -140,21 +141,29 @@ function update_combat(actions_used) {
         }
         $("#combat_energy_" + i.toString()).addClass("energy_box_" + box_state);
     }
+    /* Update weapons + stats. TODO: dynamically update depending on what they have */
+    $("#weapon").text('(' + combat_data["weapon_charge"].toString() + ") Fire Laser [2]");
     /* Update how many actions left. */
     combat_data["actions_left"] -= actions_used;
     $("#combat_counter").html(combat_data["actions_left"].toString());
     if (actions_used > 0) {
         if (combat_data["actions_left"] <= 0) {
-            for (var i = 0; i < combat_data["enemy_actions"]; i++) {
-                setTimeout(enemy_action, 1000 * (i + 1));
-            }
-            setTimeout(function () { combat_data["actions_left"] = combat_data["actions_per_turn"]; combat_data["energy_used"] = 0; $("#combat_log").text("Your turn"); update_combat(0); }, 1000 * (combat_data["enemy_actions"] + 1));
+            /* Give enemy control */
+            enemy_action(enemy_data["actions_per_turn"]);
         }
     }
 }
-function enemy_action() {
-    combat_data["shields"] -= 1;
+function enemy_action(times_to_run) {
+    combat_data["shields"] -= enemy_data["attack"];
     update_combat(0);
-    $("#combat_log").text("Enemy attacks! You take 1 damage. Shields at " + combat_data["shields"].toString());
+    $("#combat_log").text("Enemy attacks! You take 2 damage. Shields at " + combat_data["shields"].toString());
+    if (times_to_run > 1) {
+        /* Setup next attack */
+        setTimeout(function () { return enemy_action(times_to_run - 1); }, 1000);
+    }
+    else {
+        /* Grant control back to player. */
+        setTimeout(function () { combat_data["actions_left"] = combat_data["actions_per_turn"]; combat_data["energy_used"] = 0; $("#combat_log").text("Your turn"); update_combat(0); }, 1000 * (enemy_data["actions_per_turn"] + 1));
+    }
 }
 //# sourceMappingURL=adventure.js.map
