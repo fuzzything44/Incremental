@@ -6,7 +6,7 @@
 };
 
 let combat_data = {};
-
+let enemy_data = {};
 /* Sets up the adventure pane */
 function start_adventure() {
     $("#character").removeClass("hidden");
@@ -19,13 +19,14 @@ function start_adventure() {
 
 function setup_combat() {
     $("#events_topbar").html("Combat Test");
-    $("#events_content").html("<div id='combat' style='height: 30em; width: 40em; margin: auto;'></div>")
+    $("#events_content").html("<span id='combat_log'>Combat Log</span><div id='combat' style='height: 30em; width: 40em; margin: auto;'></div>")
     $("#combat").html("<div id='combat_attack' style='height: 15em; border: solid white 1px;'>Attack</div>")
     $("#combat").append("<div id='combat_stats' style='height: 15em; border: solid white 1px;'>Stats</div>")
     $("#combat").append("<div id='combat_counter' style='width: 4em; height: 1.5em; border: solid white 1px; background: #444; position: relative; top: -16em;'></div>")
 
     $("#combat_stats").html("<div id='combat_energy' style='position: relative; top: 1em; height: 14em; width: 2em;'></div>");
 
+    combat_data["enemy_actions"] = 3;
     combat_data["actions_per_turn"] = adventure_data.actions;
     combat_data["actions_left"] = adventure_data.actions;
     /* Setup energy */
@@ -44,15 +45,90 @@ function setup_combat() {
     combat_data["shields"] = adventure_data.shields;
     combat_data["power_shields"] = adventure_data.power_shields;
     
-    $("#combat_stats").append("<div id='stats_area' style='position: relative; top: -14em; left: 2.5em; width: 35em; height: 15em; margin: auto;'>Stats. So this contains all your power usage and resources. The number in the box to the left is how many actions you have left before the enemy acts. The green/grey/red boxes to the left are your energy: green is available, gray is used, and red is locked.<br><span class='clickable' onclick='combat_data[\"energy_used\"] += 1; update_combat(1);'>Zap!</span></div>");
-    $("#combat_attack").append("<div id='attack_area' style='position: relative; top: -14em; left: 2.5em; width: 35em; height: 15em; margin: auto;'>Combat. Use your weapons here. Shields are to the left. Blue means they're on and working. Red means they're down (you took a hit). Green means they're on and won't go down when you take a hit.<br><span class='clickable' onclick='combat_data[\"shields\"] -= 1; update_combat(1);'>Ow!</span></div>");
+    $("#combat_stats").append("<div id='stats_area' style='position: relative; top: -14em; left: 2.5em; width: 35em; height: 15em; margin: auto;'></div>");
+    $("#combat_attack").append("<div id='attack_area' style='position: relative; top: -14em; left: 2.5em; width: 35em; height: 15em; margin: auto;'></div>");
 
+    /* Setup weapons */
+    $("#attack_area").append("<span id='weapon' class='clickable' onclick='attack()'>Fire Laser</span>")
+    combat_data["weapon_charge"] = 0;
+
+    /* Setup power use */
+    $("#stats_area").append("<span id='shields' class='clickable' onclick='allocate_energy(\"shields\")'>Boost Shields</span>")
+    $("#stats_area").append("<span id='shields' class='clickable' onclick='allocate_energy(\"weapons\")'>Power Laser</span>")
+
+    /* Setup enemy. Probably will be done in it's own function, but we need a fake enemy for now. */
+    enemy_data = { "shields": 3, "attack": 1, "moves": 3 };
 
     update_combat(0);
 }
+function attack() {
+    /* Make sure it's their turn before acting */
+    if (combat_data["actions_left"] < 1) {
+        return;
+    } else if (combat_data["actions_left"] < 2) {
+        $("#combat_log").text("Not enough actions!");
+    }
+    if (combat_data["weapon_charge"] > 0) {
+        combat_data["weapon_charge"] -= 1;
+        enemy_data["shields"] -= 1;
+        $("#combat_log").text("You attack! Enemy shields at " + enemy_data["shields"].toString());
+        update_combat(2);
+    } else {
+        $("#combat_log").text("Weapons not charged.");
+        update_combat(0);
+    }
+}
+
+function allocate_energy(to_what: string) {
+    /* Make sure it's their turn before acting */
+    if (combat_data["actions_left"] < 1) {
+        return;
+    }
+    if (combat_data["energy_used"] >= combat_data["energy"]) {
+        $("#combat_log").text("Not enough energy!");
+        update_combat(0);
+        return;
+    }
+    switch(to_what) {
+        case "shields": {
+            if (combat_data["shields"] < 5) {
+                combat_data["energy_used"] += 1;
+                combat_data["shields"] += 1;
+            } else {
+                $("#combat_log").text("Shields at max power!");
+                update_combat(0);
+                return;
+            }
+            break;
+        }
+        case "weapons": {
+            combat_data["weapon_charge"] += 1;
+            combat_data["energy_used"] += 1;
+            break;
+        }
+    }
+
+    $("#combat_log").text("Energy allocated to " + to_what);
+    update_combat(1);
+}
 
 function update_combat(actions_used: number) {
+    /* Check for win/loss */
+    if (combat_data["shields"] < 0) {
+        alert("You lost...");
+        start_adventure();
+        return;
+    }
+    if (enemy_data["shields"] < 0) {
+        alert("You won!");
+        start_adventure();
+        return;
+    }
+
     /* Update shields */
+    if (combat_data["shields"] < combat_data["power_shields"]) {
+        combat_data["shields"] = combat_data["power_shields"];
+    }
     for (let i = 4; i >= 0; i--) {
         let shield_state = "off";
         if (i < combat_data["shields"]) {
@@ -79,8 +155,18 @@ function update_combat(actions_used: number) {
     /* Update how many actions left. */
     combat_data["actions_left"] -= actions_used;
     $("#combat_counter").html(combat_data["actions_left"].toString());
-    if (combat_data["actions_left"] <= 0) {
-        alert("You're out of actions! Normally an enemy would attack here.");
-
+    if (actions_used > 0) {
+        if (combat_data["actions_left"] <= 0) {
+            for (let i = 0; i < combat_data["enemy_actions"]; i++) {
+                setTimeout(enemy_action, 1000 * (i + 1));
+            }
+            setTimeout(() => { combat_data["actions_left"] = combat_data["actions_per_turn"]; combat_data["energy_used"] = 0; $("#combat_log").text("Your turn"); update_combat(0); }, 1000 * (combat_data["enemy_actions"] + 1));
+        }
     }
+}
+
+function enemy_action() {
+    combat_data["shields"] -= 1;
+    update_combat(0);
+    $("#combat_log").text("Enemy attacks! You take 1 damage. Shields at " + combat_data["shields"].toString());
 }
