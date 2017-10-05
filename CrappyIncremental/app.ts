@@ -76,7 +76,9 @@ var to_next_trade = 60000;
 
 function set_initial_state() {
     resources = {
-        "time": { "amount": 0, "value": -1 },
+        "time": { "amount": 0, "value": -2 },
+        "refined_mana": { "amount": 0, "value": -1 },
+        "fuel": { "amount": 0, "value": -1000 },
 
         "mana": { "amount": 0, "value": 0 },
         "energy": { "amount": 0, "value": 0 }, 
@@ -101,9 +103,7 @@ function set_initial_state() {
         "water": { "amount": 0, "value": 2 },
         "hydrogen": { "amount": 0, "value": 5 },
         "steel_beam": { "amount": 0, "value": 200 },
-        "refined_mana": { "amount": 0, "value": -1 },
         "uranium": { "amount": 0, "value": 500 },
-        "fuel": {"amount": 0, "value": -1000},
 
     };
     /* Set resources_per_sec */
@@ -1540,7 +1540,7 @@ window.onload = () => {
     setInterval(update_upgrade_list, 500);
 
     random_title();
-    setInterval(random_title, 60000);
+    setInterval(random_title, 600000);
 
     SPELL_BUILDINGS.forEach(function (build) {
         if (buildings["s_manastone"].amount < buildings[build].amount * -buildings[build].generation["mana"]) {

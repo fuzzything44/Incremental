@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.15.8:
+Doubled mana value, titles change 10x less often.
+
 v1.15.7:
 Removed link to the wiki. It was horribly out of date.
 

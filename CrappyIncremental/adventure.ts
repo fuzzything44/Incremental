@@ -163,7 +163,7 @@ function update_combat(actions_used: number) {
     if (actions_used > 0) {
         if (combat_data["actions_left"] <= 0) {
             /* Give enemy control */
-            enemy_action(enemy_data["actions_per_turn"]);
+            setTimeout(() => enemy_action(enemy_data["actions_per_turn"]), 1000);
         }
     }
 }

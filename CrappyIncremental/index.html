@@ -14,7 +14,7 @@
 </head>
 <body>
     <div style="font-size: small; position:absolute; top: 0;">
-        v1.15.7 | 
+        v1.15.8 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none; color: lightgray;">Changelog</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none; color: lightgray;">Discord</a> |
         <span onclick="save_to_clip()">Export</span> |
@@ -80,7 +80,7 @@
                 <span id="building_s_mana_refinery" class="building tooltip" style="color: #33f;" onclick="s_refinery(parseInt($('#buy_amount').val()))"><span class="building_name">Mana Refinery</span><span class="building_amount">1</span><span class="tooltiptext">Refine your mana into a crystalline form.</span></span>
             </div>
             <div style="position: relative">
-                <span id="building_s_goldboost" class="building tooltip" style="color: gold;"><span class="building_name">Greed</span><span class="building_amount">3</span><span class="tooltiptext">Uses 2 mana, but doubles net money and gold gains.</span></span>
+                <span id="building_s_goldboost" class="building tooltip" style="color: gold;"><span class="building_name">Greed</span><span class="building_amount"></span><span class="tooltiptext">Uses 2 mana, but doubles net money and gold gains.</span></span>
                 <span id="toggle_s_goldboost" class="building_state_off" onclick="toggle_building_state('s_goldboost')">Off</span>
             </div>
             <div style="position: relative" class="hidden">
@@ -102,7 +102,7 @@
                 <span id="toggle_s_startboost" class="building_state_off" onclick="toggle_building_state('s_startboost')">Off</span>
             </div>
             <div style="position: relative">
-                <span id="building_s_time_magic" class="building tooltip" style="color: cyan;"><span class="building_name">Time Rewind</span><span class="building_amount">25</span><span class="tooltiptext">Uses 30 mana to make time pass quicker.</span></span>
+                <span id="building_s_time_magic" class="building tooltip" style="color: cyan;"><span class="building_name">Time Rewind</span><span class="building_amount">25</span><span class="tooltiptext">Uses 30 mana to make time pass twice as fast.</span></span>
                 <span id="toggle_s_time_magic" class="building_state_off" onclick="toggle_building_state('s_time_magic')">Off</span>
             </div>
             <div style="position: relative">
@@ -120,7 +120,6 @@
                         <option value="wood">Grow wood</option>
                         <option value="glass">Smelt glass</option>
                         <option value="steel">Forge Steel</option>
-
                     </select>
                     <span class="building_amount">50</span>
                 </span>
