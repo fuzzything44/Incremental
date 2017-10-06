@@ -49,7 +49,8 @@ var UNLOCK_TREE = {
     "ink_refinery": [],
     "money_printer": ["book_printer"],
     "book_printer": ["library"],
-    "library": ["water_purifier"],
+    "library": ["water_purifier", "solar_panel"],
+    "solar_panel": [],
     "water_purifier": ["hydrogen_gen", "hydrogen_burner"],
     "hydrogen_gen": [],
     "hydrogen_burner": [],
@@ -504,6 +505,26 @@ function set_initial_state() {
                 "research": 1,
             },
             "flavor": "They do very important research here. <br />DO NOT DISTURB THE LIBRARIANS.",
+        },
+        "solar_panel": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 50000,
+                "glass": 100,
+                "coal": 100,
+                "diamond": 100,
+            },
+            "price_ratio": {
+                "money": .8,
+                "glass": 2,
+                "coal": 1.5,
+                "diamond": 1.5,
+            },
+            "generation": {
+                "energy": 1,
+            },
+            "flavor": "Praise the sun!",
         },
         "water_purifier": {
             "on": true,

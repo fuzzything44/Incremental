@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.16.0:
+New wiki link added, solar panel added.
+
 v1.15.9:
 You can now invest in antique items, you can't invest in rugs, meteors give more energy and potentially uranium.
 

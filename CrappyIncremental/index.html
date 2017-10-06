@@ -14,8 +14,9 @@
 </head>
 <body>
     <div style="font-size: small; position:absolute; top: 0;">
-        v1.15.9 | 
+        v1.16.0 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none; color: lightgray;">Changelog</a> |
+        <a href="http://crappy-incremental.wikia.com/wiki/Crappy_Incremental_Wiki" target="_blank" style="text-decoration: none; color: lightgray;">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none; color: lightgray;">Discord</a> |
         <span onclick="save_to_clip()">Export</span> |
         <span onclick="load_from_clip()">Import</span>
@@ -216,6 +217,15 @@
                 <span class="tooltiptext" onclick="event.stopPropagation()">Generates -1 oil per second, 1 energy per second.<br /> Costs 500 money, 200 iron.</span>
             </span>
             <span id="toggle_oil_engine" class="building_state_on" onclick="toggle_building_state('oil_engine')">On</span>
+        </div>
+        <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('solar_panel')" class="building_remove">X</span>
+            <span id="building_solar_panel" class="building tooltip" onclick="purchase_building('solar_panel');">
+                <span class="building_name">Solar Panel</span>
+                <span class="building_amount">0</span>
+                <span class="tooltiptext" onclick="event.stopPropagation()"></span>
+            </span>
+            <span id="toggle_solar_panel" class="building_state_on" onclick="toggle_building_state('solar_panel')">On</span>
         </div>
         <div style="position: relative" class="hidden">
             <span onclick="destroy_building('hydrogen_burner')" class="building_remove">X</span>
