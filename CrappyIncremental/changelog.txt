@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.16.1:
+Added notification to export.
+
 v1.16.0:
 New wiki link added, solar panel added.
 

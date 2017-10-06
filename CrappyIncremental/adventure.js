@@ -108,12 +108,12 @@ function update_combat(actions_used) {
     if (combat_data["shields"] < 0) {
         alert("You lost...");
         start_adventure();
-        return;
+        return 1;
     }
     if (enemy_data["shields"] < 0) {
         alert("You won!");
         start_adventure();
-        return;
+        return 1;
     }
     /* Update shields */
     if (combat_data["shields"] < combat_data["power_shields"]) {
@@ -152,10 +152,13 @@ function update_combat(actions_used) {
             setTimeout(function () { return enemy_action(enemy_data["actions_per_turn"]); }, 1000);
         }
     }
+    return 0;
 }
 function enemy_action(times_to_run) {
     combat_data["shields"] -= enemy_data["attack"];
-    update_combat(0);
+    if (update_combat(0)) {
+        return;
+    }
     $("#combat_log").text("Enemy attacks! You take 2 damage. Shields at " + combat_data["shields"].toString());
     if (times_to_run > 1) {
         /* Setup next attack */
