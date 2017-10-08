@@ -1,4 +1,4 @@
-/// <reference path ="events.ts" />
+﻿/// <reference path ="events.ts" />
 /// <reference path ="spells.ts" />
 function format_num(num, show_decimals) {
     if (show_decimals === void 0) { show_decimals = true; }
@@ -1114,52 +1114,72 @@ function add_log_elem(to_add) {
 }
 function save() {
     Object.keys(resources).forEach(function (type) {
-        localStorage["res-" + type] = resources[type].amount;
+        document.cookie = "res-" + type + "=" + resources[type].amount.toString() + ";expires=Fri, 31 Dec 9999 23:59:59 GMT;";
     });
     Object.keys(buildings).forEach(function (type) {
-        localStorage["build-" + type] = JSON.stringify(buildings[type]);
+        document.cookie = "build-" + type + "=" + JSON.stringify(buildings[type]) + ";expires=Fri, 31 Dec 9999 23:59:59 GMT;";
     });
-    localStorage["flags"] = JSON.stringify(event_flags);
-    localStorage["upgrades"] = JSON.stringify(purchased_upgrades);
-    localStorage["last_save"] = Date.now();
+    document.cookie = "flags=" + JSON.stringify(event_flags) + ";expires=Fri, 31 Dec 9999 23:59:59 GMT;";
+    document.cookie = "upgrades=" + JSON.stringify(purchased_upgrades) + ";expires=Fri, 31 Dec 9999 23:59:59 GMT;";
+    document.cookie = "last_save=" + Date.now() + ";expires=Fri, 31 Dec 9999 23:59:59 GMT;";
     $('#save_text').css('opacity', '1');
     setTimeout(function () { return $('#save_text').css({ 'opacity': '0', 'transition': 'opacity 1s' }); }, 1000);
     console.log("Saved");
     add_log_elem("Saved!");
 }
 function load() {
+    function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = document.cookie;
+        var ca = decodedCookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                console.log("Found request for " + cname + ": " + c.substring(name.length, c.length));
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
     console.log("Loading resources...");
     Object.keys(resources).forEach(function (type) {
-        if (localStorage.getItem("res-" + type)) {
-            resources[type].amount = parseFloat(localStorage.getItem("res-" + type));
+        /* Store in temp string because we need to check if it exists */
+        var temp_str = getCookie("res-" + type);
+        if (temp_str !== "") {
+            resources[type].amount = parseFloat(temp_str);
         }
     });
     console.log("Loading buildings...");
     Object.keys(buildings).forEach(function (type) {
-        if (localStorage.getItem("build-" + type)) {
-            buildings[type] = JSON.parse(localStorage.getItem("build-" + type));
+        var temp_str = getCookie("build-" + type);
+        if (temp_str !== "") {
+            buildings[type] = JSON.parse(temp_str);
             /* Show how many buildings they have and set tooltip properly */
             $('#building_' + type + " > .building_amount").html(buildings[type].amount.toString());
         }
     });
     console.log("Loading flags...");
-    if (localStorage.getItem("flags")) {
-        event_flags = JSON.parse(localStorage.getItem("flags"));
+    var temp_str = getCookie("flags");
+    if (temp_str !== "") {
+        event_flags = JSON.parse(temp_str);
     }
     if (buildings["s_manastone"].amount > 0) {
         $("#spells").removeClass("hidden");
         s_workshop(buildings["s_workshop"].mode); /* Load workshop option */
     }
     console.log("Loading upgrades...");
-    if (!localStorage.getItem("upgrades")) {
+    if (getCookie("upgrades") == "") {
         purchased_upgrades = [];
     }
     else {
-        purchased_upgrades = JSON.parse(localStorage.getItem("upgrades"));
+        purchased_upgrades = JSON.parse(getCookie("upgrades"));
     }
     console.log("Loading last update");
-    if (localStorage.getItem("last_save")) {
-        last_update = parseInt(localStorage.getItem("last_save"));
+    if (getCookie("last_save") != "") {
+        last_update = parseInt(getCookie("last_save"));
     }
     purchased_upgrades.forEach(function (upg) {
         var upg_name = remaining_upgrades[upg].name;
@@ -1186,13 +1206,10 @@ function load() {
         }
     });
 }
+
 function save_to_clip() {
     save();
-    var save_data = {};
-    Object.keys(localStorage).forEach(function (item) {
-        save_data[item] = localStorage[item];
-    });
-    var text = btoa(JSON.stringify(save_data));
+    var text = btoa(document.cookie);
     var textArea = document.createElement("textarea");
     /* Styling to make sure it doesn't do much if the element gets rendered */
     /* Place in top-left corner of screen regardless of scroll position. */
@@ -1222,24 +1239,9 @@ function save_to_clip() {
 }
 function load_from_clip() {
     var loaded_data = atob(prompt("Paste your save data here."));
-    try {
-        var loaded_data_1 = JSON.parse(loaded_data_1);
-        Object.keys(loaded_data_1).forEach(function (key) {
-            localStorage[key] = loaded_data_1[key];
-        });
-    }
-    catch (e) {
-        /* Using old save probably */
-        loaded_data.split(';').forEach(function (data) {
-            try {
-                var split_data = data.replace(' ', '').split("=");
-                localStorage[split_data[0]] = split_data[1];
-            }
-            catch (e) {
-                console.error(e.message);
-            }
-        });
-    }
+    loaded_data.split(";").forEach(function (data) {
+        document.cookie = data;
+    });
     location.reload();
 }
 function toggle_building_state(name) {

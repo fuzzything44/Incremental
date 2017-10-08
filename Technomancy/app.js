@@ -1,5 +1,6 @@
 /// <reference path ="events.ts" />
 /// <reference path ="spells.ts" />
+var AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA = 0;
 function format_num(num, show_decimals) {
     if (show_decimals === void 0) { show_decimals = true; }
     if (num < 100000) {
