@@ -1,0 +1,190 @@
+﻿CrappyIncremental Changelog
+
+v1.16.1:
+Added notification to export.
+
+v1.16.0:
+New wiki link added, solar panel added.
+
+v1.15.9:
+You can now invest in antique items, you can't invest in rugs, meteors give more energy and potentially uranium.
+
+v1.15.8:
+Doubled mana value, titles change 10x less often.
+
+v1.15.7:
+Removed link to the wiki. It was horribly out of date.
+
+v1.15.6:
+Bugfixes: Time speed turns off visibly when you run out of time. You can't spam click mana buildings to use them. You can't force an event when you have one. Energy converter is clearer about costs.
+
+v1.15.5:
+Slight fix for rapidly changing values. Now resource values are better shown.
+
+v1.15.4:
+Slight endgame change. Framework set up for me to actually maybe make adventuring a thing soon.
+
+v1.15.3:
+Small numbers should show properly. Building costs are now formatted.
+
+v1.15.2:
+Start transition to new number formatter, fix bug where building tooltips weren't colored correctly.
+
+v1.15.1:
+Event window is now smaller. Not as small as some people would like though. Building tooltips show what resource you need.
+
+v1.15.0:
+Workshop is no longer default on. Glass furnace is easier to get. Title changed. New event added for those with < 50 mana. Rickrolling no longer autoplays. Hopefully fixed a strange bug with workshop menu always showing.
+
+v1.14.0:
+Added workshop. This one you actually have to craft things manually. 
+
+v1.13.1:
+Fuel maker now uses refined mana as it should.
+
+v1.13.0:
+You can now use uranium to make fuel! Mana refinery moved to above greed as it can cost less. Workshop renamed to Manufacturing. Mana now caps trades much quicker. With both upgrades, you can still get steel beams. You need a ton of mana to bribe politicians.
+
+v1.12.0:
+Event box is now more annoying (it scrolls with you). Nuclear reactor added. Steel is worth more. Added uranium for your reactors. Trading portal upgrades are more expensive. Total upgrades no longer show. Slight prestige formula fix.
+
+v1.11.0:
+Go bribe some politicians now. It can do things.
+
+v1.10.2:
+Energy boost starts at a default of 1 instead of 2. Logging camp upgrade takes >= 5 mana instead of > 5. Bank upgrade takes >= 20 instead of > 20. You can actually gain more than 6 mana (reduction of >50 gains were mistakenly applied too early.) Rickrolling autoplays once per prestige now.
+
+v1.10.1:
+Gaining > 50 mana at once is now a bit harder. Slight visual improvement to upgrade list (tooltip doesn't go away on hover and you can highlight upgrades).
+
+v1.10.0:
+Added an option to force events. Demons now punish being greedy. Trading upgrades nerfed.
+
+v1.9.0:
+Added new events: trading with demons. But please be careful! Also fixed a bug with being able to go at fast speed infinitely with enough refined mana. Good catch!
+
+v1.8.2:
+Better trades no longer buff jewelry stores.
+
+v1.8.1:
+You can once again prestige for 0 mana.
+
+v1.8.0:
+Slight nerf to boost. Mines and logging scale better. Various buildings have costs changed. Strip mines slightly nerfed. Two upgrades that improve trading portal. Mana refinery works as it should now (if it broke, please prestige to fix it). Speed time works with mana buildings. Meteors have another resource they can make. New event added.
+
+v1.7.2:
+Warping items in now shows their names properly.
+
+v1.7.1:
+You now don't get bothered if refined mana makes nothing. Fixed prestige to say mana stone.
+
+v1.7.0:
+Added mana refinery. Changed value of time and removed it from trading.
+
+v1.6.2:
+Jewelry stores should NOT give managers. They should use them.
+
+v1.6.1:
+Investment banks and strip mines should now no longer show up early.
+
+v1.6.0:
+Added glass jeweler, investment bank, strip mine. Changed how offline generation works. Slightly reduced value of gold, diamond, jewelry, and books and reduced money gain from jewelry stores. Added a few new jewelry-related upgrades.
+
+v1.5.0:
+Changed prestige formula to make long runs much more rewarding.
+
+v1.4.0:
+Added skyscrapers and managers (currently they do nothing :( ). Sand, glass, hydrogen values increased. Steel beams added. Logging camp upgrade. Events no longer disappear. Workshop options slightly renamed. Workshop productions changed slightly.
+
+v1.3.0:
+Add new building: workshop! Meteors should now say what you get in the log. Reorganized spell buildings. You need to prestige to have some function again.
+
+v1.2.4:
+Gold magnets no longer secretly take coal. Trading no longer messes up the upgrade tooltip. Events are logged. Meteors now no longer slowly deplete your energy until you refresh. Greed spell renamed to Greed.
+
+v1.2.3:
+Add log so you can see past events. Hotter furnaces don't use quite as much wood. Oh, and a new event! Make sure to play with volume on!
+
+v1.2.2:
+Greed now doesn't double negative net production and has a better tooltip. Water purifier moved to correct position. Ink refinery has the proper tooltip. Prestige has a tooltip giving some explanation.
+
+v1.2.1:
+Reordered buildings to hopefully make a bit more sense.
+
+v1.2.0:
+Add time warping spell. Increase mana cost of energy converter. Add finding oil reserves to make oil wells cost less iron.
+
+v1.1.0:
+New event: meteor! A meteor can fall in your backyard! Events slightly less common. Removed arbitrary cap on investment gains. Events timeout after a minute.
+
+v1.0.2:
+Water purifier hints that prestige is required. Total upgrades now shows the actual number, not one higher.
+
+v1.0.1:
+Coal mining tooltip now properly reflects not needing research. Energy/research generation no longer says per second. Events now happen much less often (as they should have, I missed a 0) and investing gives a slight range.
+
+v1.0.0:
+Randomly generated events! You can now hit it rich on the stock market! Also added tooltip for purchased upgrades.
+
+v0.6.3:
+Tooltip bugfix with upgrades.
+
+v0.6.2:
+Banks can now be destroyed again. You can't destroy your last building of a type. Coal mines don't take research to buy. Some changes to hopefully make tooltips better.
+
+v0.6.1:
+Greed is now clearer in what it does. Fixed bug with trading not giving actual offers.
+
+v0.6.0:
+Add research, libraries, 3 new resources, 4 new buildings. There's now hydrogen engines: save up hydrogen and burn it for a short burst of energy! Trading is now slightly better if Greed is active. A few new upgrades.
+
+v0.5.4:
+Resource gain now displayed inline with the resource instead of in a tooltip.
+
+v0.5.3:
+Energy converter -/+ buttons now add or remove based on build amount setting. Upgrades turn red when you can't buy them.
+
+v0.5.2:
+Greed doesn't give extra gold even when it shouldn't.
+
+v0.5.1:
+You can no longer destroy banks. Greed now properly updates tooltips.
+
+v0.5.0:
+Added Gold sifter upgrade, upgrade count so you know how many you're missing, hides spells you can't pay for yet. Added building destruction.
+
+v0.4.3:
+All on/off buttons now ignore spells.
+
+v0.4.2:
+Can't set multibuy to less than 0. Added all on/ all off buttons.
+
+v0.4.1:
+Added more random titles. Added external save/load. Added buy multiple.
+
+v0.4.0:
+Should stop selection on more browsers. Add new expensive spell (more for getting started).
+
+v0.3.3:
+Trading portal tuning (now realizes that some resources are more valuable than others), slightly easier to get mana (every resource counts towards mana!), fix bug with trading portal hanging game if only limited resources and money are owned.
+
+v0.3.2:
+Slight portal tuning: sets max based on mana left instead of total mana. Fix bugs with potentially getting negative resources, add offline gen.
+
+v0.3.1:
+Trading bugfix. You can now buy and sell items instead of just sell.
+
+v0.3.0:
+Added new prestige spell: market! You can now get special offers to buy and sell resources for money! Also game now works in background. Offline progression coming soon!
+
+v0.2.0:
+Added prestige spell to convert spare mana to energy. Fixed prestiging bugs involving resetting with active spells removing mana.
+
+v0.1.2:
+Added fire, gear icon. Added furnace upgrade. Fixed prestige bug where building numbers/costs would still be displayed as old values.
+
+v0.1.1:
+Added flavor text to some buildings, added a paper mill upgrade.
+
+v0.1.0:
+Created changelog, links to log and wiki. Previous changes not documented.

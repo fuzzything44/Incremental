@@ -31,7 +31,9 @@
   <ItemGroup>
     <TypeScriptCompile Include="adventure.ts" />
     <TypeScriptCompile Include="app.ts" />
+    <TypeScriptCompile Include="equipment_data.ts" />
     <TypeScriptCompile Include="events.ts" />
+    <TypeScriptCompile Include="location_data.ts" />
     <TypeScriptCompile Include="spells.ts" />
   </ItemGroup>
   <ItemGroup>
