@@ -767,9 +767,9 @@ function set_initial_state() {
             "cost": {
                 "money": 1000,
                 "stone": 500,
-                "coal": 500,
+                "wood": 500,
             },
-            "tooltip": "Mines produce coal.<br /> Costs 1000 money, 500 stone, 500 coal.",
+            "tooltip": "Mines produce coal.<br /> Costs 1000 money, 500 stone, 500 wood.",
             "name": "Coal Mining <br />",
             "image": "pickaxe.png",
         },

@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.17.2:
+Coal mines now no longe take more coal than you can initially see them with.
+
 v1.17.1:
 Fuel making now takes even more research.
 
