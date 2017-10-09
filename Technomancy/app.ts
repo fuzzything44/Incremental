@@ -683,7 +683,7 @@ function set_initial_state() {
                 "steel_beam": 250,
                 "iron": 50000,
                 "gold": 3000,
-                "research": 10,
+                "research": 20,
             },
             "price_ratio": {
                 "money": 1.1,

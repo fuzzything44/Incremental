@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.17.1:
+Fuel making now takes even more research.
+
 v1.17.0:
 Politician bribing is harder. Lots of balance changes: factory takes 75 mana, mines and logging camps are slightly more expensive, furnaces cost more money, gold sifters cost more, oil wells cost more stone and produce less oil, book printers cost more, most end-game buildings have cost increases along with virtually every upgrade. Added oil well upgrades. Mana division rate is harsher.
 
