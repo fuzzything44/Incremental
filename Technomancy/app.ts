@@ -187,7 +187,7 @@ function set_initial_state() {
         },
         "s_workshop": {
             "on": false,
-            "amount": 50,
+            "amount": 75,
             "base_cost": { "mana": Infinity },
             "price_ratio": { "mana": 1 },
             "generation": {
@@ -238,10 +238,10 @@ function set_initial_state() {
             "on": true,
             "amount": 0,
             "base_cost": {
-                "money": 20,
+                "money": 30,
             },
             "price_ratio": {
-                "money": 1.15,
+                "money": 1.2,
             },
             "generation": {
                 "money": -1,
@@ -254,10 +254,10 @@ function set_initial_state() {
             "on": true,
             "amount": 0,
             "base_cost": {
-                "money": 20,
+                "money": 30,
             },
             "price_ratio": {
-                "money": 1.15,
+                "money": 1.2,
             },
             "generation": {
                 "money": -1,
@@ -270,7 +270,7 @@ function set_initial_state() {
             "on": true,
             "amount": 0,
             "base_cost": {
-                "money": 20,
+                "money": 200,
                 "stone": 50,
             },
             "price_ratio": {
@@ -308,9 +308,9 @@ function set_initial_state() {
             "on": true,
             "amount": 0,
             "base_cost": {
-                "money": 100,
-                "stone": 500,
-                "wood": 200
+                "money": 500,
+                "stone": 1000,
+                "wood": 400
             },
             "price_ratio": {
                 "money": 1.3,
@@ -382,7 +382,7 @@ function set_initial_state() {
             "amount": 0,
             "base_cost": {
                 "money": 1000,
-                "stone": 100,
+                "stone": 1000,
                 "iron": 500
             },
             "price_ratio": {
@@ -391,7 +391,7 @@ function set_initial_state() {
                 "iron": 1.3,
             },
             "generation": {
-                "oil": 1,
+                "oil": 0.1,
             },
             "flavor": "Well, this gets you oil.",
         },
@@ -477,9 +477,9 @@ function set_initial_state() {
             "on": true,
             "amount": 0,
             "base_cost": {
-                "money": 500,
-                "iron": 500,
-                "oil": 200,
+                "money": 5000,
+                "iron": 700,
+                "oil": 500,
             },
             "price_ratio": {
                 "money": 1.2,
@@ -498,8 +498,8 @@ function set_initial_state() {
             "on": true,
             "amount": 0,
             "base_cost": {
-                "money": 500,
-                "wood": 500,
+                "money": 2500,
+                "wood": 2500,
                 "iron": 50,
                 "book": 10,
             },
@@ -596,7 +596,7 @@ function set_initial_state() {
             "amount": 0,
             "base_cost": {
                 "money": 5000,
-                "steel_beam": 10,
+                "steel_beam": 25,
                 "glass": 50,
             },
             "price_ratio": {
@@ -613,8 +613,8 @@ function set_initial_state() {
             "on": true,
             "amount": 0,
             "base_cost": {
-                "money": 5000,
-                "stone": 5000,
+                "money": 25000,
+                "stone": 25000,
                 "glass": 100,
             },
             "price_ratio": {
@@ -634,7 +634,7 @@ function set_initial_state() {
             "base_cost": {
                 "money": 10000,
                 "steel_beam": 100,
-                "wood": 10000,
+                "wood": 20000,
             },
             "price_ratio": {
                 "money": 1.1,
@@ -660,7 +660,7 @@ function set_initial_state() {
             "base_cost": {
                 "money": 1000000,
                 "steel_beam": 100,
-                "iron": 5000,
+                "iron": 10000,
             },
             "price_ratio": {
                 "money": 1.1,
@@ -680,9 +680,10 @@ function set_initial_state() {
             "amount": 0,
             "base_cost": {
                 "money": 1500000,
-                "steel_beam": 100,
-                "iron": 5000,
+                "steel_beam": 250,
+                "iron": 50000,
                 "gold": 3000,
+                "research": 10,
             },
             "price_ratio": {
                 "money": 1.1,
@@ -696,10 +697,10 @@ function set_initial_state() {
                 "hydrogen": -150,
                 "refined_mana": -1,
                 "fuel": 0.01,
+                "research": 1.2,
             },
             "flavor": "This fuel is... not healthy.",
         },
-
 
     };
     purchased_upgrades = [];
@@ -719,10 +720,11 @@ function set_initial_state() {
                 }
             },
             "cost": {
-                "money": 100,
-                "stone": 10,
+                "money": 2000,
+                "stone": 500,
+                "iron": 500,
             },
-            "tooltip": "Mines produce double stone and 5x iron. <br /> Costs 100 money, 10 stone.",
+            "tooltip": "Mines produce double stone and 5x iron. <br /> Costs 2000 money, 500 stone, 500 iron.",
             "name": "Improve Mines",
             "image": "pickaxe.png",
         },
@@ -741,10 +743,11 @@ function set_initial_state() {
                 }
             },
             "cost": {
-                "money": 100,
-                "wood": 42,
+                "money": 2000,
+                "wood": 500,
+                "iron": 500,
             },
-            "tooltip": "console.err('Upgrade not purchased, player needs to buy it!'); <br /> Costs 100 money, 42 wood.",
+            "tooltip": "console.err('Upgrade not purchased, player needs to buy it!'); <br /> Costs 2000 money, 500 wood, 500 iron.",
             "name": "Magical Trees",
             "image": "",
         },
@@ -762,10 +765,11 @@ function set_initial_state() {
                 }
             },
             "cost": {
-                "money": 100,
-                "stone": 10,
+                "money": 1000,
+                "stone": 500,
+                "coal": 500,
             },
-            "tooltip": "Mines produce coal.<br /> Costs 100 money, 100 wood.",
+            "tooltip": "Mines produce coal.<br /> Costs 1000 money, 500 stone, 500 coal.",
             "name": "Coal Mining <br />",
             "image": "pickaxe.png",
         },
@@ -783,10 +787,10 @@ function set_initial_state() {
                 }
             },
             "cost": {
-                "money": 100,
-                "iron": 100,
+                "money": 3000,
+                "iron": 1000,
             },
-            "tooltip": "Compressors use 30% less coal. <br /> Costs 100 money, 100 iron.",
+            "tooltip": "Compressors use 30% less coal. <br /> Costs 3000 money, 1000 iron.",
             "name": "Improve Compressors",
             "image": "diamond.png",
         },
@@ -809,16 +813,56 @@ function set_initial_state() {
             "name": "Oil Compressors",
             "image": "diamond.png",
         },
+        "better_oil": {
+            "unlock": function () { return buildings["oil_well"].amount >= 1 && buildings["oil_well"].generation["oil"] < 1; },
+            "purchase": function () { /* When bought, turn all off, increase generation, and turn them back on again. Turns off first to get generation from them properly calculated */
+                let comp_state = buildings["oil_well"].on;
+                if (comp_state) {
+                    toggle_building_state("oil_well");
+                }
+                buildings["oil_well"]["generation"]["oil"] *= 5;
+                if (comp_state) { /* Only turn on if it already was on */
+                    toggle_building_state("oil_well");
+                }
+            },
+            "cost": {
+                "oil": 100,
+            },
+            "tooltip": "Get more oil for your wells. <br /> Costs 100 oil.",
+            "name": "Fracking",
+            "image": "",
+        },
+        "even_better_oil": {
+            "unlock": function () { return buildings["oil_well"].amount >= 1 && buildings["oil_well"].generation["oil"] < 1; },
+            "purchase": function () { /* When bought, turn all off, increase generation, and turn them back on again. Turns off first to get generation from them properly calculated */
+                let comp_state = buildings["oil_well"].on;
+                if (comp_state) {
+                    toggle_building_state("oil_well");
+                }
+                buildings["oil_well"]["generation"]["oil"] *= 2;
+                if (comp_state) { /* Only turn on if it already was on */
+                    toggle_building_state("oil_well");
+                }
+            },
+            "cost": {
+                "oil": 500,
+                "research": 1,
+            },
+            "tooltip": "If it worked once, why not again? <br /> Costs 500 oil.<br />Requires 1 research.",
+            "name": "More Fracking",
+            "image": "",
+        },
+
         "cheaper_banks": {
             "unlock": function () { return resources["money"].amount >= 2500 && buildings["bank"].amount >= 20; },
             "purchase": function () { /* When bought, turn all mines off, increase generation, and turn them back on again. Turns off first to get generation from them properly calculated */
                 buildings["bank"].price_ratio["money"] = (buildings["bank"].price_ratio["money"] - 1) * .7 + 1;
             },
             "cost": {
-                "money": 3000,
-                "iron": 500,
+                "money": 5000,
+                "iron": 1000,
             },
-            "tooltip": "Banks are cheaper to buy.<br /> Costs 3000 money, 500 iron.",
+            "tooltip": "Banks are cheaper to buy.<br /> Costs 5000 money, 1000 iron.",
             "name": "Build a vault <br />",
             "image": "money.png",
         },
@@ -836,12 +880,12 @@ function set_initial_state() {
                 }
             },
             "cost": {
-                "money": 100,
-                "iron": 100,
-                "oil": 100,
+                "money": 10000,
+                "iron": 1000,
+                "oil": 500,
                 "research": 5,
             },
-            "tooltip": "Make thinner paper, creating double the paper per wood.<br /> Costs 100 money, 100 iron, 100 oil. <br /> Requires research level of 5.",
+            "tooltip": "Make thinner paper, creating double the paper per wood.<br /> Costs 10000 money, 1000 iron, 500 oil. <br /> Requires research level of 5.",
             "name": "Thinner paper",
             "image": "gear.png",
         },
@@ -862,12 +906,12 @@ function set_initial_state() {
                 }
             },
             "cost": {
-                "money": 100,
-                "stone": 300,
-                "wood": 200,
-                "coal": 200,
+                "money": 10000,
+                "stone": 30000,
+                "wood": 20000,
+                "coal": 2000,
             },
-            "tooltip": "Much hotter furnaces run at 10x the previous rate and consume slightly less wood. <br /> Costs 100 money, 300 stone, 200 wood, 200 coal.",
+            "tooltip": "Much hotter furnaces run at 10x the previous rate and consume slightly less wood. <br /> Costs 10000 money, 30000 stone, 20000 wood, 2000 coal.",
             "name": "Hotter furnaces",
             "image": "fire.png",
         },
@@ -887,11 +931,11 @@ function set_initial_state() {
                 }
             },
             "cost": {
-                "money": 250,
-                "gold": 50,
-                "iron": 200,
+                "money": 25000,
+                "gold": 500,
+                "iron": 1000,
             },
-            "tooltip": "Special gold-plated magnets that attract only gold. And a bit of iron. <br /> Costs 250 money, 50 gold, 200 iron.",
+            "tooltip": "Special gold-plated magnets that attract only gold. And a bit of iron. <br /> Costs 25000 money, 500 gold, 1000 iron.",
             "name": "Gold magnet <br />",
             "image": "money.png",
         },
@@ -911,11 +955,11 @@ function set_initial_state() {
                 }
             },
             "cost": {
-                "money": 250,
-                "iron": 200,
-                "stone": 750,
+                "money": 25000,
+                "iron": 2000,
+                "stone": 20000,
             },
-            "tooltip": "Crushes stone into sand, improving gold find rate. <br /> Costs 250 money, 200 iron, 750 stone.",
+            "tooltip": "Crushes stone into sand, improving gold find rate. <br /> Costs 25000 money, 2000 iron, 20000 stone.",
             "name": "Destructive Sifter",
             "image": "sand.png",
         },
@@ -935,11 +979,11 @@ function set_initial_state() {
                 }
             },
             "cost": {
-                "money": 250,
-                "iron": 200,
-                "wood": 500,
+                "money": 250000,
+                "iron": 20000,
+                "wood": 50000,
             },
-            "tooltip": "Furnaces now smelt sand into glass at a rate of 1/s. <br /> Costs 250 money, 200 iron, 500 wood.",
+            "tooltip": "Furnaces now smelt sand into glass at a rate of 1/s. <br /> Costs 250K money, 20000 iron, 50000 wood.",
             "name": "Glass Furnace",
             "image": "sand.png",
         },
@@ -956,11 +1000,11 @@ function set_initial_state() {
                 purchase_building("skyscraper");
             },
             "cost": {
-                "money": 2500,
-                "steel_beam": 5,
-                "glass": 25,
+                "money": 25000,
+                "steel_beam": 50,
+                "glass": 250,
             },
-            "tooltip": "Build the first floor of a skyscraper for some managers to live in. <br /> Costs 2500 money, 5 steel beam, 25 glass.",
+            "tooltip": "Build the first floor of a skyscraper for some managers to live in. <br /> Costs 25000 money, 50 steel beam, 250 glass.",
             "name": "Skyscrapers",
             "image": "",
         },
@@ -977,11 +1021,11 @@ function set_initial_state() {
                 purchase_building("glass_jeweler");
             },
             "cost": {
-                "money": 2500,
+                "money": 25000,
                 "glass": 250,
                 "research": 7,
             },
-            "tooltip": "Research how to blow glass into jewelry. <br /> Costs 2500 money, 250 glass. <br />Requires 7 research.",
+            "tooltip": "Research how to blow glass into jewelry. <br /> Costs 25000 money, 250 glass. <br />Requires 7 research.",
             "name": "Glassblowing",
             "image": "",
         },
@@ -999,12 +1043,12 @@ function set_initial_state() {
                 }
             },
             "cost": {
-                "money": 2500,
-                "sand": 250,
-                "paper": 100,
-                "research": 10,
+                "money": 250000,
+                "sand": 2500,
+                "paper": 5000,
+                "research": 12,
             },
-            "tooltip": "Sand diamonds for a bright polish! <br /> Costs 2500 money, 250 sand, 100 paper. <br />Requires 10 research.",
+            "tooltip": "Sand diamonds for a bright polish! <br /> Costs 250000 money, 2500 sand, 5000 paper. <br />Requires 12 research.",
             "name": "Sandpaper",
             "image": "",
         },
@@ -1023,10 +1067,10 @@ function set_initial_state() {
                 }
             },
             "cost": {
-                "money": 10000,
+                "money": 10000000,
                 "research": 8,
             },
-            "tooltip": "High-pressure sales tactics let you sell jewelry for more. But you'll need managers to keep employees in line. <br /> Costs 10000 money. <br />Requires 8 research.",
+            "tooltip": "High-pressure sales tactics let you sell jewelry for more. But you'll need managers to keep employees in line. <br /> Costs 10M money. <br />Requires 8 research.",
             "name": "Sleazy Managers",
             "image": "",
         },
@@ -1035,9 +1079,9 @@ function set_initial_state() {
             "purchase": function () {},
             "cost": {
                 "refined_mana": 10000,
-                "gold": 100,
+                "gold": 500,
             },
-            "tooltip": "Your portals cover more of the market, letting you get better deals. <br /> Costs 10000 refined mana, 100 gold.",
+            "tooltip": "Your portals cover more of the market, letting you get better deals. <br /> Costs 10000 refined mana, 500 gold.",
             "name": "Mystic Portals",
             "image": "money.png",
         },
@@ -1046,9 +1090,9 @@ function set_initial_state() {
             "purchase": function () {},
             "cost": {
                 "refined_mana": 30000,
-                "diamond": 100,
+                "diamond": 1000,
             },
-            "tooltip": "Your portals cover more of the market, letting you get better deals. <br /> Costs 30000 refined mana, 100 diamond.",
+            "tooltip": "Your portals cover more of the market, letting you get better deals. <br /> Costs 30000 refined mana, 1000 diamond.",
             "name": "Arcane Portals",
             "image": "diamond.png",
         },
@@ -1056,10 +1100,10 @@ function set_initial_state() {
             "unlock": function () { return typeof event_flags["bribed_politician"] != "undefined" && event_flags["bribed_politician"] == "money"; },
             "purchase": function () { },
             "cost": {
-                "money": 5000000,
+                "money": 10000000,
                 "research": 15,
             },
-            "tooltip": "Get some of what you invest in. Sometimes. <br /> Costs 5,000,000 money. <br /> Requires 15 research.",
+            "tooltip": "Get some of what you invest in. Sometimes. <br /> Costs 10M money. <br /> Requires 15 research.",
             "name": "Investment Embezzling",
             "image": "uranium.png",
         },
@@ -1077,10 +1121,10 @@ function set_initial_state() {
                 }
             },
             "cost": {
-                "money": 5000000,
+                "money": 50000000,
                 "research": 15,
             },
-            "tooltip": "Huh, what's this metal your strip mines are finding? <br /> Costs 5,000,000 money. <br /> Requires 15 research.",
+            "tooltip": "Huh, what's this metal your strip mines are finding? <br /> Costs 50M money. <br /> Requires 15 research.",
             "name": "Deeper mines",
             "image": "uranium.png",
         },
@@ -1094,10 +1138,10 @@ function set_initial_state() {
                 purchase_building("reactor");
             },
             "cost": {
-                "money": 10000000,
+                "money": 100000000,
                 "research": 20,
             },
-            "tooltip": "Research how to use uranium for energy. <br /> Costs 10,000,000 money. <br /> Requires 20 research.",
+            "tooltip": "Research how to use uranium for energy. <br /> Costs 100M money. <br /> Requires 20 research.",
             "name": "Uranium Research",
             "image": "uranium.png",
         },
@@ -1113,11 +1157,12 @@ function prestige() {
     Object.keys(resources).forEach((res) => prestige_points += resources[res].amount * Math.max(0, resources[res].value));
 
     let mana_gain = prestige_points / 20000 - Math.pow(mana, 1.3) * .5; /* One for every 20k pp, and apply reduction based off of current mana */
+    mana_gain = Math.floor(Math.pow(Math.max(0, mana_gain), .33)); /* Then raise to .33 power and apply some rounding/checking */
     mana_gain = mana_gain / (1 + Math.floor(mana / 50) * .5); /* Then divide gain by a number increasing every 50 mana. */
-    mana_gain = Math.floor(Math.pow(Math.max(0, mana_gain), .4)); /* Finally, raise to .4 power and apply some rounding/checking */
     if (mana_gain > 50) { /* If they're getting a ton, they get less*/
-        mana_gain = Math.round(50 + (mana_gain - 50) / 2 );
+        mana_gain = 50 + (mana_gain - 50) / 2 ;
     }
+    mana_gain = Math.round(mana_gain);
     if (mana_gain < 1) {
         let percent_through = Math.max(0, Math.min(100, Math.floor((prestige_points / 20000) / (Math.pow(mana, 1.3) * .5 + 1) * 100)));
         if (!confirm("Prestige now wouldn't produce mana! As you get more mana, it gets harder to make your first mana stone in a run. You are currently " + percent_through.toString() + "% of the way to your first mana. Prestige anyway?")) {

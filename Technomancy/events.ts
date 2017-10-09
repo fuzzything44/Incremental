@@ -106,7 +106,7 @@ let events = [
         },
         "name": "Timewarp",
         "rejection": 95,
-    }), /* End rickroll */
+    }), /* End time warping */
     ({
         "condition": function () { return buildings["oil_well"].amount > (Math.log(buildings["oil_well"].base_cost["iron"]/500)/Math.log(.95)); },
         "run_event": function () {
@@ -226,7 +226,7 @@ let events = [
         "rejection": 0,
     }), /* End demon stealing */
     ({
-        "condition": function () { return typeof event_flags["bribed_politician"] == "undefined" && buildings["big_bank"].amount >= 5 && buildings["bank"].amount >= 125 && purchased_upgrades.indexOf("coal_mines") != -1 && resources["money"].amount >= 1000000 && buildings["s_manastone"].amount >= 150; },
+        "condition": function () { return typeof event_flags["bribed_politician"] == "undefined" && buildings["big_bank"].amount >= 5 && buildings["bank"].amount >= 180 && purchased_upgrades.indexOf("coal_mines") != -1 && resources["money"].amount >= 1000000 && buildings["s_manastone"].amount >= 250; },
         "run_event": function () {
             let content = "<span>Business isn't doing well. Regulations are really holding you back.</span><br>";
             content += "<span>Why not bribe a politician to change something for you?</span><br />";
