@@ -169,7 +169,7 @@ function set_initial_state() {
         },
         "s_time_magic": {
             "on": false,
-            "amount": 30,
+            "amount": 40,
             "base_cost": { "mana": Infinity },
             "price_ratio": { "mana": 1 },
             "generation": {
@@ -1069,8 +1069,28 @@ function set_initial_state() {
             "name": "Arcane Portals",
             "image": "diamond.png",
         },
+        "better_time": {
+            "unlock": function () { return buildings["s_time_magic"].on; },
+            "purchase": function () {
+                var comp_state = buildings["s_time_magic"].on;
+                if (comp_state) {
+                    toggle_building_state("s_time_magic");
+                }
+                buildings["s_time_magic"]["amount"] -= 10;
+                if (comp_state) {
+                    toggle_building_state("s_time_magic");
+                }
+                $("#building_s_time_magic > .building_amount").text("30");
+            },
+            "cost": {
+                "time": 30000,
+            },
+            "tooltip": "Throw away some extra time. You didn't need that, did you? <br /> Costs 30000 time.",
+            "name": "Time removal",
+            "image": "power_shield.png",
+        },
         "uranium_finance": {
-            "unlock": function () { return typeof event_flags["bribed_politician"] != "undefined" && event_flags["bribed_politician"] == "money"; },
+            "unlock": function () { return typeof event_flags["bribed_politician"] != "undefined" && event_flags["bribed_politician"] == "money" && buildings["s_manastone"].amount >= 200; },
             "purchase": function () { },
             "cost": {
                 "money": 10000000,
@@ -1081,7 +1101,7 @@ function set_initial_state() {
             "image": "uranium.png",
         },
         "uranium_environment": {
-            "unlock": function () { return typeof event_flags["bribed_politician"] != "undefined" && event_flags["bribed_politician"] == "environment"; },
+            "unlock": function () { return typeof event_flags["bribed_politician"] != "undefined" && event_flags["bribed_politician"] == "environment" && buildings["s_manastone"].amount >= 200; },
             "purchase": function () {
                 var comp_state = buildings["big_mine"].on;
                 if (comp_state) {
@@ -1268,9 +1288,9 @@ function save_to_clip() {
 function load_from_clip() {
     var loaded_data = atob(prompt("Paste your save data here."));
     try {
-        var loaded_data_1 = JSON.parse(loaded_data_1);
-        Object.keys(loaded_data_1).forEach(function (key) {
-            localStorage[key] = loaded_data_1[key];
+        loaded_data = JSON.parse(loaded_data);
+        Object.keys(loaded_data).forEach(function (key) {
+            localStorage[key] = loaded_data[key];
         });
     }
     catch (e) {

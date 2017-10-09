@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.18.0:
+Time rewind costs more mana. Added upgrade to make time rewind cheaper. Reduced bribing mana cost back to what it was. Uranium upgrades now take having 200 mana to show up.
+
 v1.17.2:
 Coal mines now no longe take more coal than you can initially see them with.
 

@@ -226,7 +226,7 @@ let events = [
         "rejection": 0,
     }), /* End demon stealing */
     ({
-        "condition": function () { return typeof event_flags["bribed_politician"] == "undefined" && buildings["big_bank"].amount >= 5 && buildings["bank"].amount >= 180 && purchased_upgrades.indexOf("coal_mines") != -1 && resources["money"].amount >= 1000000 && buildings["s_manastone"].amount >= 250; },
+        "condition": function () { return typeof event_flags["bribed_politician"] == "undefined" && buildings["big_bank"].amount >= 5 && buildings["bank"].amount >= 180 && purchased_upgrades.indexOf("coal_mines") != -1 && resources["money"].amount >= 1000000 && buildings["s_manastone"].amount >= 150; },
         "run_event": function () {
             let content = "<span>Business isn't doing well. Regulations are really holding you back.</span><br>";
             content += "<span>Why not bribe a politician to change something for you?</span><br />";
