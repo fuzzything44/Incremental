@@ -9,13 +9,10 @@ var adventure_data = {
         weapon_1: {
             name: "basic_weapon",
         },
-        weapon_2: {
-            name: "no_weapon",
-        },
-        weapon_3: {
-            name: "no_weapon",
-        },
+        weapon_2: null,
+        weapon_3: null,
     },
+    inventory: [],
 };
 var player_data = {};
 var enemy_data = {};
@@ -25,14 +22,68 @@ function start_adventure() {
     $("#events").removeClass("hidden");
     $("#events_topbar").html("Adventure!");
     $("#events_content").html("Welcome to Adventure Mode! <br /> I\'m glad you want to adventure, but this feature is still a long ways from being finished. Please message me on discord if you manage to get this far though! <br />");
-    $("#events_content").append("<span style='color: red'>Note: Until this announcement is removed, adventure mode gives nothing and takes nothing. Progress on it will not be saved between reloads. It exists purely for testing purposes.</span><br />");
-    $("#events_content").append("<span class='clickable' onclick='run_adventure()'>Start adventure!</span>");
+    $("#events_content").append("<span style='color: red'>Note: Until this announcement is removed, adventure mode gives nothing and takes nothing. Progress on it will not be saved between reloads. It exists purely for testing purposes. <em></em></span><br />");
+    $("#events_content").append("<span class='clickable' onclick='run_adventure(\"moon\")'>Start adventure!</span>");
+    $("#events_content").append("<span class='clickable' onclick='set_equipment()'>Build Your Spaceship</span>");
+}
+function update_inventory() {
+    $("#character_content").html('Your Ship: <br>');
+    $("#character_content").append('Engines: ' + (adventure_data.ship.engine ? gen_equipment(adventure_data.ship.engine).name : "None") + "<br>");
+    $("#character_content").append('Shields: ' + (adventure_data.ship.shield ? gen_equipment(adventure_data.ship.shield).name : "None") + "<br>");
+    $("#character_content").append('Weapon 1: ' + (adventure_data.ship.weapon_1 ? gen_equipment(adventure_data.ship.weapon_1).name : "None") + "<br>");
+    $("#character_content").append('Weapon 2: ' + (adventure_data.ship.weapon_2 ? gen_equipment(adventure_data.ship.weapon_2).name : "None") + "<br>");
+    $("#character_content").append('Weapon 3: ' + (adventure_data.ship.weapon_3 ? gen_equipment(adventure_data.ship.weapon_3).name : "None") + "<hr>");
+    $("#character_content").append("Inventory: <br>");
+    $("#character_content").append("Nothing");
+}
+function set_equipment() {
+    $("#events_topbar").html("Equipment Management");
+    $("#events_content").html("You think you can do stuff, but you can't. <br> At least you can see what you have equipped to your ship.");
+    update_inventory();
 }
 /* Selects an adventure at a given location and runs it */
 function run_adventure(location) {
-    setup_combat({});
+    var chosen_encounter = null;
+    var available_encounters = [];
+    var forced_encounters = [];
+    var total_weight = 0;
+    locations[location].forEach(function (loc) {
+        if (loc.condition()) {
+            if (loc.weight > 0) {
+                available_encounters.push(loc); /* Add encounter */
+                total_weight += loc.weight; /* Add weight to total. */
+            }
+            else {
+                forced_encounters.push(loc); /* Add it to forced encounters. */
+            }
+        }
+    });
+    /* Choose a forced encounter if possible */
+    if (forced_encounters.length > 0) {
+        chosen_encounter = forced_encounters[Math.floor(Math.random() * forced_encounters.length)];
+    }
+    else if (available_encounters.length > 0) {
+        var roll_1 = Math.floor(Math.random() * total_weight);
+        available_encounters.some(function (enc) {
+            if (roll_1 < enc.weight) {
+                chosen_encounter = enc;
+                return true;
+            }
+            else {
+                roll_1 -= enc.weight;
+                return false;
+            }
+        });
+    }
+    else {
+        $("#events_topbar").html("Oops...");
+        $("#events_content").html("Something went wrong and no encounter could be selected. Please contact fuzzything44 about this. Include in your report where you were trying to adventure.");
+        return;
+    }
+    chosen_encounter.run_encounter();
+    //setup_combat({});
     /* Currently player always gets to start.*/
-    start_turn(player_data);
+    //start_turn(player_data);
 }
 /* Sets up combat */
 function setup_combat(enemy_info) {
@@ -79,7 +130,9 @@ function setup_combat(enemy_info) {
     };
     /* Go through ship and update stuff */
     ["engine", "shield", "weapon_1", "weapon_2", "weapon_3"].forEach(function (equip_type) {
-        gen_equipment(adventure_data.ship[equip_type]).on_combat(equip_type);
+        if (adventure_data.ship[equip_type]) {
+            gen_equipment(adventure_data.ship[equip_type]).on_combat(equip_type);
+        }
     });
     /* Setup enemy. May do this differently in the future. */
     enemy_data = {

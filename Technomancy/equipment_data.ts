@@ -13,6 +13,8 @@ let equipment = {
                 update_combat(player_data["actions_left"])
             });
         },
+        equip_type: "engine",
+        name: "Basic Engine",
     },
 
     /* Shields */
@@ -21,12 +23,11 @@ let equipment = {
             player_data["max_shields"] += 3;
             player_data["shields"] += 3;
         },
+        equip_type: "shield",
+        name: "Basic Shields",
     },
 
     /* Weapons */
-    "no_weapon": {
-        on_combat: function (slot: string) { }
-    },
     "basic_weapon": {
         on_combat: function (slot: string) {
             /* Add charge button */
@@ -54,6 +55,10 @@ let equipment = {
             $("#attack_area").append("<span class='clickable' id='combat_" + slot + "'>(0) Fire Small Lazer " + slot[slot.length - 1] + " [1]</span>");
             $("#attack_area > span").last().click(function () {
                 if (player_data["actions_left"] < 1) {
+                    return;
+                }
+                if (player_data[slot].charge_level < 1) {
+                    $("#combat_log").text("Weapon not charged");
                     return;
                 }
                 /* Attack! */
@@ -93,6 +98,8 @@ let equipment = {
                 update_combat(3);
             });
         }, /* End on_combat() */
+        equip_type: "weapon",
+        name: "Small Laser",
     },
 };
 
