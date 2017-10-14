@@ -19,9 +19,10 @@ let player_data = {};
 let enemy_data = {};
 /* Sets up the adventure pane */
 function start_adventure() {
-    $("#character").removeClass("hidden");
+    $("#workshop_adv").removeClass("hidden"); /* Add new workshop recipes! */
+    $("#character").removeClass("hidden");    /* Show adventure panels */
     $("#events").removeClass("hidden");
-    $("#events_topbar").html("Adventure!");
+    $("#events_topbar").html("Adventure!");   /* Set up text for intro */
     $("#events_content").html("Welcome to Adventure Mode! <br /> I\'m glad you want to adventure, but this feature is still a long ways from being finished. Please message me on discord if you manage to get this far though! <br />");
     $("#events_content").append("<span style='color: red'>Note: Until this announcement is removed, adventure mode gives nothing and takes nothing. Progress on it will not be saved between reloads. It exists purely for testing purposes. <em></em></span><br />");
     $("#events_content").append("<span class='clickable' onclick='run_adventure(\"moon\")'>Start adventure!</span>");
@@ -53,7 +54,7 @@ function run_adventure(location: string) {
     let available_encounters = [];
     let forced_encounters = [];
     let total_weight: number = 0;
-    locations[location].forEach(function (loc) {
+    locations[location].encounters.forEach(function (loc) {
         if (loc.condition()) { /* If the encounter can happen... */
             if (loc.weight > 0) { /* If not forced encounter... */
                 available_encounters.push(loc); /* Add encounter */

@@ -13,11 +13,12 @@ let events = [
     ({
         "condition": function () { return buildings["bank"].amount > 3; },
         "run_event": function () {
-            /* Gain 0-29s of bank raw money production + 10 money for those with few banks. Capped at 200-250. */
-            let money_gain = Math.round(buildings["bank"].amount * buildings["bank"].generation["money"] * 20 * Math.random() + 10);
+            /* Gain 0-10m of bank raw money production + 10 money for those with few banks. */
+            let money_gain = Math.round(buildings["bank"].amount * buildings["bank"].generation["money"] * 600 * Math.random() + 10);
             if (buildings["big_bank"].amount > 0 && buildings["big_bank"].on) {
                 /* If they have some big banks and they're on, give some extra */
-                money_gain += buildings["big_bank"].generation["money"] * buildings["big_bank"].amount * 45
+                money_gain += buildings["big_bank"].generation["money"] * buildings["big_bank"].amount * 400
+                money_gain *= 1.3;
             }
             let antique_item = "";
             if (buildings["s_time_magic"].on && Math.random() > .5) {
@@ -142,7 +143,8 @@ let events = [
             let gold_amount = (100 * event_flags["artifacts_found"]).toString();
             content += "<span onclick='resources.gold.amount += " + gold_amount + "; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained " + gold_amount + " gold\");' class='clickable'>Melt it down</span><br>";
             if (resources["refined_mana"].amount > 500) {
-                content += "<span onclick='resources.refined_mana.amount += 500; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 500 refined mana\");' class='clickable'>Extract magic</span><br>";
+                let refined_amount = Math.round(Math.pow(1000, 1 - 0.01 * event_flags["artifacts_found"])).toString()
+                content += "<span onclick='resources.refined_mana.amount += " + refined_amount + "; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained " + refined_amount + " refined mana\");' class='clickable'>Extract magic</span><br>";
             }
             add_log_elem("You found an artifact!");
             $("#events_content").html(content);
@@ -162,15 +164,16 @@ let events = [
             if (event_flags["demon_trades"] >= 10) {
                 content += "<span style='color: red'>You bleed as they approach. </span><br />"
             }
+            let diamond_gain = Math.round(300 * (event_flags["demon_trades"] * .5 + 1)).toString();
             content += "<span onclick=' " +
-                "resources.diamond.amount += 300;" +
+                "resources.diamond.amount +=" + diamond_gain + ";" +
                 "event_flags[\"demon_trades\"] += 1;" +
                 "$(\"#events\").addClass(\"hidden\"); " +
-                "add_log_elem(\"Gained 300 diamond... at what cost?\");'" +
+                "add_log_elem(\"Gained " + diamond_gain + " diamond... at what cost?\");'" +
                 "class='clickable'>Buy Diamond</span><br>";
             if (event_flags["demon_trades"] > 5) {
                 content += "<span onclick='" +
-                    "resources.gold.amount += 1000;" +
+                    "resources.gold.amount += 5000;" +
                     "event_flags[\"demon_trades\"] += 15;" +
                     "$(\"#events\").addClass(\"hidden\"); " +
                     "add_log_elem(\"You sold your soul. I hope you&rsquo;re happy.\");'" +
@@ -180,7 +183,7 @@ let events = [
                 "resources.iron.amount -= 500;" +
                 "event_flags[\"demon_trades\"] -= 1;" +
                 "$(\"#events\").addClass(\"hidden\"); " +
-                "add_log_elem(\"Demons killed using 500 iron as weapons.\");'" +
+                "add_log_elem(\"Demons killed by throwing 500 iron bars at them.\");'" +
                 "class='clickable'>Fight them!</span><br>";
 
             add_log_elem("Demons came to trade with you.");
@@ -269,7 +272,11 @@ function force_event(id: number) {
 function handle_event(set_timer: boolean = true) {
     /* Reset our handle_event timeout */
     if (set_timer) {
-        setTimeout(handle_event, 2 * 60000 + Math.random() * 60000 * 2);
+        let to_next_event = 2 * 60000 + Math.random() * 60000 * 2;
+        if (purchased_upgrades.indexOf("more_events") != -1) {
+            to_next_event *= .7;
+        }
+        setTimeout(handle_event, to_next_event);
     }    
     /* Must have some mana to get events */
     if (buildings["s_manastone"].amount < 1) { return; }

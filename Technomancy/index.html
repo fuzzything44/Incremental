@@ -17,7 +17,7 @@
 </head>
 <body>
     <div style="font-size: small; position:absolute; top: 0;">
-        v1.18.0 | 
+        v1.18.1 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none; color: lightgray;">Changelog</a> |
         <a href="http://crappy-incremental.wikia.com/wiki/Crappy_Incremental_Wiki" target="_blank" style="text-decoration: none; color: lightgray;">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none; color: lightgray;">Discord</a> |
@@ -141,23 +141,42 @@
                     <div id="workshop_option_bar" class="hidden" onclick="event.stopPropagation()" style="position: absolute; top: 2.5em; left: 0; background: #222; z-index: 1;">
                         <div class="clickable">
                             <table>
-                                <tr>
-                                    <td class="clickable" onclick="s_workshop_set('glass')">(50) Glass</td>
-                                    <td>100 Sand</td>
-                                </tr>
-                                <tr>
-                                    <td class="clickable" onclick="s_workshop_set('steel_beam')">(25) Steel Beam</td>
-                                    <td>500 Iron</td>
-                                    <td>500 Coal</td>
-                                </tr>
-                                <tr>
-                                    <td class="clickable" onclick="s_workshop_set('ink')">(50) Ink</td>
-                                    <td>50 Oil</td>
-                                </tr>
-                                <tr>
-                                    <td class="clickable" onclick="s_workshop_set('money')">(1500) Money</td>
-                                    <td>10 Gold</td>
-                                </tr>
+                                <tbody>
+                                    <tr>
+                                        <td class="clickable" onclick="s_workshop_set('glass')">(50) Glass</td>
+                                        <td>100 Sand</td>
+                                        <td>5s</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="clickable" onclick="s_workshop_set('steel_beam')">(25) Steel Beam</td>
+                                        <td>500 Iron<br />500 Coal</td>
+                                        <td>10s</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="clickable" onclick="s_workshop_set('ink')">(50) Ink</td>
+                                        <td>50 Oil</td>
+                                        <td>10s</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="clickable" onclick="s_workshop_set('money')">(1500) Money</td>
+                                        <td>10 Gold</td>
+                                        <td>15s</td>
+                                    </tr>
+                                </tbody>
+                                <tbody id="workshop_adv" class="hidden">
+                                    <tr><td colspan="3" align="center">Adventuring Supplies</td></tr>
+                                    <tr>
+                                        <td class="clickable" onclick="s_workshop_set('test_adv')">(!) Test</td>
+                                        <td>10 Iron</td>
+                                        <td>2m30s</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="clickable" onclick="s_workshop_set('test_adv')">(0) Useless</td>
+                                        <td>10 Iron</td>
+                                        <td>2m30s</td>
+                                    </tr>
+                                </tbody>
+
                             </table>
                         </div>
                     </div>

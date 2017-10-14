@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.18.1:
+Add upgrade for more common events. Investments now gain much more money. Artifacts give more refined mana but it decreases over time. Demons give you more stuff. Workshop bar now changes color depending on if it is working or not.
+
 v1.18.0:
 Time rewind costs more mana. Added upgrade to make time rewind cheaper. Reduced bribing mana cost back to what it was. Uranium upgrades now take having 200 mana to show up.
 

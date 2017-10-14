@@ -1087,7 +1087,7 @@ function set_initial_state() {
             },
             "tooltip": "Throw away some extra time. You didn't need that, did you? <br /> Costs 30000 time.",
             "name": "Time removal",
-            "image": "power_shield.png",
+            "image": "shield_power.png",
         },
         "uranium_finance": {
             "unlock": function () { return typeof event_flags["bribed_politician"] != "undefined" && event_flags["bribed_politician"] == "money" && buildings["s_manastone"].amount >= 200; },
@@ -1135,6 +1135,17 @@ function set_initial_state() {
             "tooltip": "Research how to use uranium for energy. <br /> Costs 100M money. <br /> Requires 20 research.",
             "name": "Uranium Research",
             "image": "uranium.png",
+        },
+        "more_events": {
+            "unlock": function () { return resources["uranium"].amount > 10; },
+            "purchase": function () { },
+            "cost": {
+                "time": 20000,
+                "refined_mana": 10000,
+            },
+            "tooltip": "Events are more common. <br /> Costs 20,000 time, 10,000 refined mana.",
+            "name": "Unlimited Events",
+            "image": "shield_on.png",
         },
     };
     event_flags = {};
