@@ -19,9 +19,9 @@ var locations = {
                 "weight": 0,
                 "title": "Adventure!",
                 "run_encounter": function () {
-                    $("#events_content").html("<span class='clickable'>Add</span> or <span class='clickable'>Remove</span> items from your ship.<br />");
+                    $("#events_content").html("<span class='clickable'>Add</span> or <span class='clickable'>Remove</span> items from your ship inventory.<br />");
                     /* Somehow we handle adding of items to ship inventory. */
-                    $("#events_content > span").last().prev().click(function () {
+                    $("#events_content > span").last().prev().click(function add_to_inv() {
                         $("#events_topbar").html("Stock Your Ship");
                         $("#events_content").html("<span>Add Fuel: <input id='add_fuel' type='number' min='1'/><span class='clickable'>Add!</span></span><br />");
                         $("#events_content > span > span").last().click(function () {
@@ -39,12 +39,28 @@ var locations = {
                                 alert("Not enough fuel.");
                             }
                         });
+                        var _loop_1 = function (i) {
+                            $("#events_content").append("<span class='clickable'>Add</span> " + gen_equipment(adventure_data.warehouse[i]).name + "<br />");
+                            $("#events_content > span").last().click(function (e) {
+                                /* They have space to add it */
+                                if (adventure_data.inventory_size - (adventure_data.inventory_fuel + adventure_data.inventory.length) > 0) {
+                                    /* Remove item from warehouse and add it to inventory */
+                                    adventure_data.inventory.push(adventure_data.warehouse.splice(i, 1)[0]);
+                                    update_inventory();
+                                    add_to_inv();
+                                }
+                            });
+                        };
+                        for (var i = 0; i < adventure_data.warehouse.length; i++) {
+                            _loop_1(i);
+                        }
                         $("#events_content").append("<span class='clickable' onclick='run_adventure(\"home\");'>Go Back</span>");
-                    });
+                    }); /* End adding items to ship */
                     /* Somehow we handle removing items from ship inventory */
-                    $("#events_content > span").last().click(function () {
+                    $("#events_content > span").last().click(function rem_from_inv() {
                         alert('Sorry, not ready yet.');
-                    });
+                    }); /* End removing items from ship. */
+                    $("#events_content").append("<span class='clickable' onclick='set_equipment();'>Equip</span> your ship <br />");
                     $("#events_content").append("<span class='clickable' onclick='start_adventure();'>Go Back</span>");
                 }
             }],
@@ -77,9 +93,9 @@ var locations = {
                 },
             }),
         ],
-        "connects_to": ["home"],
+        "connects_to": [],
         "enter_cost": 1,
-        "leave_cost": 0,
+        "leave_cost": 1,
         "name": "The Moon",
     },
 };

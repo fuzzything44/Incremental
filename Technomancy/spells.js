@@ -224,7 +224,7 @@ var craftable_items = {
         },
         "return": 1500,
     },
-    "test_adv": {
+    "basic_weapon": {
         "time": 150000,
         "adventure_item": true,
         "costs": {
@@ -270,14 +270,15 @@ function s_workshop_update(delta_time) {
         $("#workshop_progress_bar").css("background-color", "red");
         /* Item finished! */
         if (workshop_elapsed_time >= workshop_time_total) {
-            add_log_elem("Finished crafting " + workshop_item.replace("_", " "));
             /* Give them the item */
             if (craftable_items[workshop_item].adventure_item) {
                 /* TODO: Handle adventure mode items. Once adventure mode exists. */
-                alert("You made an adventure mode thing! It's not available yet!");
+                adventure_data.warehouse.push({ name: workshop_item });
+                add_log_elem("Finished crafting " + gen_equipment({ name: workshop_item }).name);
             }
             else {
                 resources[workshop_item].amount += craftable_items[workshop_item].return;
+                add_log_elem("Finished crafting " + workshop_item.replace("_", " "));
             }
             workshop_item = "";
         }

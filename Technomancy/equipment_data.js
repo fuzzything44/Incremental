@@ -12,7 +12,7 @@ var equipment = {
                 update_combat(player_data["actions_left"]);
             });
         },
-        equip_type: "engine",
+        type: "engine",
         name: "Basic Engine",
     },
     /* Shields */
@@ -21,7 +21,7 @@ var equipment = {
             player_data["max_shields"] += 3;
             player_data["shields"] += 3;
         },
-        equip_type: "shield",
+        type: "shield",
         name: "Basic Shields",
     },
     /* Weapons */
@@ -94,7 +94,7 @@ var equipment = {
                 update_combat(3);
             });
         },
-        equip_type: "weapon",
+        type: "weapon",
         name: "Small Laser",
     },
 };

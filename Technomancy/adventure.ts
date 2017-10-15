@@ -14,7 +14,8 @@
     },
     inventory_size: 100,
     inventory_fuel: 0,
-    inventory: [],
+    inventory: [], /* Items in ship. Limited size. */
+    warehouse: [], /* Everything they have. */
     current_location: "home",
 };
 
@@ -39,15 +40,21 @@ function start_adventure() {
     locations[adventure_data.current_location].connects_to.forEach(function (loc) {
         if (locations[loc].unlocked()) {
             let fuel_cost = (locations[loc].enter_cost + locations[adventure_data.current_location].leave_cost).toString()
-            $("#events_content").append("<span class='clickable' onclick='travel(\"" + loc +"\");'>Go to " + locations[loc].name + " (" + fuel_cost + ")</span>")
+            $("#events_content").append("<span class='clickable' onclick='travel(\"" + loc +"\");'>Go to " + locations[loc].name + " (" + fuel_cost + ")</span><br />")
         }
     });
+    if (adventure_data.current_location != "home") {
+        $("#events_content").append("<span class='clickable' onclick='travel(\"home\");'>Go Home (0)</span>")
+    }
 }
 
 function travel(where: string) {
     let fuel_cost = locations[where].enter_cost + locations[adventure_data.current_location].leave_cost;
     if (where == adventure_data.current_location) {
         fuel_cost = locations[where].enter_cost;
+    }
+    if (where == "home") { /* Going home never costs anything, not even exit costs. */
+        fuel_cost = 0;
     }
     if (adventure_data.inventory_fuel >= fuel_cost) {
         adventure_data.current_location = where;
@@ -66,13 +73,38 @@ function update_inventory() {
 
     $("#character_content").append("Ship Inventory (" + (adventure_data.inventory.length + adventure_data.inventory_fuel).toString() + "/" + adventure_data.inventory_size.toString() + "): <br>");
     $("#character_content").append("Fuel: " + adventure_data.inventory_fuel.toString() + "<br />");
-
+    adventure_data.inventory.forEach(function (item) {
+        $("#character_content").append(gen_equipment(item).name + "<br />");
+    });
 }
 
 function set_equipment() {
-    $("#events_topbar").html("Equipment Management");
-    $("#events_content").html("You think you can do stuff, but you can't. <br> At least you can see what you have equipped to your ship.")
     update_inventory();
+    $("#events_topbar").html("Equipment Management");
+    $("#events_content").html("Equipment Manager<br />");
+    $("#events_content").append("<span class='clickable' onclick='travel(\"home\")'>Back</span>")
+    /* Our equipment types and lists of equipment we have that goes to them. Each element is an object with equip and warehouse_index */
+    let equip_mappings = { "engine": [], "shield": [], "weapon": [] };
+    for (let i = 0; i < adventure_data.warehouse.length; i++) {
+        /* Generate each item only once. */
+        let generated = gen_equipment(adventure_data.warehouse[i]);
+
+        /* Item is one of our equip types */
+        if (equip_mappings[generated.type]) {
+            equip_mappings[generated.type].push({equip: generated, warehouse_index: i});
+        }
+    }
+
+    /* For each equip type, add data for it. */
+    Object.keys(equip_mappings).forEach(function (type) {
+        $("#events_content").append("<hr />" + type.charAt(0).toUpperCase() + type.slice(1) + "s: <br />");
+        /* Add all engine items. */
+        equip_mappings[type].forEach(function (item) {
+            $("#events_content").append("Unknown Item");
+        });
+    });
+
+
 }
 
 /* Selects an adventure at a given location and runs it */
