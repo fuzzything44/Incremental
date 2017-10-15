@@ -12,23 +12,50 @@
         weapon_2: null,
         weapon_3: null,
     },
+    inventory_size: 100,
+    inventory_fuel: 0,
     inventory: [],
+    current_location: "home",
 };
 
 let player_data = {};
 let enemy_data = {};
+
+
 /* Sets up the adventure pane */
 function start_adventure() {
-    $("#workshop_adv").removeClass("hidden"); /* Add new workshop recipes! */
     $("#character").removeClass("hidden");    /* Show adventure panels */
     $("#events").removeClass("hidden");
-    $("#events_topbar").html("Adventure!");   /* Set up text for intro */
+    update_inventory();
+
+    /* Location name */
+    $("#events_topbar").html(locations[adventure_data.current_location].name); 
+    /* Let them choose to adventure there or go somewhere else. */
     $("#events_content").html("Welcome to Adventure Mode! <br /> I\'m glad you want to adventure, but this feature is still a long ways from being finished. Please message me on discord if you manage to get this far though! <br />");
     $("#events_content").append("<span style='color: red'>Note: Until this announcement is removed, adventure mode gives nothing and takes nothing. Progress on it will not be saved between reloads. It exists purely for testing purposes. <em></em></span><br />");
-    $("#events_content").append("<span class='clickable' onclick='run_adventure(\"moon\")'>Start adventure!</span>");
-    $("#events_content").append("<span class='clickable' onclick='set_equipment()'>Build Your Spaceship</span>");
+
+    $("#events_content").append("<span class='clickable' onclick='travel(\"" + adventure_data.current_location + "\")'>Stay Here (" + locations[adventure_data.current_location].enter_cost.toString() + ")</span><br />");
+
+    locations[adventure_data.current_location].connects_to.forEach(function (loc) {
+        if (locations[loc].unlocked()) {
+            let fuel_cost = (locations[loc].enter_cost + locations[adventure_data.current_location].leave_cost).toString()
+            $("#events_content").append("<span class='clickable' onclick='travel(\"" + loc +"\");'>Go to " + locations[loc].name + " (" + fuel_cost + ")</span>")
+        }
+    });
 }
 
+function travel(where: string) {
+    let fuel_cost = locations[where].enter_cost + locations[adventure_data.current_location].leave_cost;
+    if (where == adventure_data.current_location) {
+        fuel_cost = locations[where].enter_cost;
+    }
+    if (adventure_data.inventory_fuel >= fuel_cost) {
+        adventure_data.current_location = where;
+        adventure_data.inventory_fuel -= fuel_cost;
+        update_inventory();
+        run_adventure(where);
+    }
+}
 function update_inventory() {
     $("#character_content").html('Your Ship: <br>');
     $("#character_content").append('Engines: '  + (adventure_data.ship.engine ? gen_equipment(adventure_data.ship.engine).name : "None") + "<br>");
@@ -37,8 +64,8 @@ function update_inventory() {
     $("#character_content").append('Weapon 2: ' + (adventure_data.ship.weapon_2 ? gen_equipment(adventure_data.ship.weapon_2).name : "None") + "<br>");
     $("#character_content").append('Weapon 3: ' + (adventure_data.ship.weapon_3 ? gen_equipment(adventure_data.ship.weapon_3).name : "None") + "<hr>");
 
-    $("#character_content").append("Inventory: <br>");
-    $("#character_content").append("Nothing");
+    $("#character_content").append("Ship Inventory (" + (adventure_data.inventory.length + adventure_data.inventory_fuel).toString() + "/" + adventure_data.inventory_size.toString() + "): <br>");
+    $("#character_content").append("Fuel: " + adventure_data.inventory_fuel.toString() + "<br />");
 
 }
 
@@ -84,6 +111,7 @@ function run_adventure(location: string) {
         $("#events_content").html("Something went wrong and no encounter could be selected. Please contact fuzzything44 about this. Include in your report where you were trying to adventure.");
         return;
     }
+    $("#events_topbar").html(chosen_encounter.title);
     chosen_encounter.run_encounter();
     //setup_combat({});
 

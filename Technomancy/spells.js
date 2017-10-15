@@ -251,6 +251,12 @@ function s_workshop_set(item) {
     $("#workshop_progress_bar").css("width", "0");
 }
 function s_workshop_update(delta_time) {
+    /* Add new recipes! */
+    /* Base adventure mode recipes */
+    if (resources["fuel"].amount > 0) {
+        $("#workshop_adv").removeClass("hidden");
+    }
+    /* Tick building */
     if (workshop_item == "") {
         workshop_elapsed_time = 0;
         $("#workshop_progress_bar").css("width", "17.5em");
