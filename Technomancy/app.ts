@@ -1440,8 +1440,16 @@ function update() {
         }
         /* Formats it so that it says "Resource name: amount" */
         $("#" + key + " span").first().html((key.charAt(0).toUpperCase() + key.slice(1)).replace("_", " ") + ": " + format_num(Math.max(0, resources[key].amount), false));
-        /* Same for tooltip */
+        /* Same for per sec */
         $("#" + key + "_per_sec").text((resources_per_sec[key] > 0 ? "+" : "") + format_num(resources_per_sec[key]) + "/s");
+        /* Color per sec */
+        if (resources_per_sec[key] < 0) {
+            $("#" + key + "_per_sec").css("color", "red");
+        } else if (resources_per_sec[key] > 0) {
+            $("#" + key + "_per_sec").css("color", "white");
+        } else {
+            $("#" + key + "_per_sec").text("");
+        }
     });
 
     /* Unhide buildings */

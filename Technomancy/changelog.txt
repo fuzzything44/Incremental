@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v1.18.2:
+Nothing shows in the /s area if you're getting 0/s, if it's negative it shows up red. 
+
 v1.18.1:
 Add upgrade for more common events. Investments now gain much more money. Artifacts give more refined mana but it decreases over time. Demons give you more stuff. Workshop bar now changes color depending on if it is working or not.
 
