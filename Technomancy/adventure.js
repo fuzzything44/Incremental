@@ -25,18 +25,23 @@ function start_adventure() {
     $("#character").removeClass("hidden"); /* Show adventure panels */
     $("#events").removeClass("hidden");
     update_inventory();
+    /* Load location */
+    var location_data = {};
+    $.getScript("locations/" + adventure_data.current_location + ".js", function (res) { location_data = eval(res); });
     /* Location name */
-    $("#events_topbar").html(locations[adventure_data.current_location].name);
+    $("#events_topbar").html(location_data.name);
     /* Let them choose to adventure there or go somewhere else. */
     $("#events_content").html("Welcome to Adventure Mode! <br /> I\'m glad you want to adventure, but this feature is still a long ways from being finished. Please message me on discord if you manage to get this far though! <br />");
     $("#events_content").append("<span style='color: red'>Note: Until this announcement is removed, adventure mode gives nothing and takes nothing. Progress on it will not be saved between reloads. It exists purely for testing purposes. <em></em></span><br />");
-    var color = locations[adventure_data.current_location].leave_cost <= adventure_data.inventory_fuel ? "white" : "red";
-    $("#events_content").append("<span class='clickable' onclick='travel(\"" + adventure_data.current_location + "\")' style='color:" + color + "'>Stay Here (" + locations[adventure_data.current_location].leave_cost.toString() + ")</span><br />");
-    locations[adventure_data.current_location].connects_to.forEach(function (loc) {
-        if (locations[loc].unlocked()) {
-            var fuel_cost = (locations[loc].enter_cost + locations[adventure_data.current_location].leave_cost).toString();
+    var color = location_data.leave_cost <= adventure_data.inventory_fuel ? "white" : "red";
+    $("#events_content").append("<span class='clickable' onclick='travel(\"" + adventure_data.current_location + "\")' style='color:" + color + "'>Search This Area (" + location_data.leave_cost.toString() + ")</span><br />");
+    location_data.connects_to.forEach(function (loc) {
+        var test_connection = {};
+        $.getScript("locations/" + loc + ".js", function (res) { test_connection = eval(res); });
+        if (test_connection.unlocked()) {
+            var fuel_cost = (test_connection.enter_cost + location_data.leave_cost).toString();
             var color_1 = fuel_cost <= adventure_data.inventory_fuel ? "white" : "red";
-            $("#events_content").append("<span class='clickable' onclick='travel(\"" + loc + "\");' style='color:" + color_1 + ";'>Go to " + locations[loc].name + " (" + fuel_cost + ")</span><br />");
+            $("#events_content").append("<span class='clickable' onclick='travel(\"" + loc + "\");' style='color:" + color_1 + ";'>Go to " + test_connection.name + " (" + fuel_cost + ")</span><br />");
         }
     });
     if (adventure_data.current_location != "home") {
@@ -44,9 +49,15 @@ function start_adventure() {
     }
 }
 function travel(where) {
-    var fuel_cost = locations[where].enter_cost + locations[adventure_data.current_location].leave_cost;
+    /* Get location data */
+    var location_data = {};
+    var to_where = {};
+    $.getScript("locations/" + adventure_data.current_location + ".js", function (res) { location_data = eval(res); });
+    $.getScript("locations/" + where + ".js", function (res) { to_where = eval(res); });
+    var fuel_cost = to_where.enter_cost + location_data.leave_cost;
+    /* If we're just doing an explore, only charge the exit cost. */
     if (where == adventure_data.current_location) {
-        fuel_cost = locations[where].leave_cost;
+        fuel_cost = to_where.leave_cost;
     }
     if (where == "home") {
         fuel_cost = 0;
@@ -54,6 +65,7 @@ function travel(where) {
     if (adventure_data.inventory_fuel >= fuel_cost) {
         adventure_data.current_location = where;
         adventure_data.inventory_fuel -= fuel_cost;
+        location_data = to_where;
         update_inventory();
         run_adventure(where);
     }
@@ -126,11 +138,14 @@ function set_equipment() {
 }
 /* Selects an adventure at a given location and runs it */
 function run_adventure(location) {
+    /* Get location data. */
+    var location_data = {};
+    $.getScript("locations/" + location + ".js", function (res) { location_data = eval(res); });
     var chosen_encounter = null;
     var available_encounters = [];
     var forced_encounters = [];
     var total_weight = 0;
-    locations[location].encounters.forEach(function (loc) {
+    location_data.encounters.forEach(function (loc) {
         if (loc.condition()) {
             if (loc.weight > 0) {
                 available_encounters.push(loc); /* Add encounter */
@@ -165,9 +180,6 @@ function run_adventure(location) {
     }
     $("#events_topbar").html(chosen_encounter.title);
     chosen_encounter.run_encounter();
-    //setup_combat({});
-    /* Currently player always gets to start.*/
-    //start_turn(player_data);
 }
 /* Sets up combat */
 function setup_combat(enemy_info) {

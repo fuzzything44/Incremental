@@ -1600,6 +1600,11 @@ window.onload = function () {
     });
     /* Start our event system */
     setTimeout(handle_event, 2 * 60000 + Math.random() * 60000 * 2);
+    /* Set up for adventure mode requests */
+    $.ajaxSetup({
+        "async": false,
+        "cache": true,
+    });
 };
 function hack(level) {
     add_log_elem("You cheater :(");

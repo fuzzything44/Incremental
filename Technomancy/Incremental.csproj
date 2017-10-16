@@ -33,7 +33,8 @@
     <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="equipment_data.ts" />
     <TypeScriptCompile Include="events.ts" />
-    <TypeScriptCompile Include="location_data.ts" />
+    <TypeScriptCompile Include="locations\home.ts" />
+    <TypeScriptCompile Include="locations\moon.ts" />
     <TypeScriptCompile Include="spells.ts" />
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,5 @@
-﻿/* 
-* List of locations
+/*
+* Alright, location info goes here because this is where you start.
 * Each location has a name and some various encounters that can happen.
 * An encounter consists of the following:
 *   condition(): Can the encounter actually happen? If not, removed from the options when selecting an encounter.
@@ -8,12 +8,12 @@
 *   title: what the top gets set to.
 *   types: What types of encounter so some ones can be selectively removed. List of string types. Current types are:
 *       combat              noncombat
-*       
+*
 */
-let locations = {
-    "home": {
-        "unlocked": function () { return true; },
-        "encounters": [{
+({
+    "unlocked": function () { return true; },
+    "encounters": [
+        ({
             "condition": function () { return true; },
             "types": [],
             "weight": 0,
@@ -25,9 +25,9 @@ let locations = {
                     $("#events_topbar").html("Stock Your Ship");
                     $("#events_content").html("<span>Add Fuel: <input id='add_fuel' type='number' min='1'/><span class='clickable'>Add!</span></span><br />");
                     $("#events_content > span > span").last().click(function () {
-                        let fuel_to_add = parseInt($("#add_fuel").val())
+                        var fuel_to_add = parseInt($("#add_fuel").val());
                         /* Check to make sure the ship has enough space. Space is total size - used space. */
-                        let ship_space = adventure_data.inventory_size - (adventure_data.inventory_fuel + adventure_data.inventory.length);
+                        var ship_space = adventure_data.inventory_size - (adventure_data.inventory_fuel + adventure_data.inventory.length);
                         if (ship_space < fuel_to_add) {
                             fuel_to_add = ship_space;
                         }
@@ -35,11 +35,12 @@ let locations = {
                             adventure_data.inventory_fuel += fuel_to_add;
                             //resources["fuel"].amount -= fuel_to_remove;
                             update_inventory();
-                        } else {
+                        }
+                        else {
                             alert("Not enough fuel.");
                         }
                     });
-                    for (let i = 0; i < adventure_data.warehouse.length; i++) {
+                    var _loop_1 = function (i) {
                         $("#events_content").append("<span class='clickable'>Add</span> " + gen_equipment(adventure_data.warehouse[i]).name + "<br />");
                         $("#events_content > span").last().click(function (e) {
                             /* They have space to add it */
@@ -50,18 +51,18 @@ let locations = {
                                 add_to_inv();
                             }
                         });
+                    };
+                    for (var i = 0; i < adventure_data.warehouse.length; i++) {
+                        _loop_1(i);
                     }
                     $("#events_content").append("<span class='clickable' onclick='run_adventure(\"home\");'>Go Back</span>");
-                    
                 }); /* End adding items to ship */
-
-
                 /* Somehow we handle removing items from ship inventory */
                 $("#events_content > span").last().click(function rem_from_inv() {
                     $("#events_topbar").html("Empty Your Ship");
                     $("#events_content").html("<span>Remove Fuel: <input id='remove_fuel' type='number' min='1'/><span class='clickable'>Add!</span></span><br />");
                     $("#events_content > span > span").last().click(function () {
-                        let fuel_to_remove = parseInt($("#remove_fuel").val())
+                        var fuel_to_remove = parseInt($("#remove_fuel").val());
                         /* Check to make sure they can remove that much */
                         if (adventure_data.inventory_fuel < fuel_to_remove) {
                             fuel_to_remove = adventure_data.inventory_fuel;
@@ -70,7 +71,7 @@ let locations = {
                         //resources["fuel"].amount += fuel_to_remove;
                         update_inventory();
                     });
-                    for (let i = 0; i < adventure_data.inventory.length; i++) {
+                    var _loop_2 = function (i) {
                         $("#events_content").append("<span class='clickable'>Remove</span> " + gen_equipment(adventure_data.inventory[i]).name + "<br />");
                         $("#events_content > span").last().click(function (e) {
                             /* Remove item from warehouse and add it to inventory */
@@ -78,49 +79,20 @@ let locations = {
                             update_inventory();
                             rem_from_inv();
                         });
+                    };
+                    for (var i = 0; i < adventure_data.inventory.length; i++) {
+                        _loop_2(i);
                     }
                     $("#events_content").append("<span class='clickable' onclick='run_adventure(\"home\");'>Go Back</span>");
-
                 }); /* End removing items from ship. */
-
                 $("#events_content").append("<span class='clickable' onclick='set_equipment();'>Equip</span> your ship <br />");
-
                 $("#events_content").append("<span class='clickable' onclick='start_adventure();'>Go Back</span>");
             }
-        }],
-        "connects_to": ["moon"],
-        "enter_cost": 0,
-        "leave_cost": 0,
-        "name": "Home Planet",  
-    },
-    "moon": {
-        "unlocked": function () { return true; },
-        "encounters": [
-            ({
-                "condition": function () { return true; },
-                "types": ["combat"],
-                "weight": 1,
-                "title": "A Space... what?",
-                "run_encounter": function () {
-                    $("#events_content").html("While traveling to the moon, you encounter a space squid. It's not happy. <br><span class='clickable'>Fight!</span>");
-                    $("#events_content").children().last().click(() => { setup_combat({}); start_turn(player_data); });
-                },
-            }), /* End space squid encounter */
-            ({
-                "condition": function () { return true; },
-                "types": ["combat"],
-                "weight": 1,
-                "title": "TEST ENCOUNTER",
-                "run_encounter": function () {
-                    $("#events_content").html("This is an encounter test. It does things. <br><span class='clickable'>Yay things!</span>");
-                    $("#events_content").children().last().click(() => { alert("Haha no. There's no use to it."); start_adventure(); });
-                },
-            }), /* End mom encounter */
-        ], /* End encounters */
-        "connects_to": [],
-        "enter_cost": 1,
-        "leave_cost": 1,
-        "name": "The Moon",
-    },
-
-};
+        }),
+    ],
+    "connects_to": ["moon"],
+    "enter_cost": 0,
+    "leave_cost": 0,
+    "name": "Home Planet",
+});
+//# sourceMappingURL=home.js.map
