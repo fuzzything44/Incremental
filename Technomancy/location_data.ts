@@ -33,6 +33,7 @@ let locations = {
                         }
                         if (resources["fuel"].amount > fuel_to_add) {
                             adventure_data.inventory_fuel += fuel_to_add;
+                            //resources["fuel"].amount -= fuel_to_remove;
                             update_inventory();
                         } else {
                             alert("Not enough fuel.");
@@ -57,8 +58,28 @@ let locations = {
 
                 /* Somehow we handle removing items from ship inventory */
                 $("#events_content > span").last().click(function rem_from_inv() {
-                    alert('Sorry, not ready yet.');
-
+                    $("#events_topbar").html("Empty Your Ship");
+                    $("#events_content").html("<span>Remove Fuel: <input id='remove_fuel' type='number' min='1'/><span class='clickable'>Add!</span></span><br />");
+                    $("#events_content > span > span").last().click(function () {
+                        let fuel_to_remove = parseInt($("#remove_fuel").val())
+                        /* Check to make sure they can remove that much */
+                        if (adventure_data.inventory_fuel < fuel_to_remove) {
+                            fuel_to_remove = adventure_data.inventory_fuel;
+                        }
+                        adventure_data.inventory_fuel -= fuel_to_remove;
+                        //resources["fuel"].amount += fuel_to_remove;
+                        update_inventory();
+                    });
+                    for (let i = 0; i < adventure_data.inventory.length; i++) {
+                        $("#events_content").append("<span class='clickable'>Remove</span> " + gen_equipment(adventure_data.inventory[i]).name + "<br />");
+                        $("#events_content > span").last().click(function (e) {
+                            /* Remove item from warehouse and add it to inventory */
+                            adventure_data.warehouse.push(adventure_data.inventory.splice(i, 1)[0]);
+                            update_inventory();
+                            rem_from_inv();
+                        });
+                    }
+                    $("#events_content").append("<span class='clickable' onclick='run_adventure(\"home\");'>Go Back</span>");
 
                 }); /* End removing items from ship. */
 

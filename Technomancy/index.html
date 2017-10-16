@@ -442,16 +442,16 @@
 
 
     </div>
-    <div id="events" class="hidden">
+    <div id="events" class="hidden" onmouseover="document.body.style.overflow='hidden';" onmouseout="document.body.style.overflow='auto';">
         <div class="window_topbar">
             <span id="events_topbar">Something Happened</span>
             <span id="close_events" onclick="$('#events').addClass('hidden'); $('#events_content').html(''); $('#character').addClass('hidden');">X</span>
         </div>
         <div id="events_content"></div>
     </div>
-    <div id="character" class="hidden">
+    <div id="character" class="hidden" onmouseover="document.body.style.overflow='hidden';" onmouseout="document.body.style.overflow='auto';">
         <div class="window_topbar">Your stuff</div>
-        <div id="character_content" onmouseover="document.body.style.overflow='hidden';" onmouseout="document.body.style.overflow='auto';"></div>
+        <div id="character_content"></div>
     </div>
 </body>
 </html>

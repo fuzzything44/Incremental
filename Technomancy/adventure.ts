@@ -35,12 +35,14 @@ function start_adventure() {
     $("#events_content").html("Welcome to Adventure Mode! <br /> I\'m glad you want to adventure, but this feature is still a long ways from being finished. Please message me on discord if you manage to get this far though! <br />");
     $("#events_content").append("<span style='color: red'>Note: Until this announcement is removed, adventure mode gives nothing and takes nothing. Progress on it will not be saved between reloads. It exists purely for testing purposes. <em></em></span><br />");
 
-    $("#events_content").append("<span class='clickable' onclick='travel(\"" + adventure_data.current_location + "\")'>Stay Here (" + locations[adventure_data.current_location].enter_cost.toString() + ")</span><br />");
+    let color = locations[adventure_data.current_location].leave_cost <= adventure_data.inventory_fuel ? "white" : "red";
+    $("#events_content").append("<span class='clickable' onclick='travel(\"" + adventure_data.current_location + "\")' style='color:" + color + "'>Stay Here (" + locations[adventure_data.current_location].leave_cost.toString() + ")</span><br />");
 
     locations[adventure_data.current_location].connects_to.forEach(function (loc) {
         if (locations[loc].unlocked()) {
             let fuel_cost = (locations[loc].enter_cost + locations[adventure_data.current_location].leave_cost).toString()
-            $("#events_content").append("<span class='clickable' onclick='travel(\"" + loc +"\");'>Go to " + locations[loc].name + " (" + fuel_cost + ")</span><br />")
+            let color = fuel_cost <= adventure_data.inventory_fuel ? "white" : "red";
+            $("#events_content").append("<span class='clickable' onclick='travel(\"" + loc +"\");' style='color:" + color + ";'>Go to " + locations[loc].name + " (" + fuel_cost + ")</span><br />")
         }
     });
     if (adventure_data.current_location != "home") {
@@ -51,7 +53,7 @@ function start_adventure() {
 function travel(where: string) {
     let fuel_cost = locations[where].enter_cost + locations[adventure_data.current_location].leave_cost;
     if (where == adventure_data.current_location) {
-        fuel_cost = locations[where].enter_cost;
+        fuel_cost = locations[where].leave_cost;
     }
     if (where == "home") { /* Going home never costs anything, not even exit costs. */
         fuel_cost = 0;
@@ -78,6 +80,23 @@ function update_inventory() {
     });
 }
 
+/* Sets the equipment to the proper slot, moves previous to warehouse, moves equipped from warehouse, refreshes equipment menu.*/
+function equip_item(slot: string, index: number) {
+    let to_add = adventure_data.warehouse[index];
+    let to_remove = adventure_data.ship[slot];
+    let add_type = gen_equipment(to_add).type;
+    /* Make sure equipment to set is actually of the proper type */
+    if (add_type == slot || (add_type == "weapon" && slot.slice(0, 6) == "weapon")) {
+        adventure_data.warehouse[index] = to_remove; /* Just swapping slots should make it a bit faster. */
+        /* Unless the equip slot was null, so we need to check that and remove it. */
+        if (to_remove == null) {
+            adventure_data.warehouse.splice(index, 1);
+        }
+        adventure_data.ship[slot] = to_add;
+    }
+    set_equipment();
+}
+
 function set_equipment() {
     update_inventory();
     $("#events_topbar").html("Equipment Management");
@@ -97,10 +116,22 @@ function set_equipment() {
 
     /* For each equip type, add data for it. */
     Object.keys(equip_mappings).forEach(function (type) {
+        /* Do nothing if they don't have anything of the type */
+        if (equip_mappings[type].length == 0) {
+            return;
+        }
         $("#events_content").append("<hr />" + type.charAt(0).toUpperCase() + type.slice(1) + "s: <br />");
         /* Add all engine items. */
         equip_mappings[type].forEach(function (item) {
-            $("#events_content").append("Unknown Item");
+            $("#events_content").append(item.equip.name);
+            if (type != "weapon") { /* 3 weapon slots, so we need to treat them differently. */
+                $("#events_content").append("<span class='clickable' onclick='equip_item(\"" + type + "\"," + item.warehouse_index.toString() + ")'>Equip</span>");
+            } else {
+                $("#events_content").append("<span class='clickable' onclick='equip_item(\"weapon_1\"," + item.warehouse_index.toString() + ")'>Equip</span>");
+                $("#events_content").append("<span class='clickable' onclick='equip_item(\"weapon_2\"," + item.warehouse_index.toString() + ")'>[2]</span>");
+                $("#events_content").append("<span class='clickable' onclick='equip_item(\"weapon_3\"," + item.warehouse_index.toString() + ")'>[3]</span>");
+            }
+            $("#events_content").append("<br />");
         });
     });
 

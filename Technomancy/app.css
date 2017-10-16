@@ -115,6 +115,7 @@
     min-height: 35em;
     min-width: 45em;
     z-index: 1;
+    overflow-y: scroll;
     background-color: #222;
 
     border: solid lightgray 1px;
