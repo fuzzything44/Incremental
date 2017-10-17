@@ -17,7 +17,7 @@
 </head>
 <body>
     <div style="font-size: small; position:absolute; top: 0;">
-        v2.0.1 | 
+        v2.1.0 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none; color: lightgray;">Changelog</a> |
         <a href="http://crappy-incremental.wikia.com/wiki/Crappy_Incremental_Wiki" target="_blank" style="text-decoration: none; color: lightgray;">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none; color: lightgray;">Discord</a> |
@@ -166,9 +166,14 @@
                                 <tbody id="workshop_adv" class="hidden">
                                     <tr><td colspan="3" align="center">Adventuring Supplies</td></tr>
                                     <tr>
-                                        <td class="clickable" onclick="s_workshop_set('basic_weapon')">(1) Small Laser</td>
+                                        <td class="clickable" onclick="s_workshop_set('machine_part')">(1) Machine Part</td>
                                         <td>10 Iron</td>
                                         <td>2m30s</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="clickable" onclick="s_workshop_set('basic_weapon')">(1) Small Laser</td>
+                                        <td>1000 Iron</td>
+                                        <td>5m</td>
                                     </tr>
                                 </tbody>
 
@@ -428,7 +433,6 @@
         <br />
 
         <!-- Adventure Buildings -->
-
         <div style="position: relative" class="hidden">
             <span onclick="destroy_building('hydrogen_mine')" class="building_remove">X</span>
             <span id="building_hydrogen_mine" class="building tooltip">

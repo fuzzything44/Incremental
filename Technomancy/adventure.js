@@ -69,6 +69,24 @@ function travel(where) {
         run_adventure(where);
     }
 }
+/* Checks how many items they have with a name. */
+function count_item(name) {
+    var count = 0;
+    for (var i = 0; i < adventure_data.inventory.length; i++) {
+        if (adventure_data.inventory[i].name == name) {
+            count += 1;
+        }
+    }
+    return count;
+}
+function find_item(name) {
+    for (var i = 0; i < adventure_data.inventory.length; i++) {
+        if (adventure_data.inventory[i].name == name) {
+            return i;
+        }
+    }
+    return -1;
+}
 function update_inventory() {
     $("#character_content").html('Your Ship: <br>');
     $("#character_content").append('Engines: ' + (adventure_data.ship.engine ? gen_equipment(adventure_data.ship.engine).name : "None") + "<br>");

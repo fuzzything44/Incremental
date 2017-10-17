@@ -42,13 +42,37 @@
             "weight": 1,
             "title": "Hydrogen mining",
             "run_encounter": function () {
-                $("#events_content").html("Oh huh. This rock on the moon has a lot of hydrogen in it. You can refine some of it! <br><span class='clickable'>Refine</span>");
+                $("#events_content").html("Oh huh. This rock on the moon has a lot of hydrogen in it. You can <span class='clickable'>refine</span> some of it!<br />");
                 $("#events_content").children().last().click(() => {
                     $("#events_content").html("You manage to find 30000 hydrogen. <br /><span class='clickable' onclick='start_adventure()'>Done</span>");
                     resources["hydrogen"].amount += 30000;
                 });
+                /* If they have a machine part, they can build a mine. */
+                if (count_item("machine_part")) {
+                    $("#events_content").append("Or, you could <span class='clickable'>build</span> a mine on here with that machine part.");
+                    $("#events_content").children().last().click(() => {
+                        adventure_data.inventory.splice(find_item("machine_part"), 1);
+                        buildings["hydrogen_mine"].amount += 1;
+
+                        $("#events_content").html("You set up a hydrogen mine on the moon. <br /><span class='clickable' onclick='start_adventure()'>Done</span>");
+
+                        let comp_state = buildings["hydrogen_mine"].on;
+                        if (comp_state) {
+                            toggle_building_state("hydrogen_mine");
+                        }
+
+                        buildings["hydrogen_mine"].amount += 1;
+                        if (comp_state) { /* Only turn on if it already was on */
+                            toggle_building_state("hydrogen_mine");
+                        }
+                        $("#building_hydrogen_mine > .building_amount").html(buildings["hydrogen_mine"].amount.toString());
+
+                        update_inventory();
+                    });
+                }
             },
-        }), /* End test encounter */
+        }), /* End hydrogen encounter */
+
     ], /* End encounters */
     "connects_to": ["kittens/terminus"],
     "enter_cost": 1,

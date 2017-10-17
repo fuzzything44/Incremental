@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v2.1.0:
+You can now buy iron ore at Cath. Add two library upgrades. Destroying buildings refunds 30% of the build cost. Setting to buy multiple actually updates tooltops properly. Removing fuel says "Remove" instead of "Add". You can make machine parts and build mines on the moon. Making more small lasers is now harder and equally useless.
+
 v2.0.1:
 Space squid rewards you on killing it. It has a slightly different AI now too. Also winning/losing fights is better. 
 

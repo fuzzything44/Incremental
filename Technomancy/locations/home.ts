@@ -61,7 +61,7 @@
             /* Somehow we handle removing items from ship inventory */
             $("#events_content > span").last().click(function rem_from_inv() {
                 $("#events_topbar").html("Empty Your Ship");
-                $("#events_content").html("<span>Remove Fuel: <input id='remove_fuel' type='number' min='1'/><span class='clickable'>Add!</span></span><br />");
+                $("#events_content").html("<span>Remove Fuel: <input id='remove_fuel' type='number' min='1'/><span class='clickable'>Remove</span></span><br />");
                 $("#events_content > span > span").last().click(function () {
                     let fuel_to_remove = parseInt($("#remove_fuel").val())
                     /* Check to make sure they can remove that much */

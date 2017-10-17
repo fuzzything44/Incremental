@@ -231,6 +231,14 @@ let craftable_items = { /* What all they can craft and the specifications on it.
         "return": 1500,
     },
     "basic_weapon": {
+        "time": 60000 * 5,
+        "adventure_item": true,
+        "costs": {
+            "iron": 1000,
+        },
+        "return": 1,
+    },
+    "machine_part": {
         "time": 150000,
         "adventure_item": true,
         "costs": {

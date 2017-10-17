@@ -97,5 +97,10 @@ var equipment = {
         type: "weapon",
         name: "Small Laser",
     },
+    /* Other */
+    "machine_part": {
+        type: "item",
+        name: "Machine Part",
+    },
 };
 //# sourceMappingURL=equipment_data.js.map
