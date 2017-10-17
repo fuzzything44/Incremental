@@ -181,8 +181,11 @@ function run_adventure(location) {
     chosen_encounter.run_encounter();
 }
 /* Sets up combat */
-function setup_combat(enemy_info) {
-    $("#events_topbar").html("Combat Test");
+var on_win = function () { }; /* Called when player wins. If they lose, nothing gets called. */
+var enemy_ai = function () { }; /* Called whenever enemy must take an action, once per second until out of actions. Must use up some amount of actions to avoid an infinite loop! */
+function setup_combat(enemy_info, win_callback, ai) {
+    on_win = win_callback;
+    enemy_ai = ai;
     $("#events_content").html("<span id='combat_log'>Combat Log</span><div id='combat' style='height: 30em; width: 40em; margin: auto;'></div>");
     $("#combat").html("<div id='combat_attack' style='height: 15em; border: solid white 1px;'>Attack</div>");
     $("#combat").append("<div id='combat_stats' style='height: 15em; border: solid white 1px;'>Stats</div>");
@@ -229,14 +232,14 @@ function setup_combat(enemy_info) {
             gen_equipment(adventure_data.ship[equip_type]).on_combat(equip_type);
         }
     });
-    /* Setup enemy. May do this differently in the future. */
+    /* Setup enemy. This is everything the enemy can have. Then modified by enemy info. */
     enemy_data = {
         max_shields: 0,
-        shields: 1,
+        shields: 0,
         power_shields: 0,
         energy: 0,
         energy_left: 0,
-        actions_per_turn: 7,
+        actions_per_turn: 0,
         actions_left: 0,
         weapon_1: {
             charge_level: 0,
@@ -249,7 +252,8 @@ function setup_combat(enemy_info) {
             extra_damage: 0,
             on_charge: function () { },
             on_fire: function () { }
-        }, weapon_3: {
+        },
+        weapon_3: {
             charge_level: 0,
             extra_damage: 0,
             on_charge: function () { },
@@ -258,6 +262,9 @@ function setup_combat(enemy_info) {
         dodge_chance: 0,
         effects: []
     };
+    Object.keys(enemy_info).forEach(function (key) {
+        enemy_data[key] = enemy_info[key];
+    });
 }
 function start_turn(run_on) {
     /* Start a turn, so refresh energy/actions and update effects */
@@ -291,13 +298,11 @@ function remove_effect(to_who, eff_num) {
 function update_combat(actions_used) {
     /* Check for win/loss */
     if (player_data["shields"] < 0) {
-        alert("You lost...");
-        start_adventure();
+        $("#events_content").html("You lost. <br /><span class='clickable' onclick='start_adventure()'>Leave</span>");
         return 1;
     }
     if (enemy_data["shields"] < 0) {
-        alert("You won!");
-        start_adventure();
+        on_win();
         return 1;
     }
     /* Update shields */
@@ -326,8 +331,6 @@ function update_combat(actions_used) {
         }
         $("#combat_energy_" + i.toString()).addClass("energy_box_" + box_state);
     }
-    /* Update weapons + stats. TODO: dynamically update depending on what they have */
-    //$("#weapon").text('(' + player_data["weapon_charge"].toString() + ") Fire Laser [2]");
     /* Update how many actions left. */
     player_data["actions_left"] -= actions_used;
     $("#combat_counter").html(player_data["actions_left"].toString());
@@ -340,16 +343,18 @@ function update_combat(actions_used) {
     return 0;
 }
 function enemy_action() {
+    /* End turn if out of actions */
     if (enemy_data["actions_left"] <= 0) {
         start_turn(player_data);
         return;
     }
-    player_data["shields"] -= 1;
-    enemy_data["actions_left"] -= 1;
+    /* Do whatever we need to do. */
+    enemy_ai();
+    /* Mostly done to check for player death. */
     if (update_combat(0)) {
         return;
     }
-    $("#combat_log").text("Enemy attacks! You take 1 damage. Shields at " + player_data["shields"].toString());
+    /* Let's continue on next second. */
     setTimeout(enemy_action, 1000);
 }
 //# sourceMappingURL=adventure.js.map

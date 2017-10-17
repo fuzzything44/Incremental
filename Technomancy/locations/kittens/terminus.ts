@@ -27,7 +27,7 @@
                     $("#events_content").html("You freeze to death. Well, not quite but it isn't fun. <br /><span class='clickable' onclick='start_adventure()'>Done</span>");
                 });
             },
-        }),
+        }), /* Freeze/melt ice for water */
         ({
             "condition": function () { return adventure_data["has_cryostorage"] == undefined; },
             "types": ["noncombat"],
@@ -41,7 +41,7 @@
                 $("#events_content").append("<span class='clickable' onclick='start_adventure()'>Done</span>");
 
             },
-        }),
+        }), /* Ship storage boost */
         ({
             "condition": function () { return adventure_data["cath_discovery"] == undefined; },
             "types": ["noncombat"],
@@ -52,7 +52,7 @@
                 adventure_data["cath_discovery"] = 0;
                 $("#events_content").append("<span class='clickable' onclick='start_adventure()'>Interesting</span>");
             },
-        }),
+        }), /* Start quest for Cath */
         ({
             "condition": function () { return adventure_data["cath_discovery"] != undefined && adventure_data["cath_discovery"] < 3; },
             "types": ["noncombat"],
@@ -70,7 +70,7 @@
                 adventure_data["cath_discovery"] += 1;
                 $("#events_content").append("<span class='clickable' onclick='start_adventure()'>Continue onwards.</span>");
             },
-        }),
+        }), /* Continue/end quest for Cath. No clue why it's 2 different encounters but whatever. */
     ],
     "connects_to": ["moon", "kittens/cath"],
     "enter_cost": 3,

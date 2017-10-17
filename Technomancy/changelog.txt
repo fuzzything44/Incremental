@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v2.0.1:
+Space squid rewards you on killing it. It has a slightly different AI now too. Also winning/losing fights is better. 
+
 v2.0.0:
 Adventure mode! A total of 4 locations available to explore! A dazzling space squid to fight! Also a boring bugfix with fuel generation. 
 
