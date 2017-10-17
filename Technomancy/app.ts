@@ -690,6 +690,7 @@ function set_initial_state() {
                 "steel_beam": 1.07,
                 "iron": 1.2,
                 "gold": 1.1,
+                "research": 1.2,
             },
             "generation": {
                 "energy": -75,
@@ -697,7 +698,6 @@ function set_initial_state() {
                 "hydrogen": -150,
                 "refined_mana": -1,
                 "fuel": 0.01,
-                "research": 1.2,
             },
             "flavor": "This fuel is... not healthy.",
         },
@@ -1209,6 +1209,7 @@ function prestige() {
         let total_mana = buildings["s_manastone"].amount + mana_gain;
         set_initial_state();
         buildings["s_manastone"].amount = total_mana;
+        adventure_data.current_location = "home"; /* You have to prestige at home. */
         save();
         location.reload();
     }
@@ -1232,6 +1233,7 @@ function save() {
     localStorage["flags"]     = JSON.stringify(event_flags);
     localStorage["upgrades"]  = JSON.stringify(purchased_upgrades);
     localStorage["last_save"] = Date.now();
+    localStorage["adventure"] = JSON.stringify(adventure_data)
     $('#save_text').css('opacity', '1'); setTimeout(() => $('#save_text').css({ 'opacity': '0', 'transition': 'opacity 1s' }), 1000);
     console.log("Saved");
     add_log_elem("Saved!");
@@ -1269,6 +1271,10 @@ function load() {
     console.log("Loading last update");
     if (localStorage.getItem("last_save")) {
         last_update = parseInt(localStorage.getItem("last_save"));
+    }
+    console.log("Loading adventure mode");
+    if (localStorage.getItem("adventure")) {
+        adventure_data = JSON.parse(localStorage.getItem("adventure"));
     }
     purchased_upgrades.forEach(function (upg) {
         let upg_name = remaining_upgrades[upg].name;
@@ -1658,7 +1664,6 @@ window.onload = () => {
     $.ajaxSetup({
         "async": false,
         "cache": true,
-
     });
 };
 

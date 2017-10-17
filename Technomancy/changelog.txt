@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v2.0.0:
+Adventure mode! A total of 4 locations available to explore! A dazzling space squid to fight! Also a boring bugfix with fuel generation. 
+
 v1.18.2:
 Nothing shows in the /s area if you're getting 0/s, if it's negative it shows up red. 
 

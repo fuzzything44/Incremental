@@ -12,6 +12,7 @@
 */
 ({
     "unlocked": function () { return true; },
+    "go_again_text": "Setup your ship",
     "encounters": [
         ({
             "condition": function () { return true; },
@@ -33,7 +34,7 @@
                         }
                         if (resources["fuel"].amount > fuel_to_add) {
                             adventure_data.inventory_fuel += fuel_to_add;
-                            //resources["fuel"].amount -= fuel_to_remove;
+                            resources["fuel"].amount -= fuel_to_add;
                             update_inventory();
                         }
                         else {
@@ -68,7 +69,7 @@
                             fuel_to_remove = adventure_data.inventory_fuel;
                         }
                         adventure_data.inventory_fuel -= fuel_to_remove;
-                        //resources["fuel"].amount += fuel_to_remove;
+                        resources["fuel"].amount += fuel_to_remove;
                         update_inventory();
                     });
                     var _loop_2 = function (i) {

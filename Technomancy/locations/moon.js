@@ -1,5 +1,6 @@
 ({
     "unlocked": function () { return true; },
+    "go_again_text": "Moon that Planet",
     "encounters": [
         ({
             "condition": function () { return true; },
@@ -15,14 +16,17 @@
             "condition": function () { return true; },
             "types": ["combat"],
             "weight": 1,
-            "title": "TEST ENCOUNTER",
+            "title": "Hydrogen mining",
             "run_encounter": function () {
-                $("#events_content").html("This is an encounter test. It does things. <br><span class='clickable'>Yay things!</span>");
-                $("#events_content").children().last().click(function () { alert("Haha no. There's no use to it."); start_adventure(); });
+                $("#events_content").html("Oh huh. This rock on the moon has a lot of hydrogen in it. You can refine some of it! <br><span class='clickable'>Refine</span>");
+                $("#events_content").children().last().click(function () {
+                    $("#events_content").html("You manage to find 30000 hydrogen. <br /><span class='clickable' onclick='start_adventure()'>Done</span>");
+                    resources["hydrogen"].amount += 30000;
+                });
             },
         }),
     ],
-    "connects_to": [],
+    "connects_to": ["kittens/terminus"],
     "enter_cost": 1,
     "leave_cost": 1,
     "name": "The Moon",

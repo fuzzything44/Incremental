@@ -12,7 +12,7 @@ var adventure_data = {
         weapon_2: null,
         weapon_3: null,
     },
-    inventory_size: 100,
+    inventory_size: 20,
     inventory_fuel: 0,
     inventory: [],
     warehouse: [],
@@ -31,10 +31,9 @@ function start_adventure() {
     /* Location name */
     $("#events_topbar").html(location_data.name);
     /* Let them choose to adventure there or go somewhere else. */
-    $("#events_content").html("Welcome to Adventure Mode! <br /> I\'m glad you want to adventure, but this feature is still a long ways from being finished. Please message me on discord if you manage to get this far though! <br />");
-    $("#events_content").append("<span style='color: red'>Note: Until this announcement is removed, adventure mode gives nothing and takes nothing. Progress on it will not be saved between reloads. It exists purely for testing purposes. <em></em></span><br />");
+    $("#events_content").html("You are currently at " + location_data.name + ". What will you do?<br />");
     var color = location_data.leave_cost <= adventure_data.inventory_fuel ? "white" : "red";
-    $("#events_content").append("<span class='clickable' onclick='travel(\"" + adventure_data.current_location + "\")' style='color:" + color + "'>Search This Area (" + location_data.leave_cost.toString() + ")</span><br />");
+    $("#events_content").append("<span class='clickable' onclick='travel(\"" + adventure_data.current_location + "\")' style='color:" + color + "'>" + location_data.go_again_text + " (" + location_data.leave_cost.toString() + ")</span><br />");
     location_data.connects_to.forEach(function (loc) {
         var test_connection = {};
         $.getScript("locations/" + loc + ".js", function (res) { test_connection = eval(res); });
