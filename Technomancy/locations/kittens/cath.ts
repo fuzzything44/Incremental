@@ -15,7 +15,7 @@
                     $("#events_content").html("You wander the market and find many goods for sale. You have <span id='cath_money'>" + format_num(resources["money"].amount) + "</span> money to spend.<br />");
 
                     let purchase_amount = resources["money"].amount / 20; /* Each trade they spend 5% of their money */
-                    let sold_resources = ["wood", "gold", "oil", "coal", "iron", "uranium", "steel_beam", "hydrogen"]; /* What kittens have for sale. */
+                    let sold_resources = ["wood", "gold", "oil", "coal", "iron_ore", "iron", "uranium", "steel_beam", "hydrogen"]; /* What kittens have for sale. */
                     sold_resources.forEach(function (resource) {
                         let resource_amount = purchase_amount / resources[resource].value
                         $("#events_content").append("<span class='clickable'>Purchase</span> " + format_num(resource_amount, false) + " " + resource.replace("_", " ") + " (" + format_num(purchase_amount, false) + " money) <br />");

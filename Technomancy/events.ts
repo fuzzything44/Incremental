@@ -30,7 +30,7 @@ let events = [
 
             let investment_types = ["gold", "beer", "uranium", "bread", "beds", "wool", "toothpicks", "cookies", "toothpaste", "salad"];
             let invested_in = investment_types[Math.floor(Math.random() * investment_types.length)];
-            add_log_elem("You made " + money_gain.toString() + " money from investing!");
+            add_log_elem("You made " + format_num(money_gain ,false) + " money from investing!");
             $("#events_content").html("Investing in " + antique_item + invested_in + " paid off! <br />You gained " + money_gain.toString() + " money from that sweet deal!");
             if (buildings["big_bank"].amount > 0 && buildings["big_bank"].on) {
                 /* If they got extra */

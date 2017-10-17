@@ -59,6 +59,7 @@ var UNLOCK_TREE = {
     "big_mine": [],
     "reactor": ["fuel_maker"],
     "fuel_maker": [],
+    "hydrogen_mine": [],
 };
 var SPELL_BUILDINGS = [
     "s_manastone",
@@ -692,6 +693,16 @@ function set_initial_state() {
             },
             "flavor": "This fuel is... not healthy.",
         },
+        "hydrogen_mine": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {},
+            "price_ratio": {},
+            "generation": {
+                "hydrogen": 30,
+            },
+            "flavor": "The moon rocks. And now you can have those rocks.",
+        },
     };
     purchased_upgrades = [];
     remaining_upgrades = {
@@ -1147,6 +1158,34 @@ function set_initial_state() {
             "name": "Unlimited Events",
             "image": "shield_on.png",
         },
+        "better_library": {
+            "unlock": function () { return adventure_data["cath_discovery"] >= 3; },
+            "purchase": function () {
+                buildings["library"].price_ratio["iron"] = (buildings["library"].price_ratio["iron"] - 1) * .75 + 1;
+                buildings["library"].price_ratio["book"] = (buildings["library"].price_ratio["book"] - 1) * .75 + 1;
+                buildings["book_printer"].flavor = "New and improved: now prints 50 Shades of Grey.";
+            },
+            "cost": {
+                "book": 5000,
+            },
+            "tooltip": "Print more material for your libraries. <br /> Costs 5,000 book.",
+            "name": "Reading Material",
+            "image": "",
+        },
+        "better_library_2": {
+            "unlock": function () { return purchased_upgrades.indexOf("better_library") != -1; },
+            "purchase": function () {
+                buildings["library"].price_ratio["iron"] = (buildings["library"].price_ratio["iron"] - 1) * .67 + 1;
+                buildings["library"].price_ratio["book"] = (buildings["library"].price_ratio["book"] - 1) * .67 + 1;
+                buildings["book_printer"].flavor = "New and even more improved: now prints Harry Potter. All of them.";
+            },
+            "cost": {
+                "book": 15000,
+            },
+            "tooltip": "Start printing actually good books for your libraries. <br /> Costs 1s5,000 book.",
+            "name": "Good Reading Material",
+            "image": "",
+        },
     };
     event_flags = {};
     $("#buy_amount").val(1);
@@ -1436,8 +1475,13 @@ function update() {
             });
         }
         try {
+            var amount_1 = parseInt($("#buy_amount").val());
+            if (isNaN(amount_1)) {
+                amount_1 = 1;
+            }
             Object.keys(buildings[build].base_cost).forEach(function (key) {
-                if (buildings[build].base_cost[key] * Math.pow(buildings[build].price_ratio[key], buildings[build].amount) > resources[key].amount) {
+                var cost = buildings[build].base_cost[key] * Math.pow(buildings[build].price_ratio[key], buildings[build].amount) * (1 - Math.pow(buildings[build].price_ratio[key], amount_1)) / (1 - buildings[build].price_ratio[key]);
+                if (cost > resources[key].amount) {
                     throw Error("Not enough resources!");
                 }
             });
@@ -1477,6 +1521,10 @@ function update_total_upgrades(name) {
     $("#purchased_upgrades").append("<br />" + name.replace("<br />", ""));
 }
 function gen_building_tooltip(name) {
+    var amount = parseInt($("#buy_amount").val());
+    if (isNaN(amount)) {
+        amount = 1;
+    }
     var gen_text = "Generates ";
     /* Add resource gen, update how much each one generates. */
     Object.keys(buildings[name].generation).forEach(function (key) {
@@ -1489,14 +1537,15 @@ function gen_building_tooltip(name) {
     });
     var cost_text = "Costs ";
     Object.keys(buildings[name].base_cost).forEach(function (key) {
-        var cost = Math.round(buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount));
+        /* Total cost for a buy all. Uses a nice summation formula. */
+        var cost = buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount) * (1 - Math.pow(buildings[name].price_ratio[key], amount)) / (1 - buildings[name].price_ratio[key]);
         if (cost > resources[key].amount) {
             cost_text += "<span style='color: red'>";
         }
         else {
             cost_text += "<span>";
         }
-        cost_text += format_num(cost) + " " + key.replace("_", " ") + "</span>, ";
+        cost_text += format_num(cost, false) + " " + key.replace("_", " ") + "</span>, ";
     });
     var flavor_text = "<hr><i style='font-size: small'>" + buildings[name].flavor + "</i>";
     if (buildings[name].flavor == undefined || buildings[name].flavor == "") {
@@ -1509,29 +1558,29 @@ function purchase_building(name) {
     if (isNaN(amount)) {
         amount = 1;
     }
-    for (var i = 0; i < amount; i++) {
-        /* Make sure they have enough to buy it */
-        Object.keys(buildings[name].base_cost).forEach(function (key) {
-            console.log("Checking money");
-            if (buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount) > resources[key].amount) {
-                add_log_elem("You can't afford that. Missing: " + key.replace("_", " "));
-                throw Error("Not enough resources!");
-            }
-        });
-        /* Spend money to buy */
-        Object.keys(buildings[name].base_cost).forEach(function (key) {
-            console.log("Spending money");
-            resources[key].amount -= buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount);
-        });
-        /* Add resource gen */
-        Object.keys(buildings[name].generation).forEach(function (key) {
-            if (buildings[name].on) {
-                resources_per_sec[key] += buildings[name].generation[key];
-            }
-        });
-        buildings[name].amount++;
-        $('#building_' + name + " > .building_amount").html(buildings[name].amount.toString());
-    }
+    /* Make sure they have enough to buy it */
+    Object.keys(buildings[name].base_cost).forEach(function (key) {
+        console.log("Checking money");
+        var cost = buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount) * (1 - Math.pow(buildings[name].price_ratio[key], amount)) / (1 - buildings[name].price_ratio[key]);
+        if (cost > resources[key].amount) {
+            add_log_elem("You can't afford that. Missing: " + key.replace("_", " "));
+            throw Error("Not enough resources!");
+        }
+    });
+    /* Spend money to buy */
+    Object.keys(buildings[name].base_cost).forEach(function (key) {
+        console.log("Spending money");
+        var cost = buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount) * (1 - Math.pow(buildings[name].price_ratio[key], amount)) / (1 - buildings[name].price_ratio[key]);
+        resources[key].amount -= cost;
+    });
+    /* Add resource gen */
+    Object.keys(buildings[name].generation).forEach(function (key) {
+        if (buildings[name].on) {
+            resources_per_sec[key] += buildings[name].generation[key] * amount;
+        }
+    });
+    buildings[name].amount += amount;
+    $('#building_' + name + " > .building_amount").html(buildings[name].amount.toString());
 }
 function destroy_building(name) {
     var amount = parseInt($("#buy_amount").val());
@@ -1548,6 +1597,10 @@ function destroy_building(name) {
             if (buildings[name].on) {
                 resources_per_sec[key] -= buildings[name].generation[key];
             }
+        });
+        /* Refund resources a bit. Get 30% back. */
+        Object.keys(buildings[name].base_cost).forEach(function (key) {
+            resources[key].amount += 0.3 * buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount - 1);
         });
         buildings[name].amount--;
         $('#building_' + name + " > .building_amount").html(buildings[name].amount.toString());

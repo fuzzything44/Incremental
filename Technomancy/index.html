@@ -424,6 +424,21 @@
             </span>
             <span id="toggle_big_mine" class="building_state_on" onclick="toggle_building_state('big_mine')">On</span>
         </div>
+
+        <br />
+
+        <!-- Adventure Buildings -->
+
+        <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('hydrogen_mine')" class="building_remove">X</span>
+            <span id="building_hydrogen_mine" class="building tooltip">
+                <span class="building_name">Hydrogen Mine</span>
+                <span class="building_amount">0</span>
+                <span class="tooltiptext" onclick="event.stopPropagation()"></span>
+            </span>
+            <span id="toggle_hydrogen_mine" class="building_state_on" onclick="toggle_building_state('hydrogen_mine')">On</span>
+        </div>
+    <!-- End of building list. -->
     </div>
     <div id="upgrades">
         <span id="reset" class="tooltip" onclick="if(confirm('Are you sure? This resets EVERYTHING!') && prompt('If you\'re absolutely sure, enter \'reset\'.') == 'reset') { localStorage.clear(); location.reload();}"><span>Reset</span><span class="tooltiptext">Resets ALL progress. There is NO bonus for this!</span></span>
@@ -442,14 +457,14 @@
 
 
     </div>
-    <div id="events" class="hidden" onmouseover="document.body.style.overflow='hidden';" onmouseout="document.body.style.overflow='auto';">
+    <div id="events" class="hidden">
         <div class="window_topbar">
             <span id="events_topbar">Something Happened</span>
             <span id="close_events" onclick="$('#events').addClass('hidden'); $('#events_content').html(''); $('#character').addClass('hidden');">X</span>
         </div>
         <div id="events_content"></div>
     </div>
-    <div id="character" class="hidden" onmouseover="document.body.style.overflow='hidden';" onmouseout="document.body.style.overflow='auto';">
+    <div id="character" class="hidden">
         <div class="window_topbar">Your stuff</div>
         <div id="character_content"></div>
     </div>
