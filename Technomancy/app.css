@@ -1,7 +1,5 @@
 ﻿body {
     font-family: 'Segoe UI', sans-serif;
-    background-color: black;
-    color: lightgray;
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
      -khtml-user-select: none; /* Konqueror HTML */
@@ -15,7 +13,7 @@
     width: 20em;
     max-width: 20em;
     min-width: 20em;
-    border: 1px solid lightgray;
+    border: 1px solid;
     border-radius: 3px;
     padding-left: 0.3em;
     padding-right: 0.3em;
@@ -40,7 +38,7 @@
     border-radius: 3px;
     padding-left: 0.3em;
     padding-right: 0.3em;
-    border: 1px solid lightgray;
+    border: 1px solid;
     display: block;
 
         width: 18em;
@@ -102,7 +100,6 @@
     border-radius: 3px;
     height: 6em;
     width: 6em;
-    background-color: #222;
 }
 
 #events {
@@ -116,9 +113,8 @@
     min-width: 45em;
     z-index: 1;
     overflow-y: scroll;
-    background-color: #222;
 
-    border: solid lightgray 1px;
+    border: 1px solid;
     border-radius: 3px;
 
     align-content: center;
@@ -126,11 +122,10 @@
 }
 
 .window_topbar {
-    border-bottom: solid lightgray 1px;
+    border-bottom: 1px solid;
     padding-top: .3em;
     padding-bottom: .4em;
     margin-bottom: .3em;
-    background-color: #333;
 }
 
 #close_events {
@@ -139,7 +134,7 @@
     top: 0.3em;
     right: 0.3em;
     background-color: red;
-    border: solid orange 1px;
+    border: 1px solid orange;
     padding-left: .5em;
     padding-right: .5em;
     border-radius: 3px;
@@ -154,9 +149,8 @@
     min-height: 35em;
     width: 22.9%;
     z-index: 1;
-    background-color: #222;
 
-    border: solid lightgray 1px;
+    border: 1px solid;
     border-radius: 3px;
 
     align-content: center;
@@ -175,7 +169,7 @@
 }
 
 #save {
-    border: solid grey 1px;
+    border: solid 1px;
     border-radius: 3px;
     padding-left: .3em;
     padding-right: .3em;
@@ -285,8 +279,7 @@ select {
 }
 
 .clickable {
-    color: white;
-    border: solid white 1px; 
+    border: solid 1px; 
     border-radius: 3px; 
     padding-left: .3em; 
     padding-right: .3em; 

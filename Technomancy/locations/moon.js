@@ -48,8 +48,8 @@
                 if (count_item("machine_part")) {
                     $("#events_content").append("Or, you could <span class='clickable'>build</span> a mine on here with that machine part.");
                     $("#events_content > span").last().click(function () {
+                        /* Remove the machine part that they have. */
                         adventure_data.inventory.splice(find_item("machine_part"), 1);
-                        buildings["hydrogen_mine"].amount += 1;
                         $("#events_content").html("You set up a hydrogen mine on the moon. <br /><span class='clickable' onclick='start_adventure()'>Done</span>");
                         var comp_state = buildings["hydrogen_mine"].on;
                         if (comp_state) {

@@ -31,7 +31,7 @@
         ({
             "condition": function () { return true; },
             "types": ["combat"],
-            "weight": 1,
+            "weight": 3,
             "title": "Ice Giant on the ice giant.",
             "run_encounter": function () {
                 $("#events_content").html("This planet is an ice giant. It also has an ice giant on it. Good luck. <br><span class='clickable'>Fight!</span>");

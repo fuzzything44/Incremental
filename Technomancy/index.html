@@ -14,36 +14,53 @@
 
     <script src="//cdn.rawgit.com/erosson/swarm-numberformat/v0.1.0/dist/swarm-numberformat.min.js"></script>
     <script src="app.js" ></script>
+
+    <style id="color_theme">
+        .bgc {
+            background-color: black;
+        }
+
+        .fgc {
+            color: lightgray;
+        }
+        
+        .bgc_second {
+            background-color: #333;
+        }
+    </style>
 </head>
-<body>
+<body class="bgc fgc">
     <div style="font-size: small; position:absolute; top: 0;">
-        v2.2.0 | 
-        <a href="changelog.txt" target="_blank" style="text-decoration: none; color: lightgray;">Changelog</a> |
-        <a href="http://crappy-incremental.wikia.com/wiki/Crappy_Incremental_Wiki" target="_blank" style="text-decoration: none; color: lightgray;">Wiki</a> |
-        <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none; color: lightgray;">Discord</a> |
+        v2.2.1 | 
+        <a href="changelog.txt" target="_blank" style="text-decoration: none;" class="fgc">Changelog</a> |
+        <a href="http://crappy-incremental.wikia.com/wiki/Crappy_Incremental_Wiki" target="_blank" style="text-decoration: none;" class="fgc">Wiki</a> |
+        <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none;" class="fgc">Discord</a> |
         <span onclick="save_to_clip()">Export</span> |
-        <span onclick="load_from_clip()">Import</span>
-        <span style="position: absolute; left: 45em; top: -.2em; white-space: nowrap">Buy Amount: <input id="buy_amount" style="font-size: 10px; background-color: #333; color: lightgray; border: none; width: 4em;" type="number" min="0"/></span>
+        <span onclick="load_from_clip()">Import</span> |
+        <span onclick="change_theme('light')">Lights On</span> |
+        <span onclick="change_theme('dark')">Lights Off</span> |
+
+        <span style="position: absolute; left: 45em; top: -.2em; white-space: nowrap">Buy Amount: <input id="buy_amount" class="fgc bgc_second" style="font-size: 10px; border: none; width: 4em;" type="number" min="0"/></span>
         <span id="upgrade_count" class="tooltip" style="position: absolute; left: 54.6em; top: -.2em; white-space: nowrap;"><span id="num_upgrades"></span><span id="purchased_upgrades" class="tooltiptext">Purchased Upgrades:</span></span>
     </div>
     <div id="resource_bar">
         <div id="time" class="hidden" style="margin-bottom: .3em;">
             <span style="color: blue; text-shadow: coral 1px 0px 15px; vertical-align: middle;">Time: 0</span>
-            <span id="time_toggle" class="res_gen" onclick="toggle_time()" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid white; border-radius: 3px;">
+            <span id="time_toggle" class="res_gen" onclick="toggle_time()" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid; border-radius: 3px;">
                 Speed Time
             </span>
             <br />
         </div>
         <div id="refined_mana" class="hidden" style="margin-bottom: .3em;">
             <span style="color: red; text-shadow: deepskyblue 1px 1px 10px; vertical-align: middle;">Refined mana: 0</span>
-            <span class="res_gen" onclick="if(resources['refined_mana'].amount < 250) {alert('You need 250 refined mana.');return;} else if (!$('#events').hasClass('hidden')) { alert('There\'s already an event going on!'); return; } if (confirm('Try to force an event to occur for 250 refined mana?')) { resources['refined_mana'].amount -= 250; handle_event(false); }" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid white; border-radius: 3px;">
+            <span class="res_gen " onclick="if(resources['refined_mana'].amount < 250) {alert('You need 250 refined mana.');return;} else if (!$('#events').hasClass('hidden')) { alert('There\'s already an event going on!'); return; } if (confirm('Try to force an event to occur for 250 refined mana?')) { resources['refined_mana'].amount -= 250; handle_event(false); }" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid; border-radius: 3px;">
                 Force Event
             </span>
             <br />
         </div>
         <div id="fuel" class="hidden" style="margin-bottom: .3em;">
             <span style="color: greenyellow; text-shadow: yellow 1px 0px 10px; vertical-align: middle;">Refined mana: 0</span>
-            <span class="res_gen" onclick="if (resources['fuel'].amount < 1) { alert('You need more fuel.'); } else { start_adventure(); }" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid white; border-radius: 3px;">
+            <span class="res_gen " onclick="if (resources['fuel'].amount < 1) { alert('You need more fuel.'); } else { start_adventure(); }" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid; border-radius: 3px;">
                 Adventure
             </span>
             <br />
@@ -461,14 +478,14 @@
 
 
     </div>
-    <div id="events" class="hidden">
+    <div id="events" class="hidden fgc bgc_second">
         <div class="window_topbar">
             <span id="events_topbar">Something Happened</span>
             <span id="close_events" onclick="$('#events').addClass('hidden'); $('#events_content').html(''); $('#character').addClass('hidden');">X</span>
         </div>
         <div id="events_content"></div>
     </div>
-    <div id="character" class="hidden">
+    <div id="character" class="hidden fgc bgc_second">
         <div class="window_topbar">Your stuff</div>
         <div id="character_content"></div>
     </div>

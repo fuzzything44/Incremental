@@ -1319,6 +1319,10 @@ function load() {
     if (localStorage.getItem("adventure")) {
         adventure_data = JSON.parse(localStorage.getItem("adventure"));
     }
+    console.log("Loading theme");
+    if (localStorage.getItem("theme")) {
+        change_theme(localStorage.getItem("theme"));
+    }
     purchased_upgrades.forEach(function (upg) {
         let upg_name = remaining_upgrades[upg].name;
         delete remaining_upgrades[upg]; /* They shouldn't be able to get the same upgrade twice, so delete what was bought. */
@@ -1495,7 +1499,7 @@ function update() {
         if (resources_per_sec[key] < 0) {
             $("#" + key + "_per_sec").css("color", "red");
         } else if (resources_per_sec[key] > 0) {
-            $("#" + key + "_per_sec").css("color", "white");
+            $("#" + key + "_per_sec").css("color", "default");
         } else {
             $("#" + key + "_per_sec").text("");
         }
@@ -1536,14 +1540,14 @@ function update_upgrade_list() {
     /* Loop through all remaining upgrades */
     Object.keys(remaining_upgrades).forEach(function (upg_name) {
         if (remaining_upgrades[upg_name].unlock()) {
-            let color = "lightgray"; /* Set color to lightgray or red depending on if they can afford it */
+            let color = "default"; /* Set color to lightgray or red depending on if they can afford it */
             Object.keys(remaining_upgrades[upg_name].cost).forEach(function (res) {
                 if (resources[res].amount < remaining_upgrades[upg_name].cost[res]) {
                     color = "red";
                 }
             });
             let upg_elem: string = "<li id=\"upgrade_" + upg_name +
-                "\" class=\"upgrade tooltip\" onclick=\"purchase_upgrade('" + upg_name + "')\" style='text-align: center; color: " + color + "'><span>" +
+                "\" class=\"upgrade tooltip fgc bgc_second\" onclick=\"purchase_upgrade('" + upg_name + "')\" style='text-align: center; color: " + color + "'><span>" +
                 remaining_upgrades[upg_name].name + "<br /> <img src='images/" + remaining_upgrades[upg_name].image + "' alt='' style='width: 3em; height: 3em; float: bottom;' /></span><span class=\"tooltiptext\" style='opacity: 1;'>" +
                 remaining_upgrades[upg_name].tooltip + "</span> </li>";
             new_list += upg_elem;
@@ -1694,6 +1698,17 @@ function random_title() {
     ];
     document.title = TITLES.filter(item => item !== document.title)[Math.floor(Math.random() * (TITLES.length - 1))];
 
+}
+
+function change_theme(new_theme: string) {
+    let themes = {
+        "light": ".bgc {background-color: white;}\n.fgc {color: black;}\n.bgc_second {background-color: #777;}",
+        "dark": ".bgc {background-color: black;}\n.fgc {color: lightgray;}\n.bgc_second {background-color: #333;}"
+    };
+    if (themes[new_theme]) {
+        $("#color_theme").html(themes[new_theme]);
+        localStorage["theme"] = new_theme;
+    }
 }
 window.onload = () => {
     set_initial_state();
