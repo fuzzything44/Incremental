@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v2.2.2:
+Shield images now have transparent background. Light theme secondary color is lighter. Workshop menu changes with theme.
+
 v2.2.1:
 Ice giant should be more common. Hydrogen mines should build one, not 2 and give proper /s generation. You can now switch from the dark theme to an even worse light theme.
 

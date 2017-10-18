@@ -220,12 +220,6 @@ hr {
     width: 70%;
 }
 
-select {
-    background-color: #777;
-    max-height: 3em;
-}
-
-
 /* Tooltip container */
 .tooltip {
     position: relative;

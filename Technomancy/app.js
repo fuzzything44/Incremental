@@ -1652,7 +1652,7 @@ function random_title() {
 }
 function change_theme(new_theme) {
     var themes = {
-        "light": ".bgc {background-color: white;}\n.fgc {color: black;}\n.bgc_second {background-color: #777;}",
+        "light": ".bgc {background-color: white;}\n.fgc {color: black;}\n.bgc_second {background-color: #CCC;}",
         "dark": ".bgc {background-color: black;}\n.fgc {color: lightgray;}\n.bgc_second {background-color: #333;}"
     };
     if (themes[new_theme]) {

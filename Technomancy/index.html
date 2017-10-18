@@ -31,7 +31,7 @@
 </head>
 <body class="bgc fgc">
     <div style="font-size: small; position:absolute; top: 0;">
-        v2.2.1 | 
+        v2.2.2 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none;" class="fgc">Changelog</a> |
         <a href="http://crappy-incremental.wikia.com/wiki/Crappy_Incremental_Wiki" target="_blank" style="text-decoration: none;" class="fgc">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none;" class="fgc">Discord</a> |
@@ -140,7 +140,7 @@
                             <span id="workshop_prod">???</span>
                         </span>
                     </span>
-                    <select id="workshop_select" onchange="s_workshop(this.value);">
+                    <select id="workshop_select" class="bgc_second" onchange="s_workshop(this.value);">
                         <option value="iron">Extract iron</option>
                         <option value="wood">Grow wood</option>
                         <option value="glass">Smelt glass</option>
@@ -155,8 +155,8 @@
                     <span class="building_name">Workshop</span>
                     <span class="building_amount">200</span>
                     <span id="workshop_progress_bar" class="clickable" style="position: absolute; left: 0; top: 1.7em; width: 17.5em; height: .5em; background-color: green;"></span>
-                    <div id="workshop_option_bar" class="hidden" onclick="event.stopPropagation()" style="position: absolute; top: 2.5em; left: 0; background: #222; z-index: 1;">
-                        <div class="clickable">
+                    <div id="workshop_option_bar" class="hidden fgc" onclick="event.stopPropagation()" style="position: absolute; top: 2.5em; left: 0; z-index: 1;">
+                        <div class="clickable bgc_second">
                             <table>
                                 <tbody>
                                     <tr>
