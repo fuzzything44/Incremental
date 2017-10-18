@@ -1586,7 +1586,7 @@ function gen_building_tooltip(name: string) {
         }
         cost_text += format_num(cost, false) + " " + key.replace("_", " ") + "</span>, ";
     });
-
+    if (cost_text == "Costs ") { cost_text = "Unbuyable,"; } /* Free buildings don't have a cost. */
     let flavor_text: string = "<hr><i style='font-size: small'>" + buildings[name].flavor + "</i>";
     if (buildings[name].flavor == undefined || buildings[name].flavor == "") {
         flavor_text = "";

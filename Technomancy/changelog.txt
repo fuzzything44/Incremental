@@ -1,4 +1,7 @@
-﻿CrappyIncremental Changelog
+﻿Technomancy Changelog
+
+v2.2.0:
+Changelog renamed (Technomancy instead of Crappy Incremental). Add new hopefully not broken ice giant encounter. Unbuyable buildings now say so.
 
 v2.1.1:
 You can now actually get hydrogen from the moon encounter (bug fixed), gold sifters use less stone, printing press upgrade text is fixed, resources with negative values use the positive version in prestige.

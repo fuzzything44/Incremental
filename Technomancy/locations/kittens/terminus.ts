@@ -29,6 +29,37 @@
             },
         }), /* Freeze/melt ice for water */
         ({
+            "condition": function () { return true; },
+            "types": ["combat"],
+            "weight": 1,
+            "title": "Ice Giant on the ice giant.",
+            "run_encounter": function () {
+                $("#events_content").html("This planet is an ice giant. It also has an ice giant on it. Good luck. <br><span class='clickable'>Fight!</span>");
+                $("#events_content").children().last().click(function () {
+                    setup_combat(
+                        {
+                            "shields": 6, /* Actually does stuff */
+                            "actions_per_turn": 1, /* Actually does stuff */
+                            "energy": 5, /* As of writing this, does nothing but I guess if there's a player weapon that steals energy...*/
+                            "energy_left": 5,
+                        },
+                        function () {
+                            resources["water"].amount += 20000;
+                            $("#events_content").html("You beat the ice giant. You collect the ice shards and melt them. <br/>Gained 20000 water.<br/>");
+                            $("#events_content").append("<span class='clickable' onclick='start_adventure()'>Done</span>")
+                        },
+                        function () {
+                            enemy_data["actions_left"] -= 1;
+                            player_data["shields"] -= 1;
+                            $("#combat_log").html("It smashes your ship, doing 1 damage to your shields.");
+                        } /* Our enemy does 1 damage. */
+                    );
+                    start_turn(player_data);
+                });
+            },
+        }), /* Obligatory combat */
+
+        ({
             "condition": function () { return adventure_data["has_cryostorage"] == undefined; },
             "types": ["noncombat"],
             "weight": 2,
