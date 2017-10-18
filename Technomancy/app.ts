@@ -319,7 +319,7 @@ function set_initial_state() {
                 "wood": 1.2,
             },
             "generation": {
-                "stone": -20,
+                "stone": -10,
                 "gold": 0.1,
             },
             "flavor": "",
@@ -713,7 +713,6 @@ function set_initial_state() {
             },
             "flavor": "The moon rocks. And now you can have those rocks.",
         },
-
 
     };
     purchased_upgrades = [];
@@ -1214,7 +1213,7 @@ function set_initial_state() {
             "cost": {
                 "book": 15000,
             },
-            "tooltip": "Start printing actually good books for your libraries. <br /> Costs 1s5,000 book.",
+            "tooltip": "Start printing actually good books for your libraries. <br /> Costs 15,000 book.",
             "name": "Good Reading Material",
             "image": "",
         },
@@ -1229,7 +1228,7 @@ function prestige() {
     /* Calculate mana gain */
     let prestige_points = 0;
     let mana = buildings["s_manastone"].amount;
-    Object.keys(resources).forEach((res) => prestige_points += resources[res].amount * Math.max(0, resources[res].value));
+    Object.keys(resources).forEach((res) => prestige_points += resources[res].amount * Math.abs(resources[res].value));
 
     let mana_gain = prestige_points / 20000 - Math.pow(mana, 1.3) * .5; /* One for every 20k pp, and apply reduction based off of current mana */
     mana_gain = Math.floor(Math.pow(Math.max(0, mana_gain), .33)); /* Then raise to .33 power and apply some rounding/checking */

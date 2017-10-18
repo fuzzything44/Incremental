@@ -1,5 +1,8 @@
 ﻿CrappyIncremental Changelog
 
+v2.1.1:
+You can now actually get hydrogen from the moon encounter (bug fixed), gold sifters use less stone, printing press upgrade text is fixed, resources with negative values use the positive version in prestige.
+
 v2.1.0:
 You can now buy iron ore at Cath. Add two library upgrades. Destroying buildings refunds 30% of the build cost. Setting to buy multiple actually updates tooltops properly. Removing fuel says "Remove" instead of "Add". You can make machine parts and build mines on the moon. Making more small lasers is now harder and equally useless.
 
