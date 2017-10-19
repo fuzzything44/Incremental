@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v2.2.3:
+Tooltips now have the proper background color, positive resources will now not be red. 
+
 v2.2.2:
 Shield images now have transparent background. Light theme secondary color is lighter. Workshop menu changes with theme.
 

@@ -229,11 +229,10 @@ hr {
 .tooltip .tooltiptext {
     visibility: hidden;
     width: 15em;
-    background-color: #555;
-    color: #fff;
     text-align: center;
     border-radius: 3px;
 
+    
     /* Position the tooltip text */
     position: absolute;
     z-index: 1;

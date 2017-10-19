@@ -1283,9 +1283,10 @@ function load() {
         adventure_data = JSON.parse(localStorage.getItem("adventure"));
     }
     console.log("Loading theme");
-    if (localStorage.getItem("theme")) {
-        change_theme(localStorage.getItem("theme"));
+    if (!localStorage.getItem("theme")) {
+        localStorage["theme"] = "dark"; /* Default dark theme. */
     }
+    change_theme(localStorage.getItem("theme"));
     purchased_upgrades.forEach(function (upg) {
         var upg_name = remaining_upgrades[upg].name;
         delete remaining_upgrades[upg]; /* They shouldn't be able to get the same upgrade twice, so delete what was bought. */
@@ -1461,7 +1462,7 @@ function update() {
             $("#" + key + "_per_sec").css("color", "red");
         }
         else if (resources_per_sec[key] > 0) {
-            $("#" + key + "_per_sec").css("color", "default");
+            $("#" + key + "_per_sec").css("color", "");
         }
         else {
             $("#" + key + "_per_sec").text("");
@@ -1511,7 +1512,7 @@ function update_upgrade_list() {
             });
             var upg_elem = "<li id=\"upgrade_" + upg_name +
                 "\" class=\"upgrade tooltip fgc bgc_second\" onclick=\"purchase_upgrade('" + upg_name + "')\" style='text-align: center; color: " + color_1 + "'><span>" +
-                remaining_upgrades[upg_name].name + "<br /> <img src='images/" + remaining_upgrades[upg_name].image + "' alt='' style='width: 3em; height: 3em; float: bottom;' /></span><span class=\"tooltiptext\" style='opacity: 1;'>" +
+                remaining_upgrades[upg_name].name + "<br /> <img src='images/" + remaining_upgrades[upg_name].image + "' alt='' style='width: 3em; height: 3em; float: bottom;' /></span><span class=\"tooltiptext fgc bgc_second\" style='opacity: 1;'>" +
                 remaining_upgrades[upg_name].tooltip + "</span> </li>";
             new_list += upg_elem;
         }
@@ -1647,13 +1648,14 @@ function random_title() {
         "This title dedicated to /u/GitFlucked who really didn't like the previous one.",
         "Try Foodbits! They're super tasty*! *ᴾᵃʳᵗ ᵒᶠ ᵃ ᶜᵒᵐᵖˡᵉᵗᵉ ᵇʳᵉᵃᵏᶠᵃˢᵗ⋅ ᴺᵒᵗ ᶠᵒʳ ʰᵘᵐᵃⁿ ᶜᵒⁿˢᵘᵐᵖᵗᶦᵒⁿ⋅ ᴰᵒ ⁿᵒᵗ ᶜᵒⁿˢᵘᵐᵉ ʷʰᶦˡᵉ ᵘⁿᵈᵉʳ ᵗʰᵉ ᶦⁿᶠˡᵘᵉⁿᶜᵉ ᵒᶠ ᵈʳᵘᵍˢ ᵒʳ ᵃˡᶜᵒʰᵒˡ⋅ ᴼʳ ᵃᶦʳ⋅",
         "BUY ME MORE JEWELRY!",
+        "Beware the space squid",
     ];
     document.title = TITLES.filter(function (item) { return item !== document.title; })[Math.floor(Math.random() * (TITLES.length - 1))];
 }
 function change_theme(new_theme) {
     var themes = {
-        "light": ".bgc {background-color: white;}\n.fgc {color: black;}\n.bgc_second {background-color: #CCC;}",
-        "dark": ".bgc {background-color: black;}\n.fgc {color: lightgray;}\n.bgc_second {background-color: #333;}"
+        "light": ".bgc {background-color: white;}.fgc {color: black;}.bgc_second {background-color: #CCC;}",
+        "dark": ".bgc {background-color: black;}.fgc {color: lightgray;}.bgc_second {background-color: #333;}"
     };
     if (themes[new_theme]) {
         $("#color_theme").html(themes[new_theme]);
