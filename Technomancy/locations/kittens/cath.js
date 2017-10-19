@@ -38,7 +38,7 @@
             },
         }),
     ],
-    "connects_to": ["kittens/terminus"],
+    "connects_to": ["kittens/terminus", "kittens/umbra", "warpgate"],
     "enter_cost": 5,
     "leave_cost": 0,
     "name": "Cath",

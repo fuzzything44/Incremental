@@ -36,7 +36,9 @@
     <TypeScriptCompile Include="locations\home.ts" />
     <TypeScriptCompile Include="locations\kittens\cath.ts" />
     <TypeScriptCompile Include="locations\kittens\terminus.ts" />
+    <TypeScriptCompile Include="locations\kittens\umbra.ts" />
     <TypeScriptCompile Include="locations\moon.ts" />
+    <TypeScriptCompile Include="locations\warpgate.ts" />
     <TypeScriptCompile Include="spells.ts" />
   </ItemGroup>
   <ItemGroup>

@@ -26,8 +26,7 @@ function start_adventure() {
     $("#events").removeClass("hidden");
     update_inventory();
     /* Load location */
-    var location_data = {};
-    $.getScript("locations/" + adventure_data.current_location + ".js", function (res) { location_data = eval(res); });
+    var location_data = get_location(adventure_data.current_location);
     /* Location name */
     $("#events_topbar").html(location_data.name);
     /* Let them choose to adventure there or go somewhere else. */
@@ -35,8 +34,7 @@ function start_adventure() {
     var color = location_data.leave_cost <= adventure_data.inventory_fuel ? "white" : "red";
     $("#events_content").append("<span class='clickable' onclick='travel(\"" + adventure_data.current_location + "\")'>" + location_data.go_again_text + " (" + location_data.leave_cost.toString() + ")</span><br />");
     location_data.connects_to.forEach(function (loc) {
-        var test_connection = {};
-        $.getScript("locations/" + loc + ".js", function (res) { test_connection = eval(res); });
+        var test_connection = get_location(loc);
         if (test_connection.unlocked()) {
             var fuel_cost = (test_connection.enter_cost + location_data.leave_cost).toString();
             var color_1 = fuel_cost <= adventure_data.inventory_fuel ? "default" : "red";
@@ -47,12 +45,21 @@ function start_adventure() {
         $("#events_content").append("<span class='clickable' onclick='travel(\"home\");'>Go Home (0)</span>");
     }
 }
+function get_location(where) {
+    if (this["aloc_" + where]) {
+        return this["aloc_" + where];
+    }
+    else {
+        var loc_data_1 = {};
+        $.getScript("locations/" + where + ".js", function (res) { loc_data_1 = eval(res); });
+        this["aloc_" + where] = loc_data_1;
+        return loc_data_1;
+    }
+}
 function travel(where) {
     /* Get location data */
-    var location_data = {};
-    var to_where = {};
-    $.getScript("locations/" + adventure_data.current_location + ".js", function (res) { location_data = eval(res); });
-    $.getScript("locations/" + where + ".js", function (res) { to_where = eval(res); });
+    var location_data = get_location(adventure_data.current_location);
+    var to_where = get_location(where);
     var fuel_cost = to_where.enter_cost + location_data.leave_cost;
     /* If we're just doing an explore, only charge the exit cost. */
     if (where == adventure_data.current_location) {
@@ -156,8 +163,7 @@ function set_equipment() {
 /* Selects an adventure at a given location and runs it */
 function run_adventure(location) {
     /* Get location data. */
-    var location_data = {};
-    $.getScript("locations/" + location + ".js", function (res) { location_data = eval(res); });
+    var location_data = get_location(location);
     var chosen_encounter = null;
     var available_encounters = [];
     var forced_encounters = [];

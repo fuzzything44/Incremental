@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v2.3.0:
+New location: Umbra. Also there's a mysterious warpgate. Also adventuring should be less laggy. 
+
 v2.2.3:
 Tooltips now have the proper background color, positive resources will now not be red. 
 

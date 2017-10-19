@@ -29,8 +29,7 @@ function start_adventure() {
     update_inventory();
 
     /* Load location */
-    let location_data: any = {};
-    $.getScript("locations/" + adventure_data.current_location + ".js", (res) => { location_data = eval(res); });
+    let location_data = get_location(adventure_data.current_location);
     
     /* Location name */
     $("#events_topbar").html(location_data.name); 
@@ -41,9 +40,7 @@ function start_adventure() {
     $("#events_content").append("<span class='clickable' onclick='travel(\"" + adventure_data.current_location + "\")'>" + location_data.go_again_text + " (" + location_data.leave_cost.toString() + ")</span><br />");
 
     location_data.connects_to.forEach(function (loc) {
-        let test_connection: any = {};
-        $.getScript("locations/" + loc + ".js", (res) => { test_connection = eval(res) });
-
+        let test_connection = get_location(loc);
         if (test_connection.unlocked()) {
             let fuel_cost = (test_connection.enter_cost + location_data.leave_cost).toString()
             let color = fuel_cost <= adventure_data.inventory_fuel ? "default" : "red";
@@ -55,12 +52,21 @@ function start_adventure() {
     }
 }
 
+function get_location(where: string) {
+    if (this["aloc_" + where]) {
+        return this["aloc_" + where];
+    } else {
+        let loc_data: any = {};
+        $.getScript("locations/" + where + ".js", (res) => { loc_data = eval(res); });
+        this["aloc_" + where] = loc_data;
+        return loc_data
+    }
+}
+
 function travel(where: string) {
     /* Get location data */
-    let location_data: any = {};
-    let to_where: any = {};
-    $.getScript("locations/" + adventure_data.current_location + ".js", (res) => { location_data = eval(res); });
-    $.getScript("locations/" + where + ".js", (res) => { to_where = eval(res); });
+    let location_data = get_location(adventure_data.current_location);
+    let to_where = get_location(where);
 
     let fuel_cost = to_where.enter_cost + location_data.leave_cost;
 
@@ -172,8 +178,7 @@ function set_equipment() {
 /* Selects an adventure at a given location and runs it */
 function run_adventure(location: string) {
     /* Get location data. */
-    let location_data: any = {};
-    $.getScript("locations/" + location + ".js", (res) => { location_data = eval(res); });
+    let location_data = get_location(location);
 
     let chosen_encounter = null;
     let available_encounters = [];

@@ -10,6 +10,30 @@
 *       combat              noncombat
 *
 */
+/*
+//Also, for copy+pastability, here's a blank template for a locations
+
+({
+    "unlocked": function () { return true; },
+    "go_again_text": "-----",
+    "encounters": [
+        ({
+        "condition": function () { return true; },
+        "types": [],
+        "weight": 0,
+        "title": "-----",
+        "run_encounter": function () {
+            return;
+        }
+        }),
+    ],
+    "connects_to": [],
+    "enter_cost": 0,
+    "leave_cost": 0,
+    "name": "-----",
+})
+
+*/
 ({
     "unlocked": function () { return true; },
     "go_again_text": "Setup your ship",
@@ -58,7 +82,7 @@
                     }
                     $("#events_content").append("<span class='clickable' onclick='run_adventure(\"home\");'>Go Back</span>");
                 }); /* End adding items to ship */
-                /* Somehow we handle removing items from ship inventory */
+                /* Handle removing items from ship inventory */
                 $("#events_content > span").last().click(function rem_from_inv() {
                     $("#events_topbar").html("Empty Your Ship");
                     $("#events_content").html("<span>Remove Fuel: <input id='remove_fuel' type='number' min='1'/><span class='clickable'>Remove</span></span><br />");
@@ -91,7 +115,7 @@
             }
         }),
     ],
-    "connects_to": ["moon"],
+    "connects_to": ["moon", "warpgate"],
     "enter_cost": 0,
     "leave_cost": 0,
     "name": "Home Planet",
