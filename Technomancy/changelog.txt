@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v2.3.1:
+Investments should have proper sigfigs, bribing a politician shows up earlier and tells you that you need banks. Trade portal tells you that unused mana helps it, time rewind no longer has an inaccurate tooltip.
+
 v2.3.0:
 New location: Umbra. Also there's a mysterious warpgate. Also adventuring should be less laggy. 
 

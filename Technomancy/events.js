@@ -28,7 +28,7 @@ var events = [
             var investment_types = ["gold", "beer", "uranium", "bread", "beds", "wool", "toothpicks", "cookies", "toothpaste", "salad"];
             var invested_in = investment_types[Math.floor(Math.random() * investment_types.length)];
             add_log_elem("You made " + format_num(money_gain, false) + " money from investing!");
-            $("#events_content").html("Investing in " + antique_item + invested_in + " paid off! <br />You gained " + money_gain.toString() + " money from that sweet deal!");
+            $("#events_content").html("Investing in " + antique_item + invested_in + " paid off! <br />You gained " + format_num(money_gain, false) + " money from that sweet deal!");
             if (buildings["big_bank"].amount > 0 && buildings["big_bank"].on) {
                 /* If they got extra */
                 $("#events_content").append("<br />Thank your investment bankers for the tip!");
@@ -223,15 +223,20 @@ var events = [
         "rejection": 0,
     }),
     ({
-        "condition": function () { return typeof event_flags["bribed_politician"] == "undefined" && buildings["big_bank"].amount >= 5 && buildings["bank"].amount >= 180 && purchased_upgrades.indexOf("coal_mines") != -1 && resources["money"].amount >= 1000000 && buildings["s_manastone"].amount >= 150; },
+        "condition": function () { return typeof event_flags["bribed_politician"] == "undefined" && buildings["big_bank"].amount >= 5 && purchased_upgrades.indexOf("coal_mines") != -1 && buildings["s_manastone"].amount >= 150; },
         "run_event": function () {
             var content = "<span>Business isn't doing well. Regulations are really holding you back.</span><br>";
-            content += "<span>Why not bribe a politician to change something for you?</span><br />";
-            content += "<i>Bribing costs 1,000,000 money and is available once per prestige. Choose wisely.</i><br /><br />";
-            /* Bribe investment regulations. Lets them have more money from banks. */
-            content += "<span onclick='bribe_finance();' class='clickable'>Remove Financial Regulations</span><i style='text: small'>This provides a massive boost to banks and investment companies.</i><br>";
-            /* No environmental regulations. Mines and logging camps much stronger. */
-            content += "<span onclick='bribe_environment();' class='clickable'>Remove Environmental Regulations</span><i style='text: small'>This provides a massive boost to mines and logging camps.</i><br>";
+            if (buildings["bank"].amount >= 180) {
+                content += "<span>Why not bribe a politician to change something for you?</span><br />";
+                content += "<i>Bribing costs 1,000,000 money and is available once per prestige. Choose wisely.</i><br /><br />";
+                /* Bribe investment regulations. Lets them have more money from banks. */
+                content += "<span onclick='bribe_finance();' class='clickable'>Remove Financial Regulations</span><i style='text: small'>This provides a massive boost to banks and investment companies.</i><br>";
+                /* No environmental regulations. Mines and logging camps much stronger. */
+                content += "<span onclick='bribe_environment();' class='clickable'>Remove Environmental Regulations</span><i style='text: small'>This provides a massive boost to mines and logging camps.</i><br>";
+            }
+            else {
+                content += "Sadly, you don't have the influence needed. <br /><em>(You need 180 banks.)</em>";
+            }
             $("#events_content").html(content);
         },
         "name": "Bribe a Politician",
