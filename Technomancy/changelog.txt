@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v2.3.2:
+Mana is slightly easier to get. Time now is used up faster. You can see a few mana buildings ahead maybe. Factory is once again at 50 mana.
+
 v2.3.1:
 Investments should have proper sigfigs, bribing a politician shows up earlier and tells you that you need banks. Trade portal tells you that unused mana helps it, time rewind no longer has an inaccurate tooltip.
 

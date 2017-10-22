@@ -110,8 +110,8 @@ function set_initial_state() {
         "s_manastone": {
             "on": true,
             "amount": 0,
-            "base_cost": { "mana": Infinity },
-            "price_ratio": { "mana": 1 },
+            "base_cost": {},
+            "price_ratio": {},
             "generation": {
                 "mana": 1,
             },
@@ -121,8 +121,8 @@ function set_initial_state() {
         "s_goldboost": {
             "on": false,
             "amount": 2,
-            "base_cost": { "mana": Infinity },
-            "price_ratio": { "mana": 1 },
+            "base_cost": {},
+            "price_ratio": {},
             "generation": {
                 "mana": -1,
             },
@@ -144,8 +144,8 @@ function set_initial_state() {
         "s_trade": {
             "on": false,
             "amount": 6,
-            "base_cost": { "mana": Infinity },
-            "price_ratio": { "mana": 1 },
+            "base_cost": {},
+            "price_ratio": {},
             "generation": {
                 "mana": -1,
             },
@@ -155,8 +155,8 @@ function set_initial_state() {
         "s_startboost": {
             "on": false,
             "amount": 25,
-            "base_cost": { "mana": Infinity },
-            "price_ratio": { "mana": 1 },
+            "base_cost": {},
+            "price_ratio": {},
             "generation": {
                 "mana": -1,
                 "money": 1,
@@ -171,8 +171,8 @@ function set_initial_state() {
         "s_time_magic": {
             "on": false,
             "amount": 40,
-            "base_cost": { "mana": Infinity },
-            "price_ratio": { "mana": 1 },
+            "base_cost": {},
+            "price_ratio": {},
             "generation": {
                 "mana": -1,
             },
@@ -181,9 +181,9 @@ function set_initial_state() {
         },
         "s_workshop": {
             "on": false,
-            "amount": 75,
-            "base_cost": { "mana": Infinity },
-            "price_ratio": { "mana": 1 },
+            "amount": 50,
+            "base_cost": {},
+            "price_ratio": {},
             "generation": {
                 "mana": -1,
             },
@@ -194,8 +194,8 @@ function set_initial_state() {
         "s_mana_refinery": {
             "on": true,
             "amount": 1,
-            "base_cost": { "mana": Infinity },
-            "price_ratio": { "mana": 1 },
+            "base_cost": {},
+            "price_ratio": {},
             "generation": {
                 "mana": 0,
             },
@@ -205,8 +205,8 @@ function set_initial_state() {
         "s_workshop_2": {
             "on": false,
             "amount": 200,
-            "base_cost": { "mana": Infinity },
-            "price_ratio": { "mana": 1 },
+            "base_cost": {},
+            "price_ratio": {},
             "generation": {
                 "mana": -1,
             },
@@ -1196,7 +1196,7 @@ function prestige() {
     var mana = buildings["s_manastone"].amount;
     Object.keys(resources).forEach(function (res) { return prestige_points += resources[res].amount * Math.abs(resources[res].value); });
     var mana_gain = prestige_points / 20000 - Math.pow(mana, 1.3) * .5; /* One for every 20k pp, and apply reduction based off of current mana */
-    mana_gain = Math.floor(Math.pow(Math.max(0, mana_gain), .33)); /* Then raise to .33 power and apply some rounding/checking */
+    mana_gain = Math.floor(Math.pow(Math.max(0, mana_gain), .4)); /* Then raise to .33 power and apply some rounding/checking */
     mana_gain = mana_gain / (1 + Math.floor(mana / 50) * .5); /* Then divide gain by a number increasing every 50 mana. */
     if (mana_gain > 50) {
         mana_gain = 50 + (mana_gain - 50) / 2;
@@ -1405,21 +1405,21 @@ function update() {
     /* Find time since last update. */
     var delta_time = Date.now() - last_update;
     last_update = Date.now();
-    if (delta_time > 5000) {
+    if (delta_time > 15000) {
         resources["time"].amount += delta_time / 1000; /* 1 sec of production, rest goes to time. */
         return;
     }
     if (time_on) {
         /* Find how much time they will use up */
-        if (resources["time"].amount < 5) {
+        if (resources["time"].amount < 10) {
             delta_time += resources["time"].amount * 1000; /* Give extra production for however much they can get, and remove that much time. */
             toggle_time();
             $("#time").addClass("hidden");
             resources["time"].amount = 0;
         }
         else {
-            delta_time += 5000;
-            resources["time"].amount -= 5;
+            delta_time += 10000;
+            resources["time"].amount -= 10;
         }
     }
     /* Check for negative resources or resources that will run out. */
@@ -1457,11 +1457,11 @@ function update() {
         $("#" + key + " span").first().html((key.charAt(0).toUpperCase() + key.slice(1)).replace("_", " ") + ": " + format_num(Math.max(0, resources[key].amount), false));
         /* Same for per sec */
         $("#" + key + "_per_sec").text((resources_per_sec[key] > 0 ? "+" : "") + format_num(resources_per_sec[key]) + "/s");
-        /* Color per sec */
-        if (resources_per_sec[key] < 0) {
+        /* Color per sec. Hide if super small. */
+        if (resources_per_sec[key] < -0.0001) {
             $("#" + key + "_per_sec").css("color", "red");
         }
-        else if (resources_per_sec[key] > 0) {
+        else if (resources_per_sec[key] > 0.0001) {
             $("#" + key + "_per_sec").css("color", "");
         }
         else {
@@ -1672,7 +1672,7 @@ window.onload = function () {
     random_title();
     setInterval(random_title, 600000);
     SPELL_BUILDINGS.forEach(function (build) {
-        if (buildings["s_manastone"].amount < buildings[build].amount * -buildings[build].generation["mana"]) {
+        if (buildings["s_manastone"].amount * 2 < buildings[build].amount * -buildings[build].generation["mana"]) {
             $("#building_" + build).parent().addClass("hidden");
         }
     });
