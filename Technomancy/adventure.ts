@@ -36,8 +36,8 @@ function start_adventure() {
     /* Let them choose to adventure there or go somewhere else. */
     $("#events_content").html("You are currently at " + location_data.name + ". What will you do?<br />");
 
-    let color = location_data.leave_cost <= adventure_data.inventory_fuel ? "white" : "red";
-    $("#events_content").append("<span class='clickable' onclick='travel(\"" + adventure_data.current_location + "\")'>" + location_data.go_again_text + " (" + location_data.leave_cost.toString() + ")</span><br />");
+    let color = location_data.leave_cost <= adventure_data.inventory_fuel ? "default" : "red";
+    $("#events_content").append("<span class='clickable' style='color:" + color + ";' onclick='travel(\"" + adventure_data.current_location + "\")'>" + location_data.go_again_text + " (" + location_data.leave_cost.toString() + ")</span><br />");
 
     location_data.connects_to.forEach(function (loc) {
         let test_connection = get_location(loc);

@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v2.4.1:
+Umbra encounter now doesn't let you get NaN fuel, re-adventuring in a place should turn red if you don't have enough fuel. 
+
 v2.4.0:
 New umbra encounter (throw some stuff away), oil well upgrades no longer check production of oil wells, mana gain power reduced (but not as much as raised, so still a bit higher), embezzling gives more stuff (may still not be enough, but yay uranium!), eregs boosts oil wells. Also started work on new event, use force_event(10) in the console to try it out (not interactive yet, but it's coming soon, unlocked by adventure mode!)
 
