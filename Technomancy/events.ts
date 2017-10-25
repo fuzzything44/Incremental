@@ -454,13 +454,41 @@ let events = [
             let sols = find_solutions(all_statements);
             /* Now to actually add it. */
 
-            //$("#events_content").html("You found a cute kitty... wait, what's it saying?<br />");
+            let content = "You found a cute kitty... wait, what's it saying?<br /><form id='logicat'><table>";
             for (let i = 0; i < all_statements.length; i++) {
-                $("#events_content").append(num_to_name(i) + ": " + all_statements[i].toString());
+                content += "<tr><td></td><th align='right'>" + num_to_name(i) + ":&nbsp;</td><td align='left'>" + all_statements[i].toString() + "</td></tr>";
+                content += "<tr><td></td><td></td><td>" +
+                    "<div class='radio-group'>" +
+                    "<input type='radio' name='" + i.toString() + "' id='cat_" + i.toString() + "_u' value='unknown' checked><label for='cat_" + i.toString() + "_u'>Unknown</label>" +
+                    "<input type='radio' name='" + i.toString() + "' id='cat_" + i.toString() + "_t' value='true'><label for='cat_" + i.toString() + "_t'>True</label>" +
+                    "<input type='radio' name='" + i.toString() + "' id='cat_" + i.toString() + "_f' value='false'><label for='cat_" + i.toString() + "_f'>False</label>" +
+                    "</div></td></tr>";
             }
+            content += "</table></form>";
+            $("#events_content").html(content);
+            $("#events_content").append("<span class='clickable'>Reset Answers</span><br/>");
+            $("#events_content > span").last().click(function () {
+                for (let i = 0; i < all_statements.length; i++) {
+                    $("#cat_" + i.toString() + "_u").prop("checked", true);
+                }
+            });
+
+            $("#events_content").append("<span class='clickable'>Submit Answers</span><br/>");
+            $("#events_content > span").last().click(function () {
+                let check_val = 0;
+                $('#logicat td:first-child').each(function () {
+                    /* Only every other so we don't try to check the inputs. */
+                    if (check_val % 2 == 0) {
+                        this.innerHTML = 'X' + (check_val / 2).toString();
+                    }
+                    check_val++;
+                });
+            });
+
+
             $("#events_content").append(JSON.stringify(sols));
         },
-        "name": "Logic test", //"A cu±Ã k¶±t©n",
+        "name": "A cu±Ã k¶±t©n",
         "rejection": 5,
     }), /* End logicat */
 

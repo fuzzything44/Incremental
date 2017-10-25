@@ -9,6 +9,51 @@
                                   supported by Chrome and Opera */
 }
 
+table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+th {
+    font-weight: normal;
+}
+
+input[type=radio] {
+  position: absolute;
+  visibility: hidden;
+  display: none;
+}
+
+input[type=radio] {
+  position: absolute;
+  visibility: hidden;
+  display: none;
+}
+
+label {
+  color: #9a929e;
+  display: inline-block;
+  cursor: pointer;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+input[type=radio]:checked + label {
+  background: #675f6b;
+}
+
+label + input[type=radio] + label {
+  border-left: solid 1px #675f6b;
+}
+
+.radio-group {
+  border: solid 1px #675f6b;
+  display: inline-block;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+
 #resource_bar {
     width: 20em;
     max-width: 20em;
