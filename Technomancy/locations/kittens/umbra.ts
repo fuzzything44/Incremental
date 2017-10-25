@@ -54,6 +54,20 @@
                 $("#events_content").append("<span class='clickable' onclick='start_adventure()'>Leave</span>");
             },
         }), /* Trash items. */
+        ({
+            "condition": function () { return adventure_data["umbra_throwaway"] > 5; },
+            "types": ["noncombat"],
+            "weight": 4,
+            "title": "Black Hole",
+            "run_encounter": function () {
+                /* Secretly count items thrown away */
+                $("#events_content").html("You threw stuff into the black hole a few times! <br />");
+                $("#events_content").append("I don't know why you did that, but if you message me about this on discord, you can become one of the smurfs in the channel (blue name).");
+                
+                $("#events_content").append("<span class='clickable' onclick='start_adventure()'>Done</span>");
+            },
+        }), /* They trashed a bunch of stuff. */
+
     ],
     "connects_to": ["kittens/cath"],
     "enter_cost": 6,

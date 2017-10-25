@@ -37,26 +37,26 @@ var events = [
                 /* Give them some of what they invested in. */
                 switch (invested_in) {
                     case "gold": {
-                        resources["gold"].amount += 10;
-                        $("#events_content").append("<br />You embezzled 10 gold.");
+                        resources["gold"].amount += 1000;
+                        $("#events_content").append("<br />You embezzled 1000 gold.");
                         break;
                     }
                     case "uranium": {
-                        resources["uranium"].amount += 1;
+                        resources["uranium"].amount += 35;
                         if (antique_item != "") {
-                            resources["uranium"].amount += .5;
+                            resources["uranium"].amount += 15;
                         }
                         $("#events_content").append("<br />You embezzled some uranium.");
                         break;
                     }
                     case "bread": {
-                        resources["stone"].amount += 1000;
+                        resources["stone"].amount += 100000;
                         $("#events_content").append("<br />Man, this bread is as hard as rock.");
                         break;
                     }
                     case "toothpicks": { }
                     case "beds": {
-                        resources["wood"].amount += 1000;
+                        resources["wood"].amount += 100000;
                         $("#events_content").append("<br />You turn some extras into wood.");
                         break;
                     }
@@ -242,6 +242,210 @@ var events = [
         "name": "Bribe a Politician",
         "rejection": 20,
     }),
+    ({
+        "condition": function () { return false; },
+        "run_event": function () {
+            var logic_operands;
+            (function (logic_operands) {
+                logic_operands[logic_operands["AND"] = 0] = "AND";
+                logic_operands[logic_operands["OR"] = 1] = "OR";
+                logic_operands[logic_operands["XOR"] = 2] = "XOR";
+                logic_operands[logic_operands["SET"] = 3] = "SET";
+                logic_operands[logic_operands["NUM_G"] = 4] = "NUM_G";
+                logic_operands[logic_operands["NUM_E"] = 5] = "NUM_E";
+                logic_operands[logic_operands["NUM_L"] = 6] = "NUM_L";
+            })(logic_operands || (logic_operands = {}));
+            function num_to_name(num) {
+                return "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[num];
+            }
+            var logic_statement = (function () {
+                function logic_statement(state_list, op, a, a_truth, b, b_truth) {
+                    if (op === void 0) { op = null; }
+                    if (a === void 0) { a = null; }
+                    if (a_truth === void 0) { a_truth = null; }
+                    if (b === void 0) { b = null; }
+                    if (b_truth === void 0) { b_truth = null; }
+                    this.statement_list = state_list;
+                    this.operation = op;
+                    this.param_a = a;
+                    this.param_a_truth = a_truth;
+                    this.param_b = b;
+                    this.param_b_truth = b_truth;
+                }
+                logic_statement.prototype.init = function () {
+                    /* Not in constructor so statements can reference ones added later. Adds more complexity, yay! */
+                    /* Fill in blanks */
+                    if (this.operation == null) {
+                        /* We need to set an operation */
+                        /* So get all possible values */
+                        var enumValues = Object.keys(logic_operands).map(function (n) { return parseInt(n); }).filter(function (n) { return !isNaN(n); });
+                        /* Choose one at random */
+                        this.operation = enumValues[Math.floor(Math.random() * enumValues.length)];
+                        /* Make t/f counting statements slightly less common by rerolling once */
+                        if ([logic_operands.NUM_E, logic_operands.NUM_G, logic_operands.NUM_L].indexOf(this.operation) != -1) {
+                            this.operation = enumValues[Math.floor(Math.random() * enumValues.length)];
+                        }
+                    }
+                    /* Param a stuff */
+                    if (this.param_a == null) {
+                        /* Choose random parameter.*/
+                        this.param_a = Math.floor(Math.random() * this.statement_list.length);
+                        /* "B: There are less than 0 false statements." */
+                        if ([logic_operands.NUM_G, logic_operands.NUM_L].indexOf(this.operation) != -1) {
+                            this.param_a = Math.max(1, this.param_a); /* Can't have less than 0. */
+                            this.param_a = Math.min(this.statement_list.length - 1, this.param_a); /* Can't have more than exist. */
+                        }
+                    }
+                    if (this.param_a_truth == null) {
+                        this.param_a_truth = Math.random() > .5;
+                    }
+                    /* Param b stuff. We sometimes set without caring about it, but whatever. */
+                    if (this.param_b == null) {
+                        /* Choose random parameter.*/
+                        this.param_b = Math.floor(Math.random() * this.statement_list.length);
+                    }
+                    if (this.param_b_truth == null) {
+                        this.param_b_truth = Math.random() > .5;
+                    }
+                };
+                /* Checks if this statement is true or false */
+                logic_statement.prototype.check = function (puzzle_state) {
+                    switch (this.operation) {
+                        case logic_operands.AND: {
+                            return puzzle_state[this.param_a] == this.param_a_truth && puzzle_state[this.param_b] == this.param_b_truth;
+                        }
+                        case logic_operands.OR: {
+                            return puzzle_state[this.param_a] == this.param_a_truth || puzzle_state[this.param_b] == this.param_b_truth;
+                        }
+                        case logic_operands.XOR: {
+                            /* XOR is same as not equal */
+                            return puzzle_state[this.param_a] != puzzle_state[this.param_b];
+                        }
+                        case logic_operands.SET: {
+                            return puzzle_state[this.param_a] == this.param_a_truth;
+                        }
+                        case logic_operands.NUM_E: {
+                            /* Number of elements in given state */
+                            var num_in_state = 0;
+                            for (var i = 0; i < puzzle_state.length; i++) {
+                                if (puzzle_state[i] == this.param_a_truth) {
+                                    num_in_state++;
+                                }
+                            }
+                            return this.param_a == num_in_state;
+                        }
+                        case logic_operands.NUM_G: {
+                            var num_in_state = 0;
+                            for (var i = 0; i < puzzle_state.length; i++) {
+                                if (puzzle_state[i] == this.param_a_truth) {
+                                    num_in_state++;
+                                }
+                            }
+                            return num_in_state > this.param_a;
+                        }
+                        case logic_operands.NUM_L: {
+                            var num_in_state = 0;
+                            for (var i = 0; i < puzzle_state.length; i++) {
+                                if (puzzle_state[i] == this.param_a_truth) {
+                                    num_in_state++;
+                                }
+                            }
+                            return num_in_state < this.param_a;
+                        }
+                    }
+                };
+                logic_statement.prototype.toString = function () {
+                    switch (this.operation) {
+                        case logic_operands.AND: {
+                            return "Statement " + num_to_name(this.param_a) + " is " + this.param_a_truth.toString() + " and statement " + num_to_name(this.param_b) + " is " + this.param_b_truth.toString() + ". <br/>";
+                        }
+                        case logic_operands.OR: {
+                            return "Statement " + num_to_name(this.param_a) + " is " + this.param_a_truth.toString() + " or statement " + num_to_name(this.param_b) + " is " + this.param_b_truth.toString() + ". <br/>";
+                        }
+                        case logic_operands.XOR: {
+                            /* XOR is same as not equal */
+                            return "Exactly one of statement " + num_to_name(this.param_a) + " and statement " + num_to_name(this.param_b) + " is " + (Math.random() > .5).toString() + ". <br/>";
+                        }
+                        case logic_operands.SET: {
+                            return "Statement " + num_to_name(this.param_a) + " is " + this.param_a_truth.toString() + ". <br/>";
+                        }
+                        case logic_operands.NUM_E: {
+                            return "There are exactly " + this.param_a.toString() + " " + this.param_a_truth.toString() + " statements. <br/>";
+                        }
+                        case logic_operands.NUM_G: {
+                            return "There are more than " + this.param_a.toString() + " " + this.param_a_truth.toString() + " statements. <br/>";
+                        }
+                        case logic_operands.NUM_L: {
+                            return "There are less than " + this.param_a.toString() + " " + this.param_a_truth.toString() + " statements. <br/>";
+                        }
+                    }
+                };
+                return logic_statement;
+            }());
+            function find_solutions(puzzle) {
+                /* Find all possible states our puzzle could be in. */
+                function binaryCombos(n) {
+                    var result = [];
+                    for (var y = 0; y < Math.pow(2, n); y++) {
+                        var combo = [];
+                        for (var x = 0; x < n; x++) {
+                            //shift bit and and it with 1
+                            if ((y >> x) & 1)
+                                combo.push(true);
+                            else
+                                combo.push(false);
+                        }
+                        result.push(combo);
+                    }
+                    return result;
+                }
+                /* Checks single solution and returns if it is valid. */
+                function check_solution(puzzle, state) {
+                    /* Go through every logic statement. */
+                    for (var statement = 0; statement < puzzle.length; statement++) {
+                        /* Check statement */
+                        if (puzzle[statement].check(state) != state[statement]) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+                /* All found solutions */
+                var solutions = [];
+                /* List of potential states (which are lists of bools). */
+                var solutions_to_check = binaryCombos(puzzle.length);
+                for (var i = 0; i < solutions_to_check.length; i++) {
+                    if (check_solution(puzzle, solutions_to_check[i])) {
+                        solutions.push(solutions_to_check[i]);
+                    }
+                }
+                return solutions;
+            }
+            var all_statements = [];
+            /* Make a core of 3 statements, retrying until we get at least 1 solution */
+            do {
+                all_statements = []; /* Clear statement list from last try, if there was one. */
+                var core_statement_amount = 10;
+                for (var i = 0; i < core_statement_amount; i++) {
+                    all_statements.push(new logic_statement(all_statements));
+                }
+                for (var i = 0; i < core_statement_amount; i++) {
+                    all_statements[i].init();
+                }
+                /* Normally it would be != 0 and we would then add extra statements for complexity, but start simple. */
+            } while (find_solutions(all_statements).length != 1);
+            /* I guess re-find solutions, shouldn't be a huge hit seeing as we've done it a few times. */
+            var sols = find_solutions(all_statements);
+            /* Now to actually add it. */
+            //$("#events_content").html("You found a cute kitty... wait, what's it saying?<br />");
+            for (var i = 0; i < all_statements.length; i++) {
+                $("#events_content").append(num_to_name(i) + ": " + all_statements[i].toString());
+            }
+            $("#events_content").append(JSON.stringify(sols));
+        },
+        "name": "Logic test",
+        "rejection": 5,
+    }),
 ];
 /* Literally only for testing purposes. */
 function force_event(id) {
@@ -341,6 +545,7 @@ function bribe_finance() {
 function bribe_environment() {
     /* Pay bribe */
     resources["money"].amount -= 1000000;
+    /* Boost mines */
     var build_state = buildings["mine"].on;
     if (build_state) {
         toggle_building_state("mine");
@@ -351,6 +556,7 @@ function bribe_environment() {
     if (build_state) {
         toggle_building_state("mine");
     }
+    /* Boost logging */
     build_state = buildings["logging"].on;
     if (build_state) {
         toggle_building_state("logging");
@@ -358,6 +564,15 @@ function bribe_environment() {
     buildings["logging"].generation["wood"] *= 25;
     if (build_state) {
         toggle_building_state("logging");
+    }
+    /* Boost oil */
+    build_state = buildings["oil_well"].on;
+    if (build_state) {
+        toggle_building_state("oil_well");
+    }
+    buildings["oil_well"].generation["oil"] *= 2;
+    if (build_state) {
+        toggle_building_state("oil_well");
     }
     event_flags["bribed_politician"] = "environment";
     $("#events").addClass("hidden");

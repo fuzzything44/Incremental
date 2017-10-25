@@ -811,7 +811,7 @@ function set_initial_state() {
             "image": "diamond.png",
         },
         "better_oil": {
-            "unlock": function () { return buildings["oil_well"].amount >= 1 && buildings["oil_well"].generation["oil"] < 1; },
+            "unlock": function () { return buildings["oil_well"].amount >= 1; },
             "purchase": function () {
                 var comp_state = buildings["oil_well"].on;
                 if (comp_state) {
@@ -830,7 +830,7 @@ function set_initial_state() {
             "image": "",
         },
         "even_better_oil": {
-            "unlock": function () { return buildings["oil_well"].amount >= 1 && buildings["oil_well"].generation["oil"] < 1; },
+            "unlock": function () { return purchased_upgrades.indexOf("better_oil") != -1; },
             "purchase": function () {
                 var comp_state = buildings["oil_well"].on;
                 if (comp_state) {
@@ -1196,7 +1196,7 @@ function prestige() {
     var mana = buildings["s_manastone"].amount;
     Object.keys(resources).forEach(function (res) { return prestige_points += resources[res].amount * Math.abs(resources[res].value); });
     var mana_gain = prestige_points / 20000 - Math.pow(mana, 1.3) * .5; /* One for every 20k pp, and apply reduction based off of current mana */
-    mana_gain = Math.floor(Math.pow(Math.max(0, mana_gain), .4)); /* Then raise to .33 power and apply some rounding/checking */
+    mana_gain = Math.floor(Math.pow(Math.max(0, mana_gain), .36)); /* Then raise to .33 power and apply some rounding/checking */
     mana_gain = mana_gain / (1 + Math.floor(mana / 50) * .5); /* Then divide gain by a number increasing every 50 mana. */
     if (mana_gain > 50) {
         mana_gain = 50 + (mana_gain - 50) / 2;
