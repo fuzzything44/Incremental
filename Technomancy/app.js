@@ -1677,7 +1677,11 @@ window.onload = function () {
         }
     });
     /* Start our event system */
-    setTimeout(handle_event, 2 * 60000 + Math.random() * 60000 * 2);
+    var to_next_event = 2 * 60000 + Math.random() * 60000 * 2;
+    if (purchased_upgrades.indexOf("more_events") != -1) {
+        to_next_event *= .7;
+    }
+    setTimeout(handle_event, to_next_event);
     /* Set up for adventure mode requests */
     $.ajaxSetup({
         "async": false,

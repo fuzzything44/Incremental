@@ -70,8 +70,24 @@
             },
         }), /* They trashed a bunch of stuff. */
 
+        ({
+            "condition": function () { return adventure_data["has_gravstorage"] == undefined; },
+            "types": ["noncombat"],
+            "weight": 1,
+            "title": "Thoughts on Gravity",
+            "run_encounter": function () {
+                $("#events_content").html("Hmm... you could compress the stuff in your storage and fit more in there...<br />");
+                adventure_data["has_gravstorage"] = true;
+                adventure_data.inventory_size += 5;
+                update_inventory();
+                $("#events_content").append("<span class='clickable' onclick='start_adventure()'>Done</span>");
+
+            },
+        }), /* Ship storage boost */
+
+
     ],
-    "connects_to": ["kittens/cath"],
+    "connects_to": ["kittens/cath", "kittens/castles"],
     "enter_cost": 6,
     "leave_cost": 2,
     "name": "Umbra",

@@ -243,7 +243,7 @@ var events = [
         "rejection": 20,
     }),
     ({
-        "condition": function () { return false; },
+        "condition": function () { return adventure_data.current_location == "kittens/castles"; },
         "run_event": function () {
             var logic_operands;
             (function (logic_operands) {
@@ -425,7 +425,8 @@ var events = [
             /* Make a core of 3 statements, retrying until we get at least 1 solution */
             do {
                 all_statements = []; /* Clear statement list from last try, if there was one. */
-                var core_statement_amount = 10;
+                /* Somewhere from 3 to 8 statements. */
+                var core_statement_amount = 3 + Math.round(Math.random() * 3) + Math.round(Math.random() * 2);
                 for (var i = 0; i < core_statement_amount; i++) {
                     all_statements.push(new logic_statement(all_statements));
                 }
@@ -435,7 +436,7 @@ var events = [
                 /* Normally it would be != 0 and we would then add extra statements for complexity, but start simple. */
             } while (find_solutions(all_statements).length != 1);
             /* I guess re-find solutions, shouldn't be a huge hit seeing as we've done it a few times. */
-            var sols = find_solutions(all_statements);
+            var sols = find_solutions(all_statements)[0];
             /* Now to actually add it. */
             var content = "You found a cute kitty... wait, what's it saying?<br /><form id='logicat'><table>";
             for (var i = 0; i < all_statements.length; i++) {
@@ -457,16 +458,56 @@ var events = [
             });
             $("#events_content").append("<span class='clickable'>Submit Answers</span><br/>");
             $("#events_content > span").last().click(function () {
+                /* Remove submit/clear answers buttons */
+                $("#events_content > span").last().remove();
+                $("#events_content > span").last().remove();
+                $("#events_content > br").last().remove();
+                $("#events_content > br").last().remove();
+                /* Hide selectors */
+                $("#logicat tr:nth-child(even)").addClass("hidden");
+                var num_correct = 0;
+                var num_incorrect = 0;
                 var check_val = 0;
                 $('#logicat td:first-child').each(function () {
                     /* Only every other so we don't try to check the inputs. */
                     if (check_val % 2 == 0) {
-                        this.innerHTML = 'X' + (check_val / 2).toString();
+                        var answer = $("input:radio[name='" + Math.round(check_val / 2).toString() + "']:checked").val();
+                        if (answer == "unknown") {
+                            this.innerHTML = "-";
+                        }
+                        else {
+                            answer = (answer == "true"); /* Cast answer to bool */
+                            if (answer == sols[Math.round(check_val / 2)]) {
+                                this.innerHTML = "<span style='color:green'>\u2714 (" + answer.toString()[0].toUpperCase() + ")</span>";
+                                num_correct++;
+                            }
+                            else {
+                                this.innerHTML = "<span style='color:red'>X (" + answer.toString()[0].toUpperCase() + ")</span>";
+                                num_incorrect++;
+                            }
+                        }
                     }
                     check_val++;
                 });
+                $("#events_content").append("You had " + num_correct.toString() + " correct answers and " + num_incorrect.toString() + " wrong answers. Your total score is " + (num_correct - num_incorrect).toString() + ".<br />");
+                /* Perfect answer doubles resource production for 5 minutes.*/
+                if (num_correct == sols.length) {
+                    Object.keys(resources_per_sec).forEach(function (res) {
+                        /* Don't double negatives. */
+                        var ps_add = Math.max(0, resources_per_sec[res]);
+                        resources_per_sec[res] += ps_add;
+                        setTimeout(function () { return resources_per_sec[res] -= ps_add; }, 60000 * 5);
+                    });
+                }
+                /* 70% correct. Give 1 min of time. */
+                if (num_correct / sols.length >= .70) {
+                    resources["time"].amount += 60;
+                }
+                /* More right than wrong. Give glass */
+                if (num_correct > num_incorrect) {
+                    resources["glass"].amount += 2500;
+                }
             });
-            $("#events_content").append(JSON.stringify(sols));
         },
         "name": "A cu±Ã k¶±t©n",
         "rejection": 5,
