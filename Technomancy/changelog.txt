@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v2.5.1:
+Logikittens don't give energy/mana/similar. 
+
 v2.5.0:
 Added new adventure mode location. Umbra has a new adventure that expands ship storage. Your first event after reload appears sooner if you have the upgrade that does it. You can find cute kittens while you're there and they give rewards for solving puzzles.
 

@@ -513,6 +513,8 @@ let events = [
                     Object.keys(resources_per_sec).forEach(function (res) {
                         /* Don't double negatives. */
                         let ps_add = Math.max(0, resources_per_sec[res]);
+                        if (resources[res].value == 0) { ps_add = 0; } /* Don't add mana/energy/similar. */
+
                         resources_per_sec[res] += ps_add;
                         setTimeout(() => resources_per_sec[res] -= ps_add, 60000 * 5);
                     })
