@@ -243,7 +243,7 @@ var events = [
         "rejection": 20,
     }),
     ({
-        "condition": function () { return adventure_data.current_location == "kittens/castles"; },
+        "condition": function () { return adventure_data.current_location == "kittens/castles" || adventure_data["logicat_level"] >= 5; },
         "run_event": function () {
             var logic_operands;
             (function (logic_operands) {
@@ -490,6 +490,40 @@ var events = [
                     check_val++;
                 });
                 $("#events_content").append("You had " + num_correct.toString() + " correct answers and " + num_incorrect.toString() + " wrong answers. Your total score is " + (num_correct - num_incorrect).toString() + ".<br />");
+                var total_points = adventure_data["logicat_points"] + num_correct - num_incorrect;
+                /* Level up every 5 points */
+                //if (total_points >= 5) {
+                //    let levels = Math.floor(total_points / 5);
+                //    total_points = total_points - levels * 5;
+                //
+                //    if (levels < 5) {
+                //        for (let i = 0; i < levels; i++) {
+                //            /* Level them up*/
+                //            adventure_data["logicat_level"] += 1;
+                //            /* Note no <br /> at the end. */
+                //            $("#events_content").append("Logikitten level increased! This level rewards: ");
+                //            var seed = adventure_data["logicat_level"]; /* Semi-randomish number generation. Makes logicat rewards deterministic per //level. */
+                //            let rand_num = Math.sin(seed) * 10000;
+                //            rand_num = rand_num - Math.floor(rand_num);
+                //
+                //            let reward_list = [
+                //                { "name": "nothing :(", "effect": function () { }},
+                //                { "name": "also nothing :(", "effect": function () { } },
+                //                { "name": "still nothing :(", "effect": function () { } },
+                //              ];
+                //
+                //            /* Choose random reward from list. */
+                //            let reward = reward_list[Math.floor(rand_num * reward_list.length)];
+                //            $("#events_content").append(reward.name + "<br />");
+                //            reward.effect();
+                //        }
+                //    } else {
+                //        /* Gained a ton of levels. How ?*/
+                //    }
+                //} 
+                // Don't level up until we have rewards.
+                /* Set their point amount. */
+                adventure_data["logicat_points"] = total_points;
                 /* Perfect answer doubles resource production for 5 minutes.*/
                 if (num_correct == sols.length) {
                     Object.keys(resources_per_sec).forEach(function (res) {
@@ -501,14 +535,17 @@ var events = [
                         resources_per_sec[res] += ps_add;
                         setTimeout(function () { return resources_per_sec[res] -= ps_add; }, 60000 * 5);
                     });
+                    $("#events_content").append("Perfect answer! Production increased.<br />");
                 }
                 /* 70% correct. Give 1 min of time. */
                 if (num_correct / sols.length >= .70) {
                     resources["time"].amount += 60;
+                    $("#events_content").append("Good job. Gained 60 time.<br />");
                 }
                 /* More right than wrong. Give glass */
                 if (num_correct > num_incorrect) {
                     resources["glass"].amount += 2500;
+                    $("#events_content").append("Blast Furnace in Operation! Gained 2,000 Glass Chips. Gained 500 Glass Blocks.<br />");
                 }
             });
         },

@@ -5,7 +5,7 @@
         ({
             "condition": function () { return true; },
             "types": ["noncombat"],
-            "weight": 10,
+            "weight": 7,
             "title": "Brrrr....",
             "run_encounter": function () {
                 $("#events_content").html("Wow, this planet is cold. You need to constantly keep your engines running to keep warm. <br />");

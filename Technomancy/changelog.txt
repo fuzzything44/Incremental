@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v2.6.0:
+When adventuring, you have less of a chance of finding a logikitten now. In terminus, the freezing noncombat is less likely. Fixed a bug with upgrades that give buildings potentially giving none. Logikittens now say what rewards you got. 
+
 v2.5.1:
 Logikittens don't give energy/mana/similar. 
 

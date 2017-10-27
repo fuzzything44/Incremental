@@ -1007,8 +1007,7 @@ function set_initial_state() {
                 Object.keys(buildings["skyscraper"].base_cost).forEach(function (res) {
                     resources[res].amount += buildings["skyscraper"].base_cost[res];
                 });
-
-                purchase_building("skyscraper");
+                purchase_building("skyscraper", 1);
             },
             "cost": {
                 "money": 25000,
@@ -1028,8 +1027,7 @@ function set_initial_state() {
                 Object.keys(buildings["glass_jeweler"].base_cost).forEach(function (res) {
                     resources[res].amount += buildings["glass_jeweler"].base_cost[res];
                 });
-
-                purchase_building("glass_jeweler");
+                purchase_building("glass_jeweler", 1);
             },
             "cost": {
                 "money": 25000,
@@ -1166,7 +1164,7 @@ function set_initial_state() {
                     resources[res].amount += buildings["reactor"].base_cost[res];
                 });
 
-                purchase_building("reactor");
+                purchase_building("reactor", 1);
             },
             "cost": {
                 "money": 100000000,
@@ -1600,8 +1598,10 @@ function gen_building_tooltip(name: string) {
     return gen_text.trim().replace(/.$/, ".") + "<br />" + cost_text.trim().replace(/.$/, ".") + flavor_text;
 }
 
-function purchase_building(name: string) {
-    let amount = parseInt($("#buy_amount").val());
+function purchase_building(name: string, amount = null) {
+    if (amount == null) {
+        amount = parseInt($("#buy_amount").val());
+    }
     if (isNaN(amount)) { amount = 1; }
     /* Make sure they have enough to buy it */
     Object.keys(buildings[name].base_cost).forEach(function (key) {
