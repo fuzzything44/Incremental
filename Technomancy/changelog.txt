@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v2.7.0:
+Smurf encounter isn't missing a newline. You can get sandcastles. Glass value increased, but it takes more sand to smelt glass. You can use sand to buy sandcastles. Meteors give more stone and gold. Logicat levels do things. Each level gives a reward. The reward progression is deterministic, but the pattern may change if I add more rewards.
+
 v2.6.0:
 When adventuring, you have less of a chance of finding a logikitten now. In terminus, the freezing noncombat is less likely. Fixed a bug with upgrades that give buildings potentially giving none. Logikittens now say what rewards you got. 
 

@@ -49,18 +49,19 @@ function s_trade(delta_time: number) {
             return buildings["s_trade"].on;
         },
         "purchase": function () {
-            purchased_upgrades.pop();
             to_next_trade = 60000;
+            delete remaining_upgrades["trade"];
         },
         "cost": {},
         "tooltip": "",
         "name": "Trade Items <br />",
         "image": "money.png",
+        "repeats": true,
     };
     to_next_trade -= delta_time;
     if (remaining_upgrades["trade"] == undefined && to_next_trade < 0) {
         remaining_upgrades["trade"] = trade_upgrade;
-        /* Roll money amount. Horrible arbitrary formula, takes your money and max mana into account for upper bound. */
+        /* Roll money amount. Horrible arbitrary formula, takes your money and remaining mana into account for upper bound. */
         let money_value = Math.round(Math.max(1, Math.random() * Math.min(Math.pow(resources["mana"].amount, 3) * 10, resources["money"].amount) * 2 + 10));
         /* Choose resources to be about the same money worth. */
         let resource_value = Math.round((money_value * 5 / 6) + (Math.random() * money_value * 1 / 3));

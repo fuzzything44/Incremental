@@ -60,6 +60,7 @@ var UNLOCK_TREE = {
     "reactor": ["fuel_maker"],
     "fuel_maker": [],
     "hydrogen_mine": [],
+    "sandcastle": [],
 };
 var SPELL_BUILDINGS = [
     "s_manastone",
@@ -96,11 +97,12 @@ function set_initial_state() {
         "ink": { "amount": 0, "value": 10 },
         "book": { "amount": 0, "value": 400 },
         "sand": { "amount": 0, "value": 3 },
-        "glass": { "amount": 0, "value": 5 },
+        "glass": { "amount": 0, "value": 20 },
         "water": { "amount": 0, "value": 2 },
         "hydrogen": { "amount": 0, "value": 5 },
         "steel_beam": { "amount": 0, "value": 200 },
         "uranium": { "amount": 0, "value": 500 },
+        "sandcastle": { "amount": 0, "value": 10000000 },
     };
     /* Set resources_per_sec */
     Object.keys(resources).forEach(function (res) {
@@ -727,6 +729,7 @@ function set_initial_state() {
             "tooltip": "Mines produce double stone and 5x iron. <br /> Costs 2000 money, 500 stone, 500 iron.",
             "name": "Improve Mines",
             "image": "pickaxe.png",
+            "repeats": false,
         },
         "better_logging": {
             "unlock": function () { return buildings["logging"].amount >= 3 && buildings["s_manastone"].amount >= 5; },
@@ -749,6 +752,7 @@ function set_initial_state() {
             "tooltip": "console.err('Upgrade not purchased, player needs to buy it!'); <br /> Costs 2000 money, 500 wood, 500 iron.",
             "name": "Magical Trees",
             "image": "",
+            "repeats": false,
         },
         "coal_mines": {
             "unlock": function () { return buildings["mine"].amount >= 3 && buildings["compressor"].amount >= 1 && (resources["coal"].amount < 50 || resources["research"].amount > 5); },
@@ -770,6 +774,7 @@ function set_initial_state() {
             "tooltip": "Mines produce coal.<br /> Costs 1000 money, 500 stone, 500 wood.",
             "name": "Coal Mining <br />",
             "image": "pickaxe.png",
+            "repeats": false,
         },
         "better_compressors": {
             "unlock": function () { return buildings["compressor"].amount >= 1; },
@@ -790,6 +795,7 @@ function set_initial_state() {
             "tooltip": "Compressors use 30% less coal. <br /> Costs 3000 money, 1000 iron.",
             "name": "Improve Compressors",
             "image": "diamond.png",
+            "repeats": false,
         },
         "oiled_compressors": {
             "unlock": function () { return buildings["compressor"].amount >= 1 && resources["oil"].amount > 20; },
@@ -809,6 +815,7 @@ function set_initial_state() {
             "tooltip": "Oil your compressors to have them run more efficiently. <br /> Costs 50 oil.",
             "name": "Oil Compressors",
             "image": "diamond.png",
+            "repeats": false,
         },
         "better_oil": {
             "unlock": function () { return buildings["oil_well"].amount >= 1; },
@@ -828,6 +835,7 @@ function set_initial_state() {
             "tooltip": "Get more oil for your wells. <br /> Costs 100 oil.",
             "name": "Fracking",
             "image": "",
+            "repeats": false,
         },
         "even_better_oil": {
             "unlock": function () { return purchased_upgrades.indexOf("better_oil") != -1; },
@@ -848,6 +856,7 @@ function set_initial_state() {
             "tooltip": "If it worked once, why not again? <br /> Costs 500 oil.<br />Requires 1 research.",
             "name": "More Fracking",
             "image": "",
+            "repeats": false,
         },
         "cheaper_banks": {
             "unlock": function () { return resources["money"].amount >= 2500 && buildings["bank"].amount >= 20; },
@@ -861,6 +870,7 @@ function set_initial_state() {
             "tooltip": "Banks are cheaper to buy.<br /> Costs 5000 money, 1000 iron.",
             "name": "Build a vault <br />",
             "image": "money.png",
+            "repeats": false,
         },
         "better_paper": {
             "unlock": function () { return buildings["paper_mill"].amount >= 3; },
@@ -883,6 +893,7 @@ function set_initial_state() {
             "tooltip": "Make thinner paper, creating double the paper per wood.<br /> Costs 10000 money, 1000 iron, 500 oil. <br /> Requires research level of 5.",
             "name": "Thinner paper",
             "image": "gear.png",
+            "repeats": false,
         },
         "better_furnace": {
             "unlock": function () { return buildings["furnace"].amount >= 3; },
@@ -908,6 +919,7 @@ function set_initial_state() {
             "tooltip": "Much hotter furnaces run at 10x the previous rate and consume slightly less wood. <br /> Costs 10000 money, 30000 stone, 20000 wood, 2000 coal.",
             "name": "Hotter furnaces",
             "image": "fire.png",
+            "repeats": false,
         },
         "better_gold": {
             "unlock": function () { return buildings["gold_finder"].amount >= 3; },
@@ -930,6 +942,7 @@ function set_initial_state() {
             "tooltip": "Special gold-plated magnets that attract only gold. And a bit of iron. <br /> Costs 25000 money, 500 gold, 1000 iron.",
             "name": "Gold magnet <br />",
             "image": "money.png",
+            "repeats": false,
         },
         "gold_crusher": {
             "unlock": function () { return buildings["gold_finder"].amount >= 5 && buildings["s_manastone"].amount >= 10; },
@@ -952,6 +965,7 @@ function set_initial_state() {
             "tooltip": "Crushes stone into sand, improving gold find rate. <br /> Costs 25000 money, 2000 iron, 20000 stone.",
             "name": "Destructive Sifter",
             "image": "sand.png",
+            "repeats": false,
         },
         "glass_furnace": {
             "unlock": function () { return buildings["furnace"].amount >= 2 && resources["sand"].amount >= 10 && purchased_upgrades.indexOf("better_furnace") != -1; },
@@ -960,7 +974,7 @@ function set_initial_state() {
                 if (comp_state) {
                     toggle_building_state("furnace");
                 }
-                buildings["furnace"].generation["sand"] = -1;
+                buildings["furnace"].generation["sand"] = -5;
                 buildings["furnace"].generation["glass"] = 1;
                 if (comp_state) {
                     toggle_building_state("furnace");
@@ -974,6 +988,7 @@ function set_initial_state() {
             "tooltip": "Furnaces now smelt sand into glass at a rate of 1/s. <br /> Costs 250K money, 20000 iron, 50000 wood.",
             "name": "Glass Furnace",
             "image": "sand.png",
+            "repeats": false,
         },
         "skyscraper": {
             "unlock": function () { return resources["steel_beam"].amount > 5 && buildings["skyscraper"].amount < 1; },
@@ -994,6 +1009,7 @@ function set_initial_state() {
             "tooltip": "Build the first floor of a skyscraper for some managers to live in. <br /> Costs 25000 money, 50 steel beam, 250 glass.",
             "name": "Skyscrapers",
             "image": "",
+            "repeats": false,
         },
         "glassblowing": {
             "unlock": function () { return resources["glass"].amount > 5; },
@@ -1014,6 +1030,7 @@ function set_initial_state() {
             "tooltip": "Research how to blow glass into jewelry. <br /> Costs 25000 money, 250 glass. <br />Requires 7 research.",
             "name": "Glassblowing",
             "image": "",
+            "repeats": false,
         },
         "better_jeweler": {
             "unlock": function () { return resources["sand"].amount > 0 && resources["paper"].amount > 0; },
@@ -1036,6 +1053,7 @@ function set_initial_state() {
             "tooltip": "Sand diamonds for a bright polish! <br /> Costs 250000 money, 2500 sand, 5000 paper. <br />Requires 12 research.",
             "name": "Sandpaper",
             "image": "",
+            "repeats": false,
         },
         "better_jewelry_store": {
             "unlock": function () { return resources["jewelry"].amount > 100 && resources["manager"].amount > 0; },
@@ -1057,6 +1075,7 @@ function set_initial_state() {
             "tooltip": "High-pressure sales tactics let you sell jewelry for more. But you'll need managers to keep employees in line. <br /> Costs 10M money. <br />Requires 8 research.",
             "name": "Sleazy Managers",
             "image": "",
+            "repeats": false,
         },
         "better_trades": {
             "unlock": function () { return resources["refined_mana"].amount >= 1000 && buildings["s_trade"].on; },
@@ -1068,6 +1087,7 @@ function set_initial_state() {
             "tooltip": "Your portals cover more of the market, letting you get better deals. <br /> Costs 10000 refined mana, 500 gold.",
             "name": "Mystic Portals",
             "image": "money.png",
+            "repeats": false,
         },
         "better_trades_2": {
             "unlock": function () { return purchased_upgrades.indexOf("better_trades") != -1; },
@@ -1079,6 +1099,7 @@ function set_initial_state() {
             "tooltip": "Your portals cover more of the market, letting you get better deals. <br /> Costs 30000 refined mana, 1000 diamond.",
             "name": "Arcane Portals",
             "image": "diamond.png",
+            "repeats": false,
         },
         "better_time": {
             "unlock": function () { return buildings["s_time_magic"].on; },
@@ -1099,6 +1120,7 @@ function set_initial_state() {
             "tooltip": "Throw away some extra time. You didn't need that, did you? <br /> Costs 30000 time.",
             "name": "Time removal",
             "image": "shield_power.png",
+            "repeats": false
         },
         "uranium_finance": {
             "unlock": function () { return typeof event_flags["bribed_politician"] != "undefined" && event_flags["bribed_politician"] == "money" && buildings["s_manastone"].amount >= 200; },
@@ -1110,6 +1132,7 @@ function set_initial_state() {
             "tooltip": "Get some of what you invest in. Sometimes. <br /> Costs 10M money. <br /> Requires 15 research.",
             "name": "Investment Embezzling",
             "image": "uranium.png",
+            "repeats": false,
         },
         "uranium_environment": {
             "unlock": function () { return typeof event_flags["bribed_politician"] != "undefined" && event_flags["bribed_politician"] == "environment" && buildings["s_manastone"].amount >= 200; },
@@ -1130,6 +1153,7 @@ function set_initial_state() {
             "tooltip": "Huh, what's this metal your strip mines are finding? <br /> Costs 50M money. <br /> Requires 15 research.",
             "name": "Deeper mines",
             "image": "uranium.png",
+            "repeats": false,
         },
         "uranium_power": {
             "unlock": function () { return resources["uranium"].amount > 10; },
@@ -1146,6 +1170,7 @@ function set_initial_state() {
             "tooltip": "Research how to use uranium for energy. <br /> Costs 100M money. <br /> Requires 20 research.",
             "name": "Uranium Research",
             "image": "uranium.png",
+            "repeats": false,
         },
         "more_events": {
             "unlock": function () { return resources["uranium"].amount > 10; },
@@ -1157,6 +1182,7 @@ function set_initial_state() {
             "tooltip": "Events are more common. <br /> Costs 20,000 time, 10,000 refined mana.",
             "name": "Unlimited Events",
             "image": "shield_on.png",
+            "repeats": false,
         },
         "better_library": {
             "unlock": function () { return adventure_data["cath_discovery"] >= 3; },
@@ -1171,6 +1197,7 @@ function set_initial_state() {
             "tooltip": "Print more material for your libraries. <br /> Costs 5,000 book.",
             "name": "Reading Material",
             "image": "",
+            "repeats": false,
         },
         "better_library_2": {
             "unlock": function () { return purchased_upgrades.indexOf("better_library") != -1; },
@@ -1185,6 +1212,33 @@ function set_initial_state() {
             "tooltip": "Start printing actually good books for your libraries. <br /> Costs 15,000 book.",
             "name": "Good Reading Material",
             "image": "",
+            "repeats": false,
+        },
+        "sandcastles": {
+            "unlock": function () {
+                /* Since we check if it's unlocked first, we can set the cost in this function.*/
+                if (adventure_data["sandcastle_boost_unlocked"]) {
+                    remaining_upgrades["sandcastles"].cost = { "sand": 1000000 * adventure_data["sandcastle_boost_unlocked"] };
+                    remaining_upgrades["sandcastles"].tooltip = "Build a sandcastle.<br />Costs " + format_num(adventure_data["sandcastle_boost_unlocked"] * 1000000) + " sand";
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            },
+            "purchase": function () {
+                /* Next one costs more, remove this one from purchased ones. */
+                adventure_data["sandcastle_boost_unlocked"]++;
+                purchased_upgrades.pop();
+                resources["sandcastle"].amount++;
+            },
+            "cost": {
+                "sand": 1000000,
+            },
+            "tooltip": "Build a sandcastle. <br /> Costs 1M sand.",
+            "name": "Sandcastle",
+            "image": "",
+            "repeats": true,
         },
     };
     event_flags = {};
@@ -1631,14 +1685,14 @@ function purchase_upgrade(name) {
         resources[resource].amount -= upg.cost[resource];
     });
     /* Do cleanup. Get benefit from having it, remove it from purchasable upgrades, add it to purchased upgrades, remove from page */
-    purchased_upgrades.push(name);
-    var upg_name = remaining_upgrades[name].name;
-    delete remaining_upgrades[name];
-    if (name != "trade") {
+    upg.purchase();
+    if (!upg.repeats) {
+        purchased_upgrades.push(name);
+        var upg_name = remaining_upgrades[name].name;
+        delete remaining_upgrades[name];
         update_total_upgrades(upg_name);
     }
     $("#upgrade_" + name).remove();
-    upg.purchase();
 }
 function random_title() {
     var TITLES = [

@@ -74,12 +74,12 @@ let events = [
         "condition": function () { return true; },
         "run_event": function () {
             let content = "<span>Woah, a meteor just hit in your backyard!</span><br>";
-            content += "<span onclick='resources.stone.amount += 1000; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 1000 stone\");' class='clickable'>Gather stone</span><br>";
+            content += "<span onclick='resources.stone.amount += 50000; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 50000 stone\");' class='clickable'>Gather stone</span><br>";
             if (resources["iron"].amount > 0) {
                 content += "<span onclick='resources.iron.amount += 500; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 500 iron\");' class='clickable'>Recover iron</span><br>";
             }
             if (resources["gold"].amount > 0) {
-                content += "<span onclick='resources.gold.amount += 50; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 50 gold\");' class='clickable'>Look for gold</span><br>";
+                content += "<span onclick='resources.gold.amount += 150; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 150 gold\");' class='clickable'>Look for gold</span><br>";
             }
             if (resources["energy"].amount > 0) {
                 content += "<span onclick='resources_per_sec.energy += 10; setTimeout(() => resources_per_sec[\"energy\"] -= 10, 5 *60000); $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 10 energy for 5 minutes\");' class='clickable'>Capture the heat</span><br>";
@@ -510,36 +510,46 @@ let events = [
                 $("#events_content").append("You had " + num_correct.toString() + " correct answers and " + num_incorrect.toString() + " wrong answers. Your total score is " + (num_correct - num_incorrect).toString() + ".<br />");
                 let total_points = adventure_data["logicat_points"] + num_correct - num_incorrect;
                 /* Level up every 5 points */ 
-                //if (total_points >= 5) {
-                //    let levels = Math.floor(total_points / 5);
-                //    total_points = total_points - levels * 5;
-                //
-                //    if (levels < 5) {
-                //        for (let i = 0; i < levels; i++) {
-                //            /* Level them up*/
-                //            adventure_data["logicat_level"] += 1;
-                //            /* Note no <br /> at the end. */
-                //            $("#events_content").append("Logikitten level increased! This level rewards: ");
-                //            var seed = adventure_data["logicat_level"]; /* Semi-randomish number generation. Makes logicat rewards deterministic per //level. */
-                //            let rand_num = Math.sin(seed) * 10000;
-                //            rand_num = rand_num - Math.floor(rand_num);
-                //
-                //            let reward_list = [
-                //                { "name": "nothing :(", "effect": function () { }},
-                //                { "name": "also nothing :(", "effect": function () { } },
-                //                { "name": "still nothing :(", "effect": function () { } },
-                //              ];
-                //
-                //            /* Choose random reward from list. */
-                //            let reward = reward_list[Math.floor(rand_num * reward_list.length)];
-                //            $("#events_content").append(reward.name + "<br />");
-                //            reward.effect();
-                //        }
-                //    } else {
-                //        /* Gained a ton of levels. How ?*/
-                //    }
-                //} 
-                // Don't level up until we have rewards.
+                if (total_points >= 5) {
+                    let levels = Math.floor(total_points / 5);
+                    total_points = total_points - levels * 5;
+                
+                    for (let i = 0; i < levels && i < 5; i++) { /* Only level up 5 times per cat max. */
+                        /* Level them up*/
+                        adventure_data["logicat_level"] += 1;
+                        /* Note no <br /> at the end. */
+                        $("#events_content").append("Logikitten level increased! This level rewards: ");
+                        var seed = adventure_data["logicat_level"]; /* Semi-randomish number generation. Makes logicat rewards deterministic perlevel.*/
+                        let rand_num = Math.sin(seed) * 10000;
+                        rand_num = rand_num - Math.floor(rand_num);
+
+                        /* Base rewards */
+                        let reward_list = [
+                            { "name": "Temporal Duplication", "effect": function () { resources["time"].amount += 120; }},
+                            { "name": "Glass Bottle Cleanup", "effect": function () { resources["glass"].amount -= 20; resources["sand"].amount += 10000; } },
+                            { "name": "Nothing :(", "effect": function () { } },
+                        ];
+                        if (adventure_data["sandcastle_boost_unlocked"]) {
+                            reward_list.push({ "name": "ONG!", "effect": function () { adventure_data["sandcastle_boost_unlocked"] = 1; }})
+                        }
+                        /* Fixed level rewards */
+                        if (adventure_data["logicat_level"] >= 5 && adventure_data["sandcastle_boost_unlocked"] == undefined) {
+                            reward_list = [{
+                                "name": "Sandcastles", "effect": function () {
+                                    adventure_data["sandcastle_boost_unlocked"] = 1;
+                                }
+                            }];
+                        } else if (adventure_data["logicat_level"] >= 10 && adventure_data[""] == undefined) {
+                            /* What's the level 10 reward? */
+                        }
+
+                        /* Choose random reward from list. */
+                        let reward = reward_list[Math.floor(rand_num * reward_list.length)];
+                        $("#events_content").append(reward.name + "<br />");
+                        reward.effect();
+                    }
+
+                } 
                 
                 /* Set their point amount. */
                 adventure_data["logicat_points"] = total_points;
