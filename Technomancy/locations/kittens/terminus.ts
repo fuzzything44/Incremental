@@ -20,11 +20,11 @@
                     } else {
                         $("#events_content").html("You don't have enough fuel... you sit in the cold and almost freeze. You should get out of here!<br/>");
                     }
-                    $("#events_content").append("<span class='clickable' onclick='start_adventure()'>Done</span>");
+                    $("#events_content").append(exit_button("Done"));
                 });
                 $("#events_content").append("<span class='clickable'>Don't</span>");
                 $("#events_content > span").last().click(function () {
-                    $("#events_content").html("You freeze to death. Well, not quite but it isn't fun. <br /><span class='clickable' onclick='start_adventure()'>Done</span>");
+                    $("#events_content").html("You freeze to death. Well, not quite but it isn't fun. <br />" + exit_button("Done"));
                 });
             },
         }), /* Freeze/melt ice for water */
@@ -69,7 +69,7 @@
                 adventure_data["has_cryostorage"] = true;
                 adventure_data.inventory_size += 5;
                 update_inventory();
-                $("#events_content").append("<span class='clickable' onclick='start_adventure()'>Done</span>");
+                $("#events_content").append(exit_button("Done"));
 
             },
         }), /* Ship storage boost */
@@ -81,7 +81,7 @@
             "run_encounter": function () {
                 $("#events_content").html("There's a small probe crashed into the planet here. Where did it come from? <br />");
                 adventure_data["cath_discovery"] = 0;
-                $("#events_content").append("<span class='clickable' onclick='start_adventure()'>Interesting</span>");
+                $("#events_content").append(exit_button("Interesting"));
             },
         }), /* Start quest for Cath */
         ({
@@ -99,11 +99,11 @@
                     $("#events_content").html("Analyzing the trajectory of the probes, you look where you think they cam from using an undamaged telescope in the observatory. Oh wow, you can see a planet there! <br /><em>Cath unlocked!</em><br />");
                 }
                 adventure_data["cath_discovery"] += 1;
-                $("#events_content").append("<span class='clickable' onclick='start_adventure()'>Continue onwards.</span>");
+                $("#events_content").append(exit_button("Continue onwards."));
             },
         }), /* Continue/end quest for Cath. No clue why it's 2 different encounters but whatever. */
     ],
-    "connects_to": ["moon", "kittens/cath"],
+    "connects_to": ["moon", "kittens/cath", "kittens/piscine"],
     "enter_cost": 3,
     "leave_cost": 3,
     "name": "Terminus",

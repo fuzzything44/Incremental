@@ -111,7 +111,7 @@
                     $("#events_content").append("<span class='clickable' onclick='run_adventure(\"home\");'>Go Back</span>");
                 }); /* End removing items from ship. */
                 $("#events_content").append("<span class='clickable' onclick='set_equipment();'>Equip</span> your ship <br />");
-                $("#events_content").append("<span class='clickable' onclick='start_adventure();'>Go Back</span>");
+                $("#events_content").append(exit_button("Go Back"));
             }
         }),
     ],

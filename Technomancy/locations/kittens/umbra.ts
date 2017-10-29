@@ -65,7 +65,7 @@
                 /* Secretly count items thrown away */
                 $("#events_content").html("You threw stuff into the black hole a few times! <br />");
                 $("#events_content").append("It seems that it's managed to compress into some ball of magic. Interesting.<br />");
-                $("#events_content").append("<span class='clickable' onclick='start_adventure()'>Done</span>");
+                $("#events_content").append(exit_button("Done"));
                 const elements = ["time", "energy", "space", "force"];
                 adventure_data.warehouse.push({ "name": "magic_orb", "elem": elements[Math.floor(Math.random() * elements.length)] });
                 adventure_data["umbra_throwaway"] -= 5;
@@ -82,7 +82,7 @@
                 adventure_data["has_gravstorage"] = true;
                 adventure_data.inventory_size += 5;
                 update_inventory();
-                $("#events_content").append("<span class='clickable' onclick='start_adventure()'>Done</span>");
+                $("#events_content").append(exit_button("Done"));
 
             },
         }), /* Ship storage boost */

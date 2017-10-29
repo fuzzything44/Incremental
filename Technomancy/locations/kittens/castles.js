@@ -46,7 +46,7 @@
                 }
                 else {
                     $("#events_content").append("You don't find anything notable. <br/>");
-                    $("#events_content").append("<span class='clickable' onclick='start_adventure()'>Okay</span>");
+                    $("#events_content").append(exit_button("Okay"));
                 }
             }
         }),

@@ -147,6 +147,7 @@ function s_workshop(newopt: string) {
     buildings["s_workshop"].generation["mana"] = -1; /* And lose mana */
 
     if (comp_state) { /* Only turn on if it already was on */
+        resources["mana"].amount = 50; /* Make sure they have enough mana because it hasn't been set yet. */
         toggle_building_state("s_workshop");
     }
 

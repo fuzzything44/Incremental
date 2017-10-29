@@ -28,15 +28,26 @@
                             cat_market()
                         });
                     });
+                    if (adventure_data["logicat_level"] >= 10 && adventure_data["piscine_unlocked"] == undefined) {
+                        $("#events_content").append("<span class='clickable'>Purchase</span> a starchart (5,000 book)<br />");
+                        $("#events_content > span").last().click(function () {
+                            /* Make sure they still have enough money */
+                            if (resources["book"].amount >= 5000) {
+                                resources["book"].amount -= 5000;
+                                adventure_data["piscine_unlocked"] = true;
+                            }
+                            cat_market()
+                        });
+                    }
 
                     $("#events_content").append("<span class='clickable' onclick='$(\"#character\").removeClass(\"hidden\");start_adventure()'>Leave</span>");
                 });
                 $("#events_content").append("<span class='clickable'>Listen</span> to an old cat tell stories<br/>");
                 $("#events_content > span").last().click(function cat_market() {
                     $("#events_content").html("The old cat tells a tale about the very start of the civilization. \"It all started with a kitten in a catnip forest...\" <br />You listen to his ever more complex tale, which seems to take years and years to tell - slowly growing more complex, adding in hunters and unicorns and trade with other civilizations. The knowledge of kittens grew and eventually they reached space. What could the future hold for such an ambitious race?<br />If you'd like to experience the full story of kittens, check <a href=\"http://bloodrizer.ru/games/kittens/\" target=\"_blank\" style=\"text- decoration: none; color: lightgray;\">here</a>.<br />");
-                    $("#events_content").append("<span class='clickable' onclick='start_adventure()'>Leave</span>");
+                    $("#events_content").append(exit_button("Leave"));
                 });
-                $("#events_content").append("<span class='clickable' onclick='start_adventure()'>Leave</span>");
+                $("#events_content").append(exit_button("Leave"));
             },
         }),
 

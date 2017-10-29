@@ -143,6 +143,7 @@ function s_workshop(newopt) {
     buildings["s_workshop"].generation = workshop_items[newopt];
     buildings["s_workshop"].generation["mana"] = -1; /* And lose mana */
     if (comp_state) {
+        resources["mana"].amount = 50; /* Make sure they have enough mana because it hasn't been set yet. */
         toggle_building_state("s_workshop");
     }
     $("#workshop_prod").html(workshop_tooltips[newopt]); /* Set tooltip to new val */

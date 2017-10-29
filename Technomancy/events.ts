@@ -528,6 +528,13 @@ let events = [
                             { "name": "Temporal Duplication", "effect": function () { resources["time"].amount += 120; }},
                             { "name": "Glass Bottle Cleanup", "effect": function () { resources["glass"].amount -= 20; resources["sand"].amount += 10000; } },
                             { "name": "Nothing :(", "effect": function () { } },
+                            {
+                                "name": "Blast Furnace in Operation! Gained 2,000 Glass Chips. Gained 500 Glass Blocks.",
+                                "effect": function () {
+                                    resources["glass"].amount += 2500;
+                                }
+                            },
+
                         ];
                         if (adventure_data["sandcastle_boost_unlocked"]) {
                             reward_list.push({ "name": "ONG!", "effect": function () { adventure_data["sandcastle_boost_unlocked"] = 1; }})
@@ -547,34 +554,24 @@ let events = [
                         let reward = reward_list[Math.floor(rand_num * reward_list.length)];
                         $("#events_content").append(reward.name + "<br />");
                         reward.effect();
-                    }
+                    } /* End level up */
 
-                } 
+                } /* End loop of levels. */ 
                 
                 /* Set their point amount. */
                 adventure_data["logicat_points"] = total_points;
 
-                /* Perfect answer doubles resource production for 5 minutes.*/
+                /* Perfect answer increases resource production for 3 minutes.*/
                 if (num_correct == sols.length) {
                     Object.keys(resources_per_sec).forEach(function (res) {
                         /* Don't double negatives. */
-                        let ps_add = Math.max(0, resources_per_sec[res]);
-                        if (resources[res].value == 0) { ps_add = 0; } /* Don't add mana/energy/similar. */
+                        let ps_add = 0.5 * Math.max(0, resources_per_sec[res]);
+                        if (res == "mana") { ps_add = 0; } /* Don't add mana. Do give other stuff. */
 
                         resources_per_sec[res] += ps_add;
-                        setTimeout(() => resources_per_sec[res] -= ps_add, 60000 * 5);
+                        setTimeout(() => resources_per_sec[res] -= ps_add, 60000 * 3);
                     });
                     $("#events_content").append("Perfect answer! Production increased.<br />");
-                }
-                /* 70% correct. Give 1 min of time. */
-                if (num_correct / sols.length >= .70) {
-                    resources["time"].amount += 60;
-                    $("#events_content").append("Good job. Gained 60 time.<br />");
-                }
-                /* More right than wrong. Give glass */
-                if (num_correct > num_incorrect) {
-                    resources["glass"].amount += 2500;
-                    $("#events_content").append("Blast Furnace in Operation! Gained 2,000 Glass Chips. Gained 500 Glass Blocks.<br />");
                 }
 
             });

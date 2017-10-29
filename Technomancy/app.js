@@ -1341,6 +1341,7 @@ function load() {
     if (localStorage.getItem("flags")) {
         event_flags = JSON.parse(localStorage.getItem("flags"));
     }
+    console.log("Setting workshop mode...");
     if (buildings["s_manastone"].amount > 0) {
         $("#spells").removeClass("hidden");
         s_workshop(buildings["s_workshop"].mode); /* Load workshop option */
@@ -1463,11 +1464,18 @@ function toggle_building_state(name) {
     }
     else {
         /* Make sure we can run for 1s first */
-        Object.keys(buildings[name].generation).forEach(function (key) {
-            if (buildings[name].amount * buildings[name].generation[key] * -1 > resources[key].amount) {
-                throw "Can't run it for enough time, building stays off.";
-            }
-        });
+        try {
+            Object.keys(buildings[name].generation).forEach(function (key) {
+                if (buildings[name].amount * buildings[name].generation[key] * -1 > resources[key].amount) {
+                    throw "Can't run it for enough time, building stays off.";
+                }
+            });
+        }
+        catch (e) {
+            /* We don't want this error going all the way through the stack as a ton of places call this function and need to continue (they rely on it silently failing) */
+            console.error(e);
+            return;
+        }
         buildings[name].on = true;
         /* Go through each resource it generates... */
         Object.keys(buildings[name].generation).forEach(function (key) {

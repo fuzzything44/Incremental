@@ -413,3 +413,7 @@ function enemy_action() {
     /* Let's continue on next second. */
     setTimeout(enemy_action, 1000);
 }
+
+function exit_button(text: string) {
+    return "<span class='clickable' onclick='start_adventure()'>" + text + "</span>";
+}
