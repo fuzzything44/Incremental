@@ -1471,6 +1471,13 @@ function toggle_building_state(name: string) {
         $("#toggle_" + name).removeClass("building_state_on");
         $("#toggle_" + name).text("Off");
     } else { /* Turn it on */
+        /* Make sure we can run for 1s first */
+        Object.keys(buildings[name].generation).forEach(function (key) {
+            if (buildings[name].amount * buildings[name].generation[key] * -1 > resources[key].amount) {
+                throw "Can't run it for enough time, building stays off.";
+            }
+        });
+
         buildings[name].on = true;
         /* Go through each resource it generates... */
         Object.keys(buildings[name].generation).forEach(function (key) {

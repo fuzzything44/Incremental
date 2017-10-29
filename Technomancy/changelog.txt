@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v2.7.1:
+Small bugfixes: you now actually need 50 mana to get steel beams and can't cheat by spamming to keep buildings on. Refined mana now can warp fractions of any resource in. So you won't get 1 castle per warp.
+
 v2.7.0:
 Smurf encounter isn't missing a newline. You can get sandcastles. Glass value increased, but it takes more sand to smelt glass. You can use sand to buy sandcastles. Meteors give more stone and gold. Logicat levels do things. Each level gives a reward. The reward progression is deterministic, but the pattern may change if I add more rewards.
 
