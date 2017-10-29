@@ -64,9 +64,11 @@
             "run_encounter": function () {
                 /* Secretly count items thrown away */
                 $("#events_content").html("You threw stuff into the black hole a few times! <br />");
-                $("#events_content").append("I don't know why you did that, but if you message me about this on discord, you can become one of the smurfs in the channel (blue name).<br />");
-                
+                $("#events_content").append("It seems that it's managed to compress into some ball of magic. Interesting.<br />");
                 $("#events_content").append("<span class='clickable' onclick='start_adventure()'>Done</span>");
+                const elements = ["time", "energy", "space", "force"];
+                adventure_data.warehouse.push({ "name": "magic_orb", "elem": elements[Math.floor(Math.random() * elements.length)] });
+                adventure_data["umbra_throwaway"] -= 5;
             },
         }), /* They trashed a bunch of stuff. */
 

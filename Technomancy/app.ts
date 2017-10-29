@@ -109,7 +109,8 @@ function set_initial_state() {
         "hydrogen": { "amount": 0, "value": 5 },
         "steel_beam": { "amount": 0, "value": 200 },
         "uranium": { "amount": 0, "value": 500 },
-        "sandcastle": {"amount": 0, "value": 10000000 }, /* Woah, worth 10M */
+        "sandcastle": { "amount": 0, "value": 10000000 }, /* Woah, worth 10M */
+        "glass_bottle": { "amount": 0, "value": 2500 }, /* Not much above glass value, but they're useful! */
     };
     /* Set resources_per_sec */
     Object.keys(resources).forEach(function (res) {
@@ -1268,8 +1269,31 @@ function set_initial_state() {
             "image": "",
             "repeats": true,
         },
+        "glass_bottles": {
+            "unlock": function () { return buildings["glass_jeweler"].amount > 0 && adventure_data["science_level"] != undefined; },
+            "purchase": function () {
+                let comp_state = buildings["glass_jeweler"].on;
+                if (comp_state) {
+                    toggle_building_state("glass_jeweler");
+                }
 
+                buildings["glass_jeweler"]["generation"]["jewelry"] = 0;
+                buildings["glass_jeweler"]["generation"]["glass_bottle"] = 0.1;
 
+                if (comp_state) { /* Only turn on if it already was on */
+                    toggle_building_state("glass_jeweler");
+                }
+            },
+            "cost": {
+                "money": 250000,
+                "glass": 5000,
+                "research": 30,
+            },
+            "tooltip": "Glassblowers make glass bottles instead of jewelry. <br /> Costs 250K money, 5000 glass. <br />Requires 30 research.",
+            "name": "Bottle Making",
+            "image": "",
+            "repeats": false,
+        },
 
     };
     event_flags = {};

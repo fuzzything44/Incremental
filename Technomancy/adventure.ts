@@ -37,14 +37,14 @@ function start_adventure() {
     $("#events_content").html("You are currently at " + location_data.name + ". What will you do?<br />");
 
     let color = location_data.leave_cost <= adventure_data.inventory_fuel ? "default" : "red";
-    $("#events_content").append("<span class='clickable' style='color:" + color + ";' onclick='travel(\"" + adventure_data.current_location + "\")'>" + location_data.go_again_text + " (" + location_data.leave_cost.toString() + ")</span><br />");
+    $("#events_content").append("<span class='clickable' style='color:" + color + ";' onclick='travel(\"" + adventure_data.current_location + "\")'>" + location_data.go_again_text + " (" + format_num(location_data.leave_cost, false) + ")</span><br />");
 
     location_data.connects_to.forEach(function (loc) {
         let test_connection = get_location(loc);
         if (test_connection.unlocked()) {
-            let fuel_cost = (test_connection.enter_cost + location_data.leave_cost).toString()
+            let fuel_cost = test_connection.enter_cost + location_data.leave_cost;
             let color = fuel_cost <= adventure_data.inventory_fuel ? "default" : "red";
-            $("#events_content").append("<span class='clickable' onclick='travel(\"" + loc + "\");' style='color:" + color + ";'>Go to " + test_connection.name + " (" + fuel_cost + ")</span><br />")
+            $("#events_content").append("<span class='clickable' onclick='travel(\"" + loc + "\");' style='color:" + color + ";'>Go to " + test_connection.name + " (" + format_num(fuel_cost, false) + ")</span><br />")
         }
     });
     if (adventure_data.current_location != "home") {
@@ -110,8 +110,8 @@ function update_inventory() {
     $("#character_content").append('Weapon 2: ' + (adventure_data.ship.weapon_2 ? gen_equipment(adventure_data.ship.weapon_2).name : "None") + "<br>");
     $("#character_content").append('Weapon 3: ' + (adventure_data.ship.weapon_3 ? gen_equipment(adventure_data.ship.weapon_3).name : "None") + "<hr>");
 
-    $("#character_content").append("Ship Inventory (" + (adventure_data.inventory.length + adventure_data.inventory_fuel).toString() + "/" + adventure_data.inventory_size.toString() + "): <br>");
-    $("#character_content").append("Fuel: " + adventure_data.inventory_fuel.toString() + "<br />");
+    $("#character_content").append("Ship Inventory (" + format_num(adventure_data.inventory.length + adventure_data.inventory_fuel, false) + "/" + format_num(adventure_data.inventory_size, false) + "): <br>");
+    $("#character_content").append("Fuel: " + format_num(adventure_data.inventory_fuel, false) + "<br />");
     adventure_data.inventory.forEach(function (item) {
         $("#character_content").append(gen_equipment(item).name + "<br />");
     });

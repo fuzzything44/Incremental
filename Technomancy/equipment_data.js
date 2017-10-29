@@ -1,5 +1,10 @@
 function gen_equipment(equip_data) {
-    return equipment[equip_data.name];
+    var equip = $.extend(true, {}, equipment[equip_data.name]);
+    /* Here we do modification on equip if we have stuff that can. */
+    if (equip.modify != undefined) {
+        equip.modify(equip, equip_data);
+    }
+    return equip;
 }
 var equipment = {
     /* Engines */
@@ -101,6 +106,14 @@ var equipment = {
     "machine_part": {
         type: "item",
         name: "Machine Part",
+    },
+    "magic_orb": {
+        type: "item",
+        name: "Magic Orb",
+        modify: function (self, data) {
+            self["element"] = data.elem;
+            self.name += " (" + data.elem + ")";
+        }
     },
 };
 //# sourceMappingURL=equipment_data.js.map

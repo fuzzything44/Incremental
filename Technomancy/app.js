@@ -103,6 +103,7 @@ function set_initial_state() {
         "steel_beam": { "amount": 0, "value": 200 },
         "uranium": { "amount": 0, "value": 500 },
         "sandcastle": { "amount": 0, "value": 10000000 },
+        "glass_bottle": { "amount": 0, "value": 2500 },
     };
     /* Set resources_per_sec */
     Object.keys(resources).forEach(function (res) {
@@ -1239,6 +1240,29 @@ function set_initial_state() {
             "name": "Sandcastle",
             "image": "",
             "repeats": true,
+        },
+        "glass_bottles": {
+            "unlock": function () { return buildings["glass_jeweler"].amount > 0 && adventure_data["science_level"] != undefined; },
+            "purchase": function () {
+                var comp_state = buildings["glass_jeweler"].on;
+                if (comp_state) {
+                    toggle_building_state("glass_jeweler");
+                }
+                buildings["glass_jeweler"]["generation"]["jewelry"] = 0;
+                buildings["glass_jeweler"]["generation"]["glass_bottle"] = 0.1;
+                if (comp_state) {
+                    toggle_building_state("glass_jeweler");
+                }
+            },
+            "cost": {
+                "money": 250000,
+                "glass": 5000,
+                "research": 30,
+            },
+            "tooltip": "Glassblowers make glass bottles instead of jewelry. <br /> Costs 250K money, 5000 glass. <br />Requires 30 research.",
+            "name": "Bottle Making",
+            "image": "",
+            "repeats": false,
         },
     };
     event_flags = {};
