@@ -1230,7 +1230,6 @@ function set_initial_state() {
             "purchase": function () {
                 /* Next one costs more, remove this one from purchased ones. */
                 adventure_data["sandcastle_boost_unlocked"]++;
-                purchased_upgrades.pop();
                 resources["sandcastle"].amount++;
             },
             "cost": {
