@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v2.9.0:
+Added Piscine encounter that lets you learn Science! Added new engine which isn't super useful yet, but will be with some weapons (not yet added). 
+
 v2.8.0:
 Umbra now has a reward for throwing stuff away. Added glass bottles (which you can't get yet). Spoopy link to something added. You can go to Piscine, but you can't do stuff there. Loading with a workshop that's on under some conditions no longer breaks your game. Logicats now give most boosts through levels (this DOES mess up the ordering, so find the new order of what each level gives.)
 

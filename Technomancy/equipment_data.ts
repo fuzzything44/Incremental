@@ -21,6 +21,22 @@ let equipment = {
         type: "engine",
         name: "Basic Engine",
     },
+    "time_engine": {
+        on_combat: function (slot: string) {
+            player_data["energy"] += 3;
+            player_data["actions_per_turn"] += 7;
+            add_effect(enemy_data, function (data) {
+                data["actions_left"] = 0;
+                return true;
+            });
+            $("#stats_area").append("<span class='clickable'>Pass Turn</span><br>");
+            $("#stats_area > span").last().click(function () {
+                update_combat(player_data["actions_left"])
+            });
+        },
+        type: "engine",
+        name: "Warp Drive",
+    },
 
     /* Shields */
     "basic_shield": {

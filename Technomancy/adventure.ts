@@ -86,18 +86,47 @@ function travel(where: string) {
     }
 }
 
-/* Checks how many items they have with a name. */
-function count_item(name: string) {
+/* Checks how many items they have with a name in inventory (or warehouse) with data fields same as has_data*/
+function count_item(name: string, from_where = adventure_data.inventory, has_data: any = {}) {
     let count = 0;
-    for (let i = 0; i < adventure_data.inventory.length; i++) {
-        if (adventure_data.inventory[i].name == name) { count += 1; }
+    for (let i = 0; i < from_where.length; i++) {
+        if (from_where[i].name == name) {
+            try {
+                /* Make sure all has_data paramaters are found. */
+                Object.keys(has_data).forEach(function (param) {
+                    /* Test one specific param. */
+                    if (from_where[i][param] != has_data[param]) {
+                        throw "This is not the object we're looking for.";
+                    }
+                });
+                count++;
+            } catch (e) {
+                console.error(e);
+            }
+        }
     }
     return count;
 }
 
-function find_item(name: string) {
-    for (let i = 0; i < adventure_data.inventory.length; i++) {
-        if (adventure_data.inventory[i].name == name) { return i; } 
+/* Returns index of item with given name, checking inventory (or warehouse) with data fields the same as has_data. 
+   Note: item could have extra data fields and will still return true.
+*/
+function find_item(name: string, from_where = adventure_data.inventory, has_data: any = {}) {
+    for (let i = 0; i < from_where.length; i++) {
+        if (from_where[i].name == name) {
+            try {
+                /* Make sure all has_data paramaters are found. */
+                Object.keys(has_data).forEach(function (param) {
+                    /* Test one specific param. */
+                    if (from_where[i][param] != has_data[param]) {
+                        throw "This is not the object we're looking for.";
+                    }
+                });
+                return i;
+            } catch (e) {
+                console.error(e);
+            }
+        } 
     }
     return -1;
 }
@@ -271,12 +300,6 @@ function setup_combat(enemy_info, win_callback, ai) {
         dodge_chance: 0,
         effects: []
     };
-    /* Go through ship and update stuff */
-    ["engine", "shield", "weapon_1", "weapon_2", "weapon_3"].forEach(function (equip_type) {
-        if (adventure_data.ship[equip_type]) {
-            gen_equipment(adventure_data.ship[equip_type]).on_combat(equip_type);
-        }
-    });
     /* Setup enemy. This is everything the enemy can have. Then modified by enemy info. */
     enemy_data = {
         max_shields : 0,
@@ -307,6 +330,15 @@ function setup_combat(enemy_info, win_callback, ai) {
         dodge_chance: 0,
         effects: []
     };
+
+    /* Update player stats as needed. Some stuff may change enemy stats so we do this after enemies can have stats. */
+    ["engine", "shield", "weapon_1", "weapon_2", "weapon_3"].forEach(function (equip_type) {
+        if (adventure_data.ship[equip_type]) {
+            gen_equipment(adventure_data.ship[equip_type]).on_combat(equip_type);
+        }
+    });
+
+    /* Update enemy stats as needed. */
     Object.keys(enemy_info).forEach(function (key) {
         enemy_data[key] = enemy_info[key];
     });

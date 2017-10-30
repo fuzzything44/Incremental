@@ -19,7 +19,7 @@
 </head>
 <body class="bgc fgc">
     <div style="font-size: small; position:absolute; top: 0;">
-        v2.8.0 | 
+        v2.9.0 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none;" class="fgc">Changelog</a> |
         <a href="http://crappy-incremental.wikia.com/wiki/Crappy_Incremental_Wiki" target="_blank" style="text-decoration: none;" class="fgc">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none;" class="fgc">Discord</a> |
@@ -146,7 +146,7 @@
                     <span class="building_amount">200</span>
                     <span id="workshop_progress_bar" class="clickable" style="position: absolute; left: 0; top: 1.7em; width: 17.5em; height: .5em; background-color: green;"></span>
                     <div id="workshop_option_bar" class="hidden fgc" onclick="event.stopPropagation()" style="position: absolute; top: 2.5em; left: 0; z-index: 1;">
-                        <div class="clickable bgc_second">
+                        <div class="clickable bgc_second" style="max-width: none; width: 20.5em;">
                             <table>
                                 <tbody>
                                     <tr>
@@ -182,8 +182,12 @@
                                         <td>1000 Iron</td>
                                         <td>5m</td>
                                     </tr>
+                                    <tr>
+                                        <td class="clickable" onclick="s_workshop_set('time_engine')">(1) Warp Drive</td>
+                                        <td>15 Fuel<br />3 Machine Part <br />1 Magic Orb (time)</td>
+                                        <td>10m</td>
+                                    </tr>
                                 </tbody>
-
                             </table>
                         </div>
                     </div>

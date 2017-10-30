@@ -23,9 +23,14 @@
             "weight": 1,
             "title": "Whoops!",
             "run_encounter": function () {
-                $("#events_content").html("Something went wrong. You shouldn't see this. <br/>");
-                $("#events_content").append(exit_button("Okay"));
-                adventure_data.inventory_fuel += 1; /* They spent a fuel to get in, so it gets refunded. */
+                $("#events_content").html("You explore the deep blue sea.<br/>");
+                if (adventure_data["science_level"] == undefined && Math.random() > .8) {
+                    $("#events_content").append("Oh look, a shark. It wants to teach you science!<br/><span class='clickable'>Learn</span>");
+                    $("#events_content > span").last().click(function () {
+                        adventure_data["science_level"] = 1;
+                    });
+                }
+                $("#events_content").append(exit_button("Done"));
             }
         }),
     ],

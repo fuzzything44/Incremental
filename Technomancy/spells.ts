@@ -248,6 +248,26 @@ let craftable_items = { /* What all they can craft and the specifications on it.
         },
         "return": 1,
     },
+    "time_engine": {
+        "time": 10 * 60000,
+        "adventure_item": true,
+        "costs": {
+            "fuel": 15,
+        },
+        "warehouse_cost": function () {
+            /* They need at least 3 machine parts and a time orb. */
+            return count_item("machine_part", adventure_data.warehouse) >= 3 && count_item("magic_orb", adventure_data.warehouse, { "elem": "time" });
+        },
+        "warehouse_spend": function () {
+            /* Remove machine parts. */
+            for (let i = 0; i < 3; i++) {
+                adventure_data.warehouse.splice(find_item("machine_part", adventure_data.warehouse), 1);
+            }
+            /* Remove time orb. */
+            adventure_data.warehouse.splice(find_item("magic_orb", adventure_data.warehouse, { "elem": "time" }), 1);
+        },
+        "return": 1,
+    },
 };
 function s_workshop_set(item: string) {
     /* Make sure they have enough to buy it */
@@ -257,6 +277,15 @@ function s_workshop_set(item: string) {
             throw Error("Not enough resources!");
         }
     });
+    /* It may cost stuff from warehouse. So check if it will, check if they have it, and then remove resources if they do. */
+    if (craftable_items[item]["warehouse_cost"] != undefined) {
+        if (craftable_items[item]["warehouse_cost"]()) {
+            craftable_items[item]["warehouse_spend"]();
+        } else {
+            add_log_elem("You don't have the parts for that. Check your warehouse.");
+            return;
+        }
+    }
 
     /* Spend money to buy */
     Object.keys(craftable_items[item].costs).forEach(function (key) {

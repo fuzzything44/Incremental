@@ -1270,7 +1270,7 @@ function set_initial_state() {
             "repeats": true,
         },
         "glass_bottles": {
-            "unlock": function () { return buildings["glass_jeweler"].amount > 0 && adventure_data["science_level"] != undefined; },
+            "unlock": function () { return buildings["glass_jeweler"].amount > 0 && adventure_data["science_level"] > 0; },
             "purchase": function () {
                 let comp_state = buildings["glass_jeweler"].on;
                 if (comp_state) {
