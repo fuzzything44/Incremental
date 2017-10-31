@@ -1,5 +1,7 @@
 ﻿Technomancy Changelog
 
+v2.9.2:
+Added spooky lights.
 
 v2.9.1:
 Unlocking science at Piscine now works slightly better. You should no longer be able to build sandcastles and then buy upgrades again. 
