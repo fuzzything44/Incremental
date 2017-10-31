@@ -1750,7 +1750,7 @@ function change_theme(new_theme) {
     var themes = {
         "light": ".bgc {background-color: white;}.fgc {color: black;}.bgc_second {background-color: #CCC;}",
         "dark": ".bgc {background-color: black;}.fgc {color: lightgray;}.bgc_second {background-color: #333;}",
-        "halloween": ".bgc {background-color: black;}.fgc {color: orange;}.bgc_second {background-color: purple;}",
+        "halloween": ".bgc {background-color: black;}.fgc {color: darkorange;}.bgc_second {background-color: purple;}",
     };
     if (themes[new_theme]) {
         $("#color_theme").html(themes[new_theme]);
