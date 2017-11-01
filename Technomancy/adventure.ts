@@ -141,9 +141,15 @@ function update_inventory() {
 
     $("#character_content").append("Ship Inventory (" + format_num(adventure_data.inventory.length + adventure_data.inventory_fuel, false) + "/" + format_num(adventure_data.inventory_size, false) + "): <br>");
     $("#character_content").append("Fuel: " + format_num(adventure_data.inventory_fuel, false) + "<br />");
-    adventure_data.inventory.forEach(function (item) {
-        $("#character_content").append(gen_equipment(item).name + "<br />");
-    });
+    for (let i = 0; i < adventure_data.inventory.length; i++) {
+        let equip = gen_equipment(adventure_data.inventory[i]);
+        $("#character_content").append(equip.name)
+        if (equip.use != undefined) {
+            $("#character_content").append("<span class='clickable'>Use</span>");
+            $("#character_content > span").last().click(() => equip.use(i, "inventory"));
+        }
+        $("#character_content").append("<br />");
+    }
 }
 
 /* Sets the equipment to the proper slot, moves previous to warehouse, moves equipped from warehouse, refreshes equipment menu.*/
@@ -208,12 +214,13 @@ function set_equipment() {
 function run_adventure(location: string) {
     /* Get location data. */
     let location_data = get_location(location);
+    let global_data = get_location("global");
 
     let chosen_encounter = null;
     let available_encounters = [];
     let forced_encounters = [];
     let total_weight: number = 0;
-    location_data.encounters.forEach(function (loc) {
+    location_data.encounters.concat(global_data.encounters).forEach(function (loc) {
         if (loc.condition()) { /* If the encounter can happen... */
             if (loc.weight > 0) { /* If not forced encounter... */
                 available_encounters.push(loc); /* Add encounter */

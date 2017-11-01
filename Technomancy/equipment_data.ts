@@ -132,9 +132,44 @@ let equipment = {
         type: "item",
         name: "Magic Orb",
         modify: function (self, data) {
+            /* from Umbra: const elements = ["time", "energy", "space", "force"]; */
             self["element"] = data.elem;
             self.name += " (" + data.elem + ")";
-        }
+            self.use = function (index, location) {
+                switch (data.elem) {
+                    case "time": {
+                        resources["time"].amount += 120;
+                        break;
+                    }
+                    case "energy": {
+                        resources_per_sec["energy"].amount += 8;
+                        setTimeout(() => resources_per_sec["energy"] -= 8, 60000);
+                        break;
+                    }
+                    case "space": {
+                        if (location == "warehouse") {
+                            alert("Using that right now wouldn't do anything.");
+                            return;
+                        }
+                        /* If they have 4 fuel and at least 4 inventory spaces open. */
+                        if (resources["fuel"].amount >= 4 && (adventure_data.inventory_size - adventure_data.inventory.length - adventure_data.inventory_fuel) >= 4) {
+                            resources["fuel"].amount -= 4;
+                            adventure_data.inventory_fuel += 4;
+                            break;
+                        } else {
+                            return;
+                        }
+                    }
+                    case "force": {
+                        resources["fuel"].amount += 12;
+                        break;
+                    }
+                }
+                /* Remove it from inventory after use */
+                adventure_data[location].splice(index, 1);
+                update_inventory();
+            } /* End use function */
+        }, /* End modify */
     },
 };
 

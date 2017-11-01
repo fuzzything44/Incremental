@@ -142,9 +142,18 @@ function update_inventory() {
     $("#character_content").append('Weapon 3: ' + (adventure_data.ship.weapon_3 ? gen_equipment(adventure_data.ship.weapon_3).name : "None") + "<hr>");
     $("#character_content").append("Ship Inventory (" + format_num(adventure_data.inventory.length + adventure_data.inventory_fuel, false) + "/" + format_num(adventure_data.inventory_size, false) + "): <br>");
     $("#character_content").append("Fuel: " + format_num(adventure_data.inventory_fuel, false) + "<br />");
-    adventure_data.inventory.forEach(function (item) {
-        $("#character_content").append(gen_equipment(item).name + "<br />");
-    });
+    var _loop_3 = function (i) {
+        var equip = gen_equipment(adventure_data.inventory[i]);
+        $("#character_content").append(equip.name);
+        if (equip.use != undefined) {
+            $("#character_content").append("<span class='clickable'>Use</span>");
+            $("#character_content > span").last().click(function () { return equip.use(i, "inventory"); });
+        }
+        $("#character_content").append("<br />");
+    };
+    for (var i = 0; i < adventure_data.inventory.length; i++) {
+        _loop_3(i);
+    }
 }
 /* Sets the equipment to the proper slot, moves previous to warehouse, moves equipped from warehouse, refreshes equipment menu.*/
 function equip_item(slot, index) {
@@ -203,11 +212,12 @@ function set_equipment() {
 function run_adventure(location) {
     /* Get location data. */
     var location_data = get_location(location);
+    var global_data = get_location("global");
     var chosen_encounter = null;
     var available_encounters = [];
     var forced_encounters = [];
     var total_weight = 0;
-    location_data.encounters.forEach(function (loc) {
+    location_data.encounters.concat(global_data.encounters).forEach(function (loc) {
         if (loc.condition()) {
             if (loc.weight > 0) {
                 available_encounters.push(loc); /* Add encounter */

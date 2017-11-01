@@ -33,6 +33,7 @@
     <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="equipment_data.ts" />
     <TypeScriptCompile Include="events.ts" />
+    <TypeScriptCompile Include="locations\global.ts" />
     <TypeScriptCompile Include="locations\home.ts" />
     <TypeScriptCompile Include="locations\kittens\castles.ts" />
     <TypeScriptCompile Include="locations\kittens\cath.ts" />
@@ -40,6 +41,11 @@
     <TypeScriptCompile Include="locations\kittens\terminus.ts" />
     <TypeScriptCompile Include="locations\kittens\umbra.ts" />
     <TypeScriptCompile Include="locations\moon.ts" />
+    <TypeScriptCompile Include="locations\sharks\maze\0.ts" />
+    <TypeScriptCompile Include="locations\sharks\maze\1.ts" />
+    <TypeScriptCompile Include="locations\sharks\maze\2.ts" />
+    <TypeScriptCompile Include="locations\sharks\maze\3.ts" />
+    <TypeScriptCompile Include="locations\sharks\maze\exit.ts" />
     <TypeScriptCompile Include="locations\warpgate.ts" />
     <TypeScriptCompile Include="spells.ts" />
   </ItemGroup>

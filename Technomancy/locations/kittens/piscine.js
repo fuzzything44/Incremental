@@ -18,10 +18,10 @@
             }
         }),
         ({
-            "condition": function () { return true; },
+            "condition": function () { return adventure_data["science_level"] == undefined; },
             "types": [],
             "weight": 1,
-            "title": "Whoops!",
+            "title": "What do you sea?",
             "run_encounter": function () {
                 $("#events_content").html("You explore the deep blue sea.<br/>");
                 if (adventure_data["science_level"] == undefined && Math.random() > .8) {
@@ -34,8 +34,18 @@
                 $("#events_content").append(exit_button("Done"));
             }
         }),
+        ({
+            "condition": function () { return adventure_data["science_level"]; },
+            "types": [],
+            "weight": 1,
+            "title": "Nothing else here.",
+            "run_encounter": function () {
+                $("#events_content").html("The sharks have nothing else to teach you right now.<br/>");
+                $("#events_content").append(exit_button("Done"));
+            }
+        }),
     ],
-    "connects_to": ["kittens/terminus"],
+    "connects_to": ["kittens/terminus", "sharks/maze/0"],
     "enter_cost": 1,
     "leave_cost": 2,
     "name": "Piscine",

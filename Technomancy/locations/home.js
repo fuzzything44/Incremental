@@ -66,7 +66,9 @@
                         }
                     });
                     var _loop_1 = function (i) {
-                        $("#events_content").append("<span class='clickable'>Add</span> " + gen_equipment(adventure_data.warehouse[i]).name + "<br />");
+                        var equip = gen_equipment(adventure_data.warehouse[i]);
+                        /* They can add it to their ship. */
+                        $("#events_content").append("<span class='clickable'>Add</span> ");
                         $("#events_content > span").last().click(function (e) {
                             /* They have space to add it */
                             if (adventure_data.inventory_size - (adventure_data.inventory_fuel + adventure_data.inventory.length) > 0) {
@@ -76,6 +78,13 @@
                                 add_to_inv();
                             }
                         });
+                        /* They can use it. */
+                        if (equip.use != undefined) {
+                            $("#events_content").append("<span class='clickable'>Use</span> ");
+                            $("#events_content > span").last().click(function () { equip.use(i, "warehouse"); add_to_inv(); });
+                        }
+                        /* And display what it actually is. */
+                        $("#events_content").append(gen_equipment(adventure_data.warehouse[i]).name + "<br />");
                     };
                     for (var i = 0; i < adventure_data.warehouse.length; i++) {
                         _loop_1(i);
