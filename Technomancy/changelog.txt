@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v2.10.1:
+All NaN amounts of resources should automatically be set back to 0. Unless you have NaN generators, in which case you need help.
+
 v2.10.0:
 Piscine encounter says there's nothing else when there's nothing else (more may be added later!), but it now connects to a puzzle/maze area. See if you can get to the end. Added something to have some encounters able to appear anywhere, but nothing uses it yet. Some items can be used for various benefits. There's new titles that can appear. 
 

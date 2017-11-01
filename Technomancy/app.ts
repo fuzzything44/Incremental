@@ -1551,6 +1551,7 @@ function update() {
 
     /* Check for negative resources or resources that will run out. */
     Object.keys(resources).forEach(function (res) { /* Loop through all resources, res is current checked resource */
+        if (isNaN(resources[res].amount)) { resources[res].amount = 0; }
         if (resources[res].amount > 0) {
             /* Unhide resources we have */
             $("#" + res).removeClass("hidden");

@@ -6,7 +6,7 @@
             "condition": function () { return false; },
             "types": [],
             "weight": 0,
-            "title": "Test global",
+            "title": "Test Alchemy",
             "run_encounter": function () {
                 $("#events_content").html("Oops");
                 return;
