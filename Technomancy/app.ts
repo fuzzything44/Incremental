@@ -4,6 +4,7 @@ declare var $: any;
 declare var numberformat: any;
 
 function format_num(num: number, show_decimals: boolean = true): string {
+    if (isNaN(num)) { return "fuzzy"; }
     if (num < 100000) { /* Show more precise values if we aren't going to numberformat*/
         if (show_decimals) {
             return (Math.round(num * 1000) / 1000).toString();

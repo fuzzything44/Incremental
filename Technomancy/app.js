@@ -2,6 +2,9 @@
 /// <reference path ="spells.ts" />
 function format_num(num, show_decimals) {
     if (show_decimals === void 0) { show_decimals = true; }
+    if (isNaN(num)) {
+        return "fuzzy";
+    }
     if (num < 100000) {
         if (show_decimals) {
             return (Math.round(num * 1000) / 1000).toString();

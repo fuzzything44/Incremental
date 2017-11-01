@@ -139,6 +139,7 @@ function update_inventory() {
     $("#character_content").append('Weapon 2: ' + (adventure_data.ship.weapon_2 ? gen_equipment(adventure_data.ship.weapon_2).name : "None") + "<br>");
     $("#character_content").append('Weapon 3: ' + (adventure_data.ship.weapon_3 ? gen_equipment(adventure_data.ship.weapon_3).name : "None") + "<hr>");
 
+    if (isNaN(adventure_data.inventory_fuel)) { adventure_data.inventory_fuel = 0; }
     $("#character_content").append("Ship Inventory (" + format_num(adventure_data.inventory.length + adventure_data.inventory_fuel, false) + "/" + format_num(adventure_data.inventory_size, false) + "): <br>");
     $("#character_content").append("Fuel: " + format_num(adventure_data.inventory_fuel, false) + "<br />");
     for (let i = 0; i < adventure_data.inventory.length; i++) {
