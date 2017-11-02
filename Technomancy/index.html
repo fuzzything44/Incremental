@@ -19,7 +19,7 @@
 </head>
 <body class="bgc fgc">
     <div style="font-size: small; position:absolute; top: 0;">
-        v2.10.1 | 
+        v2.11.0 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none;" class="fgc">Changelog</a> |
         <a href="http://crappy-incremental.wikia.com/wiki/Crappy_Incremental_Wiki" target="_blank" style="text-decoration: none;" class="fgc">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none;" class="fgc">Discord</a> |
@@ -27,7 +27,7 @@
         <span onclick="load_from_clip()">Import</span> |
         <span onclick="change_theme('light')">Lights On</span> |
         <span onclick="change_theme('dark')">Lights Off</span> |
-        <span onclick="change_theme('halloween')">Lights Spooky</span> |
+        <!--<span onclick="change_theme('halloween')">Lights Spooky</span> |-->
 
         <span style="position: absolute; left: 45em; top: -.2em; white-space: nowrap">Buy Amount: <input id="buy_amount" class="fgc bgc_second" style="font-size: 10px; border: none; width: 4em;" type="number" min="0"/></span>
         <span id="upgrade_count" class="tooltip" style="position: absolute; left: 54.6em; top: -.2em; white-space: nowrap;"><span id="num_upgrades"></span><span id="purchased_upgrades" class="tooltiptext fgc bgc_second">Purchased Upgrades:</span></span>
@@ -140,6 +140,10 @@
                     <span class="building_amount">50</span>
                 </span>
                 <span id="toggle_s_workshop" class="building_state_off" onclick="toggle_building_state('s_workshop')">Off</span>
+            </div>
+            <div style="position: relative">
+                <span id="building_s_time_maker" class="building tooltip" style="color: aquamarine;"><span class="building_name">Flux Capacitor</span><span class="building_amount">100</span><span class="tooltiptext fgc bgc_second">Travels back in time, then gives you that time.</span></span>
+                <span id="toggle_s_time_maker" class="building_state_off" onclick="toggle_building_state('s_time_maker')">Off</span>
             </div>
             <div style="position: relative" class="">
                 <div id="building_s_workshop_2" class="building" style="color: lightslategrey; height: 2.5em;" onclick="$('#workshop_option_bar').toggleClass('hidden');">

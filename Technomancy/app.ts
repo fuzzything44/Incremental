@@ -32,6 +32,7 @@ const UNLOCK_TREE = { /* What buildings unlock */
     "s_startboost": [],
     "s_time_magic": [],
     "s_workshop": [],
+    "s_time_maker": [],
     "s_mana_refinery": [],
     "s_workshop_2": [],
 
@@ -72,8 +73,10 @@ const SPELL_BUILDINGS = [
     "s_startboost",
     "s_time_magic",
     "s_workshop",
+    "s_time_maker",
     "s_mana_refinery",
     "s_workshop_2",
+
   ];
 
 
@@ -201,6 +204,18 @@ function set_initial_state() {
             "update": "nop",
             "mode": "iron",
             "flavor": "Yay, you can read my code.",
+        },
+        "s_time_maker": {
+            "on": false,
+            "amount": 100,
+            "base_cost": {},
+            "price_ratio": {},
+            "generation": {
+                "mana": -1,
+                "time": 0.25/100,
+            },
+            "update": "nop",
+            "flavor": "Yay herbs! Thyme is good!",
         },
         "s_mana_refinery": {
             "on": true,
@@ -764,7 +779,7 @@ function set_initial_state() {
                 "wood": 500,
                 "iron": 500,
             },
-            "tooltip": "console.err('Upgrade not purchased, player needs to buy it!'); <br /> Costs 2000 money, 500 wood, 500 iron.",
+            "tooltip": "console.error('Upgrade not purchased, player needs to buy it!'); <br /> Costs 2000 money, 500 wood, 500 iron.",
             "name": "Magical Trees",
             "image": "",
             "repeats": false,
@@ -1015,7 +1030,7 @@ function set_initial_state() {
             "image": "sand.png",
             "repeats": false,
         },
-        "skyscraper": {
+        "skyscraper": {                                                   /* We probably don't need this, but just in case... */
             "unlock": function () { return resources["steel_beam"].amount > 5 && buildings["skyscraper"].amount < 1; },
             "purchase": function () {
                 /* Give them the first skyscraper. */

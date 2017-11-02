@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v2.11.0:
+Added a Flux Capacitor. Fixed a typo with the logging upgrade. Spooky lights are now gone (until next year, if I remember to turn them on).
+
 v2.10.1:
 All NaN amounts of resources should automatically be set back to 0. Unless you have NaN generators, in which case you need help.
 
