@@ -19,7 +19,7 @@
 </head>
 <body class="bgc fgc">
     <div style="font-size: small; position:absolute; top: 0;">
-        v2.11.0 | 
+        v2.11.1 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none;" class="fgc">Changelog</a> |
         <a href="http://crappy-incremental.wikia.com/wiki/Crappy_Incremental_Wiki" target="_blank" style="text-decoration: none;" class="fgc">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none;" class="fgc">Discord</a> |
@@ -463,7 +463,7 @@
     <div id="upgrades">
         <span id="reset" class="tooltip" onclick="if(confirm('Are you sure? This resets EVERYTHING!') && prompt('If you\'re absolutely sure, enter \'reset\'.') == 'reset') { localStorage.clear(); location.reload();}"><span>Reset</span><span class="tooltiptext fgc bgc_second">Resets ALL progress. There is NO bonus for this!</span></span>
         <span id="save" onclick="save();">Save</span>
-        <span id="prestige" onclick="prestige();" class="tooltip">Prestige<span class="tooltiptext fgc bgc_second">Mana gains from prestige are based on how many resources you have and what kinds they are. <br /> Mana provides many different unique buildings!</span></span>
+        <span id="prestige" onclick="prestige.run();" class="tooltip"><span>Prestige</span><span class="tooltiptext fgc bgc_second">Mana gains from prestige are based on how many resources you have and what kinds they are. <br /> Mana provides many different unique buildings!</span></span>
         <span id="all_on" onclick="Object.keys(buildings).forEach(function (build) { if (!buildings[build].on && SPELL_BUILDINGS.indexOf(build) == -1) { toggle_building_state(build);}});">All On</span>
         <span id="all_off" onclick="Object.keys(buildings).forEach(function (build) { if (buildings[build].on && SPELL_BUILDINGS.indexOf(build) == -1) { toggle_building_state(build);}});">All off</span>
         <span id="save_text">Saved!</span>

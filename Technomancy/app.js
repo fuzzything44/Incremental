@@ -1284,38 +1284,54 @@ function set_initial_state() {
     event_flags = {};
     $("#buy_amount").val(1);
 }
-function prestige() {
+var prestige = {
+    points: function () {
+        var prestige_points = 0;
+        var mana = buildings["s_manastone"].amount;
+        Object.keys(resources).forEach(function (res) { return prestige_points += resources[res].amount * Math.abs(resources[res].value); });
+        return prestige_points;
+    },
     /* Calculate mana gain */
-    var prestige_points = 0;
-    var mana = buildings["s_manastone"].amount;
-    Object.keys(resources).forEach(function (res) { return prestige_points += resources[res].amount * Math.abs(resources[res].value); });
-    var mana_gain = prestige_points / 20000 - Math.pow(mana, 1.3) * .5; /* One for every 20k pp, and apply reduction based off of current mana */
-    mana_gain = Math.floor(Math.pow(Math.max(0, mana_gain), .36)); /* Then raise to .33 power and apply some rounding/checking */
-    mana_gain = mana_gain / (1 + Math.floor(mana / 50) * .5); /* Then divide gain by a number increasing every 50 mana. */
-    if (mana_gain > 50) {
-        mana_gain = 50 + (mana_gain - 50) / 2;
-    }
-    mana_gain = Math.round(mana_gain);
-    if (mana_gain < 1) {
-        var percent_through = Math.max(0, Math.min(100, Math.floor((prestige_points / 20000) / (Math.pow(mana, 1.3) * .5 + 1) * 100)));
-        if (!confirm("Prestige now wouldn't produce mana! As you get more mana, it gets harder to make your first mana stone in a run. You are currently " + percent_through.toString() + "% of the way to your first mana. Prestige anyway?")) {
-            return;
+    mana: function () {
+        var prestige_points = prestige.points();
+        var mana = buildings["s_manastone"].amount;
+        var mana_gain = prestige_points / 20000 - Math.pow(mana, 1.3) * .5; /* One for every 20k pp, and apply reduction based off of current mana */
+        mana_gain = Math.floor(Math.pow(Math.max(0, mana_gain), .36)); /* Then raise to .33 power and apply some rounding/checking */
+        mana_gain = mana_gain / (1 + Math.floor(mana / 50) * .5); /* Then divide gain by a number increasing every 50 mana. */
+        if (mana_gain > 50) {
+            mana_gain = 50 + (mana_gain - 50) / 2;
+        }
+        return Math.round(mana_gain);
+    },
+    percent_through: function () {
+        return Math.max(0, Math.min(100, Math.floor((prestige.points() / 20000) / (Math.pow(buildings["s_manastone"].amount, 1.3) * .5 + 1) * 100)));
+    },
+    run: function () {
+        var mana_gain = prestige.mana();
+        var mana = buildings["s_manastone"].amount;
+        if (mana_gain < 1) {
+            if (!confirm("Prestige now wouldn't produce mana! As you get more mana, it gets harder to make your first mana stone in a run. You are currently " + prestige.percent_through().toString() + "% of the way to your first mana. Prestige anyway?")) {
+                return;
+            }
+        }
+        if (confirm("You will lose all resources and all buildings but gain " + mana_gain.toString() + " mana after reset. Proceed?")) {
+            var total_mana = buildings["s_manastone"].amount + mana_gain;
+            set_initial_state();
+            buildings["s_manastone"].amount = total_mana;
+            adventure_data.current_location = "home"; /* You have to prestige at home. */
+            save();
+            location.reload();
+        }
+    },
+    update: function () {
+        if (prestige.mana()) {
+            $("#prestige > span").first().html("Prestige (" + format_num(prestige.mana(), false) + ")");
+        }
+        else {
+            $("#prestige > span").first().html("Prestige (" + prestige.percent_through().toString() + "%)");
         }
     }
-    if (confirm("You will lose all resources and all buildings but gain " + mana_gain.toString() + " mana after reset. Proceed?")) {
-        SPELL_BUILDINGS.forEach(function (build) {
-            if (buildings[build].on) {
-                toggle_building_state(build);
-            }
-        });
-        var total_mana = buildings["s_manastone"].amount + mana_gain;
-        set_initial_state();
-        buildings["s_manastone"].amount = total_mana;
-        adventure_data.current_location = "home"; /* You have to prestige at home. */
-        save();
-        location.reload();
-    }
-}
+};
 function add_log_elem(to_add) {
     while ($("#log > span").length >= 10) {
         $("#log > span").last().remove(); /* Remove last child. Repeat until no more. */
@@ -1786,6 +1802,9 @@ window.onload = function () {
     setInterval(save, 30000);
     update_upgrade_list();
     setInterval(update_upgrade_list, 500);
+    /* Set prestige button updates. So you see how much mana you would get. */
+    prestige.update();
+    setInterval(prestige.update, 1000);
     random_title();
     setInterval(random_title, 600000);
     SPELL_BUILDINGS.forEach(function (build) {
