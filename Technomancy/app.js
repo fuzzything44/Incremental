@@ -1796,7 +1796,10 @@ function change_theme(new_theme) {
     }
 }
 function prng(seed) {
-    return 4;
+    if (seed <= 0) {
+        seed = 1234567;
+    }
+    return seed * 16807 % 2147483647;
 }
 window.onload = function () {
     set_initial_state();

@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v2.12.1:
+Changed PRNG function, so logicat reward order changed again. 
+
 v2.12.0:
 Gas cloud puzzle has messages better randomized. There's a new weapon you can make. Boom!
 

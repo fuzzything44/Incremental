@@ -519,9 +519,6 @@ let events = [
                         adventure_data["logicat_level"] += 1;
                         /* Note no <br /> at the end. */
                         $("#events_content").append("Logikitten level increased! This level rewards: ");
-                        var seed = adventure_data["logicat_level"]; /* Semi-randomish number generation. Makes logicat rewards deterministic perlevel.*/
-                        let rand_num = Math.sin(seed) * 10000;
-                        rand_num = rand_num - Math.floor(rand_num);
 
                         /* Base rewards */
                         let reward_list = [
@@ -546,17 +543,21 @@ let events = [
                                     adventure_data["sandcastle_boost_unlocked"] = 1;
                                 }
                             }];
-                        } else if (adventure_data["logicat_level"] >= 10 && adventure_data[""] == undefined) {
-                            /* What's the level 10 reward? */
+                        } else if (adventure_data["logicat_level"] >= 10 && adventure_data["logicat_explore"] == undefined) {
+                            reward_list = [{
+                                "name": "The DoRD has provided: Starchart", "effect": function () {
+                                    adventure_data["logicat_explore"] = 1;
+                                }
+                            }];
                         }
 
                         /* Choose random reward from list. */
-                        let reward = reward_list[Math.floor(rand_num * reward_list.length)];
+                        let reward = reward_list[prng(adventure_data["logicat_level"]) % reward_list.length];
                         $("#events_content").append(reward.name + "<br />");
                         reward.effect();
-                    } /* End level up */
+                    } /* End level up loop */
 
-                } /* End loop of levels. */ 
+                } /* End level up. */ 
                 
                 /* Set their point amount. */
                 adventure_data["logicat_points"] = total_points;
@@ -566,7 +567,7 @@ let events = [
                     Object.keys(resources_per_sec).forEach(function (res) {
                         /* Don't double negatives. */
                         let ps_add = 0.5 * Math.max(0, resources_per_sec[res]);
-                        if (res == "mana") { ps_add = 0; } /* Don't add mana. Do give other stuff. */
+                        if (res == "mana" || resources[res].value < 0) { ps_add = 0; } /* Don't add mana or special resources. Do give other stuff. */
 
                         resources_per_sec[res] += ps_add;
                         setTimeout(() => resources_per_sec[res] -= ps_add, 60000 * 3);
