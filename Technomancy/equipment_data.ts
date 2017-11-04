@@ -122,6 +122,53 @@ let equipment = {
         type: "weapon",
         name: "Small Laser",
     },
+    "cannon": {
+        on_combat: function (slot: string) {
+            /* Add charge button */
+            $("#stats_area").append("<span class='clickable' id='weapon_" + slot + "_charger'>(1) Charge Cannon " + slot[slot.length - 1] + " [3]</span><br>");
+            /* Add what happens when they charge */
+            $("#stats_area > span").last().click(function (e) {
+                /* Not player's turn. Do nothing. */
+                if (player_data["actions_left"] < 3) {
+                    return;
+                }
+                if (player_data["energy_left"] < 1) {
+                    $("#combat_log").text("Not enough energy to allocate.");
+                    return;
+                }
+                /* Use energy, charge weapon */
+                player_data["energy_left"] -= 1;
+                player_data[slot].charge_level += 1;
+                /* Update visuals */
+                $("#combat_" + slot).text('(' + player_data[slot].charge_level.toString() + ") Fire Cannon " + slot[slot.length - 1] + " [1]");
+                $("#combat_log").text("1 Energy allocated to Cannon " + slot[slot.length - 1]);
+                /* Update and use actions */
+                $("#weapon_" + slot + "_charger").remove(); /* Can only fire once! */
+                update_combat(3);
+            });
+            /* Add Fire button*/
+            $("#attack_area").append("<span class='clickable' id='combat_" + slot + "'>(0) Fire Cannon " + slot[slot.length - 1] + " [1]</span>");
+            $("#attack_area > span").last().click(function () {
+                if (player_data["actions_left"] < 1) {
+                    return;
+                }
+                if (player_data[slot].charge_level < 1) {
+                    $("#combat_log").text("Weapon not charged");
+                    return;
+                }
+                /* Attack! */
+                enemy_data["shields"] -= 3;
+
+                /* Update visuals */
+                $("#combat_" + slot).remove();
+                $("#combat_log").text("Cannon " + slot[slot.length - 1] + " fired for 3 damage!");
+
+                update_combat(1);
+            });
+        }, /* End on_combat() */
+        type: "weapon",
+        name: "Cannon",
+    },
 
     /* Other */
     "machine_part": {

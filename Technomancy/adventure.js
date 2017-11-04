@@ -376,6 +376,12 @@ function update_combat(actions_used) {
     /* Check for win/loss */
     if (player_data["shields"] < 0) {
         $("#events_content").html("You lost. <br /><span class='clickable' onclick='start_adventure()'>Leave</span>");
+        if (adventure_data["losses"]) {
+            adventure_data["losses"]++;
+        }
+        else {
+            adventure_data["losses"] = 1;
+        }
         return 1;
     }
     if (enemy_data["shields"] < 0) {

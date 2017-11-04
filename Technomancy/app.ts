@@ -1840,6 +1840,11 @@ function change_theme(new_theme: string) {
         localStorage["theme"] = new_theme;
     }
 }
+
+function prng(seed: number): number {
+    return 4;
+}
+
 window.onload = () => {
     set_initial_state();
     load();

@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v2.12.0:
+Gas cloud puzzle has messages better randomized. There's a new weapon you can make. Boom!
+
 v2.11.1:
 The prestige button should now show mana gained on prestige.
 

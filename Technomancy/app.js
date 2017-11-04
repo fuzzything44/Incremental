@@ -1795,6 +1795,9 @@ function change_theme(new_theme) {
         localStorage["theme"] = new_theme;
     }
 }
+function prng(seed) {
+    return 4;
+}
 window.onload = function () {
     set_initial_state();
     load();

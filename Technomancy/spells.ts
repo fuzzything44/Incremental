@@ -268,6 +268,16 @@ let craftable_items = { /* What all they can craft and the specifications on it.
         },
         "return": 1,
     },
+    "cannon": {
+        "time": 10 * 60000,
+        "adventure_item": true,
+        "costs": {
+            "iron": 150000,
+            "uranium": 100,
+            "energy": 150,
+        },
+        "return": 1,
+    },
 };
 function s_workshop_set(item: string) {
     /* Make sure they have enough to buy it */
@@ -305,7 +315,10 @@ function s_workshop_update(delta_time: number) {
     if (resources["fuel"].amount > 0) {
         $("#workshop_adv").removeClass("hidden"); 
     }
-
+    /* Loss-based recipes */
+    if (adventure_data["losses"] > 0) {
+        $("#workshop_cannon").removeClass("hidden"); 
+    }
 
     /* Tick building */
     if (workshop_item == "") { /* No item set. Progress bar full. */

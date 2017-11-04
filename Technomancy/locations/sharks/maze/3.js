@@ -28,10 +28,10 @@
                 var progress_text = ["swirling dust", "a pillar of fire", "a bright light", " some dust glittering"];
                 progress_values.forEach(function (val) {
                     if (adventure_data["maze_progress"][val]) {
+                        progress.push(progress_text[val]);
                         if (Math.random() > .5) {
                             progress.reverse();
                         }
-                        progress.push(progress_text[val]);
                     }
                 });
                 /* They have some progress. */
