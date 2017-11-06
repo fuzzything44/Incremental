@@ -566,8 +566,10 @@ let events = [
                 /* Set their point amount. */
                 adventure_data["logicat_points"] = total_points;
 
+                if (this.perfect_cat == undefined) { this.perfect_cat = false; }
                 /* Perfect answer increases resource production for 3 minutes.*/
-                if (num_correct == sols.length) {
+                if (num_correct == sols.length && !this.perfect_cat) {
+                    this.perfect_cat = true;
                     Object.keys(resources_per_sec).forEach(function (res) {
                         /* Don't double negatives. */
                         let ps_add = 0.5 * Math.max(0, resources_per_sec[res]);
@@ -576,6 +578,7 @@ let events = [
                         resources_per_sec[res] += ps_add;
                         setTimeout(() => resources_per_sec[res] -= ps_add, 60000 * 3);
                     });
+                    setTimeout(() => this.perfect_cat = false, 60000 * 3);
                     $("#events_content").append("Perfect answer! Production increased.<br />");
                 }
 
