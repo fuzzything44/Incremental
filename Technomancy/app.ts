@@ -1,10 +1,17 @@
 ﻿/// <reference path ="events.ts" />
 /// <reference path ="spells.ts" />
+
+/* TODO: Add repeatable 10% cost decrease for a building that has a multiplier of 1.2 or above
+    So then eventually they can get it to infinity.
+*/
 declare var $: any;
 declare var numberformat: any;
 
 function format_num(num: number, show_decimals: boolean = true): string {
     if (isNaN(num)) { return "fuzzy"; }
+    if (num < 0) { return "-" + format_num(-num, show_decimals); }
+    if (num == Infinity) { return "yes"; }
+
     if (num < 100000) { /* Show more precise values if we aren't going to numberformat*/
         if (show_decimals) {
             return (Math.round(num * 1000) / 1000).toString();
@@ -1530,7 +1537,8 @@ function toggle_building_state(name: string) {
         /* Make sure we can run for 1s first */
         try {
             Object.keys(buildings[name].generation).forEach(function (key) {
-                if (buildings[name].amount * buildings[name].generation[key] * -1 > resources[key].amount) {
+                /* Make sure we can still run buildings if they generate a resource we have negative of. */
+                if (buildings[name].generation[key] < 0 && buildings[name].amount * buildings[name].generation[key] * -1 > resources[key].amount) {
                     throw "Can't run it for enough time, building stays off.";
                 }
             });
@@ -1584,7 +1592,7 @@ function update() {
     /* Check for negative resources or resources that will run out. */
     Object.keys(resources).forEach(function (res) { /* Loop through all resources, res is current checked resource */
         if (isNaN(resources[res].amount)) { resources[res].amount = 0; }
-        if (resources[res].amount > 0) {
+        if (Math.abs(resources[res].amount) > 0.1) {
             /* Unhide resources we have */
             $("#" + res).removeClass("hidden");
         }
@@ -1616,7 +1624,13 @@ function update() {
             resources[key].amount = resources_per_sec[key];
         }
         /* Formats it so that it says "Resource name: amount" */
-        $("#" + key + " span").first().html((key.charAt(0).toUpperCase() + key.slice(1)).replace("_", " ") + ": " + format_num(Math.max(0, resources[key].amount), false));
+        $("#" + key + " span").first().html((key.charAt(0).toUpperCase() + key.slice(1)).replace("_", " ") + ": " + format_num(resources[key].amount));
+        if (resources[key].amount < -0.0001) {
+            $("#" + key).css("color", "red");
+        } else {
+            $("#" + key).css("color", "");
+        }
+
         /* Same for per sec */
         $("#" + key + "_per_sec").text((resources_per_sec[key] > 0 ? "+" : "") + format_num(resources_per_sec[key]) + "/s");
         /* Color per sec. Hide if super small. */
@@ -1727,6 +1741,8 @@ function purchase_building(name: string, amount = null) {
         amount = parseInt($("#buy_amount").val());
     }
     if (isNaN(amount)) { amount = 1; }
+    if (amount < 0) { amount = 0; }
+
     /* Make sure they have enough to buy it */
     Object.keys(buildings[name].base_cost).forEach(function (key) {
         console.log("Checking money");
@@ -1735,6 +1751,9 @@ function purchase_building(name: string, amount = null) {
         if (cost > resources[key].amount) {
             add_log_elem("You can't afford that. Missing: " + key.replace("_", " "));
             throw Error("Not enough resources!");
+        } else if (isNaN(cost)) {
+            add_log_elem("Sorry, but " + key.replace("_", " ") + " is not fuzzy.");
+            throw Error("fuzzy resources!");
         }
     });
 

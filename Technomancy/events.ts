@@ -109,8 +109,13 @@ let events = [
         "rejection": 95,
     }), /* End time warping */
     ({
-        "condition": function () { return buildings["oil_well"].amount > (Math.log(buildings["oil_well"].base_cost["iron"]/500)/Math.log(.95)); },
+        "condition": function () { return buildings["oil_well"].amount && (event_flags["cheaper_oil"] == undefined || buildings["oil_well"].amount > event_flags["cheaper_oil"]); },
         "run_event": function () {
+            if (event_flags["cheaper_oil"] == undefined) {
+                event_flags["cheaper_oil"] = 1;
+            } else {
+                event_flags["cheaper_oil"]++;
+            }
             buildings["oil_well"].base_cost["iron"] *= .95; /* Make oil cheaper */
             $("#building_oil_well > .tooltiptext").html(gen_building_tooltip("oil_well")); /* Set tooltip */
             add_log_elem("Oil reserve discovered!");
@@ -123,7 +128,6 @@ let events = [
         "condition": function () { return true; },
         "run_event": function () {
             resources["gold"].amount += 35;
-            event_flags["rickroll"] = true;
             add_log_elem("We're no strangers to love!");
             $("#events_content").html('<iframe id="ytplayer" type="text/ html" width="640" height="360" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0" frameborder="0"> </iframe>');
         },
@@ -645,6 +649,9 @@ function handle_event(set_timer: boolean = true) {
 
 /* Functions because putting all of this in an onclick is too much. */
 function bribe_finance() {
+    if (resources["money"].amount < 1000000) {
+        return;
+    }
     /* Pay bribe */
     resources["money"].amount -= 1000000;
     /* Boost banks */
@@ -683,6 +690,9 @@ function bribe_finance() {
 }
 
 function bribe_environment() {
+    if (resources["money"].amount < 1000000) {
+        return;
+    }
     /* Pay bribe */
     resources["money"].amount -= 1000000;
 

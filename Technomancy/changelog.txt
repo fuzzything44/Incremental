@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v2.12.2:
+Bugfixes: you can turn on buildings that get you money even if you have negative money. You can also see negative money. You can no longer go into debt to bribe. You can adventure if you have no fuel, but your ship does.
+
 v2.12.1:
 Changed PRNG function, so logicat reward order changed again. 
 
