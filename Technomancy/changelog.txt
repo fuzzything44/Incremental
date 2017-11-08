@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v2.13.0:
+Added a financial crisis that happens. If you can survive it, you'll come out stronger than before. Good luck.
+
 v2.12.3:
 Maybe fix logicats perfect stuff? Hopefully it doesn't break everything. Resources don't have extra decimals (oops).
 

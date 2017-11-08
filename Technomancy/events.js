@@ -628,6 +628,68 @@ function handle_event(set_timer) {
         $("#events").removeClass("hidden");
     }
 }
+/* Continuous events */
+function setup_events() {
+    /* Financial collapse. */
+    setInterval(function () {
+        if (event_flags["to_money_decrease"] == undefined) {
+            event_flags["to_money_decrease"] = 60 * 15; /* 15 min to first loss. */
+        }
+        if (event_flags["crisis_averted"] == undefined) {
+            event_flags["crisis_averted"] = false;
+        }
+        if (buildings["s_manastone"].amount >= 250 && event_flags["bribed_politician"] == "money" && !event_flags["crisis_averted"]) {
+            event_flags["to_money_decrease"]--;
+            /* Time for them to lose some. If it's the first loss, immediately break whatever they're doing (even adventuring) and tell them. */
+            if (event_flags["to_money_decrease"] <= 0) {
+                if (buildings["bank"].base_cost["money"] == 10) {
+                    $("#events_topbar").html("Financial Collapse!");
+                    $("#events_content").html("Oh no!<br />You're on the verge of total financial collapse!<br />Your banks and investment companies will slowly start producing less and costing less. This will continue until you fix it or prestige.<br />");
+                    $("#events").removeClass("hidden");
+                }
+                /* Decrease it. Banks.*/
+                var comp_state = buildings["bank"].on;
+                if (comp_state) {
+                    toggle_building_state("bank");
+                }
+                buildings["bank"]["generation"]["money"] *= 0.9;
+                if (comp_state) {
+                    toggle_building_state("bank");
+                }
+                buildings["bank"].base_cost["money"] *= 0.5;
+                comp_state = buildings["big_bank"].on;
+                if (comp_state) {
+                    toggle_building_state("big_bank");
+                }
+                buildings["big_bank"]["generation"]["money"] *= 0.5;
+                if (comp_state) {
+                    resources["manager"].amount = resources_per_sec["manager"];
+                    toggle_building_state("big_bank");
+                }
+                buildings["big_bank"].base_cost["money"] *= 0.5;
+                /* Decrease faster as we go on. */
+                if (buildings["bank"].base_cost["money"] > 1) {
+                    event_flags["to_money_decrease"] = 60 * 5;
+                }
+                else if (buildings["bank"].base_cost["money"] > 0.01) {
+                    event_flags["to_money_decrease"] = 60 * 3;
+                }
+                else if (buildings["bank"].base_cost["money"] > 0.0001) {
+                    event_flags["to_money_decrease"] = 60;
+                }
+                else if (buildings["bank"].base_cost["money"] > 0.0000001) {
+                    event_flags["to_money_decrease"] = 30;
+                }
+                else if (buildings["bank"].base_cost["money"] > 0.000000001) {
+                    event_flags["to_money_decrease"] = 15;
+                }
+                else {
+                    event_flags["to_money_decrease"] = 1; /* Every second! */
+                }
+            }
+        }
+    }, 1000);
+}
 /* Functions because putting all of this in an onclick is too much. */
 function bribe_finance() {
     if (resources["money"].amount < 1000000) {

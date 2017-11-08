@@ -9,7 +9,7 @@ function format_num(num, show_decimals) {
         return "-" + format_num(-num, show_decimals);
     }
     if (num == Infinity) {
-        return "yes";
+        return "Yes.";
     }
     if (num < 100000) {
         if (show_decimals) {
@@ -1286,6 +1286,68 @@ function set_initial_state() {
             "image": "",
             "repeats": false,
         },
+        "money_crisis_slow_1": {
+            "unlock": function () {
+                if (event_flags["crisis_slow_1_increase"] == undefined) {
+                    event_flags["crisis_slow_1_increase"] = 0;
+                }
+                /* Doubles cost each time purchased. */
+                remaining_upgrades["money_crisis_slow_1"].cost["money"] = Math.pow(2, event_flags["crisis_slow_1_increase"]);
+                remaining_upgrades["money_crisis_slow_1"].tooltip = "Banks produce 10x money.<br/> Costs " + format_num(Math.pow(2, event_flags["crisis_slow_1_increase"]), false) + " money.";
+                return buildings["bank"].generation["money"] <= 5 && event_flags["bribed_politician"] == "money";
+            },
+            "purchase": function () {
+                var comp_state = buildings["bank"].on;
+                if (comp_state) {
+                    toggle_building_state("bank");
+                }
+                buildings["bank"]["generation"]["money"] *= 10;
+                event_flags["crisis_slow_1_increase"]++;
+                remaining_upgrades["money_crisis_slow_1"].name = ["Raise Taxes", "Lower Taxes"][Math.random() > 0.5 ? 1 : 0];
+                if (comp_state) {
+                    toggle_building_state("bank");
+                }
+            },
+            "cost": {
+                "money": 1,
+            },
+            "tooltip": "Banks produce 10x money. <br />Costs 1 money",
+            "name": "Lower taxes",
+            "image": "money.png",
+            "repeats": true,
+        },
+        "money_crisis_slow_2": {
+            "unlock": function () {
+                return buildings["bank"].base_cost["money"] <= 0.5 && !event_flags["crisis_averted"];
+            },
+            "purchase": function () {
+                event_flags["to_money_decrease"] += 120;
+            },
+            "cost": {
+                "oil": 10000,
+            },
+            "tooltip": "Gives an extra 2 minutes before bank generation falls again. <br />Costs 10,000 oil",
+            "name": "Oil-backed currency",
+            "image": "money.png",
+            "repeats": true,
+        },
+        "money_crisis_avert": {
+            "unlock": function () {
+                return buildings["bank"].base_cost["money"] == 0;
+            },
+            "purchase": function () {
+                event_flags["crisis_averted"] = true;
+                buildings["bank"].generation["money"] = 50;
+                buildings["big_bank"].generation["money"] = 500;
+            },
+            "cost": {
+                "money": 1000000000,
+            },
+            "tooltip": "Rebuilds your economy. Solves economy collapse until you prestige.<br />Costs 1B money.",
+            "name": "MAKE MORE JOBS!",
+            "image": "money.png",
+            "repeats": false,
+        },
     };
     event_flags = {};
     $("#buy_amount").val(1);
@@ -1626,6 +1688,9 @@ function update() {
             }
             Object.keys(buildings[build].base_cost).forEach(function (key) {
                 var cost = buildings[build].base_cost[key] * Math.pow(buildings[build].price_ratio[key], buildings[build].amount) * (1 - Math.pow(buildings[build].price_ratio[key], amount_1)) / (1 - buildings[build].price_ratio[key]);
+                if (Math.pow(buildings[build].price_ratio[key], buildings[build].amount + amount_1 - 1) == Infinity) {
+                    cost = Infinity;
+                }
                 if (cost > resources[key].amount) {
                     throw Error("Not enough resources!");
                 }
@@ -1684,8 +1749,14 @@ function gen_building_tooltip(name) {
     Object.keys(buildings[name].base_cost).forEach(function (key) {
         /* Total cost for a buy all. Uses a nice summation formula. */
         var cost = buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount) * (1 - Math.pow(buildings[name].price_ratio[key], amount)) / (1 - buildings[name].price_ratio[key]);
+        if (Math.pow(buildings[name].price_ratio[key], buildings[name].amount + amount - 1) == Infinity && !isNaN(cost)) {
+            cost = Infinity;
+        }
         if (cost > resources[key].amount) {
             cost_text += "<span style='color: red'>";
+        }
+        else if (isNaN(cost)) {
+            cost_text += "<span style='color: green'>";
         }
         else {
             cost_text += "<span>";
@@ -1716,6 +1787,10 @@ function purchase_building(name, amount) {
     Object.keys(buildings[name].base_cost).forEach(function (key) {
         console.log("Checking money");
         var cost = buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount) * (1 - Math.pow(buildings[name].price_ratio[key], amount)) / (1 - buildings[name].price_ratio[key]);
+        /* Make it so they can't buy above what they should be able to get. */
+        if (Math.pow(buildings[name].price_ratio[key], buildings[name].amount + amount - 1) == Infinity && !isNaN(cost)) {
+            cost = Infinity;
+        }
         if (cost > resources[key].amount) {
             add_log_elem("You can't afford that. Missing: " + key.replace("_", " "));
             throw Error("Not enough resources!");
@@ -1844,6 +1919,7 @@ window.onload = function () {
         to_next_event *= .7;
     }
     setTimeout(handle_event, to_next_event);
+    setup_events();
     /* Set up for adventure mode requests */
     $.ajaxSetup({
         "async": false,
