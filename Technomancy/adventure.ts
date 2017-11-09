@@ -1,4 +1,4 @@
-﻿let adventure_data = {
+﻿const base_adventure_data = {
     ship: {
         engine: {
             name: "basic_engine",
@@ -18,6 +18,7 @@
     warehouse: [], /* Everything they have. */
     current_location: "home",
 };
+let adventure_data = JSON.parse(JSON.stringify(base_adventure_data)); /* Make a copy so we can reset adv_data easily. */
 
 let player_data = {};
 let enemy_data = {};

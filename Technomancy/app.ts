@@ -1,8 +1,7 @@
 ﻿/// <reference path ="events.ts" />
 /// <reference path ="spells.ts" />
 
-/* TODO: Add repeatable 10% cost decrease for a building that has a multiplier of 1.2 or above
-    So then eventually they can get it to infinity.
+/* TODO: Finish financial collapse end. So banks go back to producing 1 each, upgrade to get them up to 50, then finally an upgrade that maybe exponentially increases generation? Costing refined mana and will eventually get you to infinite mana?
 */
 declare var $: any;
 declare var numberformat: any;
@@ -10,7 +9,7 @@ declare var numberformat: any;
 function format_num(num: number, show_decimals: boolean = true): string {
     if (isNaN(num)) { return "fuzzy"; }
     if (num < 0) { return "-" + format_num(-num, show_decimals); }
-    if (num == Infinity) { return "Yes."; }
+    if (num == Infinity) { return "Yes"; }
 
     if (num < 100000) { /* Show more precise values if we aren't going to numberformat*/
         if (show_decimals) {
@@ -42,6 +41,7 @@ const UNLOCK_TREE = { /* What buildings unlock */
     "s_time_maker": [],
     "s_mana_refinery": [],
     "s_workshop_2": [],
+    "s_final": [],
 
     "bank": ["mine", "logging"],
     "mine": ["furnace", "gold_finder"],
@@ -83,6 +83,7 @@ const SPELL_BUILDINGS = [
     "s_time_maker",
     "s_mana_refinery",
     "s_workshop_2",
+    "s_final",
 
   ];
 
@@ -219,7 +220,7 @@ function set_initial_state() {
             "price_ratio": {},
             "generation": {
                 "mana": -1,
-                "time": 0.25/100,
+                "time": 0.2/100,
             },
             "update": "nop",
             "flavor": "Yay herbs! Thyme is good!",
@@ -245,6 +246,18 @@ function set_initial_state() {
             },
             "update": "workshop",
             "flavor": "Work. Work. Work. Work. Shop.",
+        },
+        "s_final": {
+            "on": false,
+            "amount": 500,
+            "base_cost": {},
+            "price_ratio": {},
+            "generation": {
+                "mana": -1,
+            },
+            "update": "final",
+            "strength": 2,
+            "flavor": "MORE MANA!",
         },
 
         "bank": {
@@ -1370,7 +1383,9 @@ function set_initial_state() {
             "purchase": function () {
                 event_flags["crisis_averted"] = true;
                 buildings["bank"].generation["money"] = 50;
+                resources_per_sec["money"] += 50 * buildings["bank"].amount; /* We can assume they generate nothing at this point. */
                 buildings["big_bank"].generation["money"] = 500;
+                resources_per_sec["money"] += 500 * buildings["big_bank"].amount;
             },
             "cost": {
                 "money": 1000000000,
@@ -1471,8 +1486,11 @@ function load() {
     Object.keys(buildings).forEach(function (type) {
         if (localStorage.getItem("build-" + type)) {
             buildings[type] = JSON.parse(localStorage.getItem("build-" + type));
+            if (buildings[type].amount == null) {
+                buildings[type].amount = Infinity;
+            }
             /* Show how many buildings they have and set tooltip properly */
-            $('#building_' + type + " > .building_amount").html(buildings[type].amount.toString());
+            $('#building_' + type + " > .building_amount").html(format_num(buildings[type].amount, false));
         } 
     });
     console.log("Loading flags...");
@@ -1689,14 +1707,20 @@ function update() {
         }
         /* Formats it so that it says "Resource name: amount" */
         $("#" + key + " span").first().html((key.charAt(0).toUpperCase() + key.slice(1)).replace("_", " ") + ": " + format_num(resources[key].amount, false));
+        /* Same for per sec */
+        $("#" + key + "_per_sec").text((resources_per_sec[key] > 0 ? "+" : "") + format_num(resources_per_sec[key]) + "/s");
+
+        /* Don't color special resources */
+        if (resources[key].value <= 0) {
+            return;
+        }
+        /* Color it. */
         if (resources[key].amount < -0.0001) {
             $("#" + key).css("color", "red");
         } else {
             $("#" + key).css("color", "");
         }
 
-        /* Same for per sec */
-        $("#" + key + "_per_sec").text((resources_per_sec[key] > 0 ? "+" : "") + format_num(resources_per_sec[key]) + "/s");
         /* Color per sec. Hide if super small. */
         if (resources_per_sec[key] < -0.0001) {
             $("#" + key + "_per_sec").css("color", "red");
@@ -1847,7 +1871,7 @@ function purchase_building(name: string, amount = null) {
     });
 
     buildings[name].amount += amount;
-    $('#building_' + name + " > .building_amount").html(buildings[name].amount.toString());
+    $('#building_' + name + " > .building_amount").html(format_num(buildings[name].amount, false));
 
 }
 
@@ -1945,7 +1969,6 @@ window.onload = () => {
     load();
 
     setInterval(update, 35);
-    setInterval(save, 30000);
 
     update_upgrade_list();
     setInterval(update_upgrade_list, 500);
@@ -1975,6 +1998,9 @@ window.onload = () => {
         "async": false,
         "cache": false,
     });
+
+    /* Only set to save last in case something messes up. */
+    setInterval(save, 30000);
 };
 
 function hack(level: number) {

@@ -218,5 +218,24 @@ let equipment = {
             } /* End use function */
         }, /* End modify */
     },
+    "dimension_shard": {
+        type: "item",
+        name: "Dimension Shard",
+        modify: function (self, data) {
+            self.use = function (index, location) {
+                /* Remove it from inventory after use */
+                adventure_data[location].splice(index, 1);
+                update_inventory();
+
+                alert("Oops...");
+                set_initial_state();
+                buildings["s_manastone"].amount = 500;
+                save();
+                window.location.reload();
+
+            } /* End use function */
+        }, /* End modify */
+    },
+
 };
 

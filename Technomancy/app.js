@@ -9,7 +9,7 @@ function format_num(num, show_decimals) {
         return "-" + format_num(-num, show_decimals);
     }
     if (num == Infinity) {
-        return "Yes.";
+        return "Yes";
     }
     if (num < 100000) {
         if (show_decimals) {
@@ -44,6 +44,7 @@ var UNLOCK_TREE = {
     "s_time_maker": [],
     "s_mana_refinery": [],
     "s_workshop_2": [],
+    "s_final": [],
     "bank": ["mine", "logging"],
     "mine": ["furnace", "gold_finder"],
     "logging": ["compressor"],
@@ -83,6 +84,7 @@ var SPELL_BUILDINGS = [
     "s_time_maker",
     "s_mana_refinery",
     "s_workshop_2",
+    "s_final",
 ];
 var to_next_trade = 60000;
 function set_initial_state() {
@@ -212,7 +214,7 @@ function set_initial_state() {
             "price_ratio": {},
             "generation": {
                 "mana": -1,
-                "time": 0.25 / 100,
+                "time": 0.2 / 100,
             },
             "update": "nop",
             "flavor": "Yay herbs! Thyme is good!",
@@ -238,6 +240,18 @@ function set_initial_state() {
             },
             "update": "workshop",
             "flavor": "Work. Work. Work. Work. Shop.",
+        },
+        "s_final": {
+            "on": false,
+            "amount": 500,
+            "base_cost": {},
+            "price_ratio": {},
+            "generation": {
+                "mana": -1,
+            },
+            "update": "final",
+            "strength": 2,
+            "flavor": "MORE MANA!",
         },
         "bank": {
             "on": true,
@@ -1338,7 +1352,9 @@ function set_initial_state() {
             "purchase": function () {
                 event_flags["crisis_averted"] = true;
                 buildings["bank"].generation["money"] = 50;
+                resources_per_sec["money"] += 50 * buildings["bank"].amount; /* We can assume they generate nothing at this point. */
                 buildings["big_bank"].generation["money"] = 500;
+                resources_per_sec["money"] += 500 * buildings["big_bank"].amount;
             },
             "cost": {
                 "money": 1000000000,
@@ -1433,8 +1449,11 @@ function load() {
     Object.keys(buildings).forEach(function (type) {
         if (localStorage.getItem("build-" + type)) {
             buildings[type] = JSON.parse(localStorage.getItem("build-" + type));
+            if (buildings[type].amount == null) {
+                buildings[type].amount = Infinity;
+            }
             /* Show how many buildings they have and set tooltip properly */
-            $('#building_' + type + " > .building_amount").html(buildings[type].amount.toString());
+            $('#building_' + type + " > .building_amount").html(format_num(buildings[type].amount, false));
         }
     });
     console.log("Loading flags...");
@@ -1651,14 +1670,19 @@ function update() {
         }
         /* Formats it so that it says "Resource name: amount" */
         $("#" + key + " span").first().html((key.charAt(0).toUpperCase() + key.slice(1)).replace("_", " ") + ": " + format_num(resources[key].amount, false));
+        /* Same for per sec */
+        $("#" + key + "_per_sec").text((resources_per_sec[key] > 0 ? "+" : "") + format_num(resources_per_sec[key]) + "/s");
+        /* Don't color special resources */
+        if (resources[key].value <= 0) {
+            return;
+        }
+        /* Color it. */
         if (resources[key].amount < -0.0001) {
             $("#" + key).css("color", "red");
         }
         else {
             $("#" + key).css("color", "");
         }
-        /* Same for per sec */
-        $("#" + key + "_per_sec").text((resources_per_sec[key] > 0 ? "+" : "") + format_num(resources_per_sec[key]) + "/s");
         /* Color per sec. Hide if super small. */
         if (resources_per_sec[key] < -0.0001) {
             $("#" + key + "_per_sec").css("color", "red");
@@ -1813,7 +1837,7 @@ function purchase_building(name, amount) {
         }
     });
     buildings[name].amount += amount;
-    $('#building_' + name + " > .building_amount").html(buildings[name].amount.toString());
+    $('#building_' + name + " > .building_amount").html(format_num(buildings[name].amount, false));
 }
 function destroy_building(name) {
     var amount = parseInt($("#buy_amount").val());
@@ -1900,7 +1924,6 @@ window.onload = function () {
     set_initial_state();
     load();
     setInterval(update, 35);
-    setInterval(save, 30000);
     update_upgrade_list();
     setInterval(update_upgrade_list, 500);
     /* Set prestige button updates. So you see how much mana you would get. */
@@ -1925,6 +1948,8 @@ window.onload = function () {
         "async": false,
         "cache": false,
     });
+    /* Only set to save last in case something messes up. */
+    setInterval(save, 30000);
 };
 function hack(level) {
     add_log_elem("You cheater :(");

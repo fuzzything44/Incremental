@@ -197,12 +197,21 @@
                                         <td>150K Iron<br />100 Uranium<br />150 Energy</td>
                                         <td>10m</td>
                                     </tr>
+                                    <tr id="workshop_shard" class="hidden">
+                                        <td class="clickable" onclick="s_workshop_set('dimension_shard')">Dimension Shard</td>
+                                        <td>Everything</td>
+                                        <td>???</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
                 <span id="toggle_s_workshop_2" class="building_state_off" onclick="toggle_building_state('s_workshop_2')">Off</span>
+            </div>
+            <div style="position: relative" class="hidden">
+                <span id="building_s_final" class="building tooltip" style="color: fuchsia; text-shadow: #0FF 1px 0px 10px;" onclick="s_final_upgrade()"><span class="building_name">???</span><span class="building_amount">500</span><span class="tooltiptext fgc bgc_second">???</span></span>
+                <span id="toggle_s_final" class="building_state_off" onclick="toggle_building_state('s_final')">Off</span>
             </div>
             <hr />
         </div>

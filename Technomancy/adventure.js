@@ -1,4 +1,4 @@
-var adventure_data = {
+var base_adventure_data = {
     ship: {
         engine: {
             name: "basic_engine",
@@ -18,6 +18,7 @@ var adventure_data = {
     warehouse: [],
     current_location: "home",
 };
+var adventure_data = JSON.parse(JSON.stringify(base_adventure_data)); /* Make a copy so we can reset adv_data easily. */
 var player_data = {};
 var enemy_data = {};
 /* Sets up the adventure pane */

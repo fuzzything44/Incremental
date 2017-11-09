@@ -5,6 +5,7 @@
     "time": s_time,
     "refinery": s_refinery_buff,
     "workshop": s_workshop_update,
+    "final": s_final,
 }
 
 function nop(delta_time: number) { }
@@ -14,6 +15,12 @@ function s_goldboost(delta_time: number) {
         this.boost = 0;
         this.boost_gold = 0;
     }
+    /* Don't run with final. */
+    if (buildings["s_final"].on) {
+        toggle_building_state("s_goldboost");
+        return;
+    }
+
     /* Calc native money gain */
     let normal_gain = resources_per_sec["money"] - this.boost;
     if (this.boost != normal_gain) { /* Money gain changed, we need to alter our boost to match. */
@@ -278,6 +285,12 @@ let craftable_items = { /* What all they can craft and the specifications on it.
         },
         "return": 1,
     },
+    "dimension_shard": {
+        "time": 50000000,
+        "adventure_item": true,
+        "costs": { },
+        "return": 1,
+    },
 };
 function s_workshop_set(item: string) {
     /* Make sure they have enough to buy it */
@@ -319,6 +332,9 @@ function s_workshop_update(delta_time: number) {
     if (adventure_data["losses"] > 0) {
         $("#workshop_cannon").removeClass("hidden"); 
     }
+    if (isNaN(buildings["s_manastone"].amount) || buildings["s_manastone"].amount == Infinity) {
+        $("#workshop_shard").removeClass("hidden");
+    }
 
     /* Tick building */
     if (workshop_item == "") { /* No item set. Progress bar full. */
@@ -346,4 +362,60 @@ function s_workshop_update(delta_time: number) {
             workshop_item = "";
         }
     }
+}
+
+function s_final_upgrade() {
+    let amount = parseInt($("#buy_amount").val());
+    if (isNaN(amount)) { amount = 1; }
+    if (amount < 0) { amount = 0; }
+
+    /* 100 mana worth of refined to upgrade. */
+    if (resources["refined_mana"].amount < 100000 * amount) {
+        alert("You need more refined mana.");
+    } else if (confirm("Upgrade for " + format_num(100000 * amount) + " refined mana?")) {
+        buildings["s_final"].strength *= Math.pow(1.5, amount);
+        resources["refined_mana"].amount -= 100000 * amount;
+    }
+}
+
+function s_final(delta_time: number) {
+    /* Need this for saving/loading not working with inf. */
+    if (buildings["s_final"].strength == null) {
+        buildings["s_final"].strength = Infinity;
+    }
+    $("#building_s_final .tooltiptext").html("Strength at " + format_num(buildings["s_final"].strength));
+    Object.keys(resources).forEach((res) => {
+        if (resources[res].value == 0) { return; } /* Don't boost special resources. */
+        if (this["res-" + res] == undefined) {
+            this["res-" + res] = 0;
+        }
+
+        /* Calc native gain. Oh look, we get to loop through every building's generation. */
+        let normal_gain = 0;
+        let neg_gain = 0;
+        Object.keys(buildings).forEach((build) => {
+            if (buildings[build].on && buildings[build].generation[res] != undefined) {
+                if (buildings[build].generation[res] < 0) {
+                    neg_gain += buildings[build].amount * buildings[build].generation[res];
+                } else {
+                    normal_gain += buildings[build].amount * buildings[build].generation[res];
+                }
+            }
+        });
+        if (normal_gain != 0) {
+            this["res-" + res] = Math.max(0, normal_gain * buildings["s_final"].strength);
+            /* If they normally generate none, then don't give them NaN per sec. */
+            resources_per_sec[res] = this["res-" + res] + neg_gain;
+            /* Checks if building was turned off */
+            setTimeout(() => {
+                if (!buildings["s_final"].on) {
+                    resources_per_sec[res] = normal_gain + neg_gain;
+                }
+            }, 50);
+        } else {
+            resources_per_sec[res] = neg_gain;
+        }
+
+    });
+
 }
