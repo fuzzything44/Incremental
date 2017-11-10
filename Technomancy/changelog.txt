@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v2.14.0:
+Logikittens now no longer have statements in the form of Exactly one of Statement A and Statement A is true/false. They also tell you what level you are. And there's a new reward from them, which isn't fully implemented yet.
+
 v2.13.1:
 Flux Capacitor generates slightly less time. Fixing a financial crisis now sets your money/s back to what it should be. Special resources are once again properly colored. 
 

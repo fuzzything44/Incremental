@@ -82,7 +82,11 @@
                     /* They can use it. */
                     if (equip.use != undefined) {
                         $("#events_content").append("<span class='clickable'>Use</span> ");
-                        $("#events_content > span").last().click(() => { equip.use(i, "warehouse"); add_to_inv(); });
+                        $("#events_content > span").last().click(() => {
+                            if (!equip.use(i, "warehouse")) {
+                                add_to_inv();
+                            }
+                        });
                     }
                     /* And display what it actually is. */
                     $("#events_content").append(gen_equipment(adventure_data.warehouse[i]).name + "<br />");

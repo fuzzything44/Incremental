@@ -308,6 +308,10 @@ var events = [
                     if (this.param_b == null) {
                         /* Choose random parameter.*/
                         this.param_b = Math.floor(Math.random() * this.statement_list.length);
+                        /* Don't xor statements with themselves. */
+                        while (this.operation == logic_operands.XOR && this.param_a == this.param_b) {
+                            this.param_b = Math.floor(Math.random() * this.statement_list.length);
+                        }
                     }
                     if (this.param_b_truth == null) {
                         this.param_b_truth = Math.random() > .5;
@@ -438,7 +442,6 @@ var events = [
                 for (var i = 0; i < core_statement_amount; i++) {
                     all_statements[i].init();
                 }
-                /* Normally it would be != 0 and we would then add extra statements for complexity, but start simple. */
             } while (find_solutions(all_statements).length != 1);
             /* I guess re-find solutions, shouldn't be a huge hit seeing as we've done it a few times. */
             var sols = find_solutions(all_statements)[0];
@@ -505,7 +508,7 @@ var events = [
                         /* Level them up*/
                         adventure_data["logicat_level"] += 1;
                         /* Note no <br /> at the end. */
-                        $("#events_content").append("Logikitten level increased! This level rewards: ");
+                        $("#events_content").append("Logikitten level increased to " + format_num(adventure_data["logicat_level"], false) + ". This level rewards: ");
                         /* Base rewards */
                         var reward_list = [
                             { "name": "Temporal Duplication", "effect": function () { resources["time"].amount += 120; } },
@@ -533,6 +536,13 @@ var events = [
                             reward_list = [{
                                     "name": "The DoRD has provided: Starchart", "effect": function () {
                                         adventure_data["logicat_explore"] = 1;
+                                    }
+                                }];
+                        }
+                        else if (adventure_data["logicat_level"] >= 100 && !count_item("conv_cube", "warehouse")) {
+                            reward_list = [{
+                                    "name": "Question Qube", "effect": function () {
+                                        adventure_data.warehouse.push({ "name": "conv_cube" });
                                     }
                                 }];
                         }
