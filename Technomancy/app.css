@@ -160,13 +160,17 @@ label + input[type=radio] + label {
     min-height: 35em;
     min-width: 45em;
     z-index: 1;
-    overflow-y: scroll;
 
     border: 1px solid;
     border-radius: 3px;
 
     align-content: center;
     text-align: center;
+}
+
+#events_content {
+    height: 90%;
+    overflow-y: scroll;
 }
 
 .window_topbar {

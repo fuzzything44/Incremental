@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v2.14.2:
+Really small update here. Finished the cube, changed a few things that could let you get stuck, and made the event window scroll better.
+
 v2.14.1:
 Resources now have a line under them. It should help with seeing your /s better. The convolution cube is almost fully implemented. (If solving it turns out to be impossible, tell me because that's important)
 

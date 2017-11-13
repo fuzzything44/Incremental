@@ -268,6 +268,7 @@ var equipment = {
             }
             verify_data();
             self.use = function (index, location) {
+                $("#character").addClass("hidden");
                 /* Definitions of stuff. */
                 var COLORS = ["red", "green", "blue", "black", "white"];
                 var SHAPES = ["pyramid", "cube", "octahedron", "cylinder"];
@@ -375,7 +376,11 @@ var equipment = {
                     }
                     if (data.levers.copper) {
                         if (data.color + data.shape + data.stripes + data.corners > 7) {
-                            $("#events_content").prepend("Nothing happens.<br/>");
+                            $("#events_content").prepend("Weird...<br/>");
+                            data.color = 0;
+                            data.shape = 3;
+                            data.stripes = 1;
+                            data.corners = 2;
                             return;
                         }
                         /* Remove costs */
@@ -404,10 +409,10 @@ var equipment = {
                         modification.resource_costs.water -= 5678;
                     }
                     if (data.levers.slimy) {
-                        /* Flip all other levers. */
+                        /* Flip all other levers. But if you're already flipping, it should then flip back so they can get levers out of sync. */
                         Object.keys(modification.levers).forEach(function (lever) {
                             if (lever != "slimy") {
-                                modification.levers[lever] = true;
+                                modification.levers[lever] = !modification.levers[lever];
                             }
                         });
                     }
@@ -490,16 +495,29 @@ var equipment = {
                     /* No action time limit. Handled elsewhere. */
                 }
                 else if (data.points <= 650) {
-                    /* TODO: Add crank. */
-                    $("#events_content").append("There's a crank, but it's still unimplemented so you can't crank it.<br />");
+                    $("#events_content").append("There's a crank here. <span class='clickable'>Crank</span><br />");
+                    $("#events_content > span").last().click(function () { return run_action(function () {
+                        /* Doesn't change cube. */
+                    }, function () {
+                        $("#events").addClass("hidden");
+                        handle_event(false);
+                    }); });
                 }
                 else if (data.points == 651) {
-                    /* TODO: add drawer. */
-                    $("#events_content").append("There's a drawer, but it's still unimplemented so you can't open it.<br />");
+                    $("#events_content").append("There's a drawer here. <span class='clickable'>Open</span><br />");
+                    $("#events_content > span").last().click(function () {
+                        $("#events_content").html("There's a key in here! <br/>After removing it, the box crumbles to dust.");
+                        /* Box turns into a key. */
+                        adventure_data[location][index] = { name: "conv_key" };
+                        $("#character").removeClass("hidden");
+                    });
                 }
                 else if (data.points < 700) {
-                    /* TODO: Add rope. */
-                    $("#events_content").append("There's a rope, but it's still unimplemented so you can't yank it.<br />");
+                    $("#events_content").append("There's a rope here. <span class='clickable'>Yank!</span><br />");
+                    $("#events_content > span").last().click(function () { return run_action(function (mod) {
+                    }, function () {
+                        $("#events_content").prepend("The number " + format_num(data.points, false) + " appears on the cube. <br />");
+                    }); });
                 }
                 else if (data.points < 900) {
                     /* No action resource cost. Handled elsewhere. */
@@ -645,6 +663,10 @@ var equipment = {
                 return 1;
             }; /* End use function */
         },
+    },
+    "conv_key": {
+        type: "item",
+        name: "Weird Key",
     },
 };
 //# sourceMappingURL=equipment_data.js.map
