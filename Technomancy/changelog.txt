@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v2.14.1:
+Resources now have a line under them. It should help with seeing your /s better. The convolution cube is almost fully implemented. (If solving it turns out to be impossible, tell me because that's important)
+
 v2.14.0:
 Logikittens now no longer have statements in the form of Exactly one of Statement A and Statement A is true/false. They also tell you what level you are. And there's a new reward from them, which isn't fully implemented yet.
 

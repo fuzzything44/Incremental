@@ -226,6 +226,25 @@ let equipment = {
         type: "item",
         name: "Convolution Cube",
         modify: function (self, data) {
+            const LEVER_COLORS = {
+                "cyan": "cyan",
+                "magenta": "magenta",
+                "yellow": "yellow",
+                "iron": "steelblue",
+                "copper": "sandybrown",
+                "lead": "darkgray",
+                "squishy": "palevioletred",
+                "slimy": "green",
+                "flaming": "orangered",
+                "shaking": "olive",
+                "ghostly": "turquoise"
+            };
+            const LEVERS = [
+                "cyan", "magenta", "yellow",
+                "iron", "copper", "lead",
+                "squishy", "slimy",
+                "flaming", "shaking", "ghostly"
+            ];
             function verify_data() {
                 /* Make sure we have all the data fields. */
                 /* Basic values */
@@ -241,12 +260,7 @@ let equipment = {
                     data.levers = {};
                 }
                 /*Individual levers. All set down. */
-                [
-                    "cyan", "magenta", "yellow",
-                    "iron", "copper", "lead",
-                    "squishy", "slimy",
-                    "flaming", "shaking", "ghostly"
-                ].forEach((type) => {
+                LEVERS.forEach((type) => {
                     if (data.levers[type] == undefined) { data.levers[type] = false; }
                 });
 
@@ -264,8 +278,53 @@ let equipment = {
                 const STRIPES = ["no", "thin", "thick"];
                 const CORNERS = ["sharp", "rounded"];
 
+                /* Is the given lever visible? We need to calculate this in a few places, so let's do it in a function. */
+                function lever_visible(lever: string): boolean {
+                    /* We don't do the nice way because writing a horrible switch is easier and the cube design is finished, so I won't be adding levers later. */
+                    let vsum = data.color + data.shape + data.stripes + data.corners;
+                    switch (lever) {
+                        case "cyan": {
+                            return ((vsum + data.color) % 3) == 0;
+                        }
+                        case "magenta": {
+                            return ((vsum + data.color) % 3) == 1;
+                        }
+                        case "yellow": {
+                            return ((vsum + data.color) % 3) == 2;
+                        }
+
+                        case "iron": {
+                            return ((vsum + data.shape) % 4) == 0;
+                        }
+                        case "copper": {
+                            return ((vsum + data.shape) % 4) == 1;
+                        }
+                        case "lead": { /* Yes, we skipped == 2. There's intentionally no lever there. */
+                            return ((vsum + data.shape) % 4) == 3;
+                        }
+
+                        case "squishy": {
+                            return ((vsum + data.stripes) % 2) == 0;
+                        }
+                        case "slimy": {
+                            return ((vsum + data.stripes) % 2) == 1;
+                        }
+
+                        case "flaming": {
+                            return ((vsum + data.corners) % 3) == 0;
+                        }
+                        case "shaking": {
+                            return ((vsum + data.corners) % 3) == 1;
+                        }
+                        case "ghostly": {
+                            return ((vsum + data.corners) % 3) == 2;
+                        }
+                    }
+                    throw "That's not a lever.";
+
+                }
                 /* Runs an action if possible. Oh boy will this be fun. */
-                function run_action(action) {
+                function run_action(action, callback = null) {
                     /* Check time limit. */
                     if (Date.now() - data.last_action < 5000 && (data.points < 500 || data.points > 600)) {
                         /* Too fast. */
@@ -391,7 +450,7 @@ let equipment = {
                     /* Make sure we can actually run the action. */
                     Object.keys(modification.resource_costs).forEach((res) => {
                         if (modification.resource_costs[res] > resources[res].amount) {
-                            $("#events_content").prepend("The cube shakes slightly.<br />");
+                            $("#events_content").prepend("The cube shakes slightly. (You need more " + res.replace("_", " ") + ")<br />");
                             throw "Not enough resources for cube.";
                         }
                     });
@@ -426,6 +485,9 @@ let equipment = {
 
                     /* Refresh the page. */
                     self.use();
+
+                    /* Run callback wayyyy back here. So that stuff can be added to the use page. */
+                    if (callback) { callback(); }
 
                 }
                 $("#events_topbar").html("A strange cube");
@@ -488,18 +550,29 @@ let equipment = {
                 /* Third */
                 if (button_val & 0b00000100) {
                     $("#events_content").append("There is a clear button. <span class='clickable'>Press</span><br/>");
-                    $("#events_content > span").last().click(() => run_action(function (mod) {
-                        mod.resource_costs["glass"] = -10000;
-                        mod.shape--;
-                    }));
+                    $("#events_content > span").last().click(() => run_action(
+                        function (mod) {
+                            mod.shape--;
+                        },
+                        function () {
+                            let elem = ["time", "energy", "space", "force"][prng(button_val) % 4];
+                            let orb = { name: "magic_orb", elem: elem };
+                            adventure_data.warehouse.push(orb);
+                            $("#events_content").prepend("You gained a " + gen_equipment(orb).name + "<br />");
+                        }));
                 }
                 /* 4 */
                 if (button_val & 0b00001000) {
                     $("#events_content").append("There is a ticking button. <span class='clickable'>Press</span><br/>");
                     $("#events_content > span").last().click(() => run_action(function (mod) {
-                        /* TODO: Turn off visible levers... */
-                        $("#events_content").prepend("Oh man, this isn't implemented. Go bug fuzzything44.<br/>");
-                        throw "Come on man, implement the ticking button";
+                        /* Turn off visible levers. So flip all visible ones that are on. */
+                        LEVERS.forEach(function (lever) {
+                            if (lever_visible(lever) && data.levers[lever]) {
+                                mod.levers[lever] = true;
+                            }
+                        });
+                        /* Also, we should do something to change cube state. */
+                        mod.corners++;
                     }));
                 }
                 /* 5 */
@@ -518,30 +591,53 @@ let equipment = {
                 if (button_val & 0b00100000) {
                     $("#events_content").append("There is an inverse button. <span class='clickable'>Press</span><br/>");  
                     $("#events_content > span").last().click(() => run_action(function (mod) {
-                        /* TODO: Swap some resource costs... Also need to change cube state somehow. */
-                        $("#events_content").prepend("Oh man, this isn't implemented. Go bug fuzzything44.<br/>");
-                        throw "Come on man, implement the inverse button";
+                        for (let i = 0; i < 5; i++) {
+                            /* Swap costs of two random resources. */
+                            let first_res = Object.keys(mod.resource_costs)[prng(button_val) % (Object.keys(mod.resource_costs).length)];
+                            let second_res = Object.keys(mod.resource_costs)[prng(button_val + 1) % (Object.keys(mod.resource_costs).length)];
+                            let temp_amt = mod.resource_costs[first_res];
+                            mod.resource_costs[first_res] = mod.resource_costs[second_res];
+                            mod.resource_costs[second_res] = temp_amt;
+
+                        }
+                        if (prng(button_val) % 2) {
+                            mod.stripes--;
+                        } else {
+                            mod.stripes++;
+                        }
                     })); 
                 }    
                 /* 7 */
                 if (button_val & 0b01000000) {
                     $("#events_content").append("There is a shiny button. <span class='clickable'>Press</span><br/>");     
                     $("#events_content > span").last().click(() => run_action(function (mod) {
-                        /* TODO: Turn on visible levers... */
-                        $("#events_content").prepend("Oh man, this isn't implemented. Go bug fuzzything44.<br/>");
-                        throw "Come on man, implement the shiny button";
+                        /* Turn on visible levers. */
+                        LEVERS.forEach(function (lever) {
+                            if (lever_visible(lever) && !data.levers[lever]) {
+                                mod.levers[lever] = true;
+                            }
+                        });
+                        /* Also, we should do something to change cube state. */
+                        mod.corners--;
                     }));      
                 }   
                 /* 8th. If this is set no others should be. Hopefully. */
                 if (button_val & 0b10000000) {
                     $("#events_content").append("There is a dull button. <span class='clickable'>Press</span><br/>");
                     $("#events_content > span").last().click(() => run_action(function (mod) {
-                        /* TODO: Flip visible levers, give 1 min of resources. */
-                        $("#events_content").prepend("Oh man, this isn't implemented. Go bug fuzzything44.<br/>");
-                        throw "Come on man, implement the dull button";
+                        /* Flip visible levers, give 1 min of resources. */
+                        LEVERS.forEach(function (lever) {
+                            if (lever_visible(lever)) {
+                                mod.levers[lever] = true;
+                            }
+                        });
+                        Object.keys(mod.resource_costs).forEach(function (res) {
+                            /* Give bonus resources. */
+                            mod.resource_costs[res] -= resources_per_sec[res] * 60;
+                        });
                     }));
                 }
-                $("#events_content").append("There is a gray button. <span class='clickable'>Press</span><br/>");
+                $("#events_content").append("There is a gray button. <span class='clickable'>Press</span><br/><br/>");
                 $("#events_content > span").last().click(() =>  {
                     data = { name: data.name }; /* Reset cube. */
                     verify_data();
@@ -550,8 +646,22 @@ let equipment = {
                 });
 
 
-                /* Now describe levers. Is this fun yet? */
-                $("#events_content").append("There's some levers here, but fuzzything44 hasn't finished them yet.<br/>");
+                /* Now describe levers. They all do the same thing, so that makes this nice at least. */
+                LEVERS.forEach(function (lever) {
+                    if (lever_visible(lever)) {
+                        $("#events_content").append("There is a <span style='color:" + LEVER_COLORS[lever] + ";'>" + lever + "</span> lever. <span class='clickable'>" + (data.levers[lever] ? "Push" : "Pull") + "</span><br/>");
+                        $("#events_content > span").last().click(() => run_action(
+                            function (mod) {
+                                mod.levers[lever] = true;
+                            }
+                        ));
+                    }
+                });
+                
+
+                /* Let them go back */
+                $("#events_content").append(exit_button("Stop fiddling"));
+
                 return 1;
             } /* End use function */
         }, /* End modify */

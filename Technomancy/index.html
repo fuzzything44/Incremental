@@ -19,7 +19,7 @@
 </head>
 <body class="bgc fgc">
     <div style="font-size: small; position:absolute; top: 0;">
-        v2.14.0 | 
+        v2.14.1 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none;" class="fgc">Changelog</a> |
         <a href="http://crappy-incremental.wikia.com/wiki/Crappy_Incremental_Wiki" target="_blank" style="text-decoration: none;" class="fgc">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none;" class="fgc">Discord</a> |
@@ -33,54 +33,54 @@
         <span id="upgrade_count" class="tooltip" style="position: absolute; left: 54.6em; top: -.2em; white-space: nowrap;"><span id="num_upgrades"></span><span id="purchased_upgrades" class="tooltiptext fgc bgc_second">Purchased Upgrades:</span></span>
     </div>
     <div id="resource_bar">
-        <div id="time" class="hidden" style="margin-bottom: .3em;">
+        <div id="time" class="hidden" style="padding-bottom: .3em;">
             <span style="color: blue; text-shadow: coral 1px 0px 15px; vertical-align: middle;">Time: 0</span>
             <span id="time_toggle" class="res_gen" onclick="toggle_time()" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid; border-radius: 3px;">
                 Speed Time
             </span>
             <br />
         </div>
-        <div id="refined_mana" class="hidden" style="margin-bottom: .3em;">
+        <div id="refined_mana" class="hidden" style="padding-bottom: .3em;">
             <span style="color: red; text-shadow: deepskyblue 1px 1px 10px; vertical-align: middle;">Refined mana: 0</span>
             <span class="res_gen " onclick="if(resources['refined_mana'].amount < 250) {alert('You need 250 refined mana.');return;} else if (!$('#events').hasClass('hidden')) { alert('There\'s already an event going on!'); return; } if (confirm('Try to force an event to occur for 250 refined mana?')) { resources['refined_mana'].amount -= 250; handle_event(false); }" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid; border-radius: 3px;">
                 Force Event
             </span>
             <br />
         </div>
-        <div id="fuel" class="hidden" style="margin-bottom: .3em;">
+        <div id="fuel" class="hidden" style="padding-bottom: .3em;">
             <span style="color: greenyellow; text-shadow: yellow 1px 0px 10px; vertical-align: middle;">Refined mana: 0</span>
             <span class="res_gen " onclick="if (resources['fuel'].amount < 1 && adventure_data['inventory_fuel'] < 1) { alert('You need more fuel.'); } else { start_adventure(); }" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid; border-radius: 3px;">
                 Adventure
             </span>
             <br />
         </div>
-        <span id="mana" class="hidden" style="color: mediumpurple"><span></span><br /></span>
-        <span id="energy" class="hidden" style="color: gold"><span></span><br /></span>
-        <span id="research" class="hidden" style="color: deepskyblue;"><span></span><br /></span>
-        <span id="manager" class="hidden" style="color: tan;"><span></span><br /></span>
+        <div id="mana" class="hidden" style="color: mediumpurple"><span></span><br /></div>
+        <div id="energy" class="hidden" style="color: gold"><span></span><br /></div>
+        <div id="research" class="hidden" style="color: deepskyblue;"><span></span><br /></div>
+        <div id="manager" class="hidden" style="color: tan;"><span></span><br /></div>
 
 
-        <span id="money" class="hidden"><span>Money: 0</span><span id="money_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
-        <span id="stone" class="hidden"><span>Stone: 0<br /></span><span id="stone_per_sec" class="res_gen">Making 0 per second.</span><br /></span>
-        <span id="wood" class="hidden"><span>Wood: 0<br /></span><span id="wood_per_sec" class="res_gen">Making 0 per second.</span><br /></span>
-        <span id="iron_ore" class="hidden"><span>Iron Ore: 0<br /></span><span id="iron_ore_per_sec" class="res_gen">Making 0 per second.</span><br /></span>
-        <span id="coal" class="hidden"><span>Coal: 0<br /></span><span id="coal_per_sec" class="res_gen">Making 0 per second.</span><br /></span>
-        <span id="iron" class="hidden"><span>Iron: 0<br /></span><span id="iron_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
-        <span id="gold" class="hidden"><span>Gold: 0<br /></span><span id="gold_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
-        <span id="diamond" class="hidden"><span>Diamond: 0<br /></span><span id="diamond_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
-        <span id="jewelry" class="hidden"><span>Jewelry: 0<br /></span><span id="jewelry_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
-        <span id="oil" class="hidden"><span>Oil: 0<br /></span><span id="oil_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
-        <span id="paper" class="hidden"><span>Paper: 0<br /></span><span id="paper_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
-        <span id="ink" class="hidden"><span>Ink: 0<br /></span><span id="ink_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
-        <span id="book" class="hidden"><span>Book: 0<br /></span><span id="book_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
-        <span id="sand" class="hidden"><span>Sand: 0<br /></span><span id="sand_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
-        <span id="glass" class="hidden"><span>Glass: 0<br /></span><span id="glass_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
-        <span id="water" class="hidden"><span>Water: 0<br /></span><span id="water_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
-        <span id="hydrogen" class="hidden"><span>Hydrogen: 0<br /></span><span id="hydrogen_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
-        <span id="steel_beam" class="hidden"><span>Steel beam: 0<br /></span><span id="steel_beam_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
-        <span id="uranium" class="hidden"><span>Uranium: 0<br /></span><span id="uranium_per_sec" class="res_gen">Making 1 per second.</span><br /></span>
-        <a href="http://castle.chirpingmustard.com/castle.html" target="_blank" style="text-decoration: none;" class="fgc"><span id="sandcastle" class="hidden"><span>Sandcastle: 0<br /></span><span id="sandcastle_per_sec" class="res_gen"></span><br /></span></a>
-        <span id="glass_bottle" class="hidden"><span>Glass bottle: 0<br /></span><span id="glass_bottle_per_sec" class="res_gen"></span><br /></span>
+        <div id="money" class="hidden"><span>Money: 0</span><span id="money_per_sec" class="res_gen">Making 1 per second.</span><br /></div>
+        <div id="stone" class="hidden"><span>Stone: 0<br /></span><span id="stone_per_sec" class="res_gen">Making 0 per second.</span><br /></div>
+        <div id="wood" class="hidden"><span>Wood: 0<br /></span><span id="wood_per_sec" class="res_gen">Making 0 per second.</span><br /></div>
+        <div id="iron_ore" class="hidden"><span>Iron Ore: 0<br /></span><span id="iron_ore_per_sec" class="res_gen">Making 0 per second.</span><br /></div>
+        <div id="coal" class="hidden"><span>Coal: 0<br /></span><span id="coal_per_sec" class="res_gen">Making 0 per second.</span><br /></div>
+        <div id="iron" class="hidden"><span>Iron: 0<br /></span><span id="iron_per_sec" class="res_gen">Making 1 per second.</span><br /></div>
+        <div id="gold" class="hidden"><span>Gold: 0<br /></span><span id="gold_per_sec" class="res_gen">Making 1 per second.</span><br /></div>
+        <div id="diamond" class="hidden"><span>Diamond: 0<br /></span><span id="diamond_per_sec" class="res_gen">Making 1 per second.</span><br /></div>
+        <div id="jewelry" class="hidden"><span>Jewelry: 0<br /></span><span id="jewelry_per_sec" class="res_gen">Making 1 per second.</span><br /></div>
+        <div id="oil" class="hidden"><span>Oil: 0<br /></span><span id="oil_per_sec" class="res_gen">Making 1 per second.</span><br /></div>
+        <div id="paper" class="hidden"><span>Paper: 0<br /></span><span id="paper_per_sec" class="res_gen">Making 1 per second.</span><br /></div>
+        <div id="ink" class="hidden"><span>Ink: 0<br /></span><span id="ink_per_sec" class="res_gen">Making 1 per second.</span><br /></div>
+        <div id="book" class="hidden"><span>Book: 0<br /></span><span id="book_per_sec" class="res_gen">Making 1 per second.</span><br /></div>
+        <div id="sand" class="hidden"><span>Sand: 0<br /></span><span id="sand_per_sec" class="res_gen">Making 1 per second.</span><br /></div>
+        <div id="glass" class="hidden"><span>Glass: 0<br /></span><span id="glass_per_sec" class="res_gen">Making 1 per second.</span><br /></div>
+        <div id="water" class="hidden"><span>Water: 0<br /></span><span id="water_per_sec" class="res_gen">Making 1 per second.</span><br /></div>
+        <div id="hydrogen" class="hidden"><span>Hydrogen: 0<br /></span><span id="hydrogen_per_sec" class="res_gen">Making 1 per second.</span><br /></div>
+        <div id="steel_beam" class="hidden"><span>Steel beam: 0<br /></span><span id="steel_beam_per_sec" class="res_gen">Making 1 per second.</span><br /></div>
+        <div id="uranium" class="hidden"><span>Uranium: 0<br /></span><span id="uranium_per_sec" class="res_gen">Making 1 per second.</span><br /></div>
+        <div><a href="http://castle.chirpingmustard.com/castle.html" target="_blank" style="text-decoration: none;" class="fgc"><span id="sandcastle" class="hidden"><span>Sandcastle: 0<br /></span><span id="sandcastle_per_sec" class="res_gen"></span><br /></span></a></div>
+        <div id="glass_bottle" class="hidden"><span>Glass bottle: 0<br /></span><span id="glass_bottle_per_sec" class="res_gen"></span><br /></div>
 
     </div>
     <div id="buildings">

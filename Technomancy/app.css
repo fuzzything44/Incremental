@@ -65,7 +65,10 @@ label + input[type=radio] + label {
     position: absolute;
     top: 1em;
     left: 1em;
-    
+}
+
+#resource_bar > * {
+    border-bottom: solid 1px;
 }
 
 .res_gen {
