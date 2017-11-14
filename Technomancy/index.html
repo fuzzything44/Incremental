@@ -19,14 +19,14 @@
 </head>
 <body class="bgc fgc">
     <div style="font-size: small; position:absolute; top: 0;">
-        v2.15.0 | 
+        v2.15.1 | 
         <span id="music"></span>
         <a href="changelog.txt" target="_blank" style="text-decoration: none;" class="fgc">Changelog</a> |
         <a href="http://crappy-incremental.wikia.com/wiki/Crappy_Incremental_Wiki" target="_blank" style="text-decoration: none;" class="fgc">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none;" class="fgc">Discord</a> |
         <span onclick="save_to_clip()">Export</span> |
         <span onclick="load_from_clip()">Import</span> |
-        <select id="theme_select" class="fgc bgc_second" onchange="change_theme(event.target.value)">
+        <select id="theme_select" class="fgc bgc_second" onchange="if (event.target.value == 'crazy' && !confirm('Seizure warning: This has quickly flashing colors. Proceed?')) { return;} change_theme(event.target.value)">
             <option value="light">Lights On</option>
             <option value="dark">Lights Off</option>
             <option value="crazy">STROBE!</option>
@@ -36,6 +36,8 @@
         
         <span style="position: absolute; left: 42em; top: 0em; white-space: nowrap">Buy Amount: <input id="buy_amount" class="fgc bgc_second" style="border: none; width: 4em;" type="number" min="0"/></span>
         <span id="upgrade_count" class="tooltip" style="position: absolute; left: 55em; top: 0; white-space: nowrap;"><span id="num_upgrades"></span><span id="purchased_upgrades" class="tooltiptext fgc bgc_second">Purchased Upgrades:</span></span>
+        <span id="save_text" class="fgc" style="position: absolute; left: 63em; top: 0;">Saved!</span>
+
     </div>
     <div id="resource_bar">
         <div id="time" class="hidden" style="padding-bottom: .3em; border-bottom-color: blue;">
@@ -483,9 +485,20 @@
         <span id="reset" class="tooltip" onclick="if(confirm('Are you sure? This resets EVERYTHING!') && prompt('If you\'re absolutely sure, enter \'reset\'.') == 'reset') { localStorage.clear(); location.reload();}"><span>Reset</span><span class="tooltiptext fgc bgc_second">Resets ALL progress. There is NO bonus for this!</span></span>
         <span id="save" onclick="save();">Save</span>
         <span id="prestige" onclick="prestige.run();" class="tooltip"><span>Prestige</span><span class="tooltiptext fgc bgc_second">Mana gains from prestige are based on how many resources you have and what kinds they are. <br /> Mana provides many different unique buildings!</span></span>
-        <span id="all_on" onclick="Object.keys(buildings).forEach(function (build) { if (!buildings[build].on && SPELL_BUILDINGS.indexOf(build) == -1) { toggle_building_state(build);}});">All On</span>
-        <span id="all_off" onclick="Object.keys(buildings).forEach(function (build) { if (buildings[build].on && SPELL_BUILDINGS.indexOf(build) == -1) { toggle_building_state(build);}});">All off</span>
-        <span id="save_text">Saved!</span>
+        <span id="all_on" onclick="Object.keys(buildings).forEach(function (build) { if (!buildings[build].on && SPELL_BUILDINGS.indexOf(build) == -1) { toggle_building_state(build);}});">All&nbsp;On</span>
+        <span id="all_off" onclick="Object.keys(buildings).forEach(function (build) { if (buildings[build].on && SPELL_BUILDINGS.indexOf(build) == -1) { toggle_building_state(build);}});">All&nbsp;Off</span>
+        <div class="hidden">
+            <span class="clickable fgc bgc_second" onclick="$('#production_manager').toggleClass('hidden')">Groupings</span><br />
+            <div id="production_manager" style="position: fixed; z-index: 1;">
+                <div class="clickable fgc bgc_second" style="width: 25em; position: relative; left: -20.5em; top: -0.4em; display: flex;">
+                    <div style="display: flex; flex: 0 0 5em; width: 5em; border-right: solid 1px;"></div>
+                    <div style="display: flex; flex: 1; width: 20em;">
+                        DEF<br />
+                        HIJ
+                    </div>
+                </div>
+            </div>
+        </div>
         <div id="log">
         </div>
         

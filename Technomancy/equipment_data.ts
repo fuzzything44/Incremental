@@ -439,7 +439,7 @@ let equipment = {
                         if (data.points % 2) { /* Odd points */
                             modification.points = data.points * 3 + 1;
                         } else { /* Even points */
-                            modification.points = data.points / 2;
+                            modification.points = -data.points / 2;
                         }
                     }
                     /* Yay, that's all the levers! Literally only other thing is the point range of 700-900 removing resource costs. */
@@ -526,6 +526,7 @@ let equipment = {
                         /* Box turns into a key. */
                         adventure_data[location][index] = {name: "conv_key"};
                         $("#character").removeClass("hidden");
+                        update_inventory();
                     });
                 } else if (data.points < 700) {
                     $("#events_content").append("There's a rope here. <span class='clickable'>Yank!</span><br />");

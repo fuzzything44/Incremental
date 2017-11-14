@@ -1409,10 +1409,10 @@ var prestige = {
     },
     update: function () {
         if (prestige.mana()) {
-            $("#prestige > span").first().html("Prestige (" + format_num(prestige.mana(), false) + ")");
+            $("#prestige > span").first().html("Prestige&nbsp;(" + format_num(prestige.mana(), false) + ")");
         }
         else {
-            $("#prestige > span").first().html("Prestige (" + prestige.percent_through().toString() + "%)");
+            $("#prestige > span").first().html("Prestige&nbsp;(" + prestige.percent_through().toString() + "%)");
         }
     }
 };

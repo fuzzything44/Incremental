@@ -429,7 +429,7 @@ var equipment = {
                             modification.points = data.points * 3 + 1;
                         }
                         else {
-                            modification.points = data.points / 2;
+                            modification.points = -data.points / 2;
                         }
                     }
                     /* Yay, that's all the levers! Literally only other thing is the point range of 700-900 removing resource costs. */
@@ -510,6 +510,7 @@ var equipment = {
                         /* Box turns into a key. */
                         adventure_data[location][index] = { name: "conv_key" };
                         $("#character").removeClass("hidden");
+                        update_inventory();
                     });
                 }
                 else if (data.points < 700) {

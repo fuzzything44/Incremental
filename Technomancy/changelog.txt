@@ -1,5 +1,11 @@
 ﻿Technomancy Changelog
 
+v2.15.2:
+Prestige no longer breaks in middle of button if your window is too small. Same for all off/all on buttons. Setting to strobe now gives a warning. The "saved" notification was moved a bit. Started work on better building management. Fixed a couple issues with the convolution cube.
+
+v2.15.1:
+Fixed bug where ghostly lever would add half your points instead of subtract it.
+
 v2.15.0:
 What you've all been waiting for - strobe theme!
 
