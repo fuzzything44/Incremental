@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v2.15.0:
+What you've all been waiting for - strobe theme!
+
 v2.14.4:
 Small bugfix with convolution cube.
 

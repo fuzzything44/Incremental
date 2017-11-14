@@ -19,18 +19,23 @@
 </head>
 <body class="bgc fgc">
     <div style="font-size: small; position:absolute; top: 0;">
-        v2.14.4 | 
+        v2.15.0 | 
+        <span id="music"></span>
         <a href="changelog.txt" target="_blank" style="text-decoration: none;" class="fgc">Changelog</a> |
         <a href="http://crappy-incremental.wikia.com/wiki/Crappy_Incremental_Wiki" target="_blank" style="text-decoration: none;" class="fgc">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none;" class="fgc">Discord</a> |
         <span onclick="save_to_clip()">Export</span> |
         <span onclick="load_from_clip()">Import</span> |
-        <span onclick="change_theme('light')">Lights On</span> |
-        <span onclick="change_theme('dark')">Lights Off</span> |
-        <!--<span onclick="change_theme('halloween')">Lights Spooky</span> |-->
-
-        <span style="position: absolute; left: 45em; top: -.2em; white-space: nowrap">Buy Amount: <input id="buy_amount" class="fgc bgc_second" style="font-size: 10px; border: none; width: 4em;" type="number" min="0"/></span>
-        <span id="upgrade_count" class="tooltip" style="position: absolute; left: 54.6em; top: -.2em; white-space: nowrap;"><span id="num_upgrades"></span><span id="purchased_upgrades" class="tooltiptext fgc bgc_second">Purchased Upgrades:</span></span>
+        <select id="theme_select" class="fgc bgc_second" onchange="change_theme(event.target.value)">
+            <option value="light">Lights On</option>
+            <option value="dark">Lights Off</option>
+            <option value="crazy">STROBE!</option>
+            <!--<option value="halloween">Lights Spooky</option>-->
+            <!--<option value="christmas">Christmas Lights</option>-->
+        </select>
+        
+        <span style="position: absolute; left: 42em; top: 0em; white-space: nowrap">Buy Amount: <input id="buy_amount" class="fgc bgc_second" style="border: none; width: 4em;" type="number" min="0"/></span>
+        <span id="upgrade_count" class="tooltip" style="position: absolute; left: 55em; top: 0; white-space: nowrap;"><span id="num_upgrades"></span><span id="purchased_upgrades" class="tooltiptext fgc bgc_second">Purchased Upgrades:</span></span>
     </div>
     <div id="resource_bar">
         <div id="time" class="hidden" style="padding-bottom: .3em; border-bottom-color: blue;">
@@ -131,7 +136,7 @@
                             <span id="workshop_prod">???</span>
                         </span>
                     </span>
-                    <select id="workshop_select" class="bgc_second" onchange="s_workshop(this.value);">
+                    <select id="workshop_select" class="fgc bgc_second" onchange="s_workshop(this.value);">
                         <option value="iron">Extract iron</option>
                         <option value="wood">Grow wood</option>
                         <option value="glass">Smelt glass</option>

@@ -1908,10 +1908,45 @@ function change_theme(new_theme) {
         "light": ".bgc {background-color: white;}.fgc {color: black;}.bgc_second {background-color: #CCC;}",
         "dark": ".bgc {background-color: black;}.fgc {color: lightgray;}.bgc_second {background-color: #333;}",
         "halloween": ".bgc {background-color: black;}.fgc {color: darkorange;}.bgc_second {background-color: purple;}",
+        "christmas": ".bgc {background-color: #050;}.fgc {color: #A00;}.bgc_second {background-color: #400;}",
+        "crazy": "                                              \
+          .bgc, .bgc_second, .fgc {                             \
+            animation: strobe 200ms steps(1,end) infinite;      \
+            animation-duration: 250ms;                          \
+            transition: flex .3s;                               \
+          }                                                     \
+          @keyframes strobe {                                   \
+              16% { background: red; color: blue; }             \
+              33% { background: orange; color: purple;}         \
+              49% { background: yellow; color: red; }           \
+              66% { background: green; color: orange; }         \
+              82% { background: blue; color: yellow; }          \
+              0%  { background: purple; color: green; }         \
+          }                                                     \
+         ",
     };
+    var theme_music = {
+        "light": "",
+        "dark": "",
+        "halloween": "",
+        "christmas": "https://www.youtube.com/embed/JXjQO0UixxM",
+        "crazy": "https://www.youtube.com/embed/MTrzTABzLfY",
+    };
+    /* Make sure the theme exists */
     if (themes[new_theme]) {
+        /* Set a <style> field in the document. */
         $("#color_theme").html(themes[new_theme]);
+        /* Remember what theme */
         localStorage["theme"] = new_theme;
+        /* Play music for it (or stop music if there is none) */
+        if (theme_music[new_theme]) {
+            $("#music").html("<iframe width='0' height='0' src='" + theme_music[new_theme] + "?autoplay=1&loop=1' frameborder='0'></iframe>");
+        }
+        else {
+            $("#music").html("");
+        }
+        /* Set the select box. This is really just for loading, but best to make sure. */
+        $("#theme_select").val(new_theme);
     }
 }
 function prng(seed) {

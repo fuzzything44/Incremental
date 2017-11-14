@@ -63,7 +63,7 @@ label + input[type=radio] + label {
     padding-left: 0.3em;
     padding-right: 0.3em;
     position: absolute;
-    top: 1em;
+    top: 1.5em;
     left: 1em;
 }
 
@@ -76,7 +76,7 @@ label + input[type=radio] + label {
 }
 #buildings {
     position: absolute;
-    top: 1em;
+    top: 1.5em;
     left: 24em;
 
 }
@@ -140,7 +140,7 @@ label + input[type=radio] + label {
 }
 #upgrades {
     position: absolute;
-    top: 1em;
+    top: 1.5em;
     left: 45em;
 }
 
