@@ -19,7 +19,7 @@
 </head>
 <body class="bgc fgc">
     <div style="font-size: small; position:absolute; top: 0;">
-        v2.14.2 | 
+        v2.14.3 | 
         <a href="changelog.txt" target="_blank" style="text-decoration: none;" class="fgc">Changelog</a> |
         <a href="http://crappy-incremental.wikia.com/wiki/Crappy_Incremental_Wiki" target="_blank" style="text-decoration: none;" class="fgc">Wiki</a> |
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none;" class="fgc">Discord</a> |
@@ -33,21 +33,21 @@
         <span id="upgrade_count" class="tooltip" style="position: absolute; left: 54.6em; top: -.2em; white-space: nowrap;"><span id="num_upgrades"></span><span id="purchased_upgrades" class="tooltiptext fgc bgc_second">Purchased Upgrades:</span></span>
     </div>
     <div id="resource_bar">
-        <div id="time" class="hidden" style="padding-bottom: .3em;">
+        <div id="time" class="hidden" style="padding-bottom: .3em; border-bottom-color: blue;">
             <span style="color: blue; text-shadow: coral 1px 0px 15px; vertical-align: middle;">Time: 0</span>
             <span id="time_toggle" class="res_gen" onclick="toggle_time()" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid; border-radius: 3px;">
                 Speed Time
             </span>
             <br />
         </div>
-        <div id="refined_mana" class="hidden" style="padding-bottom: .3em;">
+        <div id="refined_mana" class="hidden" style="padding-bottom: .3em; border-bottom-color: red;">
             <span style="color: red; text-shadow: deepskyblue 1px 1px 10px; vertical-align: middle;">Refined mana: 0</span>
             <span class="res_gen " onclick="if(resources['refined_mana'].amount < 250) {alert('You need 250 refined mana.');return;} else if (!$('#events').hasClass('hidden')) { alert('There\'s already an event going on!'); return; } if (confirm('Try to force an event to occur for 250 refined mana?')) { resources['refined_mana'].amount -= 250; handle_event(false); }" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid; border-radius: 3px;">
                 Force Event
             </span>
             <br />
         </div>
-        <div id="fuel" class="hidden" style="padding-bottom: .3em;">
+        <div id="fuel" class="hidden" style="padding-bottom: .3em; border-bottom-color: greenyellow;">
             <span style="color: greenyellow; text-shadow: yellow 1px 0px 10px; vertical-align: middle;">Refined mana: 0</span>
             <span class="res_gen " onclick="if (resources['fuel'].amount < 1 && adventure_data['inventory_fuel'] < 1) { alert('You need more fuel.'); } else { start_adventure(); }" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid; border-radius: 3px;">
                 Adventure

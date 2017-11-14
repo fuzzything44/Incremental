@@ -168,7 +168,7 @@ let events = [
             if (event_flags["demon_trades"] >= 10) {
                 content += "<span style='color: red'>You bleed as they approach. </span><br />"
             }
-            let diamond_gain = Math.round(300 * (event_flags["demon_trades"] * .5 + 1)).toString();
+            let diamond_gain = format_num(Math.round(300 * (event_flags["demon_trades"] * .5 + 1)), false);
             content += "<span onclick=' " +
                 "resources.diamond.amount +=" + diamond_gain + ";" +
                 "event_flags[\"demon_trades\"] += 1;" +
@@ -216,7 +216,7 @@ let events = [
             if (buildings["s_goldboost"].on) {
                 resource_loss = Math.ceil(resource_loss * 4 / 3);
             }
-            content += "<span>They took " + resource_loss.toString() + " " + chosen_resource.replace("_", " ") + " from you.</span><br />";
+            content += "<span>They took " + format_num(resource_loss, false) + " " + chosen_resource.replace("_", " ") + " from you.</span><br />";
             if (event_flags["demon_trades"] >= 25) {
                 content += "<span style='color: red'>You are still very deep in debt.</span>"
             } else if (event_flags["demon_trades"] >= 15) {
@@ -256,6 +256,7 @@ let events = [
     }), /* End politician bribing */
     ({
         "condition": function () { return adventure_data.current_location == "kittens/castles" || adventure_data["logicat_level"] >= 5; },
+        "perfect_cat": false,
         "run_event": function () {
             enum logic_operands {
                 AND, /* (a) AND (b) */
@@ -484,7 +485,7 @@ let events = [
             });
 
             $("#events_content").append("<span class='clickable'>Submit Answers</span><br/>");
-            $("#events_content > span").last().click(function () {
+            $("#events_content > span").last().click(() => {
                 /* Remove submit/clear answers buttons */
                 $("#events_content > span").last().remove();
                 $("#events_content > span").last().remove();
@@ -577,7 +578,6 @@ let events = [
                 /* Set their point amount. */
                 adventure_data["logicat_points"] = total_points;
 
-                if (this.perfect_cat == undefined) { this.perfect_cat = false; }
                 /* Perfect answer increases resource production for 3 minutes.*/
                 if (num_correct == sols.length && !this.perfect_cat) {
                     this.perfect_cat = true;

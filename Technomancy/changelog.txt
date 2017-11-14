@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v2.14.3:
+Added image for Sandpaper. Demons taking resources should have the amount formatted now. You can now only get 1 production boost from logikittens. Special resources have the line under them colored. 
+
 v2.14.2:
 Really small update here. Finished the cube, changed a few things that could let you get stuck, and made the event window scroll better.
 

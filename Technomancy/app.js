@@ -1089,8 +1089,8 @@ function set_initial_state() {
                 "research": 12,
             },
             "tooltip": "Sand diamonds for a bright polish! <br /> Costs 250000 money, 2500 sand, 5000 paper. <br />Requires 12 research.",
-            "name": "Sandpaper",
-            "image": "",
+            "name": "Sandpaper<br/>",
+            "image": "sand.png",
             "repeats": false,
         },
         "better_jewelry_store": {
