@@ -390,8 +390,8 @@ let equipment = {
                             $("#events_content").prepend("Weird...<br/>");
                             data.color = 0;
                             data.shape = 3;
-                            data.stripes = 1;
-                            data.corners = 2;
+                            data.stripes = 2;
+                            data.corners = 1;
                             return;
                         }
                         /* Remove costs */
