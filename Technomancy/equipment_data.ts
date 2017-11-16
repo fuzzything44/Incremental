@@ -324,7 +324,7 @@ let equipment = {
 
                 }
                 /* Runs an action if possible. Oh boy will this be fun. */
-                function run_action(action, callback = null) {
+                let run_action = (action, callback = null) => {
                     /* Check time limit. */
                     if (Date.now() - data.last_action < 5000 && (data.points < 500 || data.points > 600)) {
                         /* Too fast. */
@@ -488,12 +488,13 @@ let equipment = {
                     data.last_action = Date.now();
 
                     /* Refresh the page. */
-                    self.use();
+                    self.use(index, location);
 
                     /* Run callback wayyyy back here. So that stuff can be added to the use page. */
                     if (callback) { callback(); }
 
                 }
+
                 $("#events_topbar").html("A strange cube");
                 /* State description. */
                 $("#events_content").html("You look at the puzzle. It is currently a " + COLORS[data.color] + " " + SHAPES[data.shape] + " with " + STRIPES[data.stripes] + " stripes and " + CORNERS[data.corners] + " corners.<br />");
@@ -531,10 +532,10 @@ let equipment = {
                 } else if (data.points < 700) {
                     $("#events_content").append("There's a rope here. <span class='clickable'>Yank!</span><br />");
                     $("#events_content > span").last().click(() => run_action(
-                        function (mod) {
+                        (mod) => {
                             
                         },
-                        function () {
+                        () => {
                             $("#events_content").prepend("The number " + format_num(data.points, false) + " appears on the cube. <br />");
                         }
                     ));
@@ -591,7 +592,7 @@ let equipment = {
                     $("#events_content").append("There is a ticking button. <span class='clickable'>Press</span><br/>");
                     $("#events_content > span").last().click(() => run_action(function (mod) {
                         /* Turn off visible levers. So flip all visible ones that are on. */
-                        LEVERS.forEach(function (lever) {
+                        LEVERS.forEach((lever) => {
                             if (lever_visible(lever) && data.levers[lever]) {
                                 mod.levers[lever] = true;
                             }
@@ -664,10 +665,10 @@ let equipment = {
                     }));
                 }
                 $("#events_content").append("There is a gray button. <span class='clickable'>Press</span><br/><br/>");
-                $("#events_content > span").last().click(() =>  {
-                    data = { name: data.name }; /* Reset cube. */
-                    verify_data();
-                    self.use();
+                $("#events_content > span").last().click(() => {
+                    adventure_data[location][index] = { name: "conv_cube" } /* Reset cube. */
+                    let equip = gen_equipment(adventure_data[location][index]); /* Re-generate it */
+                    equip.use(index, location); /* Use it. */
                     $("#events_content").prepend("You see a bright flash of light and get a strange sense of déjà vu.<br />");
                 });
 

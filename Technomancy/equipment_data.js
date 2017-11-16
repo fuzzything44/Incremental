@@ -316,7 +316,7 @@ var equipment = {
                     throw "That's not a lever.";
                 }
                 /* Runs an action if possible. Oh boy will this be fun. */
-                function run_action(action, callback) {
+                var run_action = function (action, callback) {
                     if (callback === void 0) { callback = null; }
                     /* Check time limit. */
                     if (Date.now() - data.last_action < 5000 && (data.points < 500 || data.points > 600)) {
@@ -472,12 +472,12 @@ var equipment = {
                     /* Set last action */
                     data.last_action = Date.now();
                     /* Refresh the page. */
-                    self.use();
+                    self.use(index, location);
                     /* Run callback wayyyy back here. So that stuff can be added to the use page. */
                     if (callback) {
                         callback();
                     }
-                }
+                };
                 $("#events_topbar").html("A strange cube");
                 /* State description. */
                 $("#events_content").html("You look at the puzzle. It is currently a " + COLORS[data.color] + " " + SHAPES[data.shape] + " with " + STRIPES[data.stripes] + " stripes and " + CORNERS[data.corners] + " corners.<br />");
@@ -645,9 +645,9 @@ var equipment = {
                 }
                 $("#events_content").append("There is a gray button. <span class='clickable'>Press</span><br/><br/>");
                 $("#events_content > span").last().click(function () {
-                    data = { name: data.name }; /* Reset cube. */
-                    verify_data();
-                    self.use();
+                    adventure_data[location][index] = { name: "conv_cube" }; /* Reset cube. */
+                    var equip = gen_equipment(adventure_data[location][index]); /* Re-generate it */
+                    equip.use(index, location); /* Use it. */
                     $("#events_content").prepend("You see a bright flash of light and get a strange sense of déjà vu.<br />");
                 });
                 /* Now describe levers. They all do the same thing, so that makes this nice at least. */

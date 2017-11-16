@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v2.15.3:
+Hydrogen mines should carry over between prestiges. This is untested, but hopefully it works. The gray button on the convolution cube should actually work properly now. Financial crisis has had the balance changed. 
+
 v2.15.2:
 Prestige no longer breaks in middle of button if your window is too small. Same for all off/all on buttons. Setting to strobe now gives a warning. The "saved" notification was moved a bit. Started work on better building management. Fixed a couple issues with the convolution cube.
 

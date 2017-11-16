@@ -51,6 +51,13 @@
                         /* Remove the machine part that they have. */
                         adventure_data.inventory.splice(find_item("machine_part"), 1);
                         $("#events_content").html("You set up a hydrogen mine on the moon. <br /><span class='clickable' onclick='start_adventure()'>Done</span>");
+                        /* Give them a mine on prestige too. Weird if to check for undefined. */
+                        if (adventure_data["hydrogen_mines"]) {
+                            adventure_data["hydrogen_mines"]++;
+                        }
+                        else {
+                            adventure_data["hydrogen_mines"] = 1;
+                        }
                         var comp_state = buildings["hydrogen_mine"].on;
                         if (comp_state) {
                             toggle_building_state("hydrogen_mine");

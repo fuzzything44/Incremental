@@ -686,11 +686,11 @@ function setup_events() {
                     toggle_building_state("bank");
                 }
 
-                buildings["bank"]["generation"]["money"] *= 0.9;
+                buildings["bank"]["generation"]["money"] *= 0.7;
                 if (comp_state) { /* Only turn on if it already was on */
                     toggle_building_state("bank");
                 }
-                buildings["bank"].base_cost["money"] *= 0.5;
+                buildings["bank"].base_cost["money"] *= 0.7;
 
                 comp_state = buildings["big_bank"].on;
                 if (comp_state) {
@@ -710,9 +710,9 @@ function setup_events() {
                     event_flags["to_money_decrease"] = 60 * 3;
                 } else if (buildings["bank"].base_cost["money"] > 0.0001) {
                     event_flags["to_money_decrease"] = 60;
-                } else if (buildings["bank"].base_cost["money"] > 0.0000001) {
+                } else if (buildings["bank"].base_cost["money"] > 0.00000001) {
                     event_flags["to_money_decrease"] = 30;
-                } else if (buildings["bank"].base_cost["money"] > 0.000000001) {
+                } else if (buildings["bank"].base_cost["money"] > 0.00000000001) {
                     event_flags["to_money_decrease"] = 15;
                 } else {
                     event_flags["to_money_decrease"] = 1; /* Every second! */

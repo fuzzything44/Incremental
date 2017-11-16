@@ -1306,8 +1306,8 @@ function set_initial_state() {
                     event_flags["crisis_slow_1_increase"] = 0;
                 }
                 /* Doubles cost each time purchased. */
-                remaining_upgrades["money_crisis_slow_1"].cost["money"] = Math.pow(2, event_flags["crisis_slow_1_increase"]);
-                remaining_upgrades["money_crisis_slow_1"].tooltip = "Banks produce 10x money.<br/> Costs " + format_num(Math.pow(2, event_flags["crisis_slow_1_increase"]), false) + " money.";
+                remaining_upgrades["money_crisis_slow_1"].cost["money"] = Math.pow(4, event_flags["crisis_slow_1_increase"]);
+                remaining_upgrades["money_crisis_slow_1"].tooltip = "Banks produce 10x money.<br/> Costs " + format_num(remaining_upgrades["money_crisis_slow_1"].cost["money"], false) + " money.";
                 return buildings["bank"].generation["money"] <= 5 && event_flags["bribed_politician"] == "money";
             },
             "purchase": function () {
@@ -1740,9 +1740,12 @@ function update_upgrade_list() {
                 }
             });
             var upg_elem = "<li id=\"upgrade_" + upg_name +
-                "\" class=\"upgrade tooltip fgc bgc_second\" onclick=\"purchase_upgrade('" + upg_name + "')\" style='text-align: center; color: " + color_1 + "'><span>" +
-                remaining_upgrades[upg_name].name + "<br /> <img src='images/" + remaining_upgrades[upg_name].image + "' alt='' style='width: 3em; height: 3em; float: bottom;' /></span><span class=\"tooltiptext fgc bgc_second\" style='opacity: 1;'>" +
-                remaining_upgrades[upg_name].tooltip + "</span> </li>";
+                "\" class=\"upgrade tooltip fgc bgc_second\" onclick=\"purchase_upgrade('" + upg_name + "')\" style='text-align: center; color: " + color_1 + "'><span>";
+            /* Stops error message spamming in the console if an unlocked upgrade has no image. */
+            if (remaining_upgrades[upg_name].name) {
+                upg_elem += remaining_upgrades[upg_name].name + "<br /> <img src='images/" + remaining_upgrades[upg_name].image + "' alt='' style='width: 3em; height: 3em; float: bottom;' /></span><span class=\"tooltiptext fgc bgc_second\" style='opacity: 1;'>";
+            }
+            upg_elem += remaining_upgrades[upg_name].tooltip + "</span> </li>";
             new_list += upg_elem;
         }
     });
@@ -1983,6 +1986,17 @@ window.onload = function () {
         "async": false,
         "cache": false,
     });
+    /* Make sure we have enough hydrogen mines */
+    if (buildings["hydrogen_mine"].amount < adventure_data["hydrogen_mines"]) {
+        var comp_state = buildings["hydrogen_mine"].on;
+        if (comp_state) {
+            toggle_building_state("hydrogen_mine");
+        }
+        buildings["hydrogen_mine"].amount = adventure_data["hydrogen_mines"];
+        if (comp_state) {
+            toggle_building_state("hydrogen_mine");
+        }
+    }
     /* Only set to save last in case something messes up. */
     setInterval(save, 30000);
 };

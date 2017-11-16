@@ -56,6 +56,13 @@
 
                         $("#events_content").html("You set up a hydrogen mine on the moon. <br /><span class='clickable' onclick='start_adventure()'>Done</span>");
 
+                        /* Give them a mine on prestige too. Weird if to check for undefined. */
+                        if (adventure_data["hydrogen_mines"]) {
+                            adventure_data["hydrogen_mines"]++;
+                        } else {
+                            adventure_data["hydrogen_mines"] = 1;
+                        }
+
                         let comp_state = buildings["hydrogen_mine"].on;
                         if (comp_state) {
                             toggle_building_state("hydrogen_mine");
