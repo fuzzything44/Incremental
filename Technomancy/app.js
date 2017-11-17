@@ -1744,10 +1744,10 @@ function update_upgrade_list() {
                 }
             });
             var upg_elem = "<li id=\"upgrade_" + upg_name +
-                "\" class=\"upgrade tooltip fgc bgc_second\" onclick=\"purchase_upgrade('" + upg_name + "')\" style='text-align: center; color: " + color_1 + "'><span>";
+                "\" class=\"upgrade tooltip fgc bgc_second\" onclick=\"purchase_upgrade('" + upg_name + "')\" style='text-align: center; color: " + color_1 + "'><span>" + remaining_upgrades[upg_name].name;
             /* Stops error message spamming in the console if an unlocked upgrade has no image. */
-            if (remaining_upgrades[upg_name].name) {
-                upg_elem += remaining_upgrades[upg_name].name + "<br /> <img src='images/" + remaining_upgrades[upg_name].image + "' alt='' style='width: 3em; height: 3em; float: bottom;' /></span><span class=\"tooltiptext fgc bgc_second\" style='opacity: 1;'>";
+            if (remaining_upgrades[upg_name].image) {
+                upg_elem += "<br /> <img src='images/" + remaining_upgrades[upg_name].image + "' alt='' style='width: 3em; height: 3em; float: bottom;' /></span><span class=\"tooltiptext fgc bgc_second\" style='opacity: 1;'>";
             }
             upg_elem += remaining_upgrades[upg_name].tooltip + "</span> </li>";
             new_list += upg_elem;
