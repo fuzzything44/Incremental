@@ -168,7 +168,7 @@ let events = [
             if (event_flags["demon_trades"] >= 10) {
                 content += "<span style='color: red'>You bleed as they approach. </span><br />"
             }
-            let diamond_gain = format_num(Math.round(300 * (event_flags["demon_trades"] * .5 + 1)), false);
+            let diamond_gain = format_num(Math.round(300 * Math.max(0, event_flags["demon_trades"] * .5) + 1), false);
             content += "<span onclick=' " +
                 "resources.diamond.amount +=" + diamond_gain + ";" +
                 "event_flags[\"demon_trades\"] += 1;" +

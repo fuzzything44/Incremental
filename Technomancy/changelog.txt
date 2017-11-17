@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v2.15.4:
+Groupings now kind of work, they just need to be saved. Demons no longer trade a negative amount of diamonds. 
+
 v2.15.3:
 Hydrogen mines should carry over between prestiges. This is untested, but hopefully it works. The gray button on the convolution cube should actually work properly now. Financial crisis has had the balance changed. 
 

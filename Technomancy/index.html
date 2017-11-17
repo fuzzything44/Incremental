@@ -19,7 +19,7 @@
 </head>
 <body class="bgc fgc">
     <div style="font-size: small; position:absolute; top: 0;">
-        v2.15.3 | 
+        v2.15.4 | 
         <span id="music"></span>
         <a href="changelog.txt" target="_blank" style="text-decoration: none;" class="fgc">Changelog</a> |
         <a href="http://crappy-incremental.wikia.com/wiki/Crappy_Incremental_Wiki" target="_blank" style="text-decoration: none;" class="fgc">Wiki</a> |
@@ -487,14 +487,13 @@
         <span id="prestige" onclick="prestige.run();" class="tooltip"><span>Prestige</span><span class="tooltiptext fgc bgc_second">Mana gains from prestige are based on how many resources you have and what kinds they are. <br /> Mana provides many different unique buildings!</span></span>
         <span id="all_on" onclick="Object.keys(buildings).forEach(function (build) { if (!buildings[build].on && SPELL_BUILDINGS.indexOf(build) == -1) { toggle_building_state(build);}});">All&nbsp;On</span>
         <span id="all_off" onclick="Object.keys(buildings).forEach(function (build) { if (buildings[build].on && SPELL_BUILDINGS.indexOf(build) == -1) { toggle_building_state(build);}});">All&nbsp;Off</span>
-        <div class="hidden">
-            <span class="clickable fgc bgc_second" onclick="$('#production_manager').toggleClass('hidden')">Groupings</span><br />
-            <div id="production_manager" style="position: fixed; z-index: 1;">
-                <div class="clickable fgc bgc_second" style="width: 25em; position: relative; left: -20.5em; top: -0.4em; display: flex;">
-                    <div style="display: flex; flex: 0 0 5em; width: 5em; border-right: solid 1px;"></div>
-                    <div style="display: flex; flex: 1; width: 20em;">
-                        DEF<br />
-                        HIJ
+        <div>
+            <span id="production_box" class="clickable fgc bgc_second" onclick="$('#production_manager').toggleClass('hidden')">Groupings</span><br />
+            <div id="production_manager" class="hidden" style="z-index: 1;">
+                <div class="clickable fgc bgc_second" style="width: 35em; position: relative; top: -0.4em; display: flex;">
+                    <div id="group_names" style="width: 15em; border-right: solid 1px;"></div>
+                    <div id="group_data" style="width: 20em;">
+                        
                     </div>
                 </div>
             </div>

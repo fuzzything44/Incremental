@@ -1627,7 +1627,7 @@ function toggle_building_state(name: string) {
         } catch (e) {
             /* We don't want this error going all the way through the stack as a ton of places call this function and need to continue (they rely on it silently failing) */
             console.error(e);
-            return;
+            return 1;
         }
 
         buildings[name].on = true;
@@ -1635,6 +1635,10 @@ function toggle_building_state(name: string) {
         Object.keys(buildings[name].generation).forEach(function (key) {
             /* And increase production */
             resources_per_sec[key] += buildings[name].amount * buildings[name].generation[key];
+            /* Also for special production. */
+            if (resources[key].value == 0) {
+                resources[key].amount += buildings[name].amount * buildings[name].generation[key];
+            }
         });
         $("#toggle_" + name).addClass("building_state_on");
         $("#toggle_" + name).removeClass("building_state_off");
@@ -1996,6 +2000,93 @@ function change_theme(new_theme: string) {
     }
 }
 
+/**
+ * Maps Grouping name => buildings affected. 
+ */
+let groupings = {};
+function setup_groups() {
+    /* Add all on/off */
+    groupings["All"] = Object.keys(buildings);
+    /* Remove spell buildings from this. */
+    SPELL_BUILDINGS.forEach(function (build) {
+         groupings["All"].splice(groupings["All"].indexOf(build), 1);
+    });
+
+    /* Clear group name box*/
+    $("#group_names").html("");
+    Object.keys(groupings).forEach(function (grouping) {
+        $("#group_names").append("<div></div>");
+        $("#group_names > div").last().append(grouping + ":<span class='clickable'>Edit</span>");
+        $("#group_names > div > span").last().click(function () {
+            draw_group(grouping);
+        });
+        $("#group_names > div").last().append("<span class='clickable' style='background-color: green;'>On</span>");
+        $("#group_names > div > span").last().click(function () {
+            let failed = false;
+            groupings[grouping].forEach(function (build) {
+                /* Turn them all on. Note if we failed. */
+                if (!buildings[build].on && toggle_building_state(build)) {
+                    failed = true;
+                }
+            });
+            if (failed) {
+                alert("Turning all on failed.");
+            }
+        });
+        $("#group_names > div").last().append("<span class='clickable' style='background-color: red;'>Off</span>");
+        $("#group_names > div > span").last().click(function () {
+            groupings[grouping].forEach(function (build) {
+                /* Turn them all off. */
+                if (buildings[build].on) {
+                    toggle_building_state(build);
+                }
+            });
+        });
+    });
+    $("#group_names").append("<span class='clickable' style='position: relative; left: 6em;'>+</span>");
+    $("#group_names > span").last().click(function () {
+        let group_name = prompt("What will you name your group?").trim();
+        /* New group and has a name */
+        if (group_name && groupings[group_name] == undefined) {
+            if (groupings[group_name] == undefined) {
+                groupings[group_name] = [];
+            }
+            setup_groups();
+            draw_group(group_name);
+        }
+    });
+}
+
+function draw_group(name: string) {
+    /* Clear old stuff and say what we're editing. */
+    $("#group_data").html("");
+    $("#group_data").html("<div style='text-align: center; border-bottom: solid 1px;'>" + name + "</div>");
+
+    /* Now show every building (that they can see) and if it's in or not.
+        We're also specifically excluding two buildings because they should never be able to be turned off.
+    */
+    Object.keys(buildings).forEach(function (build) {
+        if (build != "s_manastone" && build != "s_mana_refinery" && !$("#building_" + build).parent().hasClass("hidden")) {
+            /* Get the name */
+            let b_name = $("#building_" + build + " .building_name").text();
+            /* Get the color. Red if not in the grouping, green if it is. */
+            let color = groupings[name].indexOf(build) == -1 ? "red" : "green";
+            /* Add the element */
+            $("#group_data").append("<span class='clickable' style='color:" + color + "'>" + b_name + "</span><br/>");
+            /* Add the onclick handler to add/remove it from the group. */
+            $("#group_data > span").last().click(function () {
+                /* Check if it's in the group or not. */
+                if (groupings[name].indexOf(build) == -1) {
+                    groupings[name].push(build);
+                } else {
+                    groupings[name].splice(groupings[name].indexOf(build), 1);
+                }
+                draw_group(name);
+            });
+        }
+    });
+}
+
 function prng(seed: number): number {
     if (seed <= 0) { seed = 1234567; }
     return seed * 16807 % 2147483647;
@@ -2047,6 +2138,7 @@ window.onload = () => {
             toggle_building_state("hydrogen_mine");
         }
     }
+    setup_groups();
 
     /* Only set to save last in case something messes up. */
     setInterval(save, 30000);
