@@ -1749,7 +1749,7 @@ function update_upgrade_list() {
             if (remaining_upgrades[upg_name].image) {
                 upg_elem += "<img src='images/" + remaining_upgrades[upg_name].image + "' alt='' style='width: 3em; height: 3em; float: bottom;' />";
             }
-            upg_elem += remaining_upgrades[upg_name].tooltip + "</span><span class=\"tooltiptext fgc bgc_second\" style='opacity: 1;'></span></li>";
+            upg_elem += "</span><span class=\"tooltiptext fgc bgc_second\" style='opacity: 1;'>" + remaining_upgrades[upg_name].tooltip + "</span></li>";
             new_list += upg_elem;
         }
     });
