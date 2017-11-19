@@ -1742,6 +1742,13 @@ function update() {
             $("#building_" + build).addClass("building_expensive");
         }
     });
+    /* Show favicon */
+    if ($("#events").hasClass("hidden")) {
+        $("#icon").attr("href", "images/favicon.ico");
+    }
+    else {
+        $("#icon").attr("href", "images/favicon2.ico");
+    }
 }
 /* Not in update as this could change a lot if they have too many unpurchased upgrades. */
 function update_upgrade_list() {
