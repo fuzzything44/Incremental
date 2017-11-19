@@ -189,7 +189,7 @@ let equipment = {
                         break;
                     }
                     case "energy": {
-                        resources_per_sec["energy"].amount += 8;
+                        resources_per_sec["energy"] += 8;
                         setTimeout(() => resources_per_sec["energy"] -= 8, 60000);
                         break;
                     }
@@ -697,6 +697,27 @@ let equipment = {
         type: "item",
         name: "Weird Key",
     },
+    "potion": {
+        type: "item",
+        name: "Red Potion",
+        modify: function (self, data) {
+            self.use = function (index, location) {
+                adventure_data.current_potion = {
+                    name: self.name, /* We should probably actually be setting all of these (except data) depending on the potion type. */
+                    effect: "???",
+                    time: 100,
+                    data: data
+                };
+                /* Remove it from inventory after use */
+                adventure_data[location].splice(index, 1);
+                update_inventory();
+            }; /* End use function */
 
+            /* Also set this to something different depending on the potion type. */
+            self.effect = function () {
+                resources["money"].amount += 10000000;
+            }
+        }, /* End modify */
+    },
 };
 

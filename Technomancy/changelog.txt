@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v2.16.0:
+You can now visit the homeworld of the sharks, Haven. What do they have to teach you? Will you become a master alchemist? Well, at least you can manage your buildings better now. Quite useful, actually. Also fixed a bug with Magic Orb (energy) not giving energy but taking it. Made a blatantly overpowered potion that you won't get, but is a useful test for alchemy potions doing things.
+
 v2.15.4:
 Groupings now kind of work, they just need to be saved. Demons no longer trade a negative amount of diamonds. 
 

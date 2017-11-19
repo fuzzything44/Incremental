@@ -720,6 +720,26 @@ function setup_events() {
             }
         }
     }, 1000);
+
+    /* TODO: Environmental Collapse */
+
+    /* Potions */
+    setInterval(function () {
+        if (adventure_data["current_potion"]) {
+            $("#potion").removeClass("hidden");
+            $("#current_potion").html(adventure_data["current_potion"].name);
+            $("#potion_time").html(format_num(adventure_data["current_potion"].time, false));
+            $("#potion_effect").html(adventure_data["current_potion"].effect);
+            /* Run the potion effect, decrement time left, remove buff if needed. */
+            gen_equipment(adventure_data["current_potion"].data).effect();
+            adventure_data["current_potion"].time--;
+            if (adventure_data["current_potion"].time <= 0) {
+                delete adventure_data["current_potion"];
+            }
+        } else {
+            $("#potion").addClass("hidden")
+        }
+    }, 1000);
 }
 
 /* Functions because putting all of this in an onclick is too much. */

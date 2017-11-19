@@ -19,7 +19,7 @@
 </head>
 <body class="bgc fgc">
     <div style="font-size: small; position:absolute; top: 0;">
-        v2.15.4 | 
+        v2.16.0 | 
         <span id="music"></span>
         <a href="changelog.txt" target="_blank" style="text-decoration: none;" class="fgc">Changelog</a> |
         <a href="http://crappy-incremental.wikia.com/wiki/Crappy_Incremental_Wiki" target="_blank" style="text-decoration: none;" class="fgc">Wiki</a> |
@@ -91,6 +91,13 @@
 
     </div>
     <div id="buildings">
+        <div id="potion" class="hidden">
+            <div class="building">
+                Current Potion: <span id="current_potion">Nothing</span><span id="potion_time" class="building_amount">0</span><br/>
+                Effect: <span id="potion_effect">None</span>
+            </div>
+            <hr />
+        </div>
         <div id="spells" class="hidden">
             <div style="position: relative">
                 <span id="building_s_manastone" class="building tooltip" style="color: mediumpurple;"><span class="building_name">Mana Stone</span><span class="building_amount">0</span><span class="tooltiptext fgc bgc_second">Each stone generates 1 mana.</span></span>

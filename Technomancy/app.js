@@ -2,6 +2,10 @@
 /// <reference path ="spells.ts" />
 function format_num(num, show_decimals) {
     if (show_decimals === void 0) { show_decimals = true; }
+    /* If our numberformatting library broke, we fallback to a terrible option instead. This should really only happen in development when it's being worked on online, so it doesn't matter too much.*/
+    if (typeof numberformat == "undefined") {
+        return Math.round(num).toString();
+    }
     if (isNaN(num)) {
         return "fuzzy";
     }
@@ -35,6 +39,7 @@ var purchased_upgrades = []; /* Names of all purchased upgrades */
 var remaining_upgrades = {}; /* All remaining upgrades that need to be purchased */
 var UNLOCK_TREE = {
     "s_manastone": [],
+    "s_mana_refinery": [],
     "s_goldboost": [],
     "s_energyboost": [],
     "s_trade": [],
@@ -42,36 +47,34 @@ var UNLOCK_TREE = {
     "s_time_magic": [],
     "s_workshop": [],
     "s_time_maker": [],
-    "s_mana_refinery": [],
     "s_workshop_2": [],
     "s_final": [],
     "bank": ["mine", "logging"],
+    "oil_well": ["oil_engine"],
+    "library": ["water_purifier", "solar_panel"],
+    "water_purifier": ["hydrogen_gen", "hydrogen_burner"],
+    "skyscraper": ["big_bank"],
+    "oil_engine": ["paper_mill", "ink_refinery", "s_energyboost"],
+    "solar_panel": [],
+    "hydrogen_burner": [],
+    "reactor": ["fuel_maker"],
     "mine": ["furnace", "gold_finder"],
     "logging": ["compressor"],
     "furnace": [],
-    "compressor": ["oil_well"],
     "gold_finder": ["jeweler"],
+    "compressor": ["oil_well"],
     "jeweler": ["jewelry_store"],
     "glass_jeweler": ["jewelry_store"],
     "jewelry_store": [],
-    "oil_well": ["oil_engine"],
-    "oil_engine": ["paper_mill", "ink_refinery", "s_energyboost"],
     "paper_mill": ["money_printer"],
     "ink_refinery": [],
     "money_printer": ["book_printer"],
     "book_printer": ["library"],
-    "library": ["water_purifier", "solar_panel"],
-    "solar_panel": [],
-    "water_purifier": ["hydrogen_gen", "hydrogen_burner"],
     "hydrogen_gen": [],
-    "hydrogen_burner": [],
-    "skyscraper": ["big_bank"],
+    "fuel_maker": [],
     "big_bank": ["big_mine"],
     "big_mine": [],
-    "reactor": ["fuel_maker"],
-    "fuel_maker": [],
     "hydrogen_mine": [],
-    "sandcastle": [],
 };
 var SPELL_BUILDINGS = [
     "s_manastone",
@@ -133,6 +136,17 @@ function set_initial_state() {
             },
             "update": "nop",
             "flavor": "A stone made out of pure crystallized mana. Use it to power spells!",
+        },
+        "s_mana_refinery": {
+            "on": true,
+            "amount": 1,
+            "base_cost": {},
+            "price_ratio": {},
+            "generation": {
+                "mana": 0,
+            },
+            "update": "refinery",
+            "flavor": "That's some fine mana.",
         },
         "s_goldboost": {
             "on": false,
@@ -219,17 +233,6 @@ function set_initial_state() {
             "update": "nop",
             "flavor": "Yay herbs! Thyme is good!",
         },
-        "s_mana_refinery": {
-            "on": true,
-            "amount": 1,
-            "base_cost": {},
-            "price_ratio": {},
-            "generation": {
-                "mana": 0,
-            },
-            "update": "refinery",
-            "flavor": "That's some fine mana.",
-        },
         "s_workshop_2": {
             "on": false,
             "amount": 200,
@@ -266,6 +269,158 @@ function set_initial_state() {
                 "money": 1,
             },
             "flavor": "It's a pretty small branch bank.",
+        },
+        "oil_well": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 1000,
+                "stone": 1000,
+                "iron": 500
+            },
+            "price_ratio": {
+                "money": 1.2,
+                "stone": 1.1,
+                "iron": 1.3,
+            },
+            "generation": {
+                "oil": 0.1,
+            },
+            "flavor": "Well, this gets you oil.",
+        },
+        "library": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 2500,
+                "wood": 2500,
+                "iron": 50,
+                "book": 10,
+            },
+            "price_ratio": {
+                "money": 1.2,
+                "iron": 1.4,
+                "wood": .95,
+                "book": 1.1,
+            },
+            "generation": {
+                "research": 1,
+            },
+            "flavor": "They do very important research here. <br />DO NOT DISTURB THE LIBRARIANS.",
+        },
+        "water_purifier": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 500,
+                "stone": 500,
+                "sand": 500,
+                "glass": 100,
+            },
+            "price_ratio": {
+                "money": 1.1,
+                "stone": 1.1,
+                "sand": 1.1,
+                "glass": 1.1,
+            },
+            "generation": {
+                "water": 1,
+            },
+            "flavor": "To find sand, first you must collect enough mana.",
+        },
+        "skyscraper": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 5000,
+                "steel_beam": 25,
+                "glass": 50,
+            },
+            "price_ratio": {
+                "money": 1.09,
+                "steel_beam": 1.1,
+                "glass": 1.1,
+            },
+            "generation": {
+                "manager": 1,
+            },
+            "flavor": "Only one per floor so they don't get in each others' ways.",
+        },
+        "oil_engine": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 500,
+                "iron": 200
+            },
+            "price_ratio": {
+                "money": 1.3,
+                "iron": 1.3,
+            },
+            "generation": {
+                "oil": -1,
+                "energy": 1,
+            },
+            "flavor": "",
+        },
+        "solar_panel": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 50000,
+                "glass": 100,
+                "coal": 100,
+                "diamond": 100,
+            },
+            "price_ratio": {
+                "money": .8,
+                "glass": 2,
+                "coal": 1.5,
+                "diamond": 1.5,
+            },
+            "generation": {
+                "energy": 1,
+            },
+            "flavor": "Praise the sun!",
+        },
+        "hydrogen_burner": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 2500,
+                "iron": 500,
+            },
+            "price_ratio": {
+                "money": 1.1,
+                "iron": 1.2,
+            },
+            "generation": {
+                "hydrogen": -20,
+                "energy": 10,
+                "water": 7,
+            },
+            "flavor": "FIRE!",
+        },
+        "reactor": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 1000000,
+                "steel_beam": 100,
+                "iron": 10000,
+            },
+            "price_ratio": {
+                "money": 1.1,
+                "steel_beam": 1.07,
+                "iron": 1.2,
+            },
+            "generation": {
+                "manager": -3,
+                "uranium": -0.1,
+                "water": -15,
+                "energy": 50,
+            },
+            "flavor": "Don't let it go boom!",
         },
         "mine": {
             "on": true,
@@ -318,25 +473,6 @@ function set_initial_state() {
             },
             "flavor": "Come on in! It's a blast!",
         },
-        "compressor": {
-            "on": true,
-            "amount": 0,
-            "base_cost": {
-                "money": 100,
-                "stone": 300,
-                "iron": 100
-            },
-            "price_ratio": {
-                "money": 1.3,
-                "stone": 1.3,
-                "iron": 1.3,
-            },
-            "generation": {
-                "coal": -10,
-                "diamond": 0.1,
-            },
-            "flavor": "",
-        },
         "gold_finder": {
             "on": true,
             "amount": 0,
@@ -353,6 +489,25 @@ function set_initial_state() {
             "generation": {
                 "stone": -10,
                 "gold": 0.1,
+            },
+            "flavor": "",
+        },
+        "compressor": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "money": 100,
+                "stone": 300,
+                "iron": 100
+            },
+            "price_ratio": {
+                "money": 1.3,
+                "stone": 1.3,
+                "iron": 1.3,
+            },
+            "generation": {
+                "coal": -10,
+                "diamond": 0.1,
             },
             "flavor": "",
         },
@@ -409,41 +564,6 @@ function set_initial_state() {
                 "money": 400,
             },
             "flavor": "And the cycle repeats...",
-        },
-        "oil_well": {
-            "on": true,
-            "amount": 0,
-            "base_cost": {
-                "money": 1000,
-                "stone": 1000,
-                "iron": 500
-            },
-            "price_ratio": {
-                "money": 1.2,
-                "stone": 1.1,
-                "iron": 1.3,
-            },
-            "generation": {
-                "oil": 0.1,
-            },
-            "flavor": "Well, this gets you oil.",
-        },
-        "oil_engine": {
-            "on": true,
-            "amount": 0,
-            "base_cost": {
-                "money": 500,
-                "iron": 200
-            },
-            "price_ratio": {
-                "money": 1.3,
-                "iron": 1.3,
-            },
-            "generation": {
-                "oil": -1,
-                "energy": 1,
-            },
-            "flavor": "",
         },
         "paper_mill": {
             "on": true,
@@ -527,66 +647,6 @@ function set_initial_state() {
             },
             "flavor": "It's actually just printing a bunch of copies of My Immortal.",
         },
-        "library": {
-            "on": true,
-            "amount": 0,
-            "base_cost": {
-                "money": 2500,
-                "wood": 2500,
-                "iron": 50,
-                "book": 10,
-            },
-            "price_ratio": {
-                "money": 1.2,
-                "iron": 1.4,
-                "wood": .95,
-                "book": 1.1,
-            },
-            "generation": {
-                "research": 1,
-            },
-            "flavor": "They do very important research here. <br />DO NOT DISTURB THE LIBRARIANS.",
-        },
-        "solar_panel": {
-            "on": true,
-            "amount": 0,
-            "base_cost": {
-                "money": 50000,
-                "glass": 100,
-                "coal": 100,
-                "diamond": 100,
-            },
-            "price_ratio": {
-                "money": .8,
-                "glass": 2,
-                "coal": 1.5,
-                "diamond": 1.5,
-            },
-            "generation": {
-                "energy": 1,
-            },
-            "flavor": "Praise the sun!",
-        },
-        "water_purifier": {
-            "on": true,
-            "amount": 0,
-            "base_cost": {
-                "money": 500,
-                "stone": 500,
-                "sand": 500,
-                "glass": 100,
-            },
-            "price_ratio": {
-                "money": 1.1,
-                "stone": 1.1,
-                "sand": 1.1,
-                "glass": 1.1,
-            },
-            "generation": {
-                "water": 1,
-            },
-            "flavor": "To find sand, first you must collect enough mana.",
-        },
         "hydrogen_gen": {
             "on": true,
             "amount": 0,
@@ -605,41 +665,31 @@ function set_initial_state() {
             },
             "flavor": "Runs electricity through water...",
         },
-        "hydrogen_burner": {
+        "fuel_maker": {
             "on": true,
             "amount": 0,
             "base_cost": {
-                "money": 2500,
-                "iron": 500,
+                "money": 1500000,
+                "steel_beam": 250,
+                "iron": 50000,
+                "gold": 3000,
+                "research": 20,
             },
             "price_ratio": {
                 "money": 1.1,
+                "steel_beam": 1.07,
                 "iron": 1.2,
+                "gold": 1.1,
+                "research": 1.2,
             },
             "generation": {
-                "hydrogen": -20,
-                "energy": 10,
-                "water": 7,
+                "energy": -75,
+                "uranium": -0.1,
+                "hydrogen": -150,
+                "refined_mana": -1,
+                "fuel": 0.01,
             },
-            "flavor": "...And lights it on fire!",
-        },
-        "skyscraper": {
-            "on": true,
-            "amount": 0,
-            "base_cost": {
-                "money": 5000,
-                "steel_beam": 25,
-                "glass": 50,
-            },
-            "price_ratio": {
-                "money": 1.09,
-                "steel_beam": 1.1,
-                "glass": 1.1,
-            },
-            "generation": {
-                "manager": 1,
-            },
-            "flavor": "Only one per floor so they don't get in each others' ways.",
+            "flavor": "This fuel is... not healthy.",
         },
         "big_bank": {
             "on": true,
@@ -685,53 +735,6 @@ function set_initial_state() {
                 "sand": 10,
             },
             "flavor": "Seriouser business",
-        },
-        "reactor": {
-            "on": true,
-            "amount": 0,
-            "base_cost": {
-                "money": 1000000,
-                "steel_beam": 100,
-                "iron": 10000,
-            },
-            "price_ratio": {
-                "money": 1.1,
-                "steel_beam": 1.07,
-                "iron": 1.2,
-            },
-            "generation": {
-                "manager": -3,
-                "uranium": -0.1,
-                "water": -15,
-                "energy": 50,
-            },
-            "flavor": "Don't let it go boom!",
-        },
-        "fuel_maker": {
-            "on": true,
-            "amount": 0,
-            "base_cost": {
-                "money": 1500000,
-                "steel_beam": 250,
-                "iron": 50000,
-                "gold": 3000,
-                "research": 20,
-            },
-            "price_ratio": {
-                "money": 1.1,
-                "steel_beam": 1.07,
-                "iron": 1.2,
-                "gold": 1.1,
-                "research": 1.2,
-            },
-            "generation": {
-                "energy": -75,
-                "uranium": -0.1,
-                "hydrogen": -150,
-                "refined_mana": -1,
-                "fuel": 0.01,
-            },
-            "flavor": "This fuel is... not healthy.",
         },
         "hydrogen_mine": {
             "on": true,
@@ -1433,6 +1436,7 @@ function save() {
     localStorage["upgrades"] = JSON.stringify(purchased_upgrades);
     localStorage["last_save"] = Date.now();
     localStorage["adventure"] = JSON.stringify(adventure_data);
+    localStorage["groupings"] = JSON.stringify(groupings);
     $('#save_text').css('opacity', '1');
     setTimeout(function () { return $('#save_text').css({ 'opacity': '0', 'transition': 'opacity 1s' }); }, 1000);
     console.log("Saved");
@@ -1479,6 +1483,15 @@ function load() {
     console.log("Loading adventure mode");
     if (localStorage.getItem("adventure")) {
         adventure_data = JSON.parse(localStorage.getItem("adventure"));
+    }
+    console.log("Loading groupings");
+    if (localStorage.getItem("groupings")) {
+        groupings = JSON.parse(localStorage.getItem("groupings"));
+        if (adventure_data["groupings_unlocked"]) {
+            $("#production_box").parent().removeClass("hidden");
+            $("#all_on").addClass("hidden");
+            $("#all_off").addClass("hidden");
+        }
     }
     console.log("Loading theme");
     if (!localStorage.getItem("theme")) {
@@ -1967,16 +1980,28 @@ function setup_groups() {
     SPELL_BUILDINGS.forEach(function (build) {
         groupings["All"].splice(groupings["All"].indexOf(build), 1);
     });
+    /* Ugh. We have to make a copy. Because otherwise we modify SPELL_BUILDINGS, even though it's marked as const. */
+    groupings["Spells"] = JSON.parse(JSON.stringify(SPELL_BUILDINGS));
+    groupings["Spells"].splice(groupings["Spells"].indexOf("s_manastone"), 1);
+    groupings["Spells"].splice(groupings["Spells"].indexOf("s_mana_refinery"), 1);
+    groupings["Spells"].splice(groupings["Spells"].indexOf("s_final"), 1); /* This building isn't officially a thing yet and we don't want it on. */
     /* Clear group name box*/
-    $("#group_names").html("");
+    $("#group_names").html("<table></table>");
     Object.keys(groupings).forEach(function (grouping) {
-        $("#group_names").append("<div></div>");
-        $("#group_names > div").last().append(grouping + ":<span class='clickable'>Edit</span>");
-        $("#group_names > div > span").last().click(function () {
-            draw_group(grouping);
-        });
-        $("#group_names > div").last().append("<span class='clickable' style='background-color: green;'>On</span>");
-        $("#group_names > div > span").last().click(function () {
+        $("#group_names > table").append("<tr></tr>");
+        $("#group_names tr").last().append("<td style='overflow: auto; max-width: 5em;'>" + grouping + "</td>");
+        /* Can't edit the default filters. */
+        if (grouping != "All" && grouping != "Spells") {
+            $("#group_names tr").last().append("<td><span class='clickable'>Edit</span></td>");
+            $("#group_names span").last().click(function () {
+                draw_group(grouping);
+            });
+        }
+        else {
+            $("#group_names tr").last().append("<td></td>");
+        }
+        $("#group_names tr").last().append("<td><span class='clickable' style='background-color: green;'>On</span></td>");
+        $("#group_names span").last().click(function () {
             var failed = false;
             groupings[grouping].forEach(function (build) {
                 /* Turn them all on. Note if we failed. */
@@ -1988,8 +2013,8 @@ function setup_groups() {
                 alert("Turning all on failed.");
             }
         });
-        $("#group_names > div").last().append("<span class='clickable' style='background-color: red;'>Off</span>");
-        $("#group_names > div > span").last().click(function () {
+        $("#group_names tr").last().append("<td><span class='clickable' style='background-color: red;'>Off</span></td>");
+        $("#group_names span").last().click(function () {
             groupings[grouping].forEach(function (build) {
                 /* Turn them all off. */
                 if (buildings[build].on) {
@@ -2014,7 +2039,14 @@ function setup_groups() {
 function draw_group(name) {
     /* Clear old stuff and say what we're editing. */
     $("#group_data").html("");
-    $("#group_data").html("<div style='text-align: center; border-bottom: solid 1px;'>" + name + "</div>");
+    $("#group_data").html("<div style='text-align: center; border-bottom: solid 1px;'>" + name + " <span class='clickable'>Delete</span></div>");
+    $("#group_data > div > span").click(function () {
+        if (confirm("Really delete group " + name + "?")) {
+            delete groupings[name];
+            setup_groups();
+            $("#group_data").html("");
+        }
+    });
     /* Now show every building (that they can see) and if it's in or not.
         We're also specifically excluding two buildings because they should never be able to be turned off.
     */

@@ -352,7 +352,6 @@ function s_workshop_update(delta_time: number) {
         if (workshop_elapsed_time >= workshop_time_total) {
             /* Give them the item */
             if (craftable_items[workshop_item].adventure_item) {
-                /* TODO: Handle adventure mode items. Once adventure mode exists. */
                 adventure_data.warehouse.push({ name: workshop_item });
                 add_log_elem("Finished crafting " + gen_equipment({ name: workshop_item }).name);
             } else {
