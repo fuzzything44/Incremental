@@ -22,7 +22,23 @@
                         $("#events_content").append("Hmm... maybe you could join them if you had some bottles of your own.<br/>" + exit_button("Okay"));
                     }
                     else {
-                        $("#events_content").append("Sadly, alchemy is not yet implemented.<br/>" + exit_button("Okay"));
+                        $("#events_content").append("Would you like to <span class='clickable'>refine</span> ingredients, ");
+                        $("#events_content > span").last().click(function () {
+                            alert("You have nothing to refine. Yet. Come back when major version is 3.");
+                            return;
+                            /* Check alchemy stuff to see if refined ingredient table exists, and if not make it.*/
+                            if (adventure_data["alchemy_ingredients"] == undefined) {
+                                adventure_data["alchemy_ingredients"] = {};
+                            }
+                            /* At this point alchemy will probably deserve its own file. Maybe? Still not sure on internal organization.
+                                But basically, you can refine stuff into materials. Materials can be used on potions then.
+                                Each material has a major attribute - what it does, a time attribute - how long it lasts, and a potency - how strong it is.
+                                You need one material for each slot. And no reuse of materials.
+                            */
+                        });
+                        $("#events_content").append("<span class='clickable'>make</span> potions, or ");
+                        $("#events_content > span").last().click(function () { return alert("You have nothing to make."); });
+                        $("#events_content").append(exit_button("Leave") + "?");
                     }
                 });
                 if (adventure_data["groupings_unlocked"] == undefined) {

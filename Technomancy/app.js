@@ -119,7 +119,7 @@ function set_initial_state() {
         "steel_beam": { "amount": 0, "value": 200 },
         "uranium": { "amount": 0, "value": 500 },
         "sandcastle": { "amount": 0, "value": 10000000 },
-        "glass_bottle": { "amount": 0, "value": 2500 },
+        "glass_bottle": { "amount": 0, "value": 25000 },
     };
     /* Set resources_per_sec */
     Object.keys(resources).forEach(function (res) {
@@ -1288,7 +1288,7 @@ function set_initial_state() {
                     toggle_building_state("glass_jeweler");
                 }
                 buildings["glass_jeweler"]["generation"]["jewelry"] = 0;
-                buildings["glass_jeweler"]["generation"]["glass_bottle"] = 0.1;
+                buildings["glass_jeweler"]["generation"]["glass_bottle"] = 0.01;
                 if (comp_state) {
                     toggle_building_state("glass_jeweler");
                 }

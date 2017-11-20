@@ -18,7 +18,11 @@
                     }
                     adventure_data["maze_progress"][1] = !adventure_data["maze_progress"][1];
                 } else {
-                    $("#events_content").append("<br />");
+                    if (adventure_data["maze_progress"][1]) {
+                        $("#events_content").append(" There's a jet of heated gas here.<br />");
+                    } else {
+                        $("#events_content").append("<br />");
+                    }
                 }
 
                 /* Show progress */

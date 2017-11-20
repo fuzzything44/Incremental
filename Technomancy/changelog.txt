@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v2.16.2:
+Clouds of dust now tell you their own state if they're on and didn't change. Bottles are harder to get but worth more. Fixed a bug with demon trading. 
+
 v2.16.1:
 Favicon now changes when there's an event.
 

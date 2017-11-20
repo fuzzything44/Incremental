@@ -20,7 +20,12 @@
                     adventure_data["maze_progress"][2] = !adventure_data["maze_progress"][2];
                 }
                 else {
-                    $("#events_content").append("<br />");
+                    if (adventure_data["maze_progress"][2]) {
+                        $("#events_content").append(" Woah, it's bright here!<br />");
+                    }
+                    else {
+                        $("#events_content").append("<br />");
+                    }
                 }
                 /* Show progress */
                 var progress = [];

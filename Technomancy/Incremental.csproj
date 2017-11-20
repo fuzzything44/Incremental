@@ -30,6 +30,7 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="adventure.ts" />
+    <TypeScriptCompile Include="alchemy.ts" />
     <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="equipment_data.ts" />
     <TypeScriptCompile Include="events.ts" />
