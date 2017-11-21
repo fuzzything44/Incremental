@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v2.17.0:
+You can fight wild turkeys! Get some turkey legs! Bugfixes and improvements: Hydrogen mines should show the correct amount after prestige. When logikitten perfect buff runs out it says so in the log. Fixed an issue where you never got the option to end the financial crisis. 
+
 v2.16.2:
 Clouds of dust now tell you their own state if they're on and didn't change. Bottles are harder to get but worth more. Fixed a bug with demon trading. 
 

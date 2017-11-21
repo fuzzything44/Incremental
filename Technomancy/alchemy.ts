@@ -63,3 +63,51 @@
         }
     }
 }
+
+let ingredients: ingredient[] = [
+    new ingredient("Gold Chalice", function (x) { }, 10, 5, [{ type: "resource", amount: 3, name: "gold" }, { type: "resource", amount: 1, name: "glass_bottle" }]),
+    new ingredient("Magic Dust", function (x) { }, 23, 2, [{ type: "adventure", amount: 1, name: "magic_orb", requirements: {}]),
+];
+
+/**
+ * Sets up alchemy ingredient making.
+ */
+function alchemy_ingredients() {
+    /* Let them see resources*/
+    $("#character").addClass("hidden");
+    /* Setup basic visuals*/
+    $("#events_topbar").html("Alchemy - Ingredient Crafting");
+    $("#events_content").html("<table><tbody></tbody></table>");
+    /* Table start*/
+    $("#events_content tbody").append("<tr style='font-weight: bold;'><td></td><td>&nbsp;&nbsp;Item&nbsp;&nbsp;</td><td>&nbsp;&nbsp;Amount Owned&nbsp;&nbsp;</td><td>&nbsp;&nbsp;Cost to Make&nbsp;&nbsp;</td></tr>");
+
+    /* Go through each ingredient, let them craft it. */
+    for (let i = 0; i < ingredients.length; i++) {
+        /* Add table row for it. */
+        $("#events_content tbody").append("<tr></tr>");
+        /* Craft button */
+        $("#events_content tr").last().append("<td>" + "<span class='clickable'>Make</span>" + "</td>");
+        $("#events_content span").last().click(function () {
+            /* TODO: Actually craft it.*/
+            alert("Nope. This is actually all in your head. You can't craft this.");
+        });
+        /* Add item name */
+        $("#events_content tr").last().append("<td>" + ingredients[i].name + "</td>");
+        /* Add amount. TODO: actually add it. */
+        $("#events_content tr").last().append("<td>" + "0" + "</td>");
+        /* Add crafting cost */
+        $("#events_content tr").last().append("<td></td>");
+        Object.keys(ingredients[i].cost).forEach(function (cost) {
+            /* Check cost type. */
+            if (ingredients[i].cost[cost].type == "resource") {
+                /* Add it in the form of 341K steel beam (example) */
+                $("#events_content td").last().append(format_num(ingredients[i].cost[cost].amount, true) + " " + ingredients[i].cost[cost].name.replace("_", " "));
+            } else {
+                let data = ingredients[i].cost[cost].requirements;
+                data["name"] = ingredients[i].cost[cost].name;
+                $("#events_content td").last().append(format_num(ingredients[i].cost[cost].amount, true) + " " + gen_equipment(data).name);
+            }
+            $("#events_content td").last().append("<br/>"); /* Append line break for next item. */
+        });
+    }
+}

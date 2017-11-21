@@ -24,7 +24,7 @@
                     else {
                         $("#events_content").append("Would you like to <span class='clickable'>refine</span> ingredients, ");
                         $("#events_content > span").last().click(function () {
-                            alert("You have nothing to refine. Yet. Come back when major version is 3.");
+                            alert("You have nothing to refine. Yet. Come back when major version is 3. Also, if you got here, message fuzzything44 on discord.");
                             return;
                             /* Check alchemy stuff to see if refined ingredient table exists, and if not make it.*/
                             if (adventure_data["alchemy_ingredients"] == undefined) {

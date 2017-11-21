@@ -589,7 +589,7 @@ let events = [
                         resources_per_sec[res] += ps_add;
                         setTimeout(() => resources_per_sec[res] -= ps_add, 60000 * 3);
                     });
-                    setTimeout(() => this.perfect_cat = false, 60000 * 3);
+                    setTimeout(() => { this.perfect_cat = false, 60000 * 3; add_log_elem("Logikitten bonus wore off."); });
                     $("#events_content").append("Perfect answer! Production increased.<br />");
                 }
 
@@ -687,11 +687,16 @@ function setup_events() {
                 }
 
                 buildings["bank"]["generation"]["money"] *= 0.7;
+                /* Yes, this happens. It gets small enough that rounding errors make it weird. */
+                if (buildings["bank"].base_cost["money"] * 0.7 == buildings["bank"].base_cost["money"]) {
+                    buildings["bank"].base_cost["money"] = 0;
+                }
+
                 if (comp_state) { /* Only turn on if it already was on */
                     toggle_building_state("bank");
                 }
                 buildings["bank"].base_cost["money"] *= 0.7;
-
+                /* Decrease investment companies. */
                 comp_state = buildings["big_bank"].on;
                 if (comp_state) {
                     toggle_building_state("big_bank");
@@ -703,6 +708,9 @@ function setup_events() {
                     toggle_building_state("big_bank");
                 }
                 buildings["big_bank"].base_cost["money"] *= 0.5;
+
+
+
                 /* Decrease faster as we go on. */
                 if (buildings["bank"].base_cost["money"] > 1) {
                     event_flags["to_money_decrease"] = 60 * 5;

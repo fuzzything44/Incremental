@@ -567,7 +567,7 @@ var events = [
                         resources_per_sec[res] += ps_add;
                         setTimeout(function () { return resources_per_sec[res] -= ps_add; }, 60000 * 3);
                     });
-                    setTimeout(function () { return _this.perfect_cat = false; }, 60000 * 3);
+                    setTimeout(function () { _this.perfect_cat = false, 60000 * 3; add_log_elem("Logikitten bonus wore off."); });
                     $("#events_content").append("Perfect answer! Production increased.<br />");
                 }
             });
@@ -661,10 +661,15 @@ function setup_events() {
                     toggle_building_state("bank");
                 }
                 buildings["bank"]["generation"]["money"] *= 0.7;
+                /* Yes, this happens. It gets small enough that rounding errors make it weird. */
+                if (buildings["bank"].base_cost["money"] * 0.7 == buildings["bank"].base_cost["money"]) {
+                    buildings["bank"].base_cost["money"] = 0;
+                }
                 if (comp_state) {
                     toggle_building_state("bank");
                 }
                 buildings["bank"].base_cost["money"] *= 0.7;
+                /* Decrease investment companies. */
                 comp_state = buildings["big_bank"].on;
                 if (comp_state) {
                     toggle_building_state("big_bank");

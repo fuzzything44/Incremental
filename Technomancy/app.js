@@ -2123,6 +2123,7 @@ window.onload = function () {
         if (comp_state) {
             toggle_building_state("hydrogen_mine");
         }
+        $("#building_hydrogen_mine  > .building_amount").html(format_num(buildings["hydrogen_mine"].amount, false));
     }
     setup_groups();
     /* Only set to save last in case something messes up. */

@@ -172,8 +172,10 @@ var equipment = {
         type: "item",
         name: "Magic Orb",
         modify: function (self, data) {
+            if (data.elem == undefined) {
+                return; /* Can't modify based off of data we don't have. */
+            }
             /* from Umbra: const elements = ["time", "energy", "space", "force"]; */
-            self["element"] = data.elem;
             self.name += " (" + data.elem + ")";
             self.use = function (index, location) {
                 switch (data.elem) {
@@ -669,24 +671,28 @@ var equipment = {
         type: "item",
         name: "Weird Key",
     },
-    "potion": {
+    "turkey_leg": {
         type: "item",
-        name: "Red Potion",
+        name: "Turkey Leg",
         modify: function (self, data) {
             self.use = function (index, location) {
                 adventure_data.current_potion = {
                     name: self.name,
-                    effect: "???",
-                    time: 100,
+                    effect: "Gobble Gobble Gobble",
+                    time: 60,
                     data: data
                 };
                 /* Remove it from inventory after use */
                 adventure_data[location].splice(index, 1);
                 update_inventory();
             }; /* End use function */
-            /* Also set this to something different depending on the potion type. */
+            /* Give +50% to any positive gains. Yay Thanksgiving! */
             self.effect = function () {
-                resources["money"].amount += 10000000;
+                Object.keys(resources_per_sec).forEach(function (res) {
+                    if (resources[res].value > 0) {
+                        resources[res].amount += Math.max(0, resources_per_sec[res] / 2);
+                    }
+                });
             };
         },
     },

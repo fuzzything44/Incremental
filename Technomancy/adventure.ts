@@ -222,7 +222,11 @@ function run_adventure(location: string) {
     let available_encounters = [];
     let forced_encounters = [];
     let total_weight: number = 0;
-    location_data.encounters.concat(global_data.encounters).forEach(function (loc) {
+    let encounters = location_data.encounters;
+    if (location_data.leave_cost) { /* Global encounters can only happen in non-free zones. */
+        encounters = encounters.concat(global_data.encounters);
+    }
+    encounters.forEach(function (loc) {
         if (loc.condition()) { /* If the encounter can happen... */
             if (loc.weight > 0) { /* If not forced encounter... */
                 available_encounters.push(loc); /* Add encounter */

@@ -221,7 +221,11 @@ function run_adventure(location) {
     var available_encounters = [];
     var forced_encounters = [];
     var total_weight = 0;
-    location_data.encounters.concat(global_data.encounters).forEach(function (loc) {
+    var encounters = location_data.encounters;
+    if (location_data.leave_cost) {
+        encounters = encounters.concat(global_data.encounters);
+    }
+    encounters.forEach(function (loc) {
         if (loc.condition()) {
             if (loc.weight > 0) {
                 available_encounters.push(loc); /* Add encounter */
