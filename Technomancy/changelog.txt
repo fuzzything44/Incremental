@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.0.0:
+Turkeys have disappeared. You ate them all. The buff helps you in combat now too! Oh, you can also brew potions.
+
 v2.17.0:
 You can fight wild turkeys! Get some turkey legs! Bugfixes and improvements: Hydrogen mines should show the correct amount after prestige. When logikitten perfect buff runs out it says so in the log. Fixed an issue where you never got the option to end the financial crisis. 
 

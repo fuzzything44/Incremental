@@ -343,6 +343,10 @@ function setup_combat(enemy_info, win_callback, ai) {
             gen_equipment(adventure_data.ship[equip_type]).on_combat(equip_type);
         }
     });
+    /* And perform a potion update. Just run it's update function with on_combat set to true. */
+    if (adventure_data["current_potion"]) {
+        gen_equipment(adventure_data["current_potion"].data).effect(adventure_data["current_potion"].power, true);
+    }
     /* Update enemy stats as needed. */
     Object.keys(enemy_info).forEach(function (key) {
         enemy_data[key] = enemy_info[key];

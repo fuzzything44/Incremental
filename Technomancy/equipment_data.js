@@ -80,11 +80,12 @@ var equipment = {
                     return;
                 }
                 /* Attack! */
-                enemy_data["shields"] -= 1;
+                var damage = 1 + player_data[slot].extra_damage;
+                enemy_data["shields"] -= damage;
                 player_data[slot].charge_level -= 1;
                 /* Update visuals */
                 $("#combat_" + slot).text('(' + player_data[slot].charge_level.toString() + ") Fire Small Lazer " + slot[slot.length - 1] + " [1]");
-                $("#combat_log").text("Small Lazer " + slot[slot.length - 1] + " fired for 1 damage!");
+                $("#combat_log").text("Small Lazer " + slot[slot.length - 1] + " fired for " + format_num(damage, false) + " damage!");
                 update_combat(1);
             });
             /* Rapid fire option */
@@ -97,9 +98,10 @@ var equipment = {
                     $("#combat_log").text("Not enough actions left.");
                 }
                 /* Attack! */
-                $("#combat_log").text("Small Lazer " + slot[slot.length - 1] + " fired for 1 damage " + player_data[slot].charge_level.toString() + " times!");
+                var damage = 1 + player_data[slot].extra_damage;
+                $("#combat_log").text("Small Lazer " + slot[slot.length - 1] + " fired for " + format_num(damage, false) + " damage " + player_data[slot].charge_level.toString() + " times!");
                 while (player_data[slot].charge_level > 0) {
-                    enemy_data["shields"] -= 1;
+                    enemy_data["shields"] -= damage;
                     if (update_combat(0)) {
                         return;
                     }
@@ -153,10 +155,11 @@ var equipment = {
                     return;
                 }
                 /* Attack! */
-                enemy_data["shields"] -= 3;
+                var damage = 3 + player_data[slot].extra_damage;
+                enemy_data["shields"] -= damage;
                 /* Update visuals */
                 $("#combat_" + slot).remove();
-                $("#combat_log").text("Cannon " + slot[slot.length - 1] + " fired for 3 damage!");
+                $("#combat_log").text("Cannon " + slot[slot.length - 1] + " fired for " + format_num(damage, false) + " damage!");
                 update_combat(1);
             });
         },
@@ -676,24 +679,64 @@ var equipment = {
         name: "Turkey Leg",
         modify: function (self, data) {
             self.use = function (index, location) {
+                if (adventure_data.current_potion != undefined) {
+                    gen_equipment(adventure_data["current_potion"].data).stop();
+                }
                 adventure_data.current_potion = {
                     name: self.name,
                     effect: "Gobble Gobble Gobble",
                     time: 60,
-                    data: data
+                    data: data,
+                    power: 1,
                 };
                 /* Remove it from inventory after use */
                 adventure_data[location].splice(index, 1);
                 update_inventory();
             }; /* End use function */
+            /* When we stop nothing happens. */
+            self.stop = function () { };
             /* Give +50% to any positive gains. Yay Thanksgiving! */
-            self.effect = function () {
+            self.effect = function (power, on_combat) {
+                if (on_combat === void 0) { on_combat = false; }
+                /* Also gives a shield boost when starting combat. */
+                if (on_combat) {
+                    if (player_data["shields"] < 5) {
+                        player_data["shields"]++;
+                    }
+                    return;
+                }
                 Object.keys(resources_per_sec).forEach(function (res) {
                     if (resources[res].value > 0) {
                         resources[res].amount += Math.max(0, resources_per_sec[res] / 2);
                     }
                 });
             };
+        },
+    },
+    "potion": {
+        type: "item",
+        name: "Potion",
+        modify: function (self, data) {
+            /* Figure out values for everything. */
+            self.name = data.disp_name;
+            /* data should have fields for index of major/time/power ingredients */
+            self.stop = ingredients[data.major].ending_func; /* What do we do when we finish? */
+            self.effect = ingredients[data.major].effect_func; /* Major ingredient determines effect */
+            self.use = function (index, location) {
+                if (adventure_data.current_potion != undefined) {
+                    gen_equipment(adventure_data["current_potion"].data).stop();
+                }
+                adventure_data.current_potion = {
+                    name: self.name,
+                    effect: ingredients[data.major].effect_desc,
+                    time: ingredients[data.time].effect_time,
+                    data: data,
+                    power: ingredients[data.power].effect_strength,
+                };
+                /* Remove it from inventory after use */
+                adventure_data[location].splice(index, 1);
+                update_inventory();
+            }; /* End use function */
         },
     },
 };

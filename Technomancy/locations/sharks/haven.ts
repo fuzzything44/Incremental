@@ -14,7 +14,7 @@
                 if (adventure_data["warp_locations"].indexOf("sharks/haven") == -1) {
                     adventure_data["warp_locations"].push("sharks/haven");
                 }
-                $("#events_content").html("Science sharks congregate off to the side. What are they working on?<br />");
+                $("#events_content").html("<a href='http://cirri.al/sharks/#' target='_blank' style='text-decoration: none;' class='fgc'>Science sharks</a> congregate off to the side. What are they working on?<br />");
                 $("#events_content").append("<span class='clickable'>Ask</span><br />");
                 $("#events_content > span").last().click(function () {
                     $("#events_content").html("You go over and ask them. They seem to be doing something with a few glass bottles.<br />");
@@ -23,19 +23,20 @@
                     } else {
                         $("#events_content").append("Would you like to <span class='clickable'>refine</span> ingredients, ");
                         $("#events_content > span").last().click(function () {
-                            alert("You have nothing to refine. Yet. Come back when major version is 3. Also, if you got here, message fuzzything44 on discord."); return;
                             /* Check alchemy stuff to see if refined ingredient table exists, and if not make it.*/
                             if (adventure_data["alchemy_ingredients"] == undefined) {
                                 adventure_data["alchemy_ingredients"] = {};
                             }
-                            /* At this point alchemy will probably deserve its own file. Maybe? Still not sure on internal organization.
-                                But basically, you can refine stuff into materials. Materials can be used on potions then.
-                                Each material has a major attribute - what it does, a time attribute - how long it lasts, and a potency - how strong it is.
-                                You need one material for each slot. And no reuse of materials.
-                            */
+                            alchemy_ingredients();
                         });
                         $("#events_content").append("<span class='clickable'>make</span> potions, or ");
-                        $("#events_content > span").last().click(() => alert("You have nothing to make."));
+                        $("#events_content > span").last().click(function () {
+                            /* Check alchemy stuff to see if refined ingredient table exists, and if not make it.*/
+                            if (adventure_data["alchemy_ingredients"] == undefined) {
+                                adventure_data["alchemy_ingredients"] = {};
+                            }
+                            alchemy_mix();
+                        });
                         $("#events_content").append(exit_button("Leave") + "?");
 
                     }

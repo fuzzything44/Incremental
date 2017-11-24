@@ -3,7 +3,7 @@
     "go_again_text": "ERROR - You shouldn't be here.",
     "encounters": [
         ({
-            "condition": function () { return Math.random() > 0.9; },
+            "condition": function () { return false && Math.random() > 0.9; },
             "types": ["combat", "global", "wanderer"],
             "weight": 0,
             "title": "A Wild Turkey",

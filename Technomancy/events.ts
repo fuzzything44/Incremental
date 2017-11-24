@@ -598,7 +598,16 @@ let events = [
         "name": "A cu±Ã k¶±t©n",
         "rejection": 5,
     }), /* End logicat */
-
+    ({ /* Filler event to make everything else slightly less common. Becomes less important the more eligible events we have. */
+        "condition": function () { return adventure_data["alchemy_ingredients"] != undefined && adventure_data["alchemy_ingredients"]["Carrot"] != undefined; },
+        "run_event": function () {
+            add_log_elem("You got a CARROT!");
+            $("#events_content").html("Oh look! In your garden! You grew a carrot! Yay, you're such a good farmer!");
+            adventure_data.alchemy_ingredients["Carrot"]++;
+        },
+        "name": "Farming",
+        "rejection": 40,
+    }), /* End carrot */
 ];
 
 /* Literally only for testing purposes. */
@@ -732,6 +741,10 @@ function setup_events() {
     /* TODO: Environmental Collapse */
 
     /* Potions */
+    /* Clear this flag because it's used for /s gains which are lost on reset. */
+    if (adventure_data["current_potion"] != undefined && adventure_data["current_potion"]["applied_effect"] != undefined) {
+        delete adventure_data["current_potion"]["applied_effect"];
+    }
     setInterval(function () {
         if (adventure_data["current_potion"]) {
             $("#potion").removeClass("hidden");
@@ -739,9 +752,11 @@ function setup_events() {
             $("#potion_time").html(format_num(adventure_data["current_potion"].time, false));
             $("#potion_effect").html(adventure_data["current_potion"].effect);
             /* Run the potion effect, decrement time left, remove buff if needed. */
-            gen_equipment(adventure_data["current_potion"].data).effect();
+            /* Note that we actually go to the item instead of the main ingredient. This makes it easier to add non-alchemy potions in the future. */
+            gen_equipment(adventure_data["current_potion"].data).effect(adventure_data["current_potion"].power);
             adventure_data["current_potion"].time--;
             if (adventure_data["current_potion"].time <= 0) {
+                gen_equipment(adventure_data["current_potion"].data).stop();
                 delete adventure_data["current_potion"];
             }
         } else {

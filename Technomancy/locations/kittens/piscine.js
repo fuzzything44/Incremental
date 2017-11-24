@@ -37,11 +37,27 @@
         ({
             "condition": function () { return adventure_data["science_level"]; },
             "types": [],
-            "weight": 1,
+            "weight": 4,
             "title": "Nothing else here.",
             "run_encounter": function () {
                 $("#events_content").html("The sharks have nothing else to teach you right now.<br/>");
                 $("#events_content").append(exit_button("Done"));
+            }
+        }),
+        ({
+            "condition": function () {
+                return adventure_data.alchemy_ingredients != undefined &&
+                    adventure_data.alchemy_ingredients["Carrot"] > 0;
+            },
+            "types": [],
+            "weight": 1,
+            "title": "Even Better Gardening",
+            "run_encounter": function () {
+                $("#events_content").html("Oh man oh man oh man!<br/>");
+                $("#events_content").append("So you planted your carrot and it turned into a SPACE CARROT!");
+                $("#events_content").append(exit_button("YAY!"));
+                adventure_data.alchemy_ingredients["Carrot"]--;
+                adventure_data.alchemy_ingredients["Space Carrot"]++;
             }
         }),
     ],
