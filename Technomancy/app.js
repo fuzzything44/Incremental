@@ -89,7 +89,6 @@ var SPELL_BUILDINGS = [
     "s_workshop_2",
     "s_final",
 ];
-var to_next_trade = 60000;
 function set_initial_state() {
     resources = {
         "time": { "amount": 0, "value": -2 },
@@ -765,9 +764,9 @@ function set_initial_state() {
             "cost": {
                 "money": 2000,
                 "stone": 500,
-                "iron": 500,
+                "iron": 250,
             },
-            "tooltip": "Mines produce double stone and 5x iron. <br /> Costs 2000 money, 500 stone, 500 iron.",
+            "tooltip": "Mines produce double stone and 5x iron.",
             "name": "Improve Mines",
             "image": "pickaxe.png",
             "repeats": false,
@@ -790,7 +789,7 @@ function set_initial_state() {
                 "wood": 500,
                 "iron": 500,
             },
-            "tooltip": "console.error('Upgrade not purchased, player needs to buy it!'); <br /> Costs 2000 money, 500 wood, 500 iron.",
+            "tooltip": "console.error('Upgrade not purchased, player needs to buy it!');<br /><i>(Provides an upgrade to logging camps)</i>",
             "name": "Magical Trees",
             "image": "",
             "repeats": false,
@@ -812,8 +811,8 @@ function set_initial_state() {
                 "stone": 500,
                 "wood": 500,
             },
-            "tooltip": "Mines produce coal.<br /> Costs 1000 money, 500 stone, 500 wood.",
-            "name": "Coal Mining <br />",
+            "tooltip": "Mines produce coal.",
+            "name": "Coal Mining<br />",
             "image": "pickaxe.png",
             "repeats": false,
         },
@@ -833,7 +832,7 @@ function set_initial_state() {
                 "money": 3000,
                 "iron": 1000,
             },
-            "tooltip": "Compressors use 30% less coal. <br /> Costs 3000 money, 1000 iron.",
+            "tooltip": "Compressors use 30% less coal.",
             "name": "Improve Compressors",
             "image": "diamond.png",
             "repeats": false,
@@ -853,7 +852,7 @@ function set_initial_state() {
             "cost": {
                 "oil": 50,
             },
-            "tooltip": "Oil your compressors to have them run more efficiently. <br /> Costs 50 oil.",
+            "tooltip": "Oil your compressors to have them run more efficiently.",
             "name": "Oil Compressors",
             "image": "diamond.png",
             "repeats": false,
@@ -873,7 +872,7 @@ function set_initial_state() {
             "cost": {
                 "oil": 100,
             },
-            "tooltip": "Get more oil for your wells. <br /> Costs 100 oil.",
+            "tooltip": "Get more oil for your wells.",
             "name": "Fracking",
             "image": "",
             "repeats": false,
@@ -894,7 +893,7 @@ function set_initial_state() {
                 "oil": 500,
                 "research": 1,
             },
-            "tooltip": "If it worked once, why not again? <br /> Costs 500 oil.<br />Requires 1 research.",
+            "tooltip": "If it worked once, why not again?",
             "name": "More Fracking",
             "image": "",
             "repeats": false,
@@ -908,7 +907,7 @@ function set_initial_state() {
                 "money": 5000,
                 "iron": 1000,
             },
-            "tooltip": "Banks are cheaper to buy.<br /> Costs 5000 money, 1000 iron.",
+            "tooltip": "Banks are cheaper to buy.",
             "name": "Build a vault <br />",
             "image": "money.png",
             "repeats": false,
@@ -931,7 +930,7 @@ function set_initial_state() {
                 "oil": 500,
                 "research": 5,
             },
-            "tooltip": "Make thinner paper, creating double the paper per wood.<br /> Costs 10000 money, 1000 iron, 500 oil. <br /> Requires research level of 5.",
+            "tooltip": "Make thinner paper, creating double the paper per wood.",
             "name": "Thinner paper",
             "image": "gear.png",
             "repeats": false,
@@ -957,7 +956,7 @@ function set_initial_state() {
                 "wood": 20000,
                 "coal": 2000,
             },
-            "tooltip": "Much hotter furnaces run at 10x the previous rate and consume slightly less wood. <br /> Costs 10000 money, 30000 stone, 20000 wood, 2000 coal.",
+            "tooltip": "Much hotter furnaces run at 10x the previous rate and consume slightly less wood.",
             "name": "Hotter furnaces",
             "image": "fire.png",
             "repeats": false,
@@ -980,7 +979,7 @@ function set_initial_state() {
                 "gold": 500,
                 "iron": 1000,
             },
-            "tooltip": "Special gold-plated magnets that attract only gold. And a bit of iron. <br /> Costs 25000 money, 500 gold, 1000 iron.",
+            "tooltip": "Special gold-plated magnets that attract only gold. And a bit of iron.",
             "name": "Gold magnet <br />",
             "image": "money.png",
             "repeats": false,
@@ -1003,7 +1002,7 @@ function set_initial_state() {
                 "iron": 2000,
                 "stone": 20000,
             },
-            "tooltip": "Crushes stone into sand, improving gold find rate. <br /> Costs 25000 money, 2000 iron, 20000 stone.",
+            "tooltip": "Crushes stone into sand, improving gold find rate.",
             "name": "Destructive Sifter",
             "image": "sand.png",
             "repeats": false,
@@ -1026,7 +1025,7 @@ function set_initial_state() {
                 "iron": 20000,
                 "wood": 50000,
             },
-            "tooltip": "Furnaces now smelt sand into glass at a rate of 1/s. <br /> Costs 250K money, 20000 iron, 50000 wood.",
+            "tooltip": "Furnaces now smelt sand into glass.",
             "name": "Glass Furnace",
             "image": "sand.png",
             "repeats": false,
@@ -1047,7 +1046,7 @@ function set_initial_state() {
                 "steel_beam": 50,
                 "glass": 250,
             },
-            "tooltip": "Build the first floor of a skyscraper for some managers to live in. <br /> Costs 25000 money, 50 steel beam, 250 glass.",
+            "tooltip": "Build the first floor of a skyscraper for some managers to live in.",
             "name": "Skyscrapers",
             "image": "",
             "repeats": false,
@@ -1068,7 +1067,7 @@ function set_initial_state() {
                 "glass": 250,
                 "research": 7,
             },
-            "tooltip": "Research how to blow glass into jewelry. <br /> Costs 25000 money, 250 glass. <br />Requires 7 research.",
+            "tooltip": "Research how to blow glass into jewelry.",
             "name": "Glassblowing",
             "image": "",
             "repeats": false,
@@ -1091,8 +1090,8 @@ function set_initial_state() {
                 "paper": 5000,
                 "research": 12,
             },
-            "tooltip": "Sand diamonds for a bright polish! <br /> Costs 250000 money, 2500 sand, 5000 paper. <br />Requires 12 research.",
-            "name": "Sandpaper<br/>",
+            "tooltip": "Sand diamonds for a bright polish!",
+            "name": "Sandpaper<br />",
             "image": "sand.png",
             "repeats": false,
         },
@@ -1113,7 +1112,7 @@ function set_initial_state() {
                 "money": 10000000,
                 "research": 8,
             },
-            "tooltip": "High-pressure sales tactics let you sell jewelry for more. But you'll need managers to keep employees in line. <br /> Costs 10M money. <br />Requires 8 research.",
+            "tooltip": "High-pressure sales tactics let you sell jewelry for more. But you'll need managers to keep employees in line.",
             "name": "Sleazy Managers",
             "image": "",
             "repeats": false,
@@ -1125,7 +1124,7 @@ function set_initial_state() {
                 "refined_mana": 10000,
                 "gold": 500,
             },
-            "tooltip": "Your portals cover more of the market, letting you get better deals. <br /> Costs 10000 refined mana, 500 gold.",
+            "tooltip": "Your portals cover more of the market, letting you get better deals.",
             "name": "Mystic Portals",
             "image": "money.png",
             "repeats": false,
@@ -1137,7 +1136,7 @@ function set_initial_state() {
                 "refined_mana": 30000,
                 "diamond": 1000,
             },
-            "tooltip": "Your portals cover more of the market, letting you get better deals. <br /> Costs 30000 refined mana, 1000 diamond.",
+            "tooltip": "Your portals cover more of the market, letting you get better deals.",
             "name": "Arcane Portals",
             "image": "diamond.png",
             "repeats": false,
@@ -1158,7 +1157,7 @@ function set_initial_state() {
             "cost": {
                 "time": 30000,
             },
-            "tooltip": "Throw away some extra time. You didn't need that, did you? <br /> Costs 30000 time.",
+            "tooltip": "Throw away some extra time. You didn't need that, did you?",
             "name": "Time removal",
             "image": "shield_power.png",
             "repeats": false
@@ -1170,7 +1169,7 @@ function set_initial_state() {
                 "money": 10000000,
                 "research": 15,
             },
-            "tooltip": "Get some of what you invest in. Sometimes. <br /> Costs 10M money. <br /> Requires 15 research.",
+            "tooltip": "Get some of what you invest in. Sometimes.",
             "name": "Investment Embezzling",
             "image": "uranium.png",
             "repeats": false,
@@ -1191,7 +1190,7 @@ function set_initial_state() {
                 "money": 50000000,
                 "research": 15,
             },
-            "tooltip": "Huh, what's this metal your strip mines are finding? <br /> Costs 50M money. <br /> Requires 15 research.",
+            "tooltip": "Huh, what's this metal your strip mines are finding?",
             "name": "Deeper mines",
             "image": "uranium.png",
             "repeats": false,
@@ -1205,10 +1204,10 @@ function set_initial_state() {
                 purchase_building("reactor", 1);
             },
             "cost": {
-                "money": 100000000,
+                "money": 50000000,
                 "research": 20,
             },
-            "tooltip": "Research how to use uranium for energy. <br /> Costs 100M money. <br /> Requires 20 research.",
+            "tooltip": "Research how to use uranium for energy.",
             "name": "Uranium Research",
             "image": "uranium.png",
             "repeats": false,
@@ -1220,7 +1219,7 @@ function set_initial_state() {
                 "time": 20000,
                 "refined_mana": 10000,
             },
-            "tooltip": "Events are more common. <br /> Costs 20,000 time, 10,000 refined mana.",
+            "tooltip": "Events are more common.",
             "name": "Unlimited Events",
             "image": "shield_on.png",
             "repeats": false,
@@ -1235,7 +1234,7 @@ function set_initial_state() {
             "cost": {
                 "book": 5000,
             },
-            "tooltip": "Print more material for your libraries. <br /> Costs 5,000 book.",
+            "tooltip": "Print more material for your libraries.",
             "name": "Reading Material",
             "image": "",
             "repeats": false,
@@ -1250,7 +1249,7 @@ function set_initial_state() {
             "cost": {
                 "book": 15000,
             },
-            "tooltip": "Start printing actually good books for your libraries. <br /> Costs 15,000 book.",
+            "tooltip": "Start printing actually good books for your libraries.",
             "name": "Good Reading Material",
             "image": "",
             "repeats": false,
@@ -1260,7 +1259,6 @@ function set_initial_state() {
                 /* Since we check if it's unlocked first, we can set the cost in this function.*/
                 if (adventure_data["sandcastle_boost_unlocked"]) {
                     remaining_upgrades["sandcastles"].cost = { "sand": 1000000 * adventure_data["sandcastle_boost_unlocked"] };
-                    remaining_upgrades["sandcastles"].tooltip = "Build a sandcastle.<br />Costs " + format_num(adventure_data["sandcastle_boost_unlocked"] * 1000000) + " sand";
                     return true;
                 }
                 else {
@@ -1275,7 +1273,7 @@ function set_initial_state() {
             "cost": {
                 "sand": 1000000,
             },
-            "tooltip": "Build a sandcastle. <br /> Costs 1M sand.",
+            "tooltip": "Build a sandcastle.",
             "name": "Sandcastle",
             "image": "",
             "repeats": true,
@@ -1298,7 +1296,7 @@ function set_initial_state() {
                 "glass": 5000,
                 "research": 30,
             },
-            "tooltip": "Glassblowers make glass bottles instead of jewelry. <br /> Costs 250K money, 5000 glass. <br />Requires 30 research.",
+            "tooltip": "Glassblowers make glass bottles instead of jewelry.",
             "name": "Bottle Making",
             "image": "",
             "repeats": false,
@@ -1310,7 +1308,6 @@ function set_initial_state() {
                 }
                 /* Doubles cost each time purchased. */
                 remaining_upgrades["money_crisis_slow_1"].cost["money"] = Math.pow(4, event_flags["crisis_slow_1_increase"]);
-                remaining_upgrades["money_crisis_slow_1"].tooltip = "Banks produce 10x money.<br/> Costs " + format_num(remaining_upgrades["money_crisis_slow_1"].cost["money"], false) + " money.";
                 return buildings["bank"].generation["money"] <= 5 && event_flags["bribed_politician"] == "money";
             },
             "purchase": function () {
@@ -1328,7 +1325,7 @@ function set_initial_state() {
             "cost": {
                 "money": 1,
             },
-            "tooltip": "Banks produce 10x money. <br />Costs 1 money",
+            "tooltip": "Banks produce 10x money.",
             "name": "Lower taxes",
             "image": "money.png",
             "repeats": true,
@@ -1343,7 +1340,7 @@ function set_initial_state() {
             "cost": {
                 "oil": 10000,
             },
-            "tooltip": "Gives an extra 2 minutes before bank generation falls again. <br />Costs 10,000 oil",
+            "tooltip": "Gives an extra 2 minutes before bank generation falls again.",
             "name": "Oil-backed currency",
             "image": "money.png",
             "repeats": true,
@@ -1362,10 +1359,19 @@ function set_initial_state() {
             "cost": {
                 "money": 1000000000,
             },
-            "tooltip": "Rebuilds your economy. Solves economy collapse until you prestige.<br />Costs 1B money.",
+            "tooltip": "Rebuilds your economy. Solves economy collapse until you prestige.",
             "name": "MAKE MORE JOBS!",
             "image": "money.png",
             "repeats": false,
+        },
+        "trade": {
+            "unlock": function () { return false; },
+            "purchase": function () { },
+            "cost": {},
+            "tooltip": "",
+            "name": "Trade Items<br />",
+            "image": "money.png",
+            "repeats": true,
         },
     };
     event_flags = {};
@@ -1752,28 +1758,56 @@ function update() {
 }
 /* Not in update as this could change a lot if they have too many unpurchased upgrades. */
 function update_upgrade_list() {
-    /* Remove old upgrade list */
-    var new_list = "";
     /* Loop through all remaining upgrades */
     Object.keys(remaining_upgrades).forEach(function (upg_name) {
         if (remaining_upgrades[upg_name].unlock()) {
-            var color_1 = "default"; /* Set color to lightgray or red depending on if they can afford it */
+            $("#upgrade_" + upg_name).removeClass("hidden");
+            var color_1 = ""; /* Set color to lightgray or red depending on if they can afford it */
             Object.keys(remaining_upgrades[upg_name].cost).forEach(function (res) {
                 if (resources[res].amount < remaining_upgrades[upg_name].cost[res]) {
                     color_1 = "red";
                 }
             });
-            var upg_elem = "<li id=\"upgrade_" + upg_name +
-                "\" class=\"upgrade tooltip fgc bgc_second\" onclick=\"purchase_upgrade('" + upg_name + "')\" style='text-align: center; color: " + color_1 + "'><span>" + remaining_upgrades[upg_name].name + "<br />";
-            /* Stops error message spamming in the console if an unlocked upgrade has no image. */
-            if (remaining_upgrades[upg_name].image) {
-                upg_elem += "<img src='images/" + remaining_upgrades[upg_name].image + "' alt='' style='width: 3em; height: 3em; float: bottom;' />";
+            $("#upgrade_" + upg_name).css("color", color_1);
+            /* Refresh tooltip */
+            var tooltip = remaining_upgrades[upg_name].tooltip;
+            tooltip += "<br />Costs ";
+            var reg_costs_1 = [];
+            var req_costs_1 = [];
+            Object.keys(remaining_upgrades[upg_name].cost).forEach(function (res) {
+                if (resources[res].value) {
+                    var cost = "";
+                    if (resources[res].amount < remaining_upgrades[upg_name].cost[res]) {
+                        cost += "<span style='color: red'>";
+                    }
+                    else {
+                        cost += "<span class='fgc'>";
+                    }
+                    cost += format_num(remaining_upgrades[upg_name].cost[res], true) + " " + res.replace("_", " ") + "</span>";
+                    reg_costs_1.push(cost);
+                }
+                else {
+                    var cost = "";
+                    if (resources[res].amount < remaining_upgrades[upg_name].cost[res]) {
+                        cost += "<span style='color: red'>";
+                    }
+                    else {
+                        cost += "<span class='fgc'>";
+                    }
+                    cost += "Requires " + format_num(remaining_upgrades[upg_name].cost[res], true) + " " + res.replace("_", " ") + "</span>";
+                    req_costs_1.push(cost);
+                }
+            });
+            tooltip += reg_costs_1.join(", ");
+            if (req_costs_1.length) {
+                tooltip += "<br />" + req_costs_1.join("<br />");
             }
-            upg_elem += "</span><span class=\"tooltiptext fgc bgc_second\" style='opacity: 1;'>" + remaining_upgrades[upg_name].tooltip + "</span></li>";
-            new_list += upg_elem;
+            $("#upgrade_" + upg_name + " .tooltiptext").html(tooltip);
+        }
+        else {
+            $("#upgrade_" + upg_name).addClass("hidden");
         }
     });
-    $("#upgrades > ul").html(new_list);
 }
 function update_total_upgrades(name) {
     /* Update upgrade total */
@@ -1910,8 +1944,11 @@ function purchase_upgrade(name) {
         var upg_name = remaining_upgrades[name].name;
         delete remaining_upgrades[name];
         update_total_upgrades(upg_name);
+        $("#upgrade_" + name).remove();
     }
-    $("#upgrade_" + name).remove();
+    else {
+        $("#upgrade_" + name).addClass("hidden");
+    }
 }
 function random_title() {
     var TITLES = [
@@ -2089,6 +2126,17 @@ window.onload = function () {
     set_initial_state();
     load();
     setInterval(update, 35);
+    /* Add upgrades to be unhidden*/
+    /* Loop through all remaining upgrades */
+    Object.keys(remaining_upgrades).forEach(function (upg_name) {
+        var upg_elem = "<li id='upgrade_" + upg_name + "' class='upgrade tooltip fgc bgc_second' onclick=\"purchase_upgrade('" + upg_name + "')\" style='text-align: center;'><span>" + remaining_upgrades[upg_name].name + "<br />";
+        /* Stops error message spamming in the console if an unlocked upgrade has no image. */
+        if (remaining_upgrades[upg_name].image) {
+            upg_elem += "<img src='images/" + remaining_upgrades[upg_name].image + "' alt='' style='width: 3em; height: 3em; float: bottom;' />";
+        }
+        upg_elem += "</span><span class='tooltiptext fgc bgc_second' style='opacity: 1;'>" + remaining_upgrades[upg_name].tooltip + "</span></li>";
+        $("#upgrades > ul").append(upg_elem);
+    });
     update_upgrade_list();
     setInterval(update_upgrade_list, 500);
     /* Set prestige button updates. So you see how much mana you would get. */

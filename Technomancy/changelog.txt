@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.0.1:
+The long-awaited upgrade fix! Should fix the strange issue where clicking an upgrade wouldn't buy it sometimes. Also, costs you can't pay are colored red now.
+
 v3.0.0:
 Turkeys have disappeared. You ate them all. The buff helps you in combat now too! Oh, you can also brew potions.
 

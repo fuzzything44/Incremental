@@ -45,19 +45,15 @@ function s_goldboost(delta_time: number) {
     }, 50);
 }
 
+var to_next_trade = 60000;
+var trade_expires = 0;
 function s_trade(delta_time: number) {
     let trade_upgrade = {
         "unlock": function () {
-            if (Date.now() > trade_expires) {
-                delete remaining_upgrades["trade"];
-                to_next_trade = 45000;
-                return false;
-            }
-            return buildings["s_trade"].on;
+            return !$("#upgrade_trade").hasClass("hidden");
         },
         "purchase": function () {
-            to_next_trade = 60000;
-            delete remaining_upgrades["trade"];
+            to_next_trade = 60000; /* Set up for next trade. */
         },
         "cost": {},
         "tooltip": "",
@@ -66,7 +62,8 @@ function s_trade(delta_time: number) {
         "repeats": true,
     };
     to_next_trade -= delta_time;
-    if (remaining_upgrades["trade"] == undefined && to_next_trade < 0) {
+    /* If locked and a trade is available... */
+    if (to_next_trade < 0 && !remaining_upgrades["trade"].unlock()) {
         remaining_upgrades["trade"] = trade_upgrade;
         /* Roll money amount. Horrible arbitrary formula, takes your money and remaining mana into account for upper bound. */
         let money_value = Math.round(Math.max(1, Math.random() * Math.min(Math.pow(resources["mana"].amount, 3) * 10, resources["money"].amount) * 2 + 10));
@@ -99,7 +96,10 @@ function s_trade(delta_time: number) {
             remaining_upgrades["trade"].cost[chosen_resource] = resource_value; /* Negative so we get the resource */
             remaining_upgrades["trade"].tooltip += "Sell " + format_num(resource_value) + " " + chosen_resource.replace('_', ' ') + " for " + format_num(money_value * trade_advantage) + " money";
         }
-        var trade_expires = Date.now() + 15000;
+        trade_expires = Date.now() + 15000;
+        $("#upgrade_trade").removeClass("hidden");
+    } else if (trade_expires < Date.now()){
+        $("#upgrade_trade").addClass("hidden");
     }
 }
 
