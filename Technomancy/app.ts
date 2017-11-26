@@ -405,7 +405,7 @@ function set_initial_state() {
             },
             "generation": {
                 "hydrogen": -20,
-                "energy": 10,
+                "energy": 15,
                 "water": 7,
             },
             "flavor": "FIRE!",
@@ -436,7 +436,7 @@ function set_initial_state() {
             "on": true,
             "amount": 0,
             "base_cost": {
-                "money": 30,
+                "money": 15,
             },
             "price_ratio": {
                 "money": 1.2,
@@ -452,7 +452,7 @@ function set_initial_state() {
             "on": true,
             "amount": 0,
             "base_cost": {
-                "money": 30,
+                "money": 15,
             },
             "price_ratio": {
                 "money": 1.2,
@@ -811,6 +811,34 @@ function set_initial_state() {
             "image": "",
             "repeats": false,
         },
+        "cheaper_mines": {
+            "unlock": function () { return buildings["mine"].amount >= 20; },
+            "purchase": function () {
+                buildings["mine"].price_ratio["money"] = 1.1;
+            },
+            "cost": {
+                "stone": 5000,
+                "money": 5000,
+            },
+            "tooltip": "Mines are cheaper to buy.",
+            "name": "Mountain<br />",
+            "image": "pickaxe.png",
+            "repeats": false,
+        },
+        "cheaper_logging": {
+            "unlock": function () { return buildings["logging"].amount >= 20; },
+            "purchase": function () {
+                buildings["logging"].price_ratio["money"] = 1.1;
+            },
+            "cost": {
+                "wood": 5000,
+                "money": 5000,
+            },
+            "tooltip": "Logging Camps are cheaper to buy.",
+            "name": "Forest<br />",
+            "image": "",
+            "repeats": false,
+        },
         "coal_mines": {
             "unlock": function () { return buildings["mine"].amount >= 3 && buildings["compressor"].amount >= 1 && (resources["coal"].amount < 50 || resources["research"].amount > 5); },
             "purchase": function () { /* When bought, turn all mines off, increase generation, and turn them back on again. Turns off first to get generation from them properly calculated */
@@ -1005,6 +1033,32 @@ function set_initial_state() {
             "tooltip": "Special gold-plated magnets that attract only gold. And a bit of iron.",
             "name": "Gold magnet <br />",
             "image": "money.png",
+            "repeats": false,
+        },
+        "better_hydrogen_engine": {
+            "unlock": function () { return buildings["hydrogen_burner"].amount >= 1; },
+            "purchase": function () { /* When bought, turn all buildings off, increase generation, and turn them back on again. Turns off first to get generation from them properly calculated */
+                let comp_state = buildings["hydrogen_burner"].on;
+                if (comp_state) {
+                    toggle_building_state("hydrogen_burner");
+
+                }
+                buildings["hydrogen_burner"].generation["energy"] += 5;
+                buildings["hydrogen_burner"].generation["water"] += 3;
+
+                if (comp_state) { /* Only turn on if it already was on */
+                    toggle_building_state("hydrogen_burner");
+                }
+            },
+            "cost": {
+                "gold": 500,
+                "iron": 1000,
+                "glass": 100,
+                "research": 3,
+            },
+            "tooltip": "Hydrogen Engines run at 100% efficiency.",
+            "name": "Fuel Cells<br />",
+            "image": "",
             "repeats": false,
         },
         "gold_crusher": {
@@ -1428,7 +1482,7 @@ let prestige = {
         let prestige_points = prestige.points();
         let mana = buildings["s_manastone"].amount;
         let mana_gain = prestige_points / 20000 - Math.pow(mana, 1.3) * .5; /* One for every 20k pp, and apply reduction based off of current mana */
-        mana_gain = Math.floor(Math.pow(Math.max(0, mana_gain), .36)); /* Then raise to .33 power and apply some rounding/checking */
+        mana_gain = Math.floor(Math.pow(Math.max(0, mana_gain), .40)); /* Then raise to .33 power and apply some rounding/checking */
         mana_gain = mana_gain / (1 + Math.floor(mana / 50) * .5); /* Then divide gain by a number increasing every 50 mana. */
         if (mana_gain > 50) { /* If they're getting a ton, they get less*/
             mana_gain = 50 + (mana_gain - 50) / 2;
@@ -1813,7 +1867,6 @@ function update_upgrade_list() {
 
             /* Refresh tooltip */
             let tooltip = remaining_upgrades[upg_name].tooltip;
-            tooltip += "<br />Costs ";
             let reg_costs = [];
             let req_costs = []
             Object.keys(remaining_upgrades[upg_name].cost).forEach(function (res) {
@@ -1837,7 +1890,9 @@ function update_upgrade_list() {
                     req_costs.push(cost);
                 }
             });
-            tooltip += reg_costs.join(", ");
+            if (reg_costs.length && upg_name != "trade") {
+                tooltip += "<br />Costs " + reg_costs.join(", ");
+            }
             if (req_costs.length) {
                 tooltip += "<br />" + req_costs.join("<br />");
             }
@@ -1865,7 +1920,7 @@ function gen_building_tooltip(name: string) {
     /* Add resource gen, update how much each one generates. */
     Object.keys(buildings[name].generation).forEach(function (key) {
         if (resources[key].value) { /* Add X per second for regular resources */
-            gen_text += format_num(buildings[name].generation[key]) + " " + key.replace("_", " ") + " per second, "
+            gen_text += format_num(buildings[name].generation[key]) + " " + key.replace("_", " ") + "/s, "
         } else {
             gen_text +=format_num(buildings[name].generation[key]) + " " + key.replace("_", " ") + ", "
         }
@@ -2007,6 +2062,10 @@ function random_title() {
         "Beware the space squid",
         "Now with more kittens",
         "Technomancy",
+        "You grew a CARROT! Your mother is so proud!",
+        "Strangely Bubbling Potion of Dancing",
+        "...",
+
     ];
     document.title = TITLES.filter(item => item !== document.title)[Math.floor(Math.random() * (TITLES.length - 1))];
 
@@ -2200,6 +2259,124 @@ window.onload = () => {
             $("#building_" + build).parent().addClass("hidden");
         }
     });
+
+    /* Give spell rewards */
+    if (buildings["s_manastone"].amount > 0 && event_flags["start_buildings"] == undefined) {
+        event_flags["start_buildings"] = true;
+        /* What building each mana gives. */
+        let start_buildings = [
+            "bank",
+            "mine",
+            "bank",
+            "logging",
+            "bank",
+            "mine",
+            "bank",
+            "logging",
+            "furnace",
+            "gold_finder",
+            "bank",
+            "mine",
+            "bank",
+            "logging",
+            "bank",
+            "mine",
+            "bank",
+            "logging",
+            "",
+            "",
+            "",
+            "",
+            "oil_well",
+            "bank",
+            "bank",
+            "bank",
+            "bank",
+            "oil_well",
+            "compressor",
+            "",
+            "",
+            "",
+            "",
+            "library",
+            "library",
+            "library",
+            "library",
+            "library",
+            "library",
+            "bank",
+            "bank",
+            "bank",
+            "mine",
+            "bank",
+            "logging",
+            "bank",
+            "mine",
+            "bank",
+            "logging",
+            "",
+            "",
+            "",
+            "",
+            "oil_engine",
+            "solar_panel",
+            "solar_panel",
+            "solar_panel",
+            "solar_panel",
+            "bank",
+            "mine",
+            "bank",
+            "logging",
+            "bank",
+            "mine",
+            "bank",
+            "logging",
+            "",
+            "",
+            "",
+            "",
+            "skyscraper",
+            "bank",
+            "skyscraper",
+            "bank",
+            "skyscraper",
+            "bank",
+            "skyscraper",
+            "bank",
+            "bank",
+            "mine",
+            "bank",
+            "logging",
+            "bank",
+            "mine",
+            "bank",
+            "logging",
+            "bank",
+            "mine",
+            "bank",
+            "logging",
+            "bank",
+            "mine",
+            "bank",
+            "logging",
+        ];
+        /* Only go as much as they have mana for or we boosts exist for. */
+        for (let i = 0; i < Math.min(buildings["s_manastone"].amount, start_buildings.length); i++) {
+            let bname = start_buildings[i];
+            if (bname == "") { continue; }
+            let comp_state = buildings[bname].on;
+            if (comp_state) {
+                toggle_building_state(bname);
+
+            }
+            buildings[bname].amount++;
+
+            if (comp_state) { /* Only turn on if it already was on */
+                toggle_building_state(bname);
+            }
+            $("#building_" + bname + "  > .building_amount").html(format_num(buildings[bname].amount, false));
+        }
+    }
     /* Start our event system */
     let to_next_event = 2 * 60000 + Math.random() * 60000 * 2;
     if (purchased_upgrades.indexOf("more_events") != -1) {

@@ -47,6 +47,10 @@ var trade_expires = 0;
 function s_trade(delta_time) {
     var trade_upgrade = {
         "unlock": function () {
+            if (!buildings["s_trade"].on) {
+                to_next_trade = 60000;
+                return false;
+            }
             return !$("#upgrade_trade").hasClass("hidden");
         },
         "purchase": function () {
@@ -101,8 +105,9 @@ function s_trade(delta_time) {
         trade_expires = Date.now() + 15000;
         $("#upgrade_trade").removeClass("hidden");
     }
-    else if (trade_expires < Date.now()) {
+    else if (trade_expires < Date.now() && !$("#upgrade_trade").hasClass("hidden")) {
         $("#upgrade_trade").addClass("hidden");
+        to_next_trade = 45000;
     }
 }
 function s_time(delta_time) {

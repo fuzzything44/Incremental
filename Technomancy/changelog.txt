@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.1.0:
+Hydrogen engines generate more energy and can be upgraded to be net neutral. Mines and logging camps cost less, and there's an upgrade to further reduce the price. It's slightly easier to get mana. Buildings now produce resource /s instead of resource per second. 3 new titles. Having mana gives you some buildings on prestige. Also fixed some bugs with the trading portal and fixed the tooltip.
+
 v3.0.1:
 The long-awaited upgrade fix! Should fix the strange issue where clicking an upgrade wouldn't buy it sometimes. Also, costs you can't pay are colored red now.
 
