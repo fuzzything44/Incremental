@@ -504,8 +504,8 @@ var events = [
                 /* Level up every 5 points */
                 if (total_points >= 5) {
                     var levels = Math.floor(total_points / 5);
-                    total_points = total_points - levels * 5;
                     for (var i = 0; i < levels && i < 5; i++) {
+                        total_points -= 5; /* Actually spend points for level. */
                         /* Level them up*/
                         adventure_data["logicat_level"] += 1;
                         /* Note no <br /> at the end. */

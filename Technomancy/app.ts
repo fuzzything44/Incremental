@@ -814,7 +814,7 @@ function set_initial_state() {
         "cheaper_mines": {
             "unlock": function () { return buildings["mine"].amount >= 20; },
             "purchase": function () {
-                buildings["mine"].price_ratio["money"] = 1.1;
+                buildings["mine"].price_ratio["money"] = 1.15;
             },
             "cost": {
                 "stone": 5000,
@@ -828,7 +828,7 @@ function set_initial_state() {
         "cheaper_logging": {
             "unlock": function () { return buildings["logging"].amount >= 20; },
             "purchase": function () {
-                buildings["logging"].price_ratio["money"] = 1.1;
+                buildings["logging"].price_ratio["money"] = 1.15;
             },
             "cost": {
                 "wood": 5000,
@@ -955,7 +955,7 @@ function set_initial_state() {
                 "iron": 1000,
             },
             "tooltip": "Banks are cheaper to buy.",
-            "name": "Build a vault <br />",
+            "name": "Build a Vault <br />",
             "image": "money.png",
             "repeats": false,
         },
@@ -1006,7 +1006,7 @@ function set_initial_state() {
                 "coal": 2000,
             },
             "tooltip": "Much hotter furnaces run at 10x the previous rate and consume slightly less wood.",
-            "name": "Hotter furnaces",
+            "name": "Hotter Furnaces",
             "image": "fire.png",
             "repeats": false,
         },
@@ -1016,7 +1016,6 @@ function set_initial_state() {
                 let comp_state = buildings["gold_finder"].on;
                 if (comp_state) {
                     toggle_building_state("gold_finder");
-
                 }
                 buildings["gold_finder"].generation["gold"] *= 2;
                 buildings["gold_finder"].generation["iron"] = 0.05;
@@ -1031,7 +1030,7 @@ function set_initial_state() {
                 "iron": 1000,
             },
             "tooltip": "Special gold-plated magnets that attract only gold. And a bit of iron.",
-            "name": "Gold magnet <br />",
+            "name": "Gold Magnet<br />",
             "image": "money.png",
             "repeats": false,
         },
@@ -1241,7 +1240,7 @@ function set_initial_state() {
                 "time": 30000,
             },
             "tooltip": "Throw away some extra time. You didn't need that, did you?",
-            "name": "Time removal",
+            "name": "Time Removal",
             "image": "shield_power.png",
             "repeats": false
         },
@@ -1275,7 +1274,7 @@ function set_initial_state() {
                 "research": 15,
             },
             "tooltip": "Huh, what's this metal your strip mines are finding?",
-            "name": "Deeper mines",
+            "name": "Deeper Mines",
             "image": "uranium.png",
             "repeats": false,
         },
@@ -1359,7 +1358,7 @@ function set_initial_state() {
             "cost": {
                 "sand": 1000000,
             },
-            "tooltip": "Build a sandcastle.",
+            "tooltip": "Build a Sandcastle.",
             "name": "Sandcastle",
             "image": "",
             "repeats": true,
@@ -1416,7 +1415,7 @@ function set_initial_state() {
                 "money": 1,
             },
             "tooltip": "Banks produce 10x money.",
-            "name": "Lower taxes",
+            "name": "Lower Taxes",
             "image": "money.png",
             "repeats": true,
         },
@@ -1431,7 +1430,7 @@ function set_initial_state() {
                 "oil": 10000,
             },
             "tooltip": "Gives an extra 2 minutes before bank generation falls again.",
-            "name": "Oil-backed currency",
+            "name": "Oil-backed Currency",
             "image": "money.png",
             "repeats": true,
         },
@@ -1539,6 +1538,8 @@ function save() {
     localStorage["last_save"] = Date.now();
     localStorage["adventure"] = JSON.stringify(adventure_data);
     localStorage["groupings"] = JSON.stringify(groupings);
+    localStorage["rules"] = JSON.stringify(rules);
+
     $('#save_text').css('opacity', '1'); setTimeout(() => $('#save_text').css({ 'opacity': '0', 'transition': 'opacity 1s' }), 1000);
     console.log("Saved");
     add_log_elem("Saved!");
@@ -1592,6 +1593,13 @@ function load() {
             $("#production_box").parent().removeClass("hidden");
             $("#all_on").addClass("hidden");
             $("#all_off").addClass("hidden");
+        }
+    }
+    console.log("Loading rules");
+    if (localStorage.getItem("rules")) {
+        rules = JSON.parse(localStorage.getItem("rules"));
+        if (adventure_data["rules_unlocked"]) {
+            $("#pc_box").parent().removeClass("hidden");
         }
     }
     console.log("Loading theme");
@@ -1704,7 +1712,6 @@ function toggle_building_state(name: string) {
             });
         } catch (e) {
             /* We don't want this error going all the way through the stack as a ton of places call this function and need to continue (they rely on it silently failing) */
-            console.error(e);
             return 1;
         }
 
@@ -1729,6 +1736,7 @@ function toggle_time() {
     time_on = !time_on
     $("#time_toggle").html((time_on ? "Slow" : "Speed") + " time");
 }
+var rule_timer = 0;
 var last_update: number = Date.now();
 function update() {
     /* Find time since last update. */
@@ -1751,6 +1759,12 @@ function update() {
             delta_time += 10000;
             resources["time"].amount -= 10;
         }
+    }
+    /* Perform rules */
+    rule_timer += delta_time;
+    if (rule_timer > 1000) {
+        run_rules();
+        rule_timer = 0;
     }
 
     /* Check for negative resources or resources that will run out. */
@@ -2220,6 +2234,162 @@ function draw_group(name: string) {
     });
 }
 
+let rules = {};
+function setup_rules() {
+    /* Clear group name box*/
+    $("#rule_names").html("<table></table>");
+    Object.keys(rules).forEach(function (rule) {
+        $("#rule_names > table").append("<tr></tr>");
+        $("#rule_names tr").last().append("<td style='overflow: auto; max-width: 5em;'>" + rule + "</td>");
+        /* Can't edit the default filters. */
+        $("#rule_names tr").last().append("<td><span class='clickable'>Edit</span></td>");
+        $("#rule_names span").last().click(function () {
+            draw_rule(rule);
+        });
+        $("#rule_names tr").last().append("<td><span class='clickable' style='background-color: " + (rules[rule].active ? "green" : "red") + "'>" + (rules[rule].active ? "On" : "Off") + "</span></td>");
+        $("#rule_names span").last().click(function () {
+            rules[rule].active = !rules[rule].active;
+            $(this).html(rules[rule].active ? "On" : "Off");
+            $(this).css("background-color", rules[rule].active ? "green" : "red");
+        });
+        $("#rule_names tr").last().append("<td><span class='clickable'>Delete</span></td>");
+        $("#rule_names span").last().click(function () {
+            if (confirm("Really delete rule " + rule + "?")) {
+                delete rules[rule];
+                setup_rules();
+                if (rule + " Delete" == $("#rule_data > div").first().text()) {
+                    $("#rule_data").html("");
+                }
+            }
+        });
+    });
+    $("#rule_names").append("<span class='clickable' style='position: relative; left: 6em;'>+</span>");
+    $("#rule_names > span").last().click(function () {
+        let rule_name = prompt("What will you name your rule?").trim();
+        /* New rule and has a name */
+        if (rule_name && rules[rule_name] == undefined) {
+            if (rules[rule_name] == undefined) {
+                rules[rule_name] = {
+                    active: false,
+                    main_group: "All",
+                    on_off: "on",
+                    resource: "time",
+                    res_comp: ">",
+                    res_amt: 0,
+                    fail_group: "All",
+                    fail_on_off: "on"
+                };
+            }
+            setup_rules();
+            draw_rule(rule_name);
+        }
+    });
+}
+
+function draw_rule(name: string) {
+    /* Clear old stuff and say what we're editing. */
+    $("#rule_data").html("");
+    $("#rule_data").html("<div style='text-align: center; border-bottom: solid 1px;'>" + name + " <span class='clickable'>Delete</span></div>");
+    $("#rule_data > div > span").click(function () {
+        if (confirm("Really delete rule " + name + "?")) {
+            delete rules[name];
+            setup_groups();
+            $("#rule_data").html("");
+        }
+    });
+
+    /* Oh god this. It just sets up some nice stuff for us. 
+        "Turn grouping [group] [on|off] when [resource] is [>|<] [value]"
+    */
+    $("#rule_data").append("Turn grouping " +
+        "<select id='group_select' class='fgc bgc_second'></select>" +
+        "<select id='rule_on_off' class='fgc bgc_second'><option>on</option><option>off</option></select> when " +
+        "<select id='resource_select' class='fgc bgc_second'> </select> amount <br />is " +
+        "<select id='rule_when' class='fgc bgc_second'><option>&gt;</option><option>&lt;</option></select> " +
+        "<input  id='rule_amt' type='number' class='fgc bgc_second' style= 'border: solid 1px;'> </input><br />");
+    $("#rule_data").append("On failure, turn grouping " +
+        "<select id='fail_group_select' class='fgc bgc_second'></select>" +
+        "<select id='fail_on_off' class='fgc bgc_second'><option>on</option><option>off</option></select><br /> ");
+    $("#rule_data").append("<span class='clickable' style='background-color: green'>Save Rule</span>");
+    Object.keys(groupings).forEach(function (group) {
+        $("#group_select").append("<option>" + group + "</option>");
+        $("#fail_group_select").append("<option>" + group + "</option>");
+    });
+
+    Object.keys(resources).forEach(function (res) {
+        $("#resource_select").append("<option>" + res.replace(/\_/g, " ") + "</option>");
+    });
+
+    /* Show if pending edits exist */
+    $("#rule_data > select, input").change(() => $("#rule_data > span").last().css("background-color", "red"));
+
+    /* Save it. */
+    $("#rule_data > span").last().click(function () {
+        rules[name] = {
+            active: rules[name]["active"],
+            main_group: $("#group_select").val(),
+            on_off: $("#rule_on_off").val(),
+            resource: $("#resource_select").val(),
+            res_comp: $("#rule_when").val(),
+            res_amt: parseInt($("#rule_amt").val()),
+            fail_group: $("#fail_group_select").val(),
+            fail_on_off: $("#fail_on_off").val()
+        };
+        $(this).css("background-color", "green");
+    });
+
+    /* Set values */
+    $("#group_select").val(rules[name]["main_group"]);
+    $("#rule_on_off").val(rules[name]["on_off"]);
+    $("#resource_select").val(rules[name]["resource"]);
+    $("#rule_when").val(rules[name]["res_comp"]);
+    $("#rule_amt").val(rules[name]["res_amt"]);
+    $("#fail_group_select").val(rules[name]["fail_group"]);
+    $("#fail_on_off").val(rules[name]["fail_on_off"]);
+}
+
+function run_rules() {
+    Object.keys(rules).forEach(function (rname) {
+        let rule = rules[rname];
+        if (rule["active"]) { /* It's turned on, so we need to run it. */
+            /* Check the condition. Set up a dict of funcs so we can easily compare. */
+            const compares = { "<": (a, b) => a < b, ">": (a, b) => a > b };
+            /* Check if the rule turns out to match. So if the proper comparison with the actual resource (need to get _s back) succeeds...*/
+            if (compares[rule["res_comp"]](resources[rule["resource"].replace(/\s/g, "_")].amount, rule["res_amt"])) {
+                /* Now we attempt to turn the grouping on/off */
+                if (rule["on_off"] == "on") {
+                    let failed = false;
+                    groupings[rule["main_group"]].forEach(function (build) {
+                        /* Turn them all on. Note if we failed. */
+                        if (!buildings[build].on && toggle_building_state(build)) {
+                            failed = true;
+                        }
+                    });
+                    if (failed) {
+                        groupings[rule["fail_group"]].forEach(function (build) {
+                            /* Turn them all on/off. */
+                            if (buildings[build].on) {
+                                if (rule["fail_on_off"] == "off") {
+                                    toggle_building_state(build);
+                                }
+                            } else if (rule["fail_on_off"] == "on"){
+                                toggle_building_state(build);
+                            }
+                        });
+                    } /* Whew! Not turning stuff on and trying to fail is done. */
+                } else {
+                    groupings[rule["main_group"]].forEach(function (build) {
+                        /* Turn them all off. */
+                        if (buildings[build].on) {
+                            toggle_building_state(build);
+                        }
+                    });
+                }
+            } /* End turn grouping on/off*/
+        }
+    });
+}
+
 function prng(seed: number): number {
     if (seed <= 0) { seed = 1234567; }
     return seed * 16807 % 2147483647;
@@ -2266,108 +2436,7 @@ window.onload = () => {
             resources["money"].amount = 10;
         }
         /* What building each mana gives. */
-        let start_buildings = [
-            "bank",
-            "mine",
-            "bank",
-            "logging",
-            "bank",
-            "mine",
-            "bank",
-            "logging",
-            "furnace",
-            "gold_finder",
-            "bank",
-            "mine",
-            "bank",
-            "logging",
-            "bank",
-            "mine",
-            "bank",
-            "logging",
-            "compressor",
-            "",
-            "",
-            "",
-            "",
-            "oil_well",
-            "bank",
-            "bank",
-            "bank",
-            "bank",
-            "oil_well",
-            "",
-            "",
-            "",
-            "",
-            "library",
-            "library",
-            "library",
-            "library",
-            "library",
-            "library",
-            "bank",
-            "bank",
-            "bank",
-            "mine",
-            "bank",
-            "logging",
-            "bank",
-            "mine",
-            "bank",
-            "logging",
-            "",
-            "",
-            "",
-            "",
-            "oil_engine",
-            "solar_panel",
-            "solar_panel",
-            "solar_panel",
-            "solar_panel",
-            "bank",
-            "mine",
-            "bank",
-            "logging",
-            "bank",
-            "mine",
-            "bank",
-            "logging",
-            "",
-            "",
-            "",
-            "",
-            "skyscraper",
-            "bank",
-            "skyscraper",
-            "bank",
-            "skyscraper",
-            "bank",
-            "skyscraper",
-            "bank",
-            "bank",
-            "mine",
-            "bank",
-            "logging",
-            "bank",
-            "mine",
-            "bank",
-            "logging",
-            "bank",
-            "mine",
-            "bank",
-            "logging",
-            "bank",
-            "mine",
-            "bank",
-            "logging",
-            "furnace",
-            "gold_finder",
-            "compressor",
-            "paper_mill",
-            "ink_refinery",
-            "paper_mill"
-        ];
+        let start_buildings =["bank","mine","bank","logging","bank","mine","bank","logging","furnace","gold_finder","bank","mine","bank","logging","bank","mine","bank","logging","compressor","","","","","oil_well","bank","bank","bank","bank","oil_well","","","","","library","library","library","library","library","library","bank","bank","bank","mine","bank","logging","bank","mine","bank","logging","","","","","oil_engine","solar_panel","solar_panel","solar_panel","solar_panel","bank","mine","bank","logging","bank","mine","bank","logging","","","","","skyscraper","bank","skyscraper","bank","skyscraper","bank","skyscraper","bank","bank","mine","bank","logging","bank","mine","bank","logging","bank","mine","bank","logging","bank","mine","bank","logging","furnace","gold_finder","compressor","paper_mill","ink_refinery","paper_mill"];
         /* Only go as much as they have mana for or we boosts exist for. */
         for (let i = 0; i < Math.min(buildings["s_manastone"].amount, start_buildings.length); i++) {
             let bname = start_buildings[i];
@@ -2413,6 +2482,7 @@ window.onload = () => {
     }
     setup_groups();
 
+    setup_rules();
     /* Only set to save last in case something messes up. */
     setInterval(save, 30000);
 };

@@ -17,7 +17,7 @@
 
                 adventure_data.inventory_fuel += 1; /* They spent a fuel to get in, so it gets refunded. */
             }
-        }),
+        }), /* Engine failure - can't adventure here. */
         ({
             "condition": function () { return adventure_data["science_level"] == undefined; },
             "types": [],
@@ -34,7 +34,7 @@
                 }
                 $("#events_content").append(exit_button("Done"));
             }
-        }),
+        }), /* Learn from sharks */
         ({
             "condition": function () { return adventure_data["science_level"]; },
             "types": [],
@@ -44,7 +44,7 @@
                 $("#events_content").html("The sharks have nothing else to teach you right now.<br/>");
                 $("#events_content").append(exit_button("Done"));
             }
-        }),
+        }), /* Finished shark stuff here. */
         ({
             "condition": function () {
                 return adventure_data.alchemy_ingredients != undefined &&
@@ -60,7 +60,7 @@
                 adventure_data.alchemy_ingredients["Carrot"]--;
                 adventure_data.alchemy_ingredients["Space Carrot"]++;
             }
-        }),
+        }), /* Carrot upgrade */
 
     ],
     "connects_to": ["kittens/terminus", "sharks/maze/0"],

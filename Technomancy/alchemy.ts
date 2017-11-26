@@ -229,10 +229,19 @@ let ingredients: ingredient[] = [
     ),
     new ingredient("Liquid Flame",
         function (power: number, on_combat: boolean = false) {
+            function can_run(): boolean {
+                let runnable = true;
+                ["wood", "oil", "sand", "iron_ore"].forEach((item) => {
+                    if (resources[item].amount <= -resources_per_sec[item]) {
+                        runnable = false;
+                    }
+                });
+                return runnable;
+            }
             if (on_combat) {
 
             } else {
-                if (adventure_data["current_potion"].applied_effect == undefined) {
+                if (adventure_data["current_potion"].applied_effect == undefined && can_run()) {
                     resources_per_sec["glass"] += 25 * power;
                     resources_per_sec["wood"] += -50 * power;
                     resources_per_sec["oil"] += -10 * power;
@@ -240,6 +249,10 @@ let ingredients: ingredient[] = [
                     resources_per_sec["iron_ore"] += -30 * power;
                     resources_per_sec["iron"] += 10 * power;
                     adventure_data["current_potion"].applied_effect = true;
+                }
+                if (adventure_data["current_potion"].applied_effect && !can_run()) {
+                    gen_equipment(adventure_data["current_potion"].data).stop();
+                    delete adventure_data["current_potion"]["applied_effect"];
                 }
             }
         },

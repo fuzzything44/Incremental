@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.1.2+:
+Potions of Burninating now will not melt you far into the negatives. As fun as it may have been, it can't last. Mountains and Forests aren't so powerful. Also, fixed a bunch of capitalization issues with upgrade names. Also, added production control (in testing, not available from normal play yet. Put $("#pc_box").parent().removeClass("hidden"); into the console to unlock it temporarily, tell me what you think!)
+
 v3.1.1:
 Slight prestige formula changes. Also added 6 more mana start buildings and moved one to be earlier. 
 
