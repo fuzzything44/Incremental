@@ -1432,7 +1432,6 @@ function set_initial_state() {
 var prestige = {
     points: function () {
         var prestige_points = 0;
-        var mana = buildings["s_manastone"].amount;
         Object.keys(resources).forEach(function (res) { return prestige_points += resources[res].amount * Math.abs(resources[res].value); });
         return prestige_points;
     },
@@ -1440,8 +1439,8 @@ var prestige = {
     mana: function () {
         var prestige_points = prestige.points();
         var mana = buildings["s_manastone"].amount;
-        var mana_gain = prestige_points / 20000 - Math.pow(mana, 1.3) * .5; /* One for every 20k pp, and apply reduction based off of current mana */
-        mana_gain = Math.floor(Math.pow(Math.max(0, mana_gain), .40)); /* Then raise to .33 power and apply some rounding/checking */
+        var mana_gain = prestige_points / 15000 - Math.pow(mana, 1.3) * .5; /* One for every 20k pp, and apply reduction based off of current mana */
+        mana_gain = Math.floor(Math.pow(Math.max(0, mana_gain), .36)); /* Then raise to .33 power and apply some rounding/checking */
         mana_gain = mana_gain / (1 + Math.floor(mana / 50) * .5); /* Then divide gain by a number increasing every 50 mana. */
         if (mana_gain > 50) {
             mana_gain = 50 + (mana_gain - 50) / 2;
@@ -1449,17 +1448,18 @@ var prestige = {
         return Math.round(mana_gain);
     },
     percent_through: function () {
-        return Math.max(0, Math.min(100, Math.floor((prestige.points() / 20000) / (Math.pow(buildings["s_manastone"].amount, 1.3) * .5 + 1) * 100)));
+        return Math.max(0, Math.min(100, Math.floor((prestige.points() / 15000) / (Math.pow(buildings["s_manastone"].amount, 1.3) * .5 + 1) * 100)));
     },
-    run: function () {
+    run: function (ask) {
+        if (ask === void 0) { ask = true; }
         var mana_gain = prestige.mana();
         var mana = buildings["s_manastone"].amount;
-        if (mana_gain < 1) {
+        if (mana_gain < 1 && ask) {
             if (!confirm("Prestige now wouldn't produce mana! As you get more mana, it gets harder to make your first mana stone in a run. You are currently " + prestige.percent_through().toString() + "% of the way to your first mana. Prestige anyway?")) {
                 return;
             }
         }
-        if (confirm("You will lose all resources and all buildings but gain " + mana_gain.toString() + " mana after reset. Proceed?")) {
+        if (!ask || confirm("You will lose all resources and all buildings but gain " + mana_gain.toString() + " mana after reset. Proceed?")) {
             var total_mana = buildings["s_manastone"].amount + mana_gain;
             set_initial_state();
             buildings["s_manastone"].amount = total_mana;
@@ -2208,6 +2208,9 @@ window.onload = function () {
     /* Give spell rewards */
     if (buildings["s_manastone"].amount > 0 && event_flags["start_buildings"] == undefined) {
         event_flags["start_buildings"] = true;
+        if (resources["money"].amount != 10) {
+            resources["money"].amount = 10;
+        }
         /* What building each mana gives. */
         var start_buildings = [
             "bank",
@@ -2228,17 +2231,17 @@ window.onload = function () {
             "mine",
             "bank",
             "logging",
-            "",
-            "",
-            "",
-            "",
-            "oil_well",
-            "bank",
-            "bank",
-            "bank",
-            "bank",
-            "oil_well",
             "compressor",
+            "",
+            "",
+            "",
+            "",
+            "oil_well",
+            "bank",
+            "bank",
+            "bank",
+            "bank",
+            "oil_well",
             "",
             "",
             "",
@@ -2304,6 +2307,12 @@ window.onload = function () {
             "mine",
             "bank",
             "logging",
+            "furnace",
+            "gold_finder",
+            "compressor",
+            "paper_mill",
+            "ink_refinery",
+            "paper_mill"
         ];
         /* Only go as much as they have mana for or we boosts exist for. */
         for (var i = 0; i < Math.min(buildings["s_manastone"].amount, start_buildings.length); i++) {
