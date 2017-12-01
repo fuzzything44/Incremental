@@ -11,10 +11,13 @@
             "weight": 0,
             "title": "A Deep Blue Sea",
             "run_encounter": function () {
+                /* Add this as a warp location. */
                 if (adventure_data["warp_locations"].indexOf("sharks/haven") == -1) {
                     adventure_data["warp_locations"].push("sharks/haven");
                 }
                 $("#events_content").html("<a href='http://cirri.al/sharks/#' target='_blank' style='text-decoration: none;' class='fgc'>Science sharks</a> congregate off to the side. What are they working on?<br />");
+
+                /* Talk with science sharks */
                 $("#events_content").append("<span class='clickable'>Ask</span><br />");
                 $("#events_content > span").last().click(function () {
                     $("#events_content").html("You go over and ask them. They seem to be doing something with a few glass bottles.<br />");
@@ -41,6 +44,8 @@
 
                     }
                 });
+
+                /* Unlock groupings*/
                 if (adventure_data["groupings_unlocked"] == undefined) {
                     $("#events_content").append("There are machines here. They weave in complex patterns. It's mesmerizing. <span class='clickable'>Watch</span>");
                     $("#events_content > span").last().click(function () {
@@ -54,7 +59,7 @@
             }
         }),
     ],
-    "connects_to": ["warpgate"],
+    "connects_to": ["kittens/piscine", "sharks/abandoned", "warpgate"],
     "enter_cost": 0,
     "leave_cost": 0,
     "name": "Haven",

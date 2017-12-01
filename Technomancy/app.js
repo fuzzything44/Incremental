@@ -1988,7 +1988,7 @@ function destroy_building(name) {
             resources[key].amount += 0.3 * buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount - 1);
         });
         buildings[name].amount--;
-        $('#building_' + name + " > .building_amount").html(buildings[name].amount.toString());
+        $('#building_' + name + " > .building_amount").html(format_num(buildings[name].amount, false));
     }
 }
 function purchase_upgrade(name) {
@@ -2042,19 +2042,18 @@ function change_theme(new_theme) {
         "light": ".bgc {background-color: white;}.fgc {color: black;}.bgc_second {background-color: #CCC;}",
         "dark": ".bgc {background-color: black;}.fgc {color: lightgray;}.bgc_second {background-color: #333;}",
         "halloween": ".bgc {background-color: black;}.fgc {color: darkorange;}.bgc_second {background-color: purple;}",
-        "christmas": ".bgc {background-color: #050;}.fgc {color: #A00;}.bgc_second {background-color: #400;}",
+        "christmas": ".bgc {background-color: #400;}.fgc {color: #0A0;} .bgc_second {background-color: #050;}",
         "crazy": "                                              \
           .bgc, .bgc_second, .fgc {                             \
-            animation: strobe 200ms steps(1,end) infinite;      \
-            animation-duration: 250ms;                          \
-            transition: flex .3s;                               \
+            animation: strobe 750ms infinite;                  \
           }                                                     \
           @keyframes strobe {                                   \
               16% { background: red; color: blue; }             \
               33% { background: orange; color: purple;}         \
-              49% { background: yellow; color: red; }           \
+              50% { background: yellow; color: red; }           \
               66% { background: green; color: orange; }         \
-              82% { background: blue; color: yellow; }          \
+              83% { background: blue; color: yellow; }          \
+              100% { background: purple; color: green; }        \
               0%  { background: purple; color: green; }         \
           }                                                     \
          ",
@@ -2063,8 +2062,8 @@ function change_theme(new_theme) {
         "light": "",
         "dark": "",
         "halloween": "",
-        "christmas": "https://www.youtube.com/embed/JXjQO0UixxM",
-        "crazy": "https://www.youtube.com/embed/MTrzTABzLfY",
+        "christmas": "JXjQO0UixxM",
+        "crazy": "MTrzTABzLfY",
     };
     /* Make sure the theme exists */
     if (themes[new_theme]) {
@@ -2074,7 +2073,7 @@ function change_theme(new_theme) {
         localStorage["theme"] = new_theme;
         /* Play music for it (or stop music if there is none) */
         if (theme_music[new_theme]) {
-            $("#music").html("<iframe width='0' height='0' src='" + theme_music[new_theme] + "?autoplay=1&loop=1' frameborder='0'></iframe>");
+            $("#music").html("<iframe width='0' height='0' src='https://www.youtube.com/embed/" + theme_music[new_theme] + "?autoplay=1&loop=1&playlist=" + theme_music[new_theme] + "&start=1' frameborder='0'></iframe>");
         }
         else {
             $("#music").html("");

@@ -42,6 +42,7 @@
     <TypeScriptCompile Include="locations\kittens\terminus.ts" />
     <TypeScriptCompile Include="locations\kittens\umbra.ts" />
     <TypeScriptCompile Include="locations\moon.ts" />
+    <TypeScriptCompile Include="locations\sharks\abandoned.ts" />
     <TypeScriptCompile Include="locations\sharks\haven.ts" />
     <TypeScriptCompile Include="locations\sharks\maze\0.ts" />
     <TypeScriptCompile Include="locations\sharks\maze\1.ts" />
