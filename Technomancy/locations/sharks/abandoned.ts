@@ -1,7 +1,7 @@
 ﻿({
     "unlocked": function () {
         /* Must have groupings unlocked  */
-        return false && !!adventure_data["groupings_unlocked"];
+        return !!adventure_data["groupings_unlocked"];
     },
     "go_again_text": "Explore",
     "encounters": [

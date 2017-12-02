@@ -1,5 +1,7 @@
 ﻿Technomancy Changelog
 
+v3.2.1: Okay, you can actually get to the abandoned planet. Yay!
+
 v3.2.0:
 There's a new world with not much. You can get rules unlocked there, but that unlock will probably be pushed back a bit in the future. Fixed strobe mode a bit. Also added a new style - Christmas Lights!
 
