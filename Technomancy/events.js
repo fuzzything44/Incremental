@@ -658,6 +658,9 @@ function setup_events() {
         }
         if (buildings["s_manastone"].amount >= 250 && event_flags["bribed_politician"] == "money" && !event_flags["crisis_averted"]) {
             event_flags["to_money_decrease"]--;
+            if (purchased_upgrades.indexOf("time_use_boost") != -1 && time_on) {
+                event_flags["to_money_decrease"] -= 9; /* Decrease faster! */
+            }
             /* Time for them to lose some. If it's the first loss, immediately break whatever they're doing (even adventuring) and tell them. */
             if (event_flags["to_money_decrease"] <= 0) {
                 if (buildings["bank"].base_cost["money"] == 10) {

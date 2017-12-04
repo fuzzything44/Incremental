@@ -97,36 +97,36 @@ const SPELL_BUILDINGS = [
 
 function set_initial_state() {
     resources = {
-        "time": { "amount": 0, "value": -2 },
-        "refined_mana": { "amount": 0, "value": -1 },
-        "fuel": { "amount": 0, "value": -1000 },
+        "time": { "amount": 0, "value": -2, "mult" : 1 },
+        "refined_mana": { "amount": 0, "value": -1, "mult": 1 },
+        "fuel": { "amount": 0, "value": -1000, "mult": 1 },
 
-        "mana": { "amount": 0, "value": 0 },
-        "energy": { "amount": 0, "value": 0 }, 
-        "research": { "amount": 0, "value": 0 },
-        "manager": { "amount": 0, "value": 0 },
+        "mana": { "amount": 0, "value": 0, "mult": 1 },
+        "energy": { "amount": 0, "value": 0, "mult": 1 }, 
+        "research": { "amount": 0, "value": 0, "mult": 1 },
+        "manager": { "amount": 0, "value": 0, "mult": 1 },
 
-        "money": { "amount": 10, "value": 1 },
-        "stone": { "amount": 0, "value": 0.5 },
-        "wood": { "amount": 0, "value": 0.5 },
-        "iron_ore": { "amount": 0, "value": 1 },
-        "coal": { "amount": 0, "value": 1 },
-        "iron": { "amount": 0, "value": 4 },
-        "gold": { "amount": 0, "value": 50 },
-        "diamond": { "amount": 0, "value": 75 },
-        "jewelry": { "amount": 0, "value": 300 },
-        "oil": { "amount": 0, "value": 2 },
-        "paper": { "amount": 0, "value": 4 },
-        "ink": { "amount": 0, "value": 10 },
-        "book": { "amount": 0, "value": 400 },
-        "sand": { "amount": 0, "value": 3 },
-        "glass": { "amount": 0, "value": 20 },
-        "water": { "amount": 0, "value": 2 },
-        "hydrogen": { "amount": 0, "value": 5 },
-        "steel_beam": { "amount": 0, "value": 200 },
-        "uranium": { "amount": 0, "value": 500 },
-        "sandcastle": { "amount": 0, "value": 10000000 }, /* Woah, worth 10M */
-        "glass_bottle": { "amount": 0, "value": 25000 }, /* Not much above glass value, but they're useful! */
+        "money": { "amount": 10, "value": 1, "mult": 1 },
+        "stone": { "amount": 0, "value": 0.5, "mult": 1 },
+        "wood": { "amount": 0, "value": 0.5, "mult": 1 },
+        "iron_ore": { "amount": 0, "value": 1, "mult": 1 },
+        "coal": { "amount": 0, "value": 1, "mult": 1 },
+        "iron": { "amount": 0, "value": 4, "mult": 1 },
+        "gold": { "amount": 0, "value": 50, "mult": 1 },
+        "diamond": { "amount": 0, "value": 75, "mult": 1 },
+        "jewelry": { "amount": 0, "value": 300, "mult": 1 },
+        "oil": { "amount": 0, "value": 2, "mult": 1 },
+        "paper": { "amount": 0, "value": 4, "mult": 1 },
+        "ink": { "amount": 0, "value": 10, "mult": 1 },
+        "book": { "amount": 0, "value": 400, "mult": 1 },
+        "sand": { "amount": 0, "value": 3, "mult": 1 },
+        "glass": { "amount": 0, "value": 20, "mult": 1 },
+        "water": { "amount": 0, "value": 2, "mult": 1 },
+        "hydrogen": { "amount": 0, "value": 5, "mult": 1 },
+        "steel_beam": { "amount": 0, "value": 200, "mult": 1 },
+        "uranium": { "amount": 0, "value": 500, "mult": 1 },
+        "sandcastle": { "amount": 0, "value": 10000000, "mult": 1 }, /* Woah, worth 10M */
+        "glass_bottle": { "amount": 0, "value": 25000, "mult": 1 }, /* Not much above glass value, but they're useful! */
     };
     /* Set resources_per_sec */
     Object.keys(resources).forEach(function (res) {
@@ -142,6 +142,7 @@ function set_initial_state() {
                 "mana": 1,
             },
             "update": "nop",
+            "free": 0,
             "flavor": "A stone made out of pure crystallized mana. Use it to power spells!",
         },
         "s_mana_refinery": {
@@ -153,6 +154,7 @@ function set_initial_state() {
                 "mana": 0,
             },
             "update": "refinery",
+            "free": 0,
             "flavor": "That's some fine mana.",
         },
         "s_goldboost": {
@@ -164,6 +166,7 @@ function set_initial_state() {
                 "mana": -1,
             },
             "update": "goldboost",
+            "free": 0,
             "flavor": "A magic spell made for tax fraud.",
         },
         "s_energyboost": {
@@ -176,6 +179,7 @@ function set_initial_state() {
                 "energy": 1,
             },
             "update": "nop",
+            "free": 0,
             "flavor": "This is actually a much simpler spell than the name implies.",
         },
         "s_trade": {
@@ -187,6 +191,7 @@ function set_initial_state() {
                 "mana": -1,
             },
             "update": "trade",
+            "free": 0,
             "flavor": "With an infinite variety of things, you would think you could find some apples for sale. But you can't.",
         },
         "s_startboost": {
@@ -203,6 +208,7 @@ function set_initial_state() {
                 "oil": .5/25,
             },
             "update": "nop",
+            "free": 0,
             "flavor": "I HAVE THE POWER!",
         },
         "s_time_magic": {
@@ -214,6 +220,7 @@ function set_initial_state() {
                 "mana": -1,
             },
             "update": "time",
+            "free": 0,
             "flavor": "I HAVE THE POWER!",
         },
         "s_workshop": {
@@ -226,6 +233,7 @@ function set_initial_state() {
             },
             "update": "nop",
             "mode": "iron",
+            "free": 0,
             "flavor": "Yay, you can read my code.",
         },
         "s_time_maker": {
@@ -238,6 +246,7 @@ function set_initial_state() {
                 "time": 0.2/100,
             },
             "update": "nop",
+            "free": 0,
             "flavor": "Yay herbs! Thyme is good!",
         },
         "s_workshop_2": {
@@ -249,6 +258,7 @@ function set_initial_state() {
                 "mana": -1,
             },
             "update": "workshop",
+            "free": 0,
             "flavor": "Work. Work. Work. Work. Shop.",
         },
         "s_final": {
@@ -261,6 +271,7 @@ function set_initial_state() {
             },
             "update": "final",
             "strength": 2,
+            "free": 0,
             "flavor": "MORE MANA!",
         },
 
@@ -276,6 +287,7 @@ function set_initial_state() {
             "generation": {
                 "money": 1,
             },
+            "free": 0,
             "flavor": "It's a pretty small branch bank.",
         },
         "oil_well": {
@@ -294,6 +306,7 @@ function set_initial_state() {
             "generation": {
                 "oil": 0.1,
             },
+            "free": 0,
             "flavor": "Well, this gets you oil.",
         },
         "library": {
@@ -314,6 +327,7 @@ function set_initial_state() {
             "generation": {
                 "research": 1,
             },
+            "free": 0,
             "flavor": "They do very important research here. <br />DO NOT DISTURB THE LIBRARIANS.",
         },
         "water_purifier": {
@@ -334,6 +348,7 @@ function set_initial_state() {
             "generation": {
                 "water": 1,
             },
+            "free": 0,
             "flavor": "To find sand, first you must collect enough mana.",
         },
         "skyscraper": {
@@ -352,6 +367,7 @@ function set_initial_state() {
             "generation": {
                 "manager": 1,
             },
+            "free": 0,
             "flavor": "Only one per floor so they don't get in each others' ways.",
         },
 
@@ -370,6 +386,7 @@ function set_initial_state() {
                 "oil": -1,
                 "energy": 1,
             },
+            "free": 0,
             "flavor": "",
         },
         "solar_panel": {
@@ -390,6 +407,7 @@ function set_initial_state() {
             "generation": {
                 "energy": 1,
             },
+            "free": 0,
             "flavor": "Praise the sun!",
         },
         "hydrogen_burner": {
@@ -408,6 +426,7 @@ function set_initial_state() {
                 "energy": 15,
                 "water": 7,
             },
+            "free": 0,
             "flavor": "FIRE!",
         },
         "reactor": {
@@ -429,6 +448,7 @@ function set_initial_state() {
                 "water": -15,
                 "energy": 50,
             },
+            "free": 0,
             "flavor": "Don't let it go boom!",
         },
 
@@ -446,6 +466,7 @@ function set_initial_state() {
                 "stone": 1,
                 "iron_ore": 0.1,
             },
+            "free": 0,
             "flavor": "IT'S ALL MINE!",
         },
         "logging": {
@@ -462,6 +483,7 @@ function set_initial_state() {
                 "wood": 1,
                 "coal": 0.1,
             },
+            "free": 0,
             "flavor": "console.log('Player read tooltip.')",
         },
         "furnace": {
@@ -481,6 +503,7 @@ function set_initial_state() {
                 "iron": 1,
                 "coal": 1,
             },
+            "free": 0,
             "flavor": "Come on in! It's a blast!",
         },
         "gold_finder": {
@@ -500,6 +523,7 @@ function set_initial_state() {
                 "stone": -10,
                 "gold": 0.1,
             },
+            "free": 0,
             "flavor": "",
         },
         "compressor": {
@@ -519,7 +543,8 @@ function set_initial_state() {
                 "coal": -10,
                 "diamond": 0.1,
             },
-            "flavor": "",
+            "free": 0,
+            "flavor": "Running this machine is a high-pressure job.",
         },
         "jeweler": {
             "on": true,
@@ -537,6 +562,7 @@ function set_initial_state() {
                 "diamond": -1,
                 "jewelry": 1,
             },
+            "free": 0,
             "flavor": "A jeweler uses jewels to make jewelry in July.",
         },
         "glass_jeweler": {
@@ -554,6 +580,7 @@ function set_initial_state() {
                 "glass": -10,
                 "jewelry": .5,
             },
+            "free": 0,
             "flavor": "Oooooh.... shiny!",
         },
         "jewelry_store": {
@@ -573,7 +600,8 @@ function set_initial_state() {
                 "jewelry": -1,
                 "money": 400,
             },
-            "flavor": "And the cycle repeats...",
+            "free": 0,
+            "flavor": "100% free-range, non-GMO, organic jewelry!",
         },
 
         "paper_mill": {
@@ -594,6 +622,7 @@ function set_initial_state() {
                 "wood": -3,
                 "paper": 1,
             },
+            "free": 0,
             "flavor": "",
         },
         "ink_refinery": {
@@ -614,6 +643,7 @@ function set_initial_state() {
                 "oil": -3,
                 "ink": 1,
             },
+            "free": 0,
             "flavor": "",
         },
         "money_printer": {
@@ -635,6 +665,7 @@ function set_initial_state() {
                 "ink": -1,
                 "money": 30,
             },
+            "free": 0,
             "flavor": "100% legal. Trust me on this.",
         },
         "book_printer": {
@@ -656,6 +687,7 @@ function set_initial_state() {
                 "ink": -1,
                 "book": 0.1,
             },
+            "free": 0,
             "flavor": "It's actually just printing a bunch of copies of My Immortal.",
         },
         "hydrogen_gen": {
@@ -674,6 +706,7 @@ function set_initial_state() {
                 "water": -1,
                 "hydrogen": 2,
             },
+            "free": 0,
             "flavor": "Runs electricity through water...",
         },
         "fuel_maker": {
@@ -700,6 +733,7 @@ function set_initial_state() {
                 "refined_mana": -1,
                 "fuel": 0.01,
             },
+            "free": 0,
             "flavor": "This fuel is... not healthy.",
         },
 
@@ -720,6 +754,7 @@ function set_initial_state() {
                 "manager": -1,
                 "money": 50,
             },
+            "free": 0,
             "flavor": "Serious business",
         },
         "big_mine": {
@@ -746,6 +781,7 @@ function set_initial_state() {
                 "diamond": .1,
                 "sand": 10,
             },
+            "free": 0,
             "flavor": "Seriouser business",
         },
 
@@ -757,6 +793,7 @@ function set_initial_state() {
             "generation": {
                 "hydrogen": 30,
             },
+            "free": 0,
             "flavor": "The moon rocks. And now you can have those rocks.",
         },
 
@@ -1453,6 +1490,20 @@ function set_initial_state() {
             "image": "money.png",
             "repeats": false,
         },
+        "time_use_boost": {
+            "unlock": function () {
+                return resources["time"].amount > 100000 && buildings["bank"].free != undefined;
+            },
+            "purchase": function () { }, /* Do nothing directly, effects are implemented elsewhere. */
+            "cost": {
+                "time": 1,
+                "mana": 50,
+            },
+            "tooltip": "Does some stuff with time.",
+            "name": "Chronomancy",
+            "image": "",
+            "repeats": false,
+        },
 
         "trade": { /* Having it unlockable here lets the actual element get in the list. */
             "unlock": function () { return false; },
@@ -1758,6 +1809,13 @@ function update() {
         } else { /* Add 10s of production to this tick and remove the time. */
             delta_time += 10000;
             resources["time"].amount -= 10;
+
+            /* They bought a boost! Use time on a percent base.*/
+            if (purchased_upgrades.indexOf("time_use_boost") != -1) {
+                let amt = resources["time"].amount * 0.01;
+                delta_time += 1000 * amt;
+                resources["time"].amount -= amt;
+            }
         }
     }
     /* Perform rules */
@@ -2443,9 +2501,9 @@ window.onload = () => {
             let comp_state = buildings[bname].on;
             if (comp_state) {
                 toggle_building_state(bname);
-
             }
             buildings[bname].amount++;
+            buildings[bname].free++;
 
             if (comp_state) { /* Only turn on if it already was on */
                 toggle_building_state(bname);
@@ -2482,8 +2540,30 @@ window.onload = () => {
     setup_groups();
 
     setup_rules();
+
+    /* Display a welcome back message in case of update */
+    $.get("/changelog.txt", function (log: string) {
+        /* Find the version number */
+        let changelog = log.split("\n");
+        for (let i = 0; i < changelog.length; i++) {
+            /* Find first line with a version number */
+            if (changelog[i].match(/v[0-9]+\.[0-9]+\.[0-9]+/)) {
+                /* Not a new version :( */
+                if (changelog[i] == localStorage["last_version"]) { return; }
+
+                $("#events").removeClass("hidden");
+                $("#events_topbar").html(changelog[i]);
+                $("#events_content").html("Hey, there's a new version! What's new in this version: <br />" + changelog[i + 1]);
+                /* Remember they were at this version */
+                localStorage["last_version"] = changelog[i];
+                /* We don't care about other lines. */
+                return;
+            }
+        }
+    });
     /* Only set to save last in case something messes up. */
     setInterval(save, 30000);
+
 };
 
 function hack(level: number) {

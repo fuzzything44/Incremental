@@ -1,6 +1,10 @@
 ﻿Technomancy Changelog
 
-v3.2.1: Okay, you can actually get to the abandoned planet. Yay!
+v3.3.0:
+A bit more flavor text for machines, some backend stuff that will be used later (just want it so people will have prestiged by the time it's used). Added a new boost to use time quicker (and if you have it time will also speed up the early stages of financial collapse). Oh, also added some code to check if you're on a new version!
+
+v3.2.1:
+Okay, you can actually get to the abandoned planet. Yay!
 
 v3.2.0:
 There's a new world with not much. You can get rules unlocked there, but that unlock will probably be pushed back a bit in the future. Fixed strobe mode a bit. Also added a new style - Christmas Lights!
