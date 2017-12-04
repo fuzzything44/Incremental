@@ -2542,7 +2542,7 @@ window.onload = () => {
     setup_rules();
 
     /* Display a welcome back message in case of update */
-    $.get("/changelog.txt", function (log: string) {
+    $.get("changelog.txt", function (log: string) {
         /* Find the version number */
         let changelog = log.split("\n");
         for (let i = 0; i < changelog.length; i++) {

@@ -2478,7 +2478,7 @@ window.onload = function () {
     setup_groups();
     setup_rules();
     /* Display a welcome back message in case of update */
-    $.get("/changelog.txt", function (log) {
+    $.get("changelog.txt", function (log) {
         /* Find the version number */
         var changelog = log.split("\n");
         for (var i = 0; i < changelog.length; i++) {
