@@ -1,7 +1,7 @@
 ﻿({
     "unlocked": function () {
         /* Must have groupings unlocked  */
-        return !!adventure_data["groupings_unlocked"];
+        return !!adventure_data["groupings_unlocked"] && adventure_data["alchemy_ingredients"] != undefined;
     },
     "go_again_text": "Explore",
     "encounters": [

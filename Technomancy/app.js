@@ -1837,6 +1837,7 @@ function update() {
                 /* Check resource gen */
                 if (buildings[build].generation[res] < 0 && buildings[build].on && buildings[build].amount > 0) {
                     toggle_building_state(build);
+                    console.log("Turned off " + build + ": Not enough " + res);
                 }
             });
         }

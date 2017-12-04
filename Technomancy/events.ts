@@ -606,7 +606,7 @@ let events = [
             adventure_data.alchemy_ingredients["Carrot"]++;
         },
         "name": "Farming",
-        "rejection": 40,
+        "rejection": 75,
     }), /* End carrot */
     ({
         "condition": function () { return adventure_data["rules_unlocked"] && event_flags["bribed_politician"] && event_flags["wanderer_knowledge"] == undefined; },
@@ -617,15 +617,21 @@ let events = [
                 $("#events_content").append("<i>This costs 50 libraries (cost DOES NOT RESET) and is available once per prestige. Choose wisely.</i><br /><br />");
 
                 /* . */
-                $("#events_content").append("<span class='clickable'>???</span><i style='text: small'>What does it do?</i><br>");
+                $("#events_content").append("<span class='clickable'>Become a Sorceror</span><i style='text: small'>Learn about the Arcane Secrets of the Universe.</i><br>");
                 $("#events_content span").last().click(function () {
-                    event_flags["wanderer_knowledge"];
+                    event_flags["wanderer_knowledge"] = "magic";
                 });
 
-                /* No environmental regulations. Mines and logging camps much stronger. */
-                $("#events_content").append("<span class='clickable'>!!!</span><i style='text: small'>You shouldn't see this!</i><br>");
+                /* . */
+                $("#events_content").append("<span class='clickable'>Become an Alchemist</span><i style='text: small'>Turning lead into gold is only a small part of the potential of alchemists.</i><br>");
                 $("#events_content span").last().click(function () {
-                    event_flags["wanderer_knowledge"];
+                    event_flags["wanderer_knowledge"] = "alchemy";
+                });
+
+                /* . */
+                $("#events_content").append("<span class='clickable'>Become an Inventor</span><i style='text: small'>Your machines will be the wonders of Humanity.</i><br>");
+                $("#events_content span").last().click(function () {
+                    event_flags["wanderer_knowledge"] = "inventor";
                 });
 
             } else {
@@ -664,6 +670,9 @@ function handle_event(set_timer: boolean = true) {
         let to_next_event = 2 * 60000 + Math.random() * 60000 * 2;
         if (purchased_upgrades.indexOf("more_events") != -1) {
             to_next_event *= .7;
+        }
+        if (time_on && purchased_upgrades.indexOf("time_use_boost") != -1) {
+            to_next_event *= .5;
         }
         setTimeout(handle_event, to_next_event);
     }    

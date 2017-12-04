@@ -14,7 +14,7 @@ var ingredient = (function () {
     function ingredient(name, maj, ending, desc, time, str, costs, maj_name, time_name, str_name) {
         this.name = name;
         this.effect_func = maj;
-        this.ending_func = ending;
+        this.ending_func = function () { maj(0); ending(); }; /* When potion stops, make sure to run effect once more to make sure it was actually initialized first. */
         this.effect_desc = desc;
         this.effect_time = time;
         this.effect_strength = str;
@@ -226,19 +226,36 @@ var ingredients = [
         if (on_combat) {
         }
         else {
+            resources["fuel"].amount += 0.1 * power; /* This is not a /s increase because that gets to be incredibly broken with speed time. */
             if (adventure_data["current_potion"].applied_effect == undefined) {
                 resources_per_sec["uranium"] += power;
-                resources_per_sec["fuel"] += 0.1 * power;
                 adventure_data["current_potion"].applied_effect = true;
             }
         }
     }, function () {
         var power = adventure_data["current_potion"].power;
         resources_per_sec["uranium"] -= power;
-        resources_per_sec["fuel"] -= 0.1 * power;
     }, "You have good space vision.", 180, 10, [], "Space Sight", "Super Still", "Very Fine"),
+    new ingredient("Cheese", function (power, on_combat) {
+        if (on_combat === void 0) { on_combat = false; }
+        if (on_combat) {
+        }
+        else {
+            if (adventure_data["current_potion"].logging_upkeep == undefined) {
+                adventure_data["current_potion"].logging_upkeep = buildings["logging"].generation["money"];
+                buildings["logging"].generation["money"] = 0;
+            }
+            if (adventure_data["current_potion"].mine_upkeep == undefined) {
+                adventure_data["current_potion"].mine_upkeep = buildings["mine"].generation["money"];
+                buildings["mine"].generation["money"] = 0;
+            }
+        }
+    }, function () {
+        buildings["logging"].generation["money"] = adventure_data["current_potion"].logging_upkeep;
+        buildings["mine"].generation["money"] = adventure_data["current_potion"].mine_upkeep;
+    }, "Mmm... cheese...", 90, 6, [], "Happiness", "Lactose Intolerant", "Tasty,"),
 ];
-/**
+/*
  * Sets up alchemy ingredient making.
  */
 function alchemy_ingredients() {

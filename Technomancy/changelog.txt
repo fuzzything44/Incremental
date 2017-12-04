@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.4.1:
+Upgrading carrots is now more expensive. You now need to know some alchemy before you can unlock Production Control (mostly for checking later on stuff easier). Potions of Space Sight now don't let you get ridiculous amounts of fuel when combined with speed time. Carrots are harder to find. Having Chronomancy can sometimes make events more common.
+
 v3.4.0:
 Oh yeah, also forgot to add resource multipliers. That will also be used later, so make sure you prestige sometime within the next month or so. And now I can't actually forget to update the version number as it's automatic. Also fixed a bug where speed time + energy buildings would turn off the energy buildings. There's also a new event. It doesn't do anything yet, but it's planned.
 

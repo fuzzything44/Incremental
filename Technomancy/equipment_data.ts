@@ -761,7 +761,6 @@ let equipment = {
                     data: data,
                     power: ingredients[data.power].effect_strength, /* So when I change the ingredient potions made change too. */
                 };
-
                 /* Remove it from inventory after use */
                 adventure_data[location].splice(index, 1);
                 update_inventory();

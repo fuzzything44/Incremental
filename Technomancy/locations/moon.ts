@@ -80,6 +80,20 @@
 
             },
         }), /* End hydrogen encounter */
+        ({
+            "condition": function () { return event_flags["wanderer_knowledge"] == "alchemy" && adventure_data["alchemy_ingredients"]["Cheese"] != undefined; },
+            "types": ["noncombat"],
+            "weight": 1,
+            "title": "This isn't right...",
+            "run_encounter": function () {
+                $("#events_content").html("Everyone knows the moon is made of cheese. But now that you're at the moon, you can't find cheese anywhere. Just some boring rocks. <br /><span class='clickable'>Fine</span>");
+                $("#events_content > span").last().click(() => {
+                    $("#events_content").html("You're an alchemist! You don't have to take this abuse! You transute some of the moon to cheese. A nice gouda, actually. <br /><span class='clickable' onclick='start_adventure()'>Yay!</span>");
+                    adventure_data["alchemy_ingredients"]["Cheese"]++;
+                });
+
+            },
+        }), /* End cheese */
 
     ], /* End encounters */
     "connects_to": ["kittens/terminus"],

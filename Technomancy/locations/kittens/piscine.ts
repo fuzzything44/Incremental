@@ -59,6 +59,8 @@
                 $("#events_content").append(exit_button("YAY!"));
                 adventure_data.alchemy_ingredients["Carrot"]--;
                 adventure_data.alchemy_ingredients["Space Carrot"]++;
+                adventure_data.inventory_fuel = 0;
+                update_inventory();
             }
         }), /* Carrot upgrade */
 
