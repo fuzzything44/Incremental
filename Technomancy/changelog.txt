@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.4.0:
+Oh yeah, also forgot to add resource multipliers. That will also be used later, so make sure you prestige sometime within the next month or so. And now I can't actually forget to update the version number as it's automatic. Also fixed a bug where speed time + energy buildings would turn off the energy buildings. There's also a new event. It doesn't do anything yet, but it's planned.
+
 v3.3.0:
 A bit more flavor text for machines, some backend stuff that will be used later (just want it so people will have prestiged by the time it's used). Added a new boost to use time quicker (and if you have it time will also speed up the early stages of financial collapse). Oh, also added some code to check if you're on a new version!
 

@@ -608,6 +608,35 @@ let events = [
         "name": "Farming",
         "rejection": 40,
     }), /* End carrot */
+    ({
+        "condition": function () { return adventure_data["rules_unlocked"] && event_flags["bribed_politician"] && event_flags["wanderer_knowledge"] == undefined; },
+        "run_event": function () {
+            $("#events_content").html("<span>A mysterious traveler has arrived.</span><br>");
+            if (false && buildings["library"].amount >= 50) {
+                $("#events_content").append("<span>" + (Math.random() > 0 ? "She" : "He") + " is willing to teach you secrets. </span><br />");
+                $("#events_content").append("<i>This costs 50 libraries (cost DOES NOT RESET) and is available once per prestige. Choose wisely.</i><br /><br />");
+
+                /* . */
+                $("#events_content").append("<span class='clickable'>???</span><i style='text: small'>What does it do?</i><br>");
+                $("#events_content span").last().click(function () {
+                    event_flags["wanderer_knowledge"];
+                });
+
+                /* No environmental regulations. Mines and logging camps much stronger. */
+                $("#events_content").append("<span class='clickable'>!!!</span><i style='text: small'>You shouldn't see this!</i><br>");
+                $("#events_content span").last().click(function () {
+                    event_flags["wanderer_knowledge"];
+                });
+
+            } else {
+                $("#events_content").append("The traveler isn't interested.")
+                //$("#events_content").append("The traveler isn't interested. <br /><em>(You need 50 libraries.)</em>")
+            }
+        },
+        "name": "A Visit",
+        "rejection": 80,
+    }), /* End wanderer */
+
 ];
 
 /* Literally only for testing purposes. */

@@ -141,6 +141,9 @@ function set_initial_state() {
             "generation": {
                 "mana": 1,
             },
+            "multipliers": {
+
+            },
             "update": "nop",
             "free": 0,
             "flavor": "A stone made out of pure crystallized mana. Use it to power spells!",
@@ -153,6 +156,9 @@ function set_initial_state() {
             "generation": {
                 "mana": 0,
             },
+            "multipliers": {
+
+            },
             "update": "refinery",
             "free": 0,
             "flavor": "That's some fine mana.",
@@ -164,6 +170,9 @@ function set_initial_state() {
             "price_ratio": { },
             "generation": {
                 "mana": -1,
+            },
+            "multipliers": {
+
             },
             "update": "goldboost",
             "free": 0,
@@ -178,6 +187,9 @@ function set_initial_state() {
                 "mana": -3,
                 "energy": 1,
             },
+            "multipliers": {
+
+            },
             "update": "nop",
             "free": 0,
             "flavor": "This is actually a much simpler spell than the name implies.",
@@ -189,6 +201,9 @@ function set_initial_state() {
             "price_ratio": { },
             "generation": {
                 "mana": -1,
+            },
+            "multipliers": {
+
             },
             "update": "trade",
             "free": 0,
@@ -206,6 +221,9 @@ function set_initial_state() {
                 "wood": 2,
                 "iron_ore": 5/25,
                 "oil": .5/25,
+            },
+            "multipliers": {
+
             },
             "update": "nop",
             "free": 0,
@@ -231,6 +249,9 @@ function set_initial_state() {
             "generation": {
                 "mana": -1,
             },
+            "multipliers": {
+
+            },
             "update": "nop",
             "mode": "iron",
             "free": 0,
@@ -245,6 +266,9 @@ function set_initial_state() {
                 "mana": -1,
                 "time": 0.2/100,
             },
+            "multipliers": {
+
+            },
             "update": "nop",
             "free": 0,
             "flavor": "Yay herbs! Thyme is good!",
@@ -257,6 +281,9 @@ function set_initial_state() {
             "generation": {
                 "mana": -1,
             },
+            "multipliers": {
+
+            },
             "update": "workshop",
             "free": 0,
             "flavor": "Work. Work. Work. Work. Shop.",
@@ -268,6 +295,9 @@ function set_initial_state() {
             "price_ratio": {},
             "generation": {
                 "mana": -1,
+            },
+            "multipliers": {
+
             },
             "update": "final",
             "strength": 2,
@@ -287,6 +317,9 @@ function set_initial_state() {
             "generation": {
                 "money": 1,
             },
+            "multipliers": {
+
+            },
             "free": 0,
             "flavor": "It's a pretty small branch bank.",
         },
@@ -305,6 +338,9 @@ function set_initial_state() {
             },
             "generation": {
                 "oil": 0.1,
+            },
+            "multipliers": {
+
             },
             "free": 0,
             "flavor": "Well, this gets you oil.",
@@ -327,6 +363,9 @@ function set_initial_state() {
             "generation": {
                 "research": 1,
             },
+            "multipliers": {
+
+            },
             "free": 0,
             "flavor": "They do very important research here. <br />DO NOT DISTURB THE LIBRARIANS.",
         },
@@ -348,6 +387,9 @@ function set_initial_state() {
             "generation": {
                 "water": 1,
             },
+            "multipliers": {
+
+            },
             "free": 0,
             "flavor": "To find sand, first you must collect enough mana.",
         },
@@ -367,6 +409,9 @@ function set_initial_state() {
             "generation": {
                 "manager": 1,
             },
+            "multipliers": {
+
+            },
             "free": 0,
             "flavor": "Only one per floor so they don't get in each others' ways.",
         },
@@ -385,6 +430,9 @@ function set_initial_state() {
             "generation": {
                 "oil": -1,
                 "energy": 1,
+            },
+            "multipliers": {
+
             },
             "free": 0,
             "flavor": "",
@@ -407,6 +455,9 @@ function set_initial_state() {
             "generation": {
                 "energy": 1,
             },
+            "multipliers": {
+
+            },
             "free": 0,
             "flavor": "Praise the sun!",
         },
@@ -425,6 +476,9 @@ function set_initial_state() {
                 "hydrogen": -20,
                 "energy": 15,
                 "water": 7,
+            },
+            "multipliers": {
+
             },
             "free": 0,
             "flavor": "FIRE!",
@@ -448,6 +502,9 @@ function set_initial_state() {
                 "water": -15,
                 "energy": 50,
             },
+            "multipliers": {
+
+            },
             "free": 0,
             "flavor": "Don't let it go boom!",
         },
@@ -466,6 +523,9 @@ function set_initial_state() {
                 "stone": 1,
                 "iron_ore": 0.1,
             },
+            "multipliers": {
+
+            },
             "free": 0,
             "flavor": "IT'S ALL MINE!",
         },
@@ -482,6 +542,9 @@ function set_initial_state() {
                 "money": -1,
                 "wood": 1,
                 "coal": 0.1,
+            },
+            "multipliers": {
+
             },
             "free": 0,
             "flavor": "console.log('Player read tooltip.')",
@@ -503,6 +566,9 @@ function set_initial_state() {
                 "iron": 1,
                 "coal": 1,
             },
+            "multipliers": {
+
+            },
             "free": 0,
             "flavor": "Come on in! It's a blast!",
         },
@@ -522,6 +588,9 @@ function set_initial_state() {
             "generation": {
                 "stone": -10,
                 "gold": 0.1,
+            },
+            "multipliers": {
+
             },
             "free": 0,
             "flavor": "",
@@ -543,6 +612,9 @@ function set_initial_state() {
                 "coal": -10,
                 "diamond": 0.1,
             },
+            "multipliers": {
+
+            },
             "free": 0,
             "flavor": "Running this machine is a high-pressure job.",
         },
@@ -562,6 +634,9 @@ function set_initial_state() {
                 "diamond": -1,
                 "jewelry": 1,
             },
+            "multipliers": {
+
+            },
             "free": 0,
             "flavor": "A jeweler uses jewels to make jewelry in July.",
         },
@@ -579,6 +654,9 @@ function set_initial_state() {
             "generation": {
                 "glass": -10,
                 "jewelry": .5,
+            },
+            "multipliers": {
+
             },
             "free": 0,
             "flavor": "Oooooh.... shiny!",
@@ -599,6 +677,9 @@ function set_initial_state() {
             "generation": {
                 "jewelry": -1,
                 "money": 400,
+            },
+            "multipliers": {
+
             },
             "free": 0,
             "flavor": "100% free-range, non-GMO, organic jewelry!",
@@ -622,6 +703,9 @@ function set_initial_state() {
                 "wood": -3,
                 "paper": 1,
             },
+            "multipliers": {
+
+            },
             "free": 0,
             "flavor": "",
         },
@@ -642,6 +726,9 @@ function set_initial_state() {
                 "energy": -1,
                 "oil": -3,
                 "ink": 1,
+            },
+            "multipliers": {
+
             },
             "free": 0,
             "flavor": "",
@@ -665,6 +752,9 @@ function set_initial_state() {
                 "ink": -1,
                 "money": 30,
             },
+            "multipliers": {
+
+            },
             "free": 0,
             "flavor": "100% legal. Trust me on this.",
         },
@@ -687,6 +777,9 @@ function set_initial_state() {
                 "ink": -1,
                 "book": 0.1,
             },
+            "multipliers": {
+
+            },
             "free": 0,
             "flavor": "It's actually just printing a bunch of copies of My Immortal.",
         },
@@ -705,6 +798,9 @@ function set_initial_state() {
                 "energy": -2,
                 "water": -1,
                 "hydrogen": 2,
+            },
+            "multipliers": {
+
             },
             "free": 0,
             "flavor": "Runs electricity through water...",
@@ -733,6 +829,9 @@ function set_initial_state() {
                 "refined_mana": -1,
                 "fuel": 0.01,
             },
+            "multipliers": {
+
+            },
             "free": 0,
             "flavor": "This fuel is... not healthy.",
         },
@@ -753,6 +852,9 @@ function set_initial_state() {
             "generation": {
                 "manager": -1,
                 "money": 50,
+            },
+            "multipliers": {
+
             },
             "free": 0,
             "flavor": "Serious business",
@@ -781,6 +883,9 @@ function set_initial_state() {
                 "diamond": .1,
                 "sand": 10,
             },
+            "multipliers": {
+
+            },
             "free": 0,
             "flavor": "Seriouser business",
         },
@@ -792,6 +897,9 @@ function set_initial_state() {
             "price_ratio": { },
             "generation": {
                 "hydrogen": 30,
+            },
+            "multipliers": {
+
             },
             "free": 0,
             "flavor": "The moon rocks. And now you can have those rocks.",
@@ -1832,7 +1940,13 @@ function update() {
             /* Unhide resources we have */
             $("#" + res).removeClass("hidden");
         }
-        if (resources[res].amount < -resources_per_sec[res] * delta_time / 1000) {
+        let time = delta_time;
+        /* These don't normally run out. */
+        if (resources[res].value == 0) {
+            time = 0
+        }
+        /* Resource will run out. */
+        if (resources[res].amount < -resources_per_sec[res] * time / 1000) {
             /* Check all buildings */
             Object.keys(buildings).forEach(function (build) { /* Loop through all buildings, build is current checked building */
                 /* Check resource gen */
@@ -1853,9 +1967,14 @@ function update() {
 
     /* Update all resources */
     Object.keys(resources).forEach(function (key) {
+        /* Don't add special resources */
         if (resources[key].value != 0) {
-            /* Don't add special resources */
-            resources[key].amount += resources_per_sec[key] * delta_time / 1000;
+            /* Only positive generation gets a multiplier. */
+            if (resources_per_sec[key] > 0) {
+                resources[key].amount += resources_per_sec[key] * resources[key].mult * delta_time / 1000;
+            } else {
+                resources[key].amount += resources_per_sec[key] * delta_time / 1000;
+            }
         } else { /* We have as much of specialty resources as we generate */
             resources[key].amount = resources_per_sec[key];
         }
@@ -1863,7 +1982,11 @@ function update() {
         $("#" + key + " span").first().html((key.charAt(0).toUpperCase() + key.slice(1)).replace("_", " ") + ": " + format_num(resources[key].amount, false));
         /* Same for per sec */
         $("#" + key + "_per_sec").text((resources_per_sec[key] > 0 ? "+" : "") + format_num(resources_per_sec[key]) + "/s");
-
+        /* Display multiplier if positive RPS and mult not 1 (approx) */
+        if (resources_per_sec[key] > 0 && Math.abs(resources[key].mult - 1) > 0.001) {
+            let color = resources[key].mult > 1 ? "green" : "red";
+            $("#" + key + "_per_sec").append(" <span style='color:" + color + "'>(x" + format_num(resources[key].mult) + ")</span>");
+        }
         /* Don't color special resources */
         if (resources[key].value <= 0) {
             return;
@@ -2548,6 +2671,8 @@ window.onload = () => {
         for (let i = 0; i < changelog.length; i++) {
             /* Find first line with a version number */
             if (changelog[i].match(/v[0-9]+\.[0-9]+\.[0-9]+/)) {
+                /* We need to set version number. So just version line without the : */
+                $("#version").html(changelog[i].replace(":", ""));
                 /* Not a new version :( */
                 if (changelog[i] == localStorage["last_version"]) { return; }
 
