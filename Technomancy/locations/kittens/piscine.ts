@@ -66,7 +66,7 @@
 
     ],
     "connects_to": ["kittens/terminus", "sharks/maze/0"],
-    "enter_cost": 1,
-    "leave_cost": 2,
+    "enter_cost": 3,
+    "leave_cost": 1,
     "name": "Piscine",
 })

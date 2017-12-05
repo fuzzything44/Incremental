@@ -109,14 +109,9 @@ let events = [
         "rejection": 95,
     }), /* End time warping */
     ({
-        "condition": function () { return buildings["oil_well"].amount && (event_flags["cheaper_oil"] == undefined || buildings["oil_well"].amount > event_flags["cheaper_oil"]); },
+        "condition": function () { return buildings["oil_well"].amount > buildings["oil_well"].free && buildings["oil_well"].base_cost["iron"]; },
         "run_event": function () {
-            if (event_flags["cheaper_oil"] == undefined) {
-                event_flags["cheaper_oil"] = 1;
-            } else {
-                event_flags["cheaper_oil"]++;
-            }
-            buildings["oil_well"].base_cost["iron"] *= .95; /* Make oil cheaper */
+            buildings["oil_well"].free++; /* Make oil cheaper */
             $("#building_oil_well > .tooltiptext").html(gen_building_tooltip("oil_well")); /* Set tooltip */
             add_log_elem("Oil reserve discovered!");
             $("#events_content").html("You found an oil reserve!<br /><i style='font-size: small'>Oil wells are now cheaper</i>");
@@ -609,34 +604,42 @@ let events = [
         "rejection": 75,
     }), /* End carrot */
     ({
-        "condition": function () { return adventure_data["rules_unlocked"] && event_flags["bribed_politician"] && event_flags["wanderer_knowledge"] == undefined; },
+        "condition": function () { return adventure_data["rules_unlocked"] && event_flags["crisis_averted"] && event_flags["wanderer_knowledge"] == undefined; },
         "run_event": function () {
             $("#events_content").html("<span>A mysterious traveler has arrived.</span><br>");
-            if (false && buildings["library"].amount >= 50) {
+            if (buildings["library"].amount > 50) {
                 $("#events_content").append("<span>" + (Math.random() > 0 ? "She" : "He") + " is willing to teach you secrets. </span><br />");
-                $("#events_content").append("<i>This costs 50 libraries (cost DOES NOT RESET) and is available once per prestige. Choose wisely.</i><br /><br />");
+                $("#events_content").append("<i>This destroys 50 libraries (cost DOES NOT RESET) and is available once per prestige. Choose wisely.</i><br /><br />");
 
-                /* . */
+                /* Magic! */
                 $("#events_content").append("<span class='clickable'>Become a Sorceror</span><i style='text: small'>Learn about the Arcane Secrets of the Universe.</i><br>");
                 $("#events_content span").last().click(function () {
+                    destroy_building("library", 50);
+                    buildings["library"].free -= 50;
                     event_flags["wanderer_knowledge"] = "magic";
+                    $("#events").addClass("hidden");
                 });
 
-                /* . */
+                /* Alchemy! */
                 $("#events_content").append("<span class='clickable'>Become an Alchemist</span><i style='text: small'>Turning lead into gold is only a small part of the potential of alchemists.</i><br>");
                 $("#events_content span").last().click(function () {
+                    destroy_building("library", 50);
+                    buildings["library"].free -= 50;
                     event_flags["wanderer_knowledge"] = "alchemy";
+                    $("#events").addClass("hidden");
                 });
 
-                /* . */
-                $("#events_content").append("<span class='clickable'>Become an Inventor</span><i style='text: small'>Your machines will be the wonders of Humanity.</i><br>");
+                /* Machines! */
+                $("#events_content").append("<span class='clickable'>Become an Inventor</span><i style='text: small'>Your machines will be the wonders of humanity.</i><br>");
                 $("#events_content span").last().click(function () {
+                    destroy_building("library", 50);
+                    buildings["library"].free -= 50;
                     event_flags["wanderer_knowledge"] = "inventor";
+                    $("#events").addClass("hidden");
                 });
 
             } else {
-                $("#events_content").append("The traveler isn't interested.")
-                //$("#events_content").append("The traveler isn't interested. <br /><em>(You need 50 libraries.)</em>")
+                $("#events_content").append("The traveler isn't interested. <br /><em>(You need over 50 libraries.)</em>")
             }
         },
         "name": "A Visit",
@@ -779,7 +782,86 @@ function setup_events() {
         }
     }, 1000);
 
-    /* TODO: Environmental Collapse */
+    /* Environmental Collapse */
+    let prev_division = 1;
+    setInterval(function () {
+        if (event_flags["to_oil_decrease"] == undefined) {
+            event_flags["to_oil_decrease"] = 60 * 15; /* 15 min to first loss. */
+            event_flags["sludge_level"] = 0;
+        }
+        if (event_flags["crisis_averted"] == undefined) {
+            event_flags["crisis_averted"] = false;
+        }
+        if (buildings["s_manastone"].amount >= 350 && event_flags["bribed_politician"] == "environment") {
+            event_flags["to_oil_decrease"]--;
+            if (purchased_upgrades.indexOf("time_use_boost") != -1 && time_on) {
+                event_flags["to_oil_decrease"] -= 9; /* Decrease faster! */
+            }
+            /* Time for them to lose some. If it's the first loss, immediately break whatever they're doing (even adventuring) and tell them. */
+            if (event_flags["to_oil_decrease"] <= 0) {
+                if (event_flags["sludge_level"] == 0) {
+                    $("#events_topbar").html("Environmental Disaster!");
+                    $("#events_content").html("Oh no!<br />Your oil engines are generating some weird waste. <br />This really isn't good.<br />");
+                    $("#events").removeClass("hidden");
+                    event_flags["sludge_level"] = 1;
+                    event_flags["to_oil_decrease"] = 60 * 10; /* 10 minutes to next loss. */
+                } else if (event_flags["sludge_level"] < 10) {
+                    event_flags["sludge_level"] += 1;
+                    event_flags["to_oil_decrease"] = 60 * 5; /* 10 minutes to next loss. */
+                } else if (event_flags["sludge_level"] < 20) {
+                    event_flags["sludge_level"] += 1;
+                    event_flags["to_oil_decrease"] = 60 * 3; /* 10 minutes to next loss. */
+                }
+
+                /* Increase/decrease sludge level based on oil stuff, then increase/decrease production modifiers based off of that. 
+                        This means we'll need some arbitrary formulas.
+
+                    Important points of sludge -> amt. / by:
+                        Sludge    |   Division
+                      ------------+------------
+                                0 | 1
+                              100 | 1.1 (+0.1)
+                              200 | 1.3 (+0.2)
+                              300 | 1.6 (+0.3)
+                              400 | 2.0 (+0.4)
+                    AKA 1 + ((s)(s + 1)/2)/10 where s is sludge/100.
+                    So division increases quadratically with sludge
+
+                    Sludge amount: Decrease exponentially, then get an amount added for every oil user.
+                        So -5% + 3 * oil well + 15 * oil engine + 7 * ink refinery with each one being on making the -5% worse.
+                */
+                /* Undo previous */
+                let sludge_increase = 0;
+
+                /* Sludge increasers. The more on, the less natural reduction does. */
+                if (buildings["oil_well"].on) {
+                    sludge_increase += buildings["oil_well"].amount * 3 + Math.floor(event_flags["sludge_level"] * 0.01);
+                }
+                if (buildings["oil_engine"].on) {
+                    sludge_increase += buildings["oil_engine"].amount * 15 + Math.floor(event_flags["sludge_level"] * 0.02);
+                }
+                if (buildings["ink_refinery"].on) {
+                    sludge_increase += buildings["ink_refinery"].amount * 7 + Math.floor(event_flags["sludge_level"] * 0.01);
+                }
+                if (!event_flags["crisis_averted"] && event_flags["to_oil_decrease"] < 0) { /* Stop increase if crisis averted or still starting. */
+                    event_flags["sludge_level"] += sludge_increase + 1;
+                    event_flags["sludge_level"] = Math.floor(event_flags["sludge_level"] * 0.95); /* Natural sludge reduction. */
+                }
+                /* Calc new */
+                let s = event_flags["sludge_level"] / 100;
+                let new_division = 1 + (s * (s + 1) / 2) / 10;
+
+                /* Set visible sludge. */
+                resources_per_sec["sludge"] = event_flags["sludge_level"];
+
+                /* Implement division factors. */
+                Object.keys(resources).forEach(function (res) {
+                    resources[res].mult *= prev_division / new_division;
+                });
+                prev_division = new_division;
+            }
+        }
+    }, 1000);
 
     /* Potions */
     /* Clear this flag because it's used for /s gains which are lost on reset. */

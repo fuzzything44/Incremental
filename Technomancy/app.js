@@ -98,6 +98,7 @@ function set_initial_state() {
         "energy": { "amount": 0, "value": 0, "mult": 1 },
         "research": { "amount": 0, "value": 0, "mult": 1 },
         "manager": { "amount": 0, "value": 0, "mult": 1 },
+        "sludge": { "amount": 0, "value": 0, "mult": 1 },
         "money": { "amount": 10, "value": 1, "mult": 1 },
         "stone": { "amount": 0, "value": 0.5, "mult": 1 },
         "wood": { "amount": 0, "value": 0.5, "mult": 1 },
@@ -1476,10 +1477,24 @@ function set_initial_state() {
             },
             "purchase": function () {
                 event_flags["crisis_averted"] = true;
+                /* Fix banks. */
+                var comp_state = buildings["bank"].on;
+                if (comp_state) {
+                    toggle_building_state("bank");
+                }
                 buildings["bank"].generation["money"] = 50;
-                resources_per_sec["money"] += 50 * buildings["bank"].amount; /* We can assume they generate nothing at this point. */
+                if (comp_state) {
+                    toggle_building_state("bank");
+                }
+                /* Fix investments */
+                comp_state = buildings["big_bank"].on;
+                if (comp_state) {
+                    toggle_building_state("big_bank");
+                }
                 buildings["big_bank"].generation["money"] = 500;
-                resources_per_sec["money"] += 500 * buildings["big_bank"].amount;
+                if (comp_state) {
+                    toggle_building_state("big_bank");
+                }
             },
             "cost": {
                 "money": 1000000000,
@@ -1500,6 +1515,67 @@ function set_initial_state() {
             },
             "tooltip": "Does some stuff with time.",
             "name": "Chronomancy",
+            "image": "",
+            "repeats": false,
+        },
+        "enviro_crisis_avert": {
+            "unlock": function () {
+                return resources["sludge"].amount > 10000;
+            },
+            "purchase": function () {
+                event_flags["crisis_averted"] = true;
+                event_flags["sludge_level"] = -1;
+                /* Fix oil wells. */
+                var comp_state = buildings["oil_well"].on;
+                if (comp_state) {
+                    toggle_building_state("oil_well");
+                }
+                buildings["oil_well"].amount = 15;
+                purchase_building("oil_well", 0); /* Actually updates amount show. */
+                if (comp_state) {
+                    toggle_building_state("oil_well");
+                }
+                buildings["oil_well"].base_cost = {};
+                /* Fix oil engines. */
+                comp_state = buildings["oil_engine"].on;
+                if (comp_state) {
+                    toggle_building_state("oil_engine");
+                }
+                buildings["oil_engine"].amount = 10;
+                purchase_building("oil_engine", 0); /* Actually updates amount show. */
+                if (comp_state) {
+                    toggle_building_state("oil_engine");
+                }
+                buildings["oil_engine"].base_cost = {};
+                /* Fix ink refinery. */
+                comp_state = buildings["ink_refinery"].on;
+                if (comp_state) {
+                    toggle_building_state("ink_refinery");
+                }
+                buildings["ink_refinery"].amount = 5;
+                purchase_building("ink_refinery", 0); /* Actually updates amount show. */
+                if (comp_state) {
+                    toggle_building_state("ink_refinery");
+                }
+                buildings["ink_refinery"].base_cost = {};
+                /* And finally, the bonuses... */
+                buildings["solar_panel"].price_ratio = {
+                    "money": 0.99,
+                    "glass": 1.04,
+                    "coal": 1.05,
+                    "diamond": 1.05,
+                };
+                buildings["solar_panel"].free = 15;
+                buildings["solar_panel"].multipliers = { "diamond": .05, "glass": .05 };
+                buildings["solar_panel"].generation["refined_mana"] = 0.001;
+            },
+            "cost": {
+                "money": 100000000,
+                "water": 1000000,
+                "wood": 10000000,
+            },
+            "tooltip": "Clean up the environment. You won't be able to use oil near the amount you were though.",
+            "name": "Cleanup",
             "image": "",
             "repeats": false,
         },
@@ -1665,6 +1741,10 @@ function load() {
                 /* And increase production */
                 resources_per_sec[key] += buildings[name].amount * buildings[name].generation[key];
             });
+            /* And add the multiplier */
+            Object.keys(buildings[name].multipliers).forEach(function (key) {
+                resources[key].mult *= 1 + buildings[name].amount * (buildings[name].multipliers[key]);
+            });
             $("#toggle_" + name).addClass("building_state_on");
             $("#toggle_" + name).removeClass("building_state_off");
             $("#toggle_" + name).text("On");
@@ -1743,6 +1823,9 @@ function toggle_building_state(name) {
             /* And decrease production by that much */
             resources_per_sec[key] -= buildings[name].amount * buildings[name].generation[key];
         });
+        Object.keys(buildings[name].multipliers).forEach(function (key) {
+            resources[key].mult /= 1 + buildings[name].amount * (buildings[name].multipliers[key]);
+        });
         $("#toggle_" + name).addClass("building_state_off");
         $("#toggle_" + name).removeClass("building_state_on");
         $("#toggle_" + name).text("Off");
@@ -1771,6 +1854,10 @@ function toggle_building_state(name) {
                 resources[key].amount += buildings[name].amount * buildings[name].generation[key];
             }
         });
+        /* Add multipliers. */
+        Object.keys(buildings[name].multipliers).forEach(function (key) {
+            resources[key].mult *= 1 + buildings[name].amount * (buildings[name].multipliers[key]);
+        });
         $("#toggle_" + name).addClass("building_state_on");
         $("#toggle_" + name).removeClass("building_state_off");
         $("#toggle_" + name).text("On");
@@ -1796,7 +1883,6 @@ function update() {
         if (resources["time"].amount < 10) {
             delta_time += resources["time"].amount * 1000; /* Give extra production for however much they can get, and remove that much time. */
             toggle_time();
-            $("#time").addClass("hidden");
             resources["time"].amount = 0;
         }
         else {
@@ -1821,9 +1907,12 @@ function update() {
         if (isNaN(resources[res].amount)) {
             resources[res].amount = 0;
         }
-        if (Math.abs(resources[res].amount) > 0.1) {
+        if (resources[res].amount > 0.1) {
             /* Unhide resources we have */
             $("#" + res).removeClass("hidden");
+        }
+        else {
+            $("#" + res).addClass("hidden");
         }
         var time = delta_time;
         /* These don't normally run out. */
@@ -1911,8 +2000,8 @@ function update() {
                 amount_1 = 1;
             }
             Object.keys(buildings[build].base_cost).forEach(function (key) {
-                var cost = buildings[build].base_cost[key] * Math.pow(buildings[build].price_ratio[key], buildings[build].amount) * (1 - Math.pow(buildings[build].price_ratio[key], amount_1)) / (1 - buildings[build].price_ratio[key]);
-                if (Math.pow(buildings[build].price_ratio[key], buildings[build].amount + amount_1 - 1) == Infinity) {
+                var cost = buildings[build].base_cost[key] * Math.pow(buildings[build].price_ratio[key], buildings[build].amount - buildings[build].free) * (1 - Math.pow(buildings[build].price_ratio[key], amount_1)) / (1 - buildings[build].price_ratio[key]);
+                if (Math.pow(buildings[build].price_ratio[key], buildings[build].amount + amount_1 - 1 - buildings[build].free) == Infinity) {
                     cost = Infinity;
                 }
                 if (cost > resources[key].amount) {
@@ -2008,11 +2097,16 @@ function gen_building_tooltip(name) {
             gen_text += format_num(buildings[name].generation[key]) + " " + key.replace("_", " ") + ", ";
         }
     });
+    var mults = [];
+    Object.keys(buildings[name].multipliers).forEach(function (key) {
+        mults.push("" + format_num(buildings[name].multipliers[key] * 100) + "% bonus to " + key.replace(/\_/g, " "));
+    });
+    var mult_str = "<span style='color: goldenrod'>Gives a " + mults.join(", a ") + ".</span>";
     var cost_text = "Costs ";
     Object.keys(buildings[name].base_cost).forEach(function (key) {
         /* Total cost for a buy all. Uses a nice summation formula. */
-        var cost = buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount) * (1 - Math.pow(buildings[name].price_ratio[key], amount)) / (1 - buildings[name].price_ratio[key]);
-        if (Math.pow(buildings[name].price_ratio[key], buildings[name].amount + amount - 1) == Infinity && !isNaN(cost)) {
+        var cost = buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount - buildings[name].free) * (1 - Math.pow(buildings[name].price_ratio[key], amount)) / (1 - buildings[name].price_ratio[key]);
+        if (Math.pow(buildings[name].price_ratio[key], buildings[name].amount + amount - 1 - buildings[name].free) == Infinity && !isNaN(cost)) {
             cost = Infinity;
         }
         if (cost > resources[key].amount) {
@@ -2033,7 +2127,11 @@ function gen_building_tooltip(name) {
     if (buildings[name].flavor == undefined || buildings[name].flavor == "") {
         flavor_text = "";
     }
-    return gen_text.trim().replace(/.$/, ".") + "<br />" + cost_text.trim().replace(/.$/, ".") + flavor_text;
+    var ret_text = gen_text.trim().replace(/.$/, ".") + "<br />";
+    if (mults.length) {
+        ret_text += mult_str + "<br />";
+    }
+    return ret_text + cost_text.trim().replace(/.$/, ".") + flavor_text;
 }
 function purchase_building(name, amount) {
     if (amount === void 0) { amount = null; }
@@ -2046,12 +2144,16 @@ function purchase_building(name, amount) {
     if (amount < 0) {
         amount = 0;
     }
+    /* Make sure not unbuyable. */
+    if ($.isEmptyObject(buildings[name].base_cost)) {
+        throw Error("Unbuyable building");
+    }
     /* Make sure they have enough to buy it */
     Object.keys(buildings[name].base_cost).forEach(function (key) {
         console.log("Checking money");
-        var cost = buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount) * (1 - Math.pow(buildings[name].price_ratio[key], amount)) / (1 - buildings[name].price_ratio[key]);
+        var cost = buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount - buildings[name].free) * (1 - Math.pow(buildings[name].price_ratio[key], amount)) / (1 - buildings[name].price_ratio[key]);
         /* Make it so they can't buy above what they should be able to get. */
-        if (Math.pow(buildings[name].price_ratio[key], buildings[name].amount + amount - 1) == Infinity && !isNaN(cost)) {
+        if (Math.pow(buildings[name].price_ratio[key], buildings[name].amount + amount - 1 - buildings[name].free) == Infinity && !isNaN(cost)) {
             cost = Infinity;
         }
         if (cost > resources[key].amount) {
@@ -2066,20 +2168,25 @@ function purchase_building(name, amount) {
     /* Spend money to buy */
     Object.keys(buildings[name].base_cost).forEach(function (key) {
         console.log("Spending money");
-        var cost = buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount) * (1 - Math.pow(buildings[name].price_ratio[key], amount)) / (1 - buildings[name].price_ratio[key]);
+        var cost = buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount - buildings[name].free) * (1 - Math.pow(buildings[name].price_ratio[key], amount)) / (1 - buildings[name].price_ratio[key]);
         resources[key].amount -= cost;
     });
-    /* Add resource gen */
-    Object.keys(buildings[name].generation).forEach(function (key) {
-        if (buildings[name].on) {
-            resources_per_sec[key] += buildings[name].generation[key] * amount;
-        }
-    });
+    /* Turn off, add building, turn back on. */
+    var build_state = buildings[name].on;
+    if (build_state) {
+        toggle_building_state(name);
+    }
     buildings[name].amount += amount;
+    if (build_state) {
+        toggle_building_state(name);
+    }
     $('#building_' + name + " > .building_amount").html(format_num(buildings[name].amount, false));
 }
-function destroy_building(name) {
-    var amount = parseInt($("#buy_amount").val());
+function destroy_building(name, amount) {
+    if (amount === void 0) { amount = null; }
+    if (amount == null) {
+        amount = parseInt($("#buy_amount").val());
+    }
     if (isNaN(amount)) {
         amount = 1;
     }
@@ -2089,16 +2196,18 @@ function destroy_building(name) {
             return; /* Can't sell last building */
         }
         /* Remove resource gen */
-        Object.keys(buildings[name].generation).forEach(function (key) {
-            if (buildings[name].on) {
-                resources_per_sec[key] -= buildings[name].generation[key];
-            }
-        });
+        var build_state = buildings[name].on;
+        if (build_state) {
+            toggle_building_state(name);
+        }
+        buildings[name].amount--;
+        if (build_state) {
+            toggle_building_state(name);
+        }
         /* Refund resources a bit. Get 30% back. */
         Object.keys(buildings[name].base_cost).forEach(function (key) {
-            resources[key].amount += 0.3 * buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount - 1);
+            resources[key].amount += 0.3 * buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount - 1 - buildings[name].free);
         });
-        buildings[name].amount--;
         $('#building_' + name + " > .building_amount").html(format_num(buildings[name].amount, false));
     }
 }
@@ -2376,7 +2485,9 @@ function draw_rule(name) {
         $("#fail_group_select").append("<option>" + group + "</option>");
     });
     Object.keys(resources).forEach(function (res) {
-        $("#resource_select").append("<option>" + res.replace(/\_/g, " ") + "</option>");
+        if (resources[res].amount != 0 || resources_per_sec[res] != 0 || rules[name].resource == res) {
+            $("#resource_select").append("<option>" + res.replace(/\_/g, " ") + "</option>");
+        }
     });
     /* Show if pending edits exist */
     $("#rule_data > select, input").change(function () { return $("#rule_data > span").last().css("background-color", "red"); });

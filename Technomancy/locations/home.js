@@ -127,6 +127,21 @@
                     $("#events_content").append("<span class='clickable' onclick='run_adventure(\"home\");'>Go Back</span>");
                 }); /* End removing items from ship. */
                 $("#events_content").append("<span class='clickable' onclick='set_equipment();'>Equip</span> your ship <br />");
+                if (event_flags["wanderer_knowledge"]) {
+                    $("#events_content").append("<span class='clickable'>Go</span> to your study.<br />");
+                    $("#events_content > span").last().click(function study() {
+                        if (event_flags["wanderer_knowledge"] == "magic") {
+                            $("#events_content").html("You know a good deal of magic, but can't really think of a project to do.<br />");
+                        }
+                        else if (event_flags["wanderer_knowledge"] == "alchemy") {
+                            $("#events_content").html("You know a good deal of alchemy, but can't really think of a project to do.<br />");
+                        }
+                        else if (event_flags["wanderer_knowledge"] == "inventor") {
+                            $("#events_content").html("You can build a cool machine, but can't really think of a project to do.<br />");
+                        }
+                        $("#events_content").append(exit_button("Done"));
+                    }); /* End study */
+                }
                 $("#events_content").append(exit_button("Go Back"));
             }
         }),

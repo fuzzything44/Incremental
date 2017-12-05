@@ -431,10 +431,10 @@ var equipment = {
                     if (data.levers.ghostly) {
                         /* Collatz points. */
                         if (data.points % 2) {
-                            modification.points = data.points * 3 + 1;
+                            modification.points += data.points * 2 + 1;
                         }
                         else {
-                            modification.points = -data.points / 2;
+                            modification.points -= data.points / 2;
                         }
                     }
                     /* Yay, that's all the levers! Literally only other thing is the point range of 700-900 removing resource costs. */
@@ -501,8 +501,9 @@ var equipment = {
                 }
                 else if (data.points <= 650) {
                     $("#events_content").append("There's a crank here. <span class='clickable'>Crank</span><br />");
-                    $("#events_content > span").last().click(function () { return run_action(function () {
-                        /* Doesn't change cube. */
+                    $("#events_content > span").last().click(function () { return run_action(function (mod) {
+                        /* Doesn't change cube. Does cost fuel for not-ridiculous carrot farming. */
+                        mod.resource_costs["fuel"] += 1;
                     }, function () {
                         $("#events").addClass("hidden");
                         handle_event(false);
@@ -565,6 +566,7 @@ var equipment = {
                     $("#events_content").append("There is a clear button. <span class='clickable'>Press</span><br/>");
                     $("#events_content > span").last().click(function () { return run_action(function (mod) {
                         mod.shape--;
+                        mod.resource_costs["refined_mana"] += 50;
                     }, function () {
                         var elem = ["time", "energy", "space", "force"][prng(button_val) % 4];
                         var orb = { name: "magic_orb", elem: elem };
@@ -596,6 +598,7 @@ var equipment = {
                         }
                         /* And give bonus. */
                         mod.resource_costs.fuel -= 3;
+                        mod.resource_costs["refined_mana"] += 300;
                     }); });
                 }
                 /* 6 */

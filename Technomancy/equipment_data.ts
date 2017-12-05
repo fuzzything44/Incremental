@@ -442,9 +442,9 @@ let equipment = {
                     if (data.levers.ghostly) {
                         /* Collatz points. */
                         if (data.points % 2) { /* Odd points */
-                            modification.points = data.points * 3 + 1;
+                            modification.points += data.points * 2 + 1;
                         } else { /* Even points */
-                            modification.points = -data.points / 2;
+                            modification.points -= data.points / 2;
                         }
                     }
                     /* Yay, that's all the levers! Literally only other thing is the point range of 700-900 removing resource costs. */
@@ -517,8 +517,9 @@ let equipment = {
                 } else if (data.points <= 650) {
                     $("#events_content").append("There's a crank here. <span class='clickable'>Crank</span><br />");
                     $("#events_content > span").last().click(() => run_action(
-                        function () {
-                            /* Doesn't change cube. */
+                        function (mod) {
+                            /* Doesn't change cube. Does cost fuel for not-ridiculous carrot farming. */
+                            mod.resource_costs["fuel"] += 1;
                         },
                         function () {
                             $("#events").addClass("hidden");
@@ -584,6 +585,7 @@ let equipment = {
                     $("#events_content > span").last().click(() => run_action(
                         function (mod) {
                             mod.shape--;
+                            mod.resource_costs["refined_mana"] += 50;
                         },
                         function () {
                             let elem = ["time", "energy", "space", "force"][prng(button_val) % 4];
@@ -616,7 +618,7 @@ let equipment = {
                         }
                         /* And give bonus. */
                         mod.resource_costs.fuel -= 3;
-
+                        mod.resource_costs["refined_mana"] += 300;
                     }));     
                 }  
                 /* 6 */

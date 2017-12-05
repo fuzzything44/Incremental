@@ -19,7 +19,7 @@
         }),
     ],
     "connects_to": ["sharks/haven", "kittens/piscine"],
-    "enter_cost": 0,
+    "enter_cost": 2,
     "leave_cost": 1,
     "name": "A Small Cloud of Dust",
 });

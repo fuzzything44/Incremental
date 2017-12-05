@@ -57,7 +57,7 @@
             }
         }),
     ],
-    "connects_to": ["kittens/piscine", "sharks/abandoned", "warpgate"],
+    "connects_to": ["sharks/maze/exit", "sharks/abandoned", "warpgate"],
     "enter_cost": 0,
     "leave_cost": 0,
     "name": "Haven",

@@ -354,7 +354,6 @@ let ingredients: ingredient[] = [
         "Lactose Intolerant",
         "Tasty,"
     ),
-    /* TODO: Potion that removes upkeep of mines/logging. */
 ];
 
 /*
