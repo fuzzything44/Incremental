@@ -1,4 +1,7 @@
-﻿Technomancy Changelog
+Technomancy Changelog
+
+v3.4.1+:
+Please make sure you prestige within the next week! New stuff is coming out that will make it impossible to progress in your current prestige if you don't!
 
 v3.4.1:
 Upgrading carrots is now more expensive. You now need to know some alchemy before you can unlock Production Control (mostly for checking later on stuff easier). Potions of Space Sight now don't let you get ridiculous amounts of fuel when combined with speed time. Carrots are harder to find. Having Chronomancy can sometimes make events more common.
