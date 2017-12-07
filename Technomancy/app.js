@@ -1826,6 +1826,9 @@ function toggle_building_state(name) {
         Object.keys(buildings[name].generation).forEach(function (key) {
             /* And decrease production by that much */
             resources_per_sec[key] -= buildings[name].amount * buildings[name].generation[key];
+            if (resources[key].value == 0) {
+                resources[key].amount -= buildings[name].amount * buildings[name].generation[key];
+            }
         });
         Object.keys(buildings[name].multipliers).forEach(function (key) {
             resources[key].mult /= 1 + buildings[name].amount * (buildings[name].multipliers[key]);
@@ -1839,8 +1842,8 @@ function toggle_building_state(name) {
         try {
             Object.keys(buildings[name].generation).forEach(function (key) {
                 /* Make sure we can still run buildings if they generate a resource we have negative of. */
-                if (buildings[name].generation[key] < 0 && buildings[name].amount * buildings[name].generation[key] * -1 > resources[key].amount) {
-                    throw "Can't run it for enough time, building stays off.";
+                if (resources[key].value == 0 && buildings[name].generation[key] < 0 && buildings[name].amount * buildings[name].generation[key] * -1 > resources_per_sec[key]) {
+                    throw "Not enough special resources.";
                 }
             });
         }
