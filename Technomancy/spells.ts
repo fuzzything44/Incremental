@@ -1,6 +1,6 @@
 ﻿var spell_funcs = {
     "nop": nop,
-    "goldboost": s_goldboost,
+//    "goldboost": s_goldboost,
     "trade": s_trade,
     "time": s_time,
     "refinery": s_refinery_buff,
@@ -9,41 +9,6 @@
 }
 
 function nop(delta_time: number) { }
-
-function s_goldboost(delta_time: number) {
-    if (typeof this.boost == "undefined") {
-        this.boost = 0;
-        this.boost_gold = 0;
-    }
-    /* Don't run with final. */
-    if (buildings["s_final"].on) {
-        toggle_building_state("s_goldboost");
-        return;
-    }
-
-    /* Calc native money gain */
-    let normal_gain = resources_per_sec["money"] - this.boost;
-    if (this.boost != normal_gain) { /* Money gain changed, we need to alter our boost to match. */
-        resources_per_sec["money"] -= this.boost;
-        this.boost = Math.max(0, resources_per_sec["money"]);
-        resources_per_sec["money"] += this.boost;
-    }
-    let normal_gold_gain = resources_per_sec["gold"] - this.boost_gold;
-    if (this.boost_gold != normal_gold_gain) { /* Gold gain changed, we need to alter our boost to match. */
-        resources_per_sec["gold"] -= this.boost_gold;
-        this.boost_gold = Math.max(0, resources_per_sec["gold"]);
-        resources_per_sec["gold"] += this.boost_gold;
-    }
-    /* Checks if building was turned off */
-    setTimeout(() => {
-        if (!buildings["s_goldboost"].on) {
-            resources_per_sec["money"] -= this.boost;
-            resources_per_sec["gold"] -= this.boost_gold;
-            this.boost = 0;
-            this.boost_gold = 0;
-        }
-    }, 50);
-}
 
 var to_next_trade = 60000;
 var trade_expires = 0;

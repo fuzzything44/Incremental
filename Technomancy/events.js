@@ -561,8 +561,11 @@ var events = [
                         resources_per_sec[res] += ps_add;
                         setTimeout(function () { return resources_per_sec[res] -= ps_add; }, 60000 * 3);
                     });
-                    setTimeout(function () { _this.perfect_cat = false, 60000 * 3; add_log_elem("Logikitten bonus wore off."); });
+                    setTimeout(function () { _this.perfect_cat = false, 60000 * 3; add_log_elem("Logikitten bonus wore off."); buildings["logging"].tooltip = "console.log('Logikitten super mode engaged')"; });
                     $("#events_content").append("Perfect answer! Production increased.<br />");
+                    if (buildings["s_moneyboost"].on) {
+                        buildings["logging"].tooltip = "�������";
+                    }
                 }
             });
         },

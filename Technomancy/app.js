@@ -160,16 +160,19 @@ function set_initial_state() {
             "generation": {
                 "mana": -1,
             },
-            "multipliers": {},
-            "update": "goldboost",
+            "multipliers": {
+                "money": 0.5,
+                "gold": 0.5,
+            },
+            "update": "nop",
             "free": 0,
             "flavor": "A magic spell made for tax fraud.",
         },
         "s_energyboost": {
             "on": false,
             "amount": 1,
-            "base_cost": {},
-            "price_ratio": {},
+            "base_cost": { "mana": 0 },
+            "price_ratio": { "mana": 0 },
             "generation": {
                 "mana": -3,
                 "energy": 1,
@@ -218,6 +221,7 @@ function set_initial_state() {
             "generation": {
                 "mana": -1,
             },
+            "multipliers": {},
             "update": "time",
             "free": 0,
             "flavor": "I HAVE THE POWER!",
@@ -1567,7 +1571,7 @@ function set_initial_state() {
                 };
                 buildings["solar_panel"].free = 15;
                 buildings["solar_panel"].multipliers = { "diamond": .05, "glass": .05 };
-                buildings["solar_panel"].generation["refined_mana"] = 0.001;
+                buildings["solar_panel"].generation["fuel"] = 0.001;
             },
             "cost": {
                 "money": 100000000,
@@ -2254,6 +2258,7 @@ function random_title() {
         "You grew a CARROT! Your mother is so proud!",
         "Strangely Bubbling Potion of Dancing",
         "...",
+        "Technomancy: Now with meta-bugs",
     ];
     document.title = TITLES.filter(function (item) { return item !== document.title; })[Math.floor(Math.random() * (TITLES.length - 1))];
 }
@@ -2650,7 +2655,7 @@ window.onload = function () {
             /* Find first line with a version number */
             if (changelog[i].match(/v[0-9]+\.[0-9]+\.[0-9]+/)) {
                 /* We need to set version number. So just version line without the : */
-                $("#version").html(changelog[i].replace(":", ""));
+                $("#version").html(changelog[i].replace(/\:.*/, ""));
                 /* Not a new version :( */
                 if (changelog[i] == localStorage["last_version"]) {
                     return;
@@ -2663,6 +2668,59 @@ window.onload = function () {
                 /* We don't care about other lines. */
                 return;
             }
+        }
+    });
+    /* Setup hotkeys */
+    var hotkey_mode = 0;
+    $(document).keyup(function (e) {
+        /* ESC ALWAYS exits. */
+        if (e.key == "Escape" || e.key.toLowerCase() == "x") {
+            $("#events").addClass("hidden");
+            $("#character").addClass("hidden");
+        }
+        /* Otherwise, we need to make sure we aren't actually trying to type something */
+        if (document.activeElement.tagName == "INPUT") {
+            return;
+        }
+        if (hotkey_mode == 0) {
+            if ("1234567890".indexOf(e.key) != -1) {
+                if (!$("#events").hasClass("hidden")) {
+                    $("#events_content span.clickable")["1234567890".indexOf(e.key)].click();
+                }
+            }
+            else if (e.key.toLowerCase() == "f") {
+                if (!$("#refined_mana").hasClass("hidden")) {
+                    $("#refined_mana .res_gen").click();
+                }
+            }
+            else if (e.key.toLowerCase() == "t") {
+                if (!$("#time").hasClass("hidden")) {
+                    $("#time .res_gen").click();
+                }
+            }
+            else if (e.key.toLowerCase() == "a") {
+                if (!$("#fuel").hasClass("hidden")) {
+                    $("#fuel .res_gen").click();
+                }
+            }
+            else if (e.key.toLowerCase() == "r") {
+                if (!$("#building_s_mana_refinery").hasClass("hidden")) {
+                    $("#building_s_mana_refinery").click();
+                }
+            }
+            else if (e.key == "+") {
+                if (!$("#building_s_energyboost").hasClass("hidden")) {
+                    purchase_building('s_energyboost');
+                }
+            }
+            else if (e.key == "-") {
+                if (!$("#building_s_energyboost").hasClass("hidden")) {
+                    destroy_building('s_energyboost');
+                }
+            }
+        }
+        else if (hotkey_mode == 1) {
+            /* Potentially add chaining of hotkeys? Maybe for later stuff, but probably good for now. */
         }
     });
     /* Only set to save last in case something messes up. */

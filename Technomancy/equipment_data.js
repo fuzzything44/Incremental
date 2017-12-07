@@ -6,6 +6,9 @@ function gen_equipment(equip_data) {
     }
     return equip;
 }
+var presents_used = {
+    "2017": false,
+};
 var equipment = {
     /* Engines */
     "basic_engine": {
@@ -324,7 +327,7 @@ var equipment = {
                 var run_action = function (action, callback) {
                     if (callback === void 0) { callback = null; }
                     /* Check time limit. */
-                    if (Date.now() - data.last_action < 5000 && (data.points < 500 || data.points > 600)) {
+                    if ((Date.now() - data.last_action < 15000 && (data.points < 400 || data.points > 600)) || (Date.now() - data.last_action < 3000)) {
                         /* Too fast. */
                         $("#events_content").prepend("Please wait, your cube is still working from your last action.<br />");
                         return;
@@ -493,7 +496,7 @@ var equipment = {
                 if (data.points < 200) {
                     /* Do nothing, but make the flow control here much better. */
                 }
-                else if (data.points < 500) {
+                else if (data.points < 400) {
                     $("#events_content").append("You hear a low beeping.<br/>");
                 }
                 else if (data.points < 600) {
@@ -740,6 +743,49 @@ var equipment = {
                 adventure_data[location].splice(index, 1);
                 update_inventory();
             }; /* End use function */
+        },
+    },
+    "present": {
+        type: "item",
+        name: "Wrapped Present",
+        modify: function (self, data) {
+            if (data.open) {
+                switch (data.year) {
+                    case "2017": {
+                        self.name = "Cheater.";
+                        //self.name = "Spaceship Figurine (2017)";
+                        self.use = function (index, location) {
+                            $("#events_content").html("Hey! How did you open this?<br />");
+                            //$("#events_content").html("You admire your figurine. It's pretty cool. <br />");
+                            if (!presents_used["2017"]) {
+                                Object.keys(resources).forEach(function (res) { return resources[res].mult = 0; });
+                                //resources["fuel"].mult *= 1.1;
+                                presents_used["2017"] = true;
+                            }
+                            else {
+                                $("#events_content").append("You've already admired it.");
+                            }
+                            update_inventory();
+                        }; /* End use function */
+                    } /* 2017 */
+                }
+            }
+            else {
+                self.name += " (" + data.year + ")";
+                self.use = function (index, location) {
+                    switch (data.year) {
+                        case "2017": {
+                            $("#events_content").html("Wait until Christmas to open your present.");
+                            //$("#events_content").html("You tear open the bright red present. Inside, there's a small figurine of your spaceship.");
+                            //break;
+                            return 1;
+                        }
+                    }
+                    data.open = true;
+                    update_inventory();
+                    return 1;
+                }; /* End use function */
+            }
         },
     },
 };
