@@ -90,36 +90,43 @@ var SPELL_BUILDINGS = [
     "s_final",
 ];
 function set_initial_state() {
+    /*
+        Each resource has a few different fields:
+            amount: How many they have. This is the ONLY field stored on save/load
+            value: How much it's worth (for prestige or otherwise).
+            mult: The per-second multiplier. (Amount per second is stored elsewhere because bad design decisions). If you have +10/s and a mult of 2, you actually get +20/s. Only is applied for positive net changes.
+            changes: List of [string, value] elements. Tracks what's modifying the /s gain to be displayed later. TODO: Actually do stuff with this.
+    */
     resources = {
-        "time": { "amount": 0, "value": -2, "mult": 1 },
-        "refined_mana": { "amount": 0, "value": -1, "mult": 1 },
-        "fuel": { "amount": 0, "value": -1000, "mult": 1 },
-        "mana": { "amount": 0, "value": 0, "mult": 1 },
-        "energy": { "amount": 0, "value": 0, "mult": 1 },
-        "research": { "amount": 0, "value": 0, "mult": 1 },
-        "manager": { "amount": 0, "value": 0, "mult": 1 },
-        "sludge": { "amount": 0, "value": 0, "mult": 1 },
-        "money": { "amount": 10, "value": 1, "mult": 1 },
-        "stone": { "amount": 0, "value": 0.5, "mult": 1 },
-        "wood": { "amount": 0, "value": 0.5, "mult": 1 },
-        "iron_ore": { "amount": 0, "value": 1, "mult": 1 },
-        "coal": { "amount": 0, "value": 1, "mult": 1 },
-        "iron": { "amount": 0, "value": 4, "mult": 1 },
-        "gold": { "amount": 0, "value": 50, "mult": 1 },
-        "diamond": { "amount": 0, "value": 75, "mult": 1 },
-        "jewelry": { "amount": 0, "value": 300, "mult": 1 },
-        "oil": { "amount": 0, "value": 2, "mult": 1 },
-        "paper": { "amount": 0, "value": 4, "mult": 1 },
-        "ink": { "amount": 0, "value": 10, "mult": 1 },
-        "book": { "amount": 0, "value": 400, "mult": 1 },
-        "sand": { "amount": 0, "value": 3, "mult": 1 },
-        "glass": { "amount": 0, "value": 20, "mult": 1 },
-        "water": { "amount": 0, "value": 2, "mult": 1 },
-        "hydrogen": { "amount": 0, "value": 5, "mult": 1 },
-        "steel_beam": { "amount": 0, "value": 200, "mult": 1 },
-        "uranium": { "amount": 0, "value": 500, "mult": 1 },
-        "sandcastle": { "amount": 0, "value": 10000000, "mult": 1 },
-        "glass_bottle": { "amount": 0, "value": 25000, "mult": 1 },
+        "time": { "amount": 0, "value": -2, "mult": 1, "changes": [] },
+        "refined_mana": { "amount": 0, "value": -1, "mult": 1, "changes": [] },
+        "fuel": { "amount": 0, "value": -1000, "mult": 1, "changes": [] },
+        "mana": { "amount": 0, "value": 0, "mult": 1, "changes": [] },
+        "energy": { "amount": 0, "value": 0, "mult": 1, "changes": [] },
+        "research": { "amount": 0, "value": 0, "mult": 1, "changes": [] },
+        "manager": { "amount": 0, "value": 0, "mult": 1, "changes": [] },
+        "sludge": { "amount": 0, "value": 0, "mult": 1, "changes": [] },
+        "money": { "amount": 10, "value": 1, "mult": 1, "changes": [] },
+        "stone": { "amount": 0, "value": 0.5, "mult": 1, "changes": [] },
+        "wood": { "amount": 0, "value": 0.5, "mult": 1, "changes": [] },
+        "iron_ore": { "amount": 0, "value": 1, "mult": 1, "changes": [] },
+        "coal": { "amount": 0, "value": 1, "mult": 1, "changes": [] },
+        "iron": { "amount": 0, "value": 4, "mult": 1, "changes": [] },
+        "gold": { "amount": 0, "value": 50, "mult": 1, "changes": [] },
+        "diamond": { "amount": 0, "value": 75, "mult": 1, "changes": [] },
+        "jewelry": { "amount": 0, "value": 300, "mult": 1, "changes": [] },
+        "oil": { "amount": 0, "value": 2, "mult": 1, "changes": [] },
+        "paper": { "amount": 0, "value": 4, "mult": 1, "changes": [] },
+        "ink": { "amount": 0, "value": 10, "mult": 1, "changes": [] },
+        "book": { "amount": 0, "value": 400, "mult": 1, "changes": [] },
+        "sand": { "amount": 0, "value": 3, "mult": 1, "changes": [] },
+        "glass": { "amount": 0, "value": 20, "mult": 1, "changes": [] },
+        "water": { "amount": 0, "value": 2, "mult": 1, "changes": [] },
+        "hydrogen": { "amount": 0, "value": 5, "mult": 1, "changes": [] },
+        "steel_beam": { "amount": 0, "value": 200, "mult": 1, "changes": [] },
+        "uranium": { "amount": 0, "value": 500, "mult": 1, "changes": [] },
+        "sandcastle": { "amount": 0, "value": 10000000, "mult": 1, "changes": [] },
+        "glass_bottle": { "amount": 0, "value": 25000, "mult": 1, "changes": [] },
     };
     /* Set resources_per_sec */
     Object.keys(resources).forEach(function (res) {
@@ -1381,6 +1388,22 @@ function set_initial_state() {
             },
             "tooltip": "Start printing actually good books for your libraries.",
             "name": "Good Reading Material",
+            "image": "",
+            "repeats": false,
+        },
+        "better_library_3": {
+            "unlock": function () { return purchased_upgrades.indexOf("better_library_2") != -1; },
+            "purchase": function () {
+                buildings["library"].price_ratio["iron"] = 1.05;
+                buildings["library"].price_ratio["wood"] = 1.05;
+                buildings["library"].price_ratio["book"] = 1.05;
+                buildings["library"].price_ratio["money"] = 1.05;
+            },
+            "cost": {
+                "wood": 150000,
+            },
+            "tooltip": "Libraries take more wood and less iron.",
+            "name": "Elven Library",
             "image": "",
             "repeats": false,
         },

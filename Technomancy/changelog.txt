@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.6.0: Environmental Disaster!
+When adding fuel, it shows how much you have to add. You can now use libraries to gain knowledge points and use those to reset the cost of libraries. More uses will come soon (TM). New upgrade to make libraries even cheaper (it'll be needed). Convolution cubes now have a different starting state depending on how many you've solved. The wanderer only shows you 2 options out of the 3 possible ones. Environmental and financial crises now happen at alternating amounts of mana. Fixed a bug with getting more sludge after you solved the environmental disaster. Coming soon (maybe): Tracking of what's all increasing/decreasing your resource gains.
+
 v3.5.1: Environmental Disaster!
 Fixed a bug where buying some buildings would turn them off, even if you had the production to back them up.
 

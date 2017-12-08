@@ -248,28 +248,61 @@ var equipment = {
                 "flaming", "shaking", "ghostly"
             ];
             function verify_data() {
-                /* Make sure we have all the data fields. */
-                /* Basic values */
-                ["color", "shape", "stripes", "corners"].forEach(function (type) {
-                    if (data[type] == undefined) {
-                        data[type] = 0;
+                /* Make sure we have all the data fields. If not, add them. If cubes have been previously solved, then we don't start in a nice place. */
+                if (adventure_data["cubes_solved"]) {
+                    /* Base state */
+                    if (data["color"] == undefined) {
+                        data["color"] = prng(adventure_data["cubes_solved"]) % 5;
                     }
-                });
-                /* Points are useful! */
-                if (data.points == undefined) {
-                    data.points = 0;
-                }
-                /* Levers as a whole. */
-                if (data.levers == undefined) {
-                    data.levers = {};
-                }
-                /*Individual levers. All set down. */
-                LEVERS.forEach(function (type) {
-                    if (data.levers[type] == undefined) {
-                        data.levers[type] = false;
+                    if (data["shape"] == undefined) {
+                        data["shape"] = prng(adventure_data["cubes_solved"]) % 4;
                     }
-                });
-                /* Last action. */
+                    if (data["stripes"] == undefined) {
+                        data["stripes"] = prng(adventure_data["cubes_solved"]) % 3;
+                    }
+                    if (data["corners"] == undefined) {
+                        data["corners"] = prng(adventure_data["cubes_solved"]) % 2;
+                    }
+                    /* Points are useful! */
+                    if (data.points == undefined) {
+                        data.points = prng(adventure_data["cubes_solved"]) % 1190;
+                    }
+                    /* Levers as a whole. */
+                    if (data.levers == undefined) {
+                        data.levers = {};
+                    }
+                    /*Individual levers. All set down. */
+                    var lcount_1 = 0;
+                    LEVERS.forEach(function (type) {
+                        if (data.levers[type] == undefined) {
+                            data.levers[type] = (prng(adventure_data["cubes_solved"] + lcount_1) % 2 == 0);
+                        }
+                        lcount_1++;
+                    });
+                }
+                else {
+                    /* Basic values */
+                    ["color", "shape", "stripes", "corners"].forEach(function (type) {
+                        if (data[type] == undefined) {
+                            data[type] = 0;
+                        }
+                    });
+                    /* Points are useful! */
+                    if (data.points == undefined) {
+                        data.points = 0;
+                    }
+                    /* Levers as a whole. */
+                    if (data.levers == undefined) {
+                        data.levers = {};
+                    }
+                    /*Individual levers. All set down. */
+                    LEVERS.forEach(function (type) {
+                        if (data.levers[type] == undefined) {
+                            data.levers[type] = false;
+                        }
+                    });
+                }
+                /* Last action. Should always be 0.  */
                 if (data.last_action == undefined) {
                     data.last_action = 0;
                 }
@@ -520,6 +553,12 @@ var equipment = {
                         adventure_data[location][index] = { name: "conv_key" };
                         $("#character").removeClass("hidden");
                         update_inventory();
+                        if (adventure_data["cubes_solved"]) {
+                            adventure_data["cubes_solved"]++;
+                        }
+                        else {
+                            adventure_data["cubes_solved"] = 1;
+                        }
                     });
                 }
                 else if (data.points < 700) {

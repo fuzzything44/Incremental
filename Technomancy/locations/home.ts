@@ -50,7 +50,7 @@
             /* Somehow we handle adding of items to ship inventory. */
             $("#events_content > span").last().prev().click(function add_to_inv() {
                 $("#events_topbar").html("Stock Your Ship");
-                $("#events_content").html("<span>Add Fuel: <input id='add_fuel' type='number' min='1'/><span class='clickable'>Add!</span></span><br />");
+                $("#events_content").html("<span>Add Fuel: <input id='add_fuel' type='number' min='1'/><span class='clickable'>Add!</span></span> (You have " + format_num(resources["fuel"].amount, false) + " fuel)<br />");
                 $("#events_content > span > span").last().click(function () {
                     let fuel_to_add = parseInt($("#add_fuel").val())
                     /* Check to make sure the ship has enough space. Space is total size - used space. */
@@ -77,6 +77,8 @@
                             adventure_data.inventory.push(adventure_data.warehouse.splice(i, 1)[0]);
                             update_inventory();
                             add_to_inv();
+                        } else {
+                            $("#events_content").prepend("Not enough storage space<br />");
                         }
                     });
                     /* They can use it. */
@@ -128,14 +130,39 @@
             $("#events_content").append("<span class='clickable' onclick='set_equipment();'>Equip</span> your ship <br />");
 
             if (event_flags["wanderer_knowledge"]) {
+                if (event_flags["know_pts"] == undefined) {
+                    event_flags["know_pts"] = 0;
+                }
                 $("#events_content").append("<span class='clickable'>Go</span> to your study.<br />");
                 $("#events_content > span").last().click(function study() {
+                    $("#events_content").html("You have " + format_num(event_flags["know_pts"]) + " knowledge points.<br />");
+                    if (buildings["library"].amount > 25) {
+                        $("#events_content").append("<span class='clickable'>Study</span><i style='text: small'>(Gain 1 knowledge point, but destroy 25 libraries without the cost decrease.)</i><br />");
+                        $("#events_content span").last().click(function () {
+                            destroy_building("library", 25); /* Remove libraries. */
+                            buildings["library"].free -= 25;
+                            event_flags["know_pts"]++;
+                            study(); /* Redraw. */
+                        });
+                    }
+                    if (event_flags["know_pts"] && buildings["library"].free < buildings["library"].amount && purchased_upgrades.indexOf("better_library_3") != -1) {
+                        $("#events_content").append("<span class='clickable'>Reset</span> library base cost.<i style='text: small'>(Libraries are at their base cost (no matter how many you have), but the cost scaling of them is increased. This costs 1 knowledge point.)</i><br />");
+                        $("#events_content span").last().click(function () {
+                            buildings["library"].free = buildings["library"].amount;
+                            event_flags["know_pts"]--;
+                            buildings["library"].price_ratio["iron"] *= 1.05;
+                            buildings["library"].price_ratio["wood"] *= 1.05;
+                            buildings["library"].price_ratio["book"] *= 1.05;
+                            buildings["library"].price_ratio["money"] *= 1.05;
+                            study();
+                        });
+                    }
                     if (event_flags["wanderer_knowledge"] == "magic") {
-                        $("#events_content").html("Yay, you can do magic! Message fuzzything44 on Discord if you get this far.<br />");
+                        $("#events_content").append("Yay, you can do magic! Message fuzzything44 on Discord if you get this far.<br />");
                     } else if (event_flags["wanderer_knowledge"] == "alchemy") {
-                        $("#events_content").html("Yay, you can do alchemy! Message fuzzything44 on Discord if you get this far.<br />");
+                        $("#events_content").append("Yay, you can do alchemy! Message fuzzything44 on Discord if you get this far.<br />");
                     } else if (event_flags["wanderer_knowledge"] == "inventor") {
-                        $("#events_content").html("Yay, you can make machines! Message fuzzything44 on Discord if you get this far.<br />");
+                        $("#events_content").append("Yay, you can make machines! Message fuzzything44 on Discord if you get this far.<br />");
                     }
                     $("#events_content").append(exit_button("Done"));
                 }); /* End study */
