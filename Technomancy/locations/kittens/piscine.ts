@@ -6,7 +6,7 @@
     "go_again_text": "Swim",
     "encounters": [
         ({
-            "condition": function () { return adventure_data.ship.engine.name == "basic_engine"; }, /* Just need any better engine */
+            "condition": function () { return adventure_data.ship.engine == null || adventure_data.ship.engine.name == "basic_engine"; }, /* Just need any better engine */
             "types": [],
             "weight": 0,
             "title": "Something Seems Fishy",

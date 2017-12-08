@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.6.1: The Wanderer.
+Fixed a bug where adventuring in Piscine would sometimes simply not work. Prestige shows % to next mana (kind of, it's an approximation and each subsequent % is harder). Choosing a class with the wanderer gives minor bonuses: Magic makes refined mana twice as effective (before being capped for resources that cap), Alchemy makes potions slightly stronger, and Inventor makes Manufacturing better.
+
 v3.6.0: Environmental Disaster!
 When adding fuel, it shows how much you have to add. You can now use libraries to gain knowledge points and use those to reset the cost of libraries. More uses will come soon (TM). New upgrade to make libraries even cheaper (it'll be needed). Convolution cubes now have a different starting state depending on how many you've solved. The wanderer only shows you 2 options out of the 3 possible ones. Environmental and financial crises now happen at alternating amounts of mana. Fixed a bug with getting more sludge after you solved the environmental disaster. Coming soon (maybe): Tracking of what's all increasing/decreasing your resource gains.
 

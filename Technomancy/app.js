@@ -1626,19 +1626,30 @@ var prestige = {
         return prestige_points;
     },
     /* Calculate mana gain */
-    mana: function () {
+    mana: function (round) {
+        if (round === void 0) { round = true; }
         var prestige_points = prestige.points();
         var mana = buildings["s_manastone"].amount;
         var mana_gain = prestige_points / 15000 - Math.pow(mana, 1.3) * .5; /* One for every 20k pp, and apply reduction based off of current mana */
-        mana_gain = Math.floor(Math.pow(Math.max(0, mana_gain), .36)); /* Then raise to .33 power and apply some rounding/checking */
+        mana_gain = Math.pow(Math.max(0, mana_gain), .36); /* Then raise to .33 power and apply some rounding/checking */
         mana_gain = mana_gain / (1 + Math.floor(mana / 50) * .5); /* Then divide gain by a number increasing every 50 mana. */
         if (mana_gain > 50) {
             mana_gain = 50 + (mana_gain - 50) / 2;
         }
-        return Math.round(mana_gain);
+        if (round) {
+            return Math.floor(mana_gain);
+        }
+        else {
+            return mana_gain;
+        }
     },
     percent_through: function () {
-        return Math.max(0, Math.min(100, Math.floor((prestige.points() / 15000) / (Math.pow(buildings["s_manastone"].amount, 1.3) * .5 + 1) * 100)));
+        if (prestige.mana() < 1) {
+            return Math.max(0, Math.min(100, Math.floor((prestige.points() / 15000) / (Math.pow(buildings["s_manastone"].amount, 1.3) * .5 + 1) * 100)));
+        }
+        else {
+            return Math.round(100 * (prestige.mana(false) - prestige.mana(true)));
+        }
     },
     run: function (ask) {
         if (ask === void 0) { ask = true; }
@@ -1660,10 +1671,10 @@ var prestige = {
     },
     update: function () {
         if (prestige.mana()) {
-            $("#prestige > span").first().html("Prestige&nbsp;(" + format_num(prestige.mana(), false) + ")");
+            $("#prestige > span").first().html("Prestige&nbsp;(" + format_num(prestige.mana(), false) + ", " + format_num(prestige.percent_through(), false) + "%)");
         }
         else {
-            $("#prestige > span").first().html("Prestige&nbsp;(" + prestige.percent_through().toString() + "%)");
+            $("#prestige > span").first().html("Prestige&nbsp;(" + format_num(prestige.percent_through(), false) + "%)");
         }
     }
 };

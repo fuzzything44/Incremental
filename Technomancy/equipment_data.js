@@ -778,6 +778,10 @@ var equipment = {
                     data: data,
                     power: ingredients[data.power].effect_strength,
                 };
+                if (event_flags["wanderer_knowledge"] == "alchemy") {
+                    adventure_data.current_potion["power"]++;
+                    adventure_data.current_potion["time"] += 5;
+                }
                 /* Remove it from inventory after use */
                 adventure_data[location].splice(index, 1);
                 update_inventory();

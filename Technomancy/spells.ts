@@ -123,6 +123,15 @@ function s_workshop(newopt: string) {
     buildings["s_workshop"].generation = workshop_items[newopt];
     buildings["s_workshop"].generation["mana"] = -1; /* And lose mana */
 
+    /* Small inventor bonus. */
+    if (event_flags["wanderer_knowledge"] == "inventor") {
+        Object.keys(workshop_items[newopt]).forEach(function (res) {
+            if (buildings["s_workshop"].generation[res] > 0) {
+                buildings["s_workshop"].generation[res] *= 2;
+            }
+        });
+    }
+
     if (comp_state) { /* Only turn on if it already was on */
         resources["mana"].amount = 50; /* Make sure they have enough mana because it hasn't been set yet. */
         toggle_building_state("s_workshop");
@@ -162,6 +171,11 @@ function s_refinery_buff(delta_time: number) {
         }
         /* How much of it to give. We give 10 value per mana they spent for this. */
         let to_give = resources["refined_mana"].amount / 100;
+
+        if (event_flags["wanderer_knowledge"] == "magic") {
+            to_give *= 2;
+        }
+
         to_give = to_give / Math.abs(resources[chosen_resource].value); /* Give approx value */
         if (resources[chosen_resource].value < 0) {
             /* Specialty resource chosen. So cap it.*/
