@@ -831,5 +831,36 @@ var equipment = {
             }
         },
     },
+    "bag": {
+        type: "item",
+        name: "Bag of Holding",
+        modify: function (self, data) {
+            if (data.resource == undefined) {
+                self.use = function (index, location) {
+                    $("#character").addClass("hidden");
+                    $("#events_topbar").html("Bag of Holding");
+                    $("#events_content").html("What would you like to put in your bag?<br />");
+                    /* Let them put some resources in. */
+                    Object.keys(resources).forEach(function (res) {
+                        if (resources[res].value > 0 && resources[res].amount > 0) {
+                            var amount_1 = Math.min(resources[res].amount, 100000 / resources[res].value); /* Can hold 100k value. */
+                            $("#events_content").append("<span class='clickable'>Add</span> " + format_num(amount_1, true) + " " + res.replace("_", " ") + "<br />");
+                            $("#events_content > span").last().click(function () {
+                                /* Add them. */
+                                data.resource = res;
+                                data.amount = amount_1;
+                                resources[res].amount -= amount_1;
+                                start_adventure();
+                            });
+                        }
+                    });
+                    return 1;
+                };
+            }
+            else {
+                self.name += " (" + format_num(data.amount, true) + " " + data.resource.replace("_", " ") + ")";
+            }
+        },
+    },
 };
 //# sourceMappingURL=equipment_data.js.map

@@ -28,7 +28,7 @@ let events = [
 
             resources["money"].amount += money_gain;
 
-            let investment_types = ["gold", "beer", "uranium", "bread", "beds", "wool", "toothpicks", "cookies", "toothpaste", "salad"];
+            let investment_types = ["gold", "beer", "uranium", "uranium", "uranium", "bread", "beds", "wool", "toothpicks", "cookies", "toothpaste", "salad"];
             let invested_in = investment_types[Math.floor(Math.random() * investment_types.length)];
             add_log_elem("You made " + format_num(money_gain, false) + " money from investing!");
             $("#events_content").html("Investing in " + antique_item + invested_in + " paid off! <br />You gained " + format_num(money_gain, false) + " money from that sweet deal!");
@@ -142,7 +142,7 @@ let events = [
             let gold_amount = (100 * event_flags["artifacts_found"]).toString();
             content += "<span onclick='resources.gold.amount += " + gold_amount + "; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained " + gold_amount + " gold\");' class='clickable'>Melt it down</span><br>";
             if (resources["refined_mana"].amount > 500) {
-                let refined_amount = Math.round(Math.pow(1000, 1 - 0.01 * event_flags["artifacts_found"])).toString()
+                let refined_amount = Math.round(Math.pow(1000, 1.01 - 0.01 * event_flags["artifacts_found"])).toString()
                 content += "<span onclick='resources.refined_mana.amount += " + refined_amount + "; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained " + refined_amount + " refined mana\");' class='clickable'>Extract magic</span><br>";
             }
             add_log_elem("You found an artifact!");
@@ -586,7 +586,7 @@ let events = [
                     });
                     setTimeout(() => { this.perfect_cat = false, 60000 * 3; add_log_elem("Logikitten bonus wore off."); buildings["logging"].tooltip = "console.log('Logikitten super mode engaged')"});
                     $("#events_content").append("Perfect answer! Production increased.<br />");
-                    if (buildings["s_moneyboost"].on) {
+                    if (buildings["s_goldboost"].on) {
                         buildings["logging"].tooltip = "�������";
                     }
                 }
@@ -818,10 +818,10 @@ function setup_events() {
                     event_flags["to_oil_decrease"] = 60 * 10; /* 10 minutes to next loss. */
                 } else if (event_flags["sludge_level"] < 10) {
                     event_flags["sludge_level"] += 1;
-                    event_flags["to_oil_decrease"] = 60 * 5; /* 10 minutes to next loss. */
+                    event_flags["to_oil_decrease"] = 60 * 5; /* 5 minutes to next loss. */
                 } else if (event_flags["sludge_level"] < 20) {
                     event_flags["sludge_level"] += 1;
-                    event_flags["to_oil_decrease"] = 60 * 3; /* 10 minutes to next loss. */
+                    event_flags["to_oil_decrease"] = 60 * 3; /* 3 minutes to next loss. */
                 }
 
                 /* Increase/decrease sludge level based on oil stuff, then increase/decrease production modifiers based off of that. 

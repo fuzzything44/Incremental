@@ -16,16 +16,22 @@
                     var purchase_amount = resources["money"].amount / 20; /* Each trade they spend 5% of their money */
                     var sold_resources = ["wood", "gold", "oil", "coal", "iron_ore", "iron", "uranium", "steel_beam", "hydrogen"]; /* What kittens have for sale. */
                     sold_resources.forEach(function (resource) {
+                        if (adventure_data["c_sell_" + resource] == undefined) {
+                            adventure_data["c_sell_" + resource] = 0;
+                        }
                         var resource_amount = purchase_amount / resources[resource].value;
-                        $("#events_content").append("<span class='clickable'>Purchase</span> " + format_num(resource_amount, false) + " " + resource.replace("_", " ") + " (" + format_num(purchase_amount, false) + " money) <br />");
-                        $("#events_content > span").last().click(function () {
-                            /* Make sure they still have enough money */
-                            if (resources["money"].amount >= purchase_amount) {
-                                resources["money"].amount -= purchase_amount;
-                                resources[resource].amount += resource_amount;
-                            }
-                            cat_market();
-                        });
+                        if (adventure_data["c_sell_" + resource] < Date.now() - 60000 * 10) {
+                            $("#events_content").append("<span class='clickable'>Purchase</span> " + format_num(resource_amount, false) + " " + resource.replace("_", " ") + " (" + format_num(purchase_amount, false) + " money) <br />");
+                            $("#events_content > span").last().click(function () {
+                                /* Make sure they still have enough money */
+                                if (resources["money"].amount >= purchase_amount) {
+                                    resources["money"].amount -= purchase_amount;
+                                    resources[resource].amount += resource_amount;
+                                }
+                                adventure_data["c_sell_" + resource] = Date.now();
+                                cat_market();
+                            });
+                        }
                     });
                     if (adventure_data["logicat_level"] >= 10 && adventure_data["piscine_unlocked"] == undefined) {
                         $("#events_content").append("<span class='clickable'>Purchase</span> a starchart (5,000 book)<br />");

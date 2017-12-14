@@ -138,7 +138,7 @@
                     $("#events_content > span").last().click(function study() {
                         $("#events_content").html("You have " + format_num(event_flags["know_pts"]) + " knowledge points.<br />");
                         if (buildings["library"].amount > 25) {
-                            $("#events_content").append("<span class='clickable'>Study</span><i style='text: small'>(Gain 1 knowledge point, but destroy 25 libraries without the cost decrease.)</i><br />");
+                            $("#events_content").append("<span class='clickable'>Study</span><i style='text: small'>(Gain 1 knowledge point (KP), but destroy 25 libraries without the cost decrease.)</i><br />");
                             $("#events_content span").last().click(function () {
                                 destroy_building("library", 25); /* Remove libraries. */
                                 buildings["library"].free -= 25;
@@ -147,7 +147,7 @@
                             });
                         }
                         if (event_flags["know_pts"] && buildings["library"].free < buildings["library"].amount && purchased_upgrades.indexOf("better_library_3") != -1) {
-                            $("#events_content").append("<span class='clickable'>Reset</span> library base cost.<i style='text: small'>(Libraries are at their base cost (no matter how many you have), but the cost scaling of them is increased. This costs 1 knowledge point.)</i><br />");
+                            $("#events_content").append("<span class='clickable'>Reset</span> library base cost.<i style='text: small'> (Libraries go to their base cost, but the cost scaling of them is increased. This costs 1 KP.)</i><br />");
                             $("#events_content span").last().click(function () {
                                 buildings["library"].free = buildings["library"].amount;
                                 event_flags["know_pts"]--;
@@ -160,12 +160,57 @@
                         }
                         if (event_flags["wanderer_knowledge"] == "magic") {
                             $("#events_content").append("Yay, you can do magic! Message fuzzything44 on Discord if you get this far.<br />");
+                            $("#events_content").append("<span class='clickable'>Make</span> a Bag of Holding (requires one of each magic orb)<br />");
+                            $("#events_content span").last().click(function () {
+                                if (count_item("magic_orb", adventure_data.warehouse, { elem: "time" }) &&
+                                    count_item("magic_orb", adventure_data.warehouse, { elem: "space" }) &&
+                                    count_item("magic_orb", adventure_data.warehouse, { elem: "energy" }) &&
+                                    count_item("magic_orb", adventure_data.warehouse, { elem: "force" })) {
+                                    adventure_data.warehouse.splice(find_item("magic_orb", adventure_data.warehouse, { elem: "force" }), 1);
+                                    adventure_data.warehouse.splice(find_item("magic_orb", adventure_data.warehouse, { elem: "time" }), 1);
+                                    adventure_data.warehouse.splice(find_item("magic_orb", adventure_data.warehouse, { elem: "energy" }), 1);
+                                    adventure_data.warehouse.splice(find_item("magic_orb", adventure_data.warehouse, { elem: "space" }), 1);
+                                    adventure_data.warehouse.push({ name: "bag" });
+                                }
+                                else {
+                                    $("#events_content").prepend("You're missing an orb. Check your warehouse.<br />");
+                                }
+                            });
                         }
                         else if (event_flags["wanderer_knowledge"] == "alchemy") {
                             $("#events_content").append("Yay, you can do alchemy! Message fuzzything44 on Discord if you get this far.<br />");
                         }
                         else if (event_flags["wanderer_knowledge"] == "inventor") {
                             $("#events_content").append("Yay, you can make machines! Message fuzzything44 on Discord if you get this far.<br />");
+                            $("#events_content").append("<span class='clickable'>Make</span> a Giant Magnet (Costs 1 Machine Part and 1 KP)<br />");
+                            $("#events_content > span").last().click(function () {
+                                if (count_item("machine_part", adventure_data.warehouse)) {
+                                    if (event_flags["know_pts"]) {
+                                        var build_state = buildings["magnet"].on;
+                                        if (build_state) {
+                                            toggle_building_state("magnet");
+                                        }
+                                        /* Give a free magnet. */
+                                        buildings["magnet"].amount++;
+                                        buildings["magnet"].free++;
+                                        if (build_state) {
+                                            toggle_building_state("magnet");
+                                        }
+                                        /* Spend costs. */
+                                        event_flags["know_pts"]--;
+                                        adventure_data.warehouse.splice(find_item("machine_part", adventure_data.warehouse), 1);
+                                        purchase_building("magnet", 0); /* Update amount visible. */
+                                        /* Redraw. */
+                                        study();
+                                    }
+                                    else {
+                                        $("#events_content").prepend("Not enough Knowledge Points. Build more libraries.<br />");
+                                    }
+                                }
+                                else {
+                                    $("#events_content").prepend("No machine part found. Check your warehouse.<br />");
+                                }
+                            }); /* End building magnet. */
                         }
                         $("#events_content").append(exit_button("Done"));
                     }); /* End study */

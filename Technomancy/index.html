@@ -468,7 +468,24 @@
             </span>
             <span id="toggle_fuel_maker" class="building_state_on" onclick="toggle_building_state('fuel_maker')">On</span>
         </div>
-
+        <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('magnet')" class="building_remove">X</span>
+            <span id="building_magnet" class="building tooltip" onclick="purchase_building('magnet');">
+                <span class="building_name">Giant Magnet</span>
+                <span class="building_amount">0</span>
+                <span class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()"></span>
+            </span>
+            <span id="toggle_magnet" class="building_state_on" onclick="toggle_building_state('magnet')">On</span>
+        </div>
+        <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('steel_smelter')" class="building_remove">X</span>
+            <span id="building_steel_smelter" class="building tooltip" onclick="purchase_building('steel_smelter');">
+                <span class="building_name">Steel Foundry</span>
+                <span class="building_amount">0</span>
+                <span class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()"></span>
+            </span>
+            <span id="toggle_steel_smelter" class="building_state_on" onclick="toggle_building_state('steel_smelter')">On</span>
+        </div>
         <br />
 
         <!-- Managed Buildings -->

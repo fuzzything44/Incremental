@@ -72,6 +72,9 @@ var UNLOCK_TREE = {
     "book_printer": ["library"],
     "hydrogen_gen": [],
     "fuel_maker": [],
+    "magnet": ["steel_smelter"],
+    "steel_smelter": [],
+    "mithril_smelter": [],
     "big_bank": ["big_mine"],
     "big_mine": [],
     "hydrogen_mine": [],
@@ -127,6 +130,7 @@ function set_initial_state() {
         "uranium": { "amount": 0, "value": 500, "mult": 1, "changes": [] },
         "sandcastle": { "amount": 0, "value": 10000000, "mult": 1, "changes": [] },
         "glass_bottle": { "amount": 0, "value": 25000, "mult": 1, "changes": [] },
+        "mithril": { "amount": 0, "value": 3500, "mult": 1, "changes": [] },
     };
     /* Set resources_per_sec */
     Object.keys(resources).forEach(function (res) {
@@ -768,6 +772,65 @@ function set_initial_state() {
             "multipliers": {},
             "free": 0,
             "flavor": "This fuel is... not healthy.",
+        },
+        "magnet": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "iron": 10000,
+                "steel_beam": 500,
+            },
+            "price_ratio": {
+                "iron": 1.1,
+                "steel_beam": 1.1,
+            },
+            "generation": {},
+            "multipliers": {
+                "iron": 0.1,
+                "iron_ore": 0.1,
+            },
+            "free": 0,
+            "flavor": "It's just a big magnet.",
+        },
+        "steel_smelter": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "iron": 20000,
+                "stone": 50000,
+            },
+            "price_ratio": {
+                "iron": 1.1,
+                "stone": 1.1,
+            },
+            "generation": {
+                "steel_beam": 1,
+                "iron": -25,
+                "coal": -25,
+            },
+            "multipliers": {},
+            "free": 0,
+            "flavor": "Hot hot hot!",
+        },
+        "mithril_smelter": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "iron": 20000,
+                "stone": 50000,
+            },
+            "price_ratio": {
+                "iron": 1.1,
+                "stone": 1.1,
+            },
+            "generation": {
+                "mithril": 0.1,
+                "gold": -5,
+                "refined_mana": -25,
+            },
+            "multipliers": {},
+            "free": 0,
+            "flavor": "",
         },
         "big_bank": {
             "on": true,
@@ -1538,7 +1601,7 @@ function set_initial_state() {
             "purchase": function () { },
             "cost": {
                 "time": 1,
-                "mana": 50,
+                "mana": 100,
             },
             "tooltip": "Does some stuff with time.",
             "name": "Chronomancy",
@@ -1594,7 +1657,7 @@ function set_initial_state() {
                 };
                 buildings["solar_panel"].free = 15;
                 buildings["solar_panel"].multipliers = { "diamond": .05, "glass": .05 };
-                buildings["solar_panel"].generation["fuel"] = 0.001;
+                buildings["solar_panel"].generation["fuel"] = 0.0002;
             },
             "cost": {
                 "money": 100000000,
@@ -1622,7 +1685,12 @@ function set_initial_state() {
 var prestige = {
     points: function () {
         var prestige_points = 0;
-        Object.keys(resources).forEach(function (res) { return prestige_points += resources[res].amount * Math.abs(resources[res].value); });
+        Object.keys(resources).forEach(function (res) {
+            if (isNaN(resources[res].amount)) {
+                resources[res].amount = 0;
+            }
+            prestige_points += resources[res].amount * Math.abs(resources[res].value);
+        });
         return prestige_points;
     },
     /* Calculate mana gain */
@@ -1665,6 +1733,21 @@ var prestige = {
             set_initial_state();
             buildings["s_manastone"].amount = total_mana;
             adventure_data.current_location = "home"; /* You have to prestige at home. */
+            /* Open bags of holding */
+            for (var i = count_item("bag", adventure_data.inventory); i; i--) {
+                var bag_index = find_item("bag", adventure_data.inventory);
+                if (adventure_data.inventory[bag_index].resource != undefined) {
+                    resources[adventure_data.inventory[bag_index].resource].amount += adventure_data.inventory[bag_index].amount;
+                    adventure_data.inventory.splice(bag_index, 1);
+                }
+            }
+            for (var i = count_item("bag", adventure_data.warehouse); i; i--) {
+                var bag_index = find_item("bag", adventure_data.warehouse);
+                if (adventure_data.warehouse[bag_index].resource != undefined) {
+                    resources[adventure_data.warehouse[bag_index].resource].amount += adventure_data.warehouse[bag_index].amount;
+                    adventure_data.warehouse.splice(bag_index, 1);
+                }
+            }
             save();
             location.reload();
         }
@@ -1821,6 +1904,9 @@ function save_to_clip() {
         var successful = document.execCommand('copy');
         if (successful) {
             alert("Save copied to clipboard.");
+        }
+        else {
+            console.log("Copying unsuccessful?");
         }
     }
     catch (err) {
@@ -2296,6 +2382,7 @@ function random_title() {
         "Strangely Bubbling Potion of Dancing",
         "...",
         "Technomancy: Now with meta-bugs",
+        "Even the bugs have bugs.",
     ];
     document.title = TITLES.filter(function (item) { return item !== document.title; })[Math.floor(Math.random() * (TITLES.length - 1))];
 }
@@ -2635,7 +2722,7 @@ window.onload = function () {
     /* Give spell rewards */
     if (buildings["s_manastone"].amount > 0 && event_flags["start_buildings"] == undefined) {
         event_flags["start_buildings"] = true;
-        if (resources["money"].amount != 10) {
+        if (resources["money"].amount < 10) {
             resources["money"].amount = 10;
         }
         /* What building each mana gives. */
