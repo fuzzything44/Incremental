@@ -45,7 +45,7 @@
             "title": "Adventure!",
             "run_encounter": function () {
                 $("#events_content").html("<span class='clickable'>Add</span> or <span class='clickable'>Remove</span> items from your ship inventory.<br />");
-                /* Somehow we handle adding of items to ship inventory. */
+                /* Handle adding of items to ship inventory. */
                 $("#events_content > span").last().prev().click(function add_to_inv() {
                     $("#events_topbar").html("Stock Your Ship");
                     $("#events_content").html("<span>Add Fuel: <input id='add_fuel' type='number' min='1'/><span class='clickable'>Add!</span></span> (You have " + format_num(resources["fuel"].amount, false) + " fuel)<br />");
@@ -211,6 +211,47 @@
                                     $("#events_content").prepend("No machine part found. Check your warehouse.<br />");
                                 }
                             }); /* End building magnet. */
+                            if (buildings["steel_smelter"].amount > 1) {
+                                $("#events_content").append("<span class='clickable'>Upgrade</span> a Steel Foundry (Costs 1 KP)<br />");
+                                $("#events_content > span").last().click(function () {
+                                    if (buildings["steel_smelter"].amount > 1) {
+                                        if (event_flags["know_pts"]) {
+                                            /* Remove a steel foundry, give a mithril forge. */
+                                            var build_state = buildings["steel_smelter"].on;
+                                            if (build_state) {
+                                                toggle_building_state("steel_smelter");
+                                            }
+                                            buildings["steel_smelter"].amount--;
+                                            buildings["steel_smelter"].free--;
+                                            if (build_state) {
+                                                toggle_building_state("steel_smelter");
+                                            }
+                                            /* Giving the forge. */
+                                            build_state = buildings["mithril_smelter"].on;
+                                            if (build_state) {
+                                                toggle_building_state("mithril_smelter");
+                                            }
+                                            buildings["mithril_smelter"].amount++;
+                                            if (build_state) {
+                                                toggle_building_state("mithril_smelter");
+                                            }
+                                            /* Spend knowledge point. */
+                                            event_flags["know_pts"]--;
+                                            /* Redraw amounts. */
+                                            purchase_building("steel_smelter", 0);
+                                            purchase_building("mithril_smelter", 0);
+                                            study();
+                                        }
+                                        else {
+                                            $("#events_content").prepend("Not enough Knowledge Points. Build more libraries.<br />");
+                                        }
+                                    }
+                                    else {
+                                        $("#events_content").prepend("You need another Steel Foundry.<br />");
+                                        study();
+                                    }
+                                });
+                            }
                         }
                         $("#events_content").append(exit_button("Done"));
                     }); /* End study */

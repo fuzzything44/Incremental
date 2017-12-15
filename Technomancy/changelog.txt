@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.8.0: The Wanderer
+You can forge Mithril now! Well, if you're an inventor. Also fixed a small tooltip bug. 
+
 v3.7.0: The Wanderer
 Cath trading has been nerfed. You can now only take each deal once every 10 minutes, so make them count. Choosing Magic or Technology now does stuff! Specifically, a bag of holding (yay, starting bonuses) and two new buildings. You're now more likely to invest in uranium. Your first artifact should actually give the full 1000 refined mana. Fixed a bug in a easter egg "bug" (yes, our bugs even have bugs!) Chronomancy requires more mana. Solar panels generate less fuel after you finish the environmental crisis. Fixed a bug where you could accidentally prestige for infinite mana. Added a new title. NOTE: Bags of holding will be harder to get in the future, however I they're necessary for something I want to implement soon, so they're easy to get now.
 

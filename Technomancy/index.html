@@ -94,6 +94,7 @@
         <div id="uranium" class="hidden"><span>Uranium: 0<br /></span><span id="uranium_per_sec" class="res_gen">Making 1 per second.</span><br /></div>
         <div><a href="http://castle.chirpingmustard.com/castle.html" target="_blank" style="text-decoration: none;" class="fgc"><span id="sandcastle" class="hidden"><span>Sandcastle: 0<br /></span><span id="sandcastle_per_sec" class="res_gen"></span><br /></span></a></div>
         <div id="glass_bottle" class="hidden"><span>Glass bottle: 0<br /></span><span id="glass_bottle_per_sec" class="res_gen"></span><br /></div>
+        <div id="mithril" class="hidden"><span>Mithril: 0<br /></span><span id="mithril_per_sec" class="res_gen"></span><br /></div>
 
     </div>
     <div id="buildings">
@@ -485,6 +486,15 @@
                 <span class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()"></span>
             </span>
             <span id="toggle_steel_smelter" class="building_state_on" onclick="toggle_building_state('steel_smelter')">On</span>
+        </div>
+        <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('mithril_smelter')" class="building_remove">X</span>
+            <span id="building_mithril_smelter" class="building tooltip" onclick="purchase_building('mithril_smelter');">
+                <span class="building_name">Mithril Forge</span>
+                <span class="building_amount">0</span>
+                <span class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()"></span>
+            </span>
+            <span id="toggle_mithril_smelter" class="building_state_on" onclick="toggle_building_state('mithril_smelter')">On</span>
         </div>
         <br />
 

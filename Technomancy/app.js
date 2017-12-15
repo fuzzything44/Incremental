@@ -815,14 +815,8 @@ function set_initial_state() {
         "mithril_smelter": {
             "on": true,
             "amount": 0,
-            "base_cost": {
-                "iron": 20000,
-                "stone": 50000,
-            },
-            "price_ratio": {
-                "iron": 1.1,
-                "stone": 1.1,
-            },
+            "base_cost": {},
+            "price_ratio": {},
             "generation": {
                 "mithril": 0.1,
                 "gold": -5,
@@ -2214,7 +2208,8 @@ function gen_building_tooltip(name) {
     if (isNaN(amount)) {
         amount = 1;
     }
-    var gen_text = "Generates ";
+    var tooltip = "";
+    var gen_text = "";
     /* Add resource gen, update how much each one generates. */
     Object.keys(buildings[name].generation).forEach(function (key) {
         if (resources[key].value) {
@@ -2224,11 +2219,17 @@ function gen_building_tooltip(name) {
             gen_text += format_num(buildings[name].generation[key]) + " " + key.replace("_", " ") + ", ";
         }
     });
+    if (gen_text) {
+        tooltip += "Generates " + gen_text.trim().replace(/.$/, ".") + "<br />";
+    }
     var mults = [];
     Object.keys(buildings[name].multipliers).forEach(function (key) {
         mults.push("" + format_num(buildings[name].multipliers[key] * 100) + "% bonus to " + key.replace(/\_/g, " "));
     });
     var mult_str = "<span style='color: goldenrod'>Gives a " + mults.join(", a ") + ".</span>";
+    if (mults.length) {
+        tooltip += mult_str + "<br />";
+    }
     var cost_text = "Costs ";
     Object.keys(buildings[name].base_cost).forEach(function (key) {
         /* Total cost for a buy all. Uses a nice summation formula. */
@@ -2250,18 +2251,18 @@ function gen_building_tooltip(name) {
     if (cost_text == "Costs ") {
         cost_text = "Unbuyable,";
     } /* Free buildings don't have a cost. */
+    tooltip += cost_text.trim().replace(/.$/, ".");
     var flavor_text = "<hr><i style='font-size: small'>" + buildings[name].flavor + "</i>";
     if (buildings[name].flavor == undefined || buildings[name].flavor == "") {
         flavor_text = "";
     }
-    var ret_text = gen_text.trim().replace(/.$/, ".") + "<br />";
-    if (mults.length) {
-        ret_text += mult_str + "<br />";
-    }
-    return ret_text + cost_text.trim().replace(/.$/, ".") + flavor_text;
+    tooltip += flavor_text;
+    return tooltip;
 }
 function purchase_building(name, amount) {
     if (amount === void 0) { amount = null; }
+    /* Sometimes we're calling this to update amount shown, so make sure we do so. */
+    $('#building_' + name + " > .building_amount").html(format_num(buildings[name].amount, false));
     if (amount == null) {
         amount = parseInt($("#buy_amount").val());
     }

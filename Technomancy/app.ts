@@ -898,12 +898,8 @@ function set_initial_state() {
             "on": true,
             "amount": 0,
             "base_cost": {
-                "iron": 20000,
-                "stone": 50000,
             },
             "price_ratio": {
-                "iron": 1.1,
-                "stone": 1.1,
             },
             "generation": {
                 "mithril": 0.1,
@@ -915,7 +911,7 @@ function set_initial_state() {
             },
             "free": 0,
             "flavor": "",
-        }, /* TODO: Make this possible to get. */
+        },
 
         "big_bank": {
             "on": true,
@@ -2339,8 +2335,8 @@ function update_total_upgrades(name: string) {
 function gen_building_tooltip(name: string) {
     let amount = parseInt($("#buy_amount").val());
     if (isNaN(amount)) { amount = 1; }
-
-    let gen_text: string = "Generates ";
+    let tooltip = "";
+    let gen_text: string = "";
     /* Add resource gen, update how much each one generates. */
     Object.keys(buildings[name].generation).forEach(function (key) {
         if (resources[key].value) { /* Add X per second for regular resources */
@@ -2349,12 +2345,18 @@ function gen_building_tooltip(name: string) {
             gen_text +=format_num(buildings[name].generation[key]) + " " + key.replace("_", " ") + ", "
         }
     });
+    if (gen_text) {
+        tooltip += "Generates " + gen_text.trim().replace(/.$/, ".") + "<br />";
+    }
 
     let mults = [];
     Object.keys(buildings[name].multipliers).forEach(function (key) {
         mults.push("" + format_num(buildings[name].multipliers[key] * 100) + "% bonus to " + key.replace(/\_/g, " "));
     });
     let mult_str = "<span style='color: goldenrod'>Gives a " + mults.join(", a ") + ".</span>";
+    if (mults.length) {
+        tooltip += mult_str + "<br />";
+    }
 
     let cost_text: string = "Costs ";
     Object.keys(buildings[name].base_cost).forEach(function (key) {
@@ -2373,18 +2375,21 @@ function gen_building_tooltip(name: string) {
         cost_text += format_num(cost, false) + " " + key.replace("_", " ") + "</span>, ";
     });
     if (cost_text == "Costs ") { cost_text = "Unbuyable,"; } /* Free buildings don't have a cost. */
+    tooltip += cost_text.trim().replace(/.$/, ".");
+
     let flavor_text: string = "<hr><i style='font-size: small'>" + buildings[name].flavor + "</i>";
     if (buildings[name].flavor == undefined || buildings[name].flavor == "") {
         flavor_text = "";
     }
-    let ret_text = gen_text.trim().replace(/.$/, ".") + "<br />";
-    if (mults.length) {
-        ret_text += mult_str + "<br />";
-    }
-    return ret_text + cost_text.trim().replace(/.$/, ".") + flavor_text;
+    tooltip += flavor_text;
+
+    return tooltip;
 }
 
 function purchase_building(name: string, amount = null) {
+    /* Sometimes we're calling this to update amount shown, so make sure we do so. */
+    $('#building_' + name + " > .building_amount").html(format_num(buildings[name].amount, false));
+
     if (amount == null) {
         amount = parseInt($("#buy_amount").val());
     }
@@ -2430,7 +2435,6 @@ function purchase_building(name: string, amount = null) {
     }
 
     $('#building_' + name + " > .building_amount").html(format_num(buildings[name].amount, false));
-
 }
 
 function destroy_building(name: string, amount = null) {
