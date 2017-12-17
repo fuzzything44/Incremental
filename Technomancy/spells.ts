@@ -270,9 +270,19 @@ let craftable_items = { /* What all they can craft and the specifications on it.
         "return": 1,
     },
     "dimension_shard": {
-        "time": 50000000,
+        "time": 5e20,
         "adventure_item": true,
         "costs": { },
+        "return": 1,
+    },
+    "const_shield": {
+        "time": 20 * 60000,
+        "adventure_item": true,
+        "costs": {
+            "mithril": 5000,
+            "steel_beam": 5000,
+            "iron": 250000,
+        },
         "return": 1,
     },
 };
@@ -318,6 +328,9 @@ function s_workshop_update(delta_time: number) {
     }
     if (isNaN(buildings["s_manastone"].amount) || buildings["s_manastone"].amount == Infinity) {
         $("#workshop_shard").removeClass("hidden");
+    }
+    if (resources["mithril"].amount > 1) {
+        $("#workshop_const_shield").removeClass("hidden");
     }
 
     /* Tick building */

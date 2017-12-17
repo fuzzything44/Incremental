@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.9.0: The Wanderer
+Minor CSS fix: You should now be able to easily highlight your purchased upgrades to easily share them. Fixed a bug with bags of holding not opening. New shield available for crafting: mithril plating (requires being an Inventor). Convolution cube now shouldn't do weird things with requiring sludge. 
+
 v3.8.0: The Wanderer
 You can forge Mithril now! Well, if you're an inventor. Also fixed a small tooltip bug. 
 

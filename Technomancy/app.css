@@ -2,10 +2,18 @@
     font-family: 'Segoe UI', sans-serif;
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
        -moz-user-select: none; /* Firefox */
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
+#purchased_upgrades {
+  -webkit-touch-callout: text; /* iOS Safari */
+    -webkit-user-select: text; /* Safari */
+       -moz-user-select: text; /* Firefox */
+        -ms-user-select: text; /* Internet Explorer/Edge */
+            user-select: text; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
 }
 
@@ -314,13 +322,6 @@ hr {
 #upgrade_count > .tooltiptext:hover {
              visibility: visible;
   -webkit-touch-callout: initial; /* iOS Safari */
-    -webkit-user-select: initial; /* Safari */
-     -khtml-user-select: initial; /* Konqueror HTML */
-       -moz-user-select: initial; /* Firefox */
-        -ms-user-select: initial; /* Internet Explorer/Edge */
-            user-select: initial; /* Non-prefixed version, currently
-                                  supported by Chrome and Opera */
-       
 }
 
 .clickable {

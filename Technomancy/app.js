@@ -1727,19 +1727,17 @@ var prestige = {
             set_initial_state();
             buildings["s_manastone"].amount = total_mana;
             adventure_data.current_location = "home"; /* You have to prestige at home. */
-            /* Open bags of holding */
-            for (var i = count_item("bag", adventure_data.inventory); i; i--) {
-                var bag_index = find_item("bag", adventure_data.inventory);
-                if (adventure_data.inventory[bag_index].resource != undefined) {
-                    resources[adventure_data.inventory[bag_index].resource].amount += adventure_data.inventory[bag_index].amount;
-                    adventure_data.inventory.splice(bag_index, 1);
+            /* Open bags of holding. Iterate backwards so we don't skip bags.  */
+            for (var i = adventure_data.inventory.length - 1; i >= 0; i--) {
+                if (adventure_data.inventory[i].name == "bag" && adventure_data.inventory[i].resource != undefined) {
+                    resources[adventure_data.inventory[i].resource].amount += adventure_data.inventory[i].amount;
+                    adventure_data.inventory.splice(i, 1);
                 }
             }
-            for (var i = count_item("bag", adventure_data.warehouse); i; i--) {
-                var bag_index = find_item("bag", adventure_data.warehouse);
-                if (adventure_data.warehouse[bag_index].resource != undefined) {
-                    resources[adventure_data.warehouse[bag_index].resource].amount += adventure_data.warehouse[bag_index].amount;
-                    adventure_data.warehouse.splice(bag_index, 1);
+            for (var i = adventure_data.warehouse.length - 1; i >= 0; i--) {
+                if (adventure_data.warehouse[i].name == "bag" && adventure_data.warehouse[i].resource != undefined) {
+                    resources[adventure_data.warehouse[i].resource].amount += adventure_data.warehouse[i].amount;
+                    adventure_data.warehouse.splice(i, 1);
                 }
             }
             save();

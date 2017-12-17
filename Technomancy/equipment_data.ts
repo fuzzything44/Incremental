@@ -51,6 +51,15 @@ let equipment = {
         type: "shield",
         name: "Basic Shields",
     },
+    "const_shield": {
+        on_combat: function (slot: string) {
+            player_data["max_shields"] += 3;
+            player_data["shields"] += 3;
+            player_data["power_shields"] += 1;
+        },
+        type: "shield",
+        name: "Mithril Plating",
+    },
 
     /* Weapons */
     "basic_weapon": {
@@ -496,7 +505,7 @@ let equipment = {
 
                     /* Make sure we can actually run the action. */
                     Object.keys(modification.resource_costs).forEach((res) => {
-                        if (modification.resource_costs[res] > resources[res].amount) {
+                        if (modification.resource_costs[res] > resources[res].amount && resources[res].value != 0) {
                             $("#events_content").prepend("The cube shakes slightly. (You need more " + res.replace("_", " ") + ")<br />");
                             throw "Not enough resources for cube.";
                         }
@@ -505,7 +514,9 @@ let equipment = {
                     /* Okay, time to run it! */
                     /* Pay resources */
                     Object.keys(modification.resource_costs).forEach((res) => {
-                        resources[res].amount -= modification.resource_costs[res];
+                        if (resources[res].value != 0) {
+                            resources[res].amount -= modification.resource_costs[res];
+                        }
                     });
                     /* Change color/shape/... state. These wrap around. */
                     /* We need this because javascript doesn't do negative modulo. */
