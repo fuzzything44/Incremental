@@ -540,7 +540,14 @@
     <div id="upgrades">
         <span id="reset" class="tooltip" onclick="if(confirm('Are you sure? This resets EVERYTHING!') && prompt('If you\'re absolutely sure, enter \'reset\'.') == 'reset') { localStorage.clear(); location.reload();}"><span>Reset</span><span class="tooltiptext fgc bgc_second">Resets ALL progress. There is NO bonus for this!</span></span>
         <span id="save" onclick="save();">Save</span>
-        <span id="prestige" onclick="prestige.run();" class="tooltip"><span>Prestige</span><span class="tooltiptext fgc bgc_second">Mana gains from prestige are based on how many resources you have and what kinds they are. <br /> Mana provides many different unique buildings!</span></span>
+        <span id="prestige" onclick="prestige.run();" class="tooltip">
+            <span>Prestige</span>
+            <span class="tooltiptext fgc bgc_second">
+                Mana gains from prestige are based on how many resources you have and what kinds they are. <br />
+                Mana provides many different unique buildings! <br />
+                <span id="prestige_suggest"></span>
+            </span>
+        </span>
         <span id="all_on" onclick="Object.keys(buildings).forEach(function (build) { if (!buildings[build].on && SPELL_BUILDINGS.indexOf(build) == -1) { toggle_building_state(build);}});">All&nbsp;On</span>
         <span id="all_off" onclick="Object.keys(buildings).forEach(function (build) { if (buildings[build].on && SPELL_BUILDINGS.indexOf(build) == -1) { toggle_building_state(build);}});">All&nbsp;Off</span>
         <div class="hidden">

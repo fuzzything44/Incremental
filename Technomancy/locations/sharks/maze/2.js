@@ -53,7 +53,7 @@
             }
         }),
     ],
-    "connects_to": ["sharks/maze/1", "sharks/maze/3", "sharks/maze/0"],
+    "connects_to": ["sharks/maze/1", "sharks/maze/3", "sharks/maze/exit", "sharks/maze/0"],
     "enter_cost": 0,
     "leave_cost": 1,
     "name": "Bright Cloud of Dust",

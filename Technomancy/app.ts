@@ -1878,6 +1878,15 @@ let prestige = {
         } else {
             $("#prestige > span").first().html("Prestige&nbsp;(" + format_num(prestige.percent_through(), false) + "%)")
         }
+
+        let suggested_amounts = [2, 5, 10, 27, 52, 92, 150, 200]; /* What mana amounts are good to prestige at. */
+
+        for (let i in suggested_amounts) {
+            if (suggested_amounts[i] > buildings["s_manastone"].amount) {
+                $("#prestige_suggest").html("Your next prestige goal is at " + format_num(suggested_amounts[i] - buildings["s_manastone"].amount, false) + " more mana.");
+                break;
+            }
+        }
     }
 }
 
@@ -2142,6 +2151,9 @@ function update() {
             /* They bought a boost! Use time on a percent base.*/
             if (purchased_upgrades.indexOf("time_use_boost") != -1) {
                 let amt = resources["time"].amount * 0.01;
+                if (amt > Math.pow(buildings["s_manastone"].amount, 2) * 0.01) {
+                    amt = Math.pow(buildings["s_manastone"].amount, 2) * 0.01;
+                }
                 delta_time += 1000 * amt;
                 resources["time"].amount -= amt;
             }

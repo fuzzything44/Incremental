@@ -50,7 +50,7 @@
             }
         }),
     ],
-    "connects_to": ["sharks/maze/1", "sharks/maze/3", "sharks/maze/2", "kittens/piscine"],
+    "connects_to": ["sharks/maze/1", "sharks/maze/3", "sharks/maze/2", "sharks/maze/exit", "kittens/piscine"],
     "enter_cost": 0,
     "leave_cost": 1,
     "name": "Dark Cloud of Dust",

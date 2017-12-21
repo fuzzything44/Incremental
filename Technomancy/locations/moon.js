@@ -35,7 +35,7 @@
         }),
         ({
             "condition": function () { return true; },
-            "types": ["combat"],
+            "types": ["noncombat"],
             "weight": 1,
             "title": "Hydrogen mining",
             "run_encounter": function () {

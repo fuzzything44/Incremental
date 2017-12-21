@@ -827,21 +827,22 @@ function setup_events() {
                     event_flags["sludge_level"] += sludge_increase + 1;
                     event_flags["sludge_level"] = Math.floor(event_flags["sludge_level"] * 0.95); /* Natural sludge reduction. */
                 }
-                /* Reset if crisis fixed */
-                if (event_flags["crisis_averted"]) {
-                    event_flags["sludge_level"] = -1;
-                }
-                /* Calc new */
-                var s = event_flags["sludge_level"] / 100;
-                var new_division_1 = 1 + (s * (s + 1) / 2) / 10;
-                /* Set visible sludge. */
-                resources_per_sec["sludge"] = event_flags["sludge_level"];
-                /* Implement division factors. */
-                Object.keys(resources).forEach(function (res) {
-                    resources[res].mult *= prev_division / new_division_1;
-                });
-                prev_division = new_division_1;
             }
+            /* Recalculation of sludge is done here in case they save and load while in the slow stages. It makes sure it reappears. */
+            /* Reset if crisis fixed */
+            if (event_flags["crisis_averted"]) {
+                event_flags["sludge_level"] = -1;
+            }
+            /* Calc new division level */
+            var s = event_flags["sludge_level"] / 100;
+            var new_division_1 = 1 + (s * (s + 1) / 2) / 10;
+            /* Set visible sludge. */
+            resources_per_sec["sludge"] = event_flags["sludge_level"];
+            /* Implement division factors. */
+            Object.keys(resources).forEach(function (res) {
+                resources[res].mult *= prev_division / new_division_1;
+            });
+            prev_division = new_division_1;
         }
     }, 1000);
     /* Potions */
