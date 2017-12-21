@@ -1,6 +1,6 @@
 ﻿Technomancy Changelog
 
-v3.9.0: The Wanderer
+v3.9.1: The Wanderer
 All clouds of dust now lead to the Small Cloud. Added a suggested prestige amount. Getting sludge should work better if you refresh. 
 
 v3.9.0: The Wanderer
