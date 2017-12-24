@@ -15,7 +15,7 @@
                 $("#events_content").append("Only machines will remain. All will be lost.<br/><br/>");
                 $("#events_content").append("There is nothing you can do. Only watch.<br/>");
                 if (resources_per_sec["mana"] >= 50 && adventure_data["rules_unlocked"] == undefined) {
-                    $("#events_content").append("<span class='clickable'>Watch</span> the machines.<i>This will destroy some of your mana stones. Click with care. </i><br/>");
+                    $("#events_content").append("<span class='clickable'>Watch</span> the machines. <i>This will destroy some of your mana stones. Click with care. </i><br/>");
                     $("#events_content span").last().click(function () {
                         /* Remove mana. */
                         resources_per_sec["mana"] -= 50;
@@ -28,6 +28,24 @@
                         $("#events_content").html("The machines continue their functions, even as the tar in the ocean grows and obscures them from your view and clogs your engine.");
                         adventure_data["ship"].engine = null;
                         update_inventory();
+                    });
+                }
+                if (resources_per_sec["mana"] > 50 && adventure_data["rules_unlocked"] != undefined && adventure_data["auto_events"] == undefined) {
+                    $("#events_content").append("<span class='clickable'>Watch</span> the machines. <i>This will destroy more of your mana stones. Click with care. </i><br/>");
+                    $("#events_content span").last().click(function () {
+                        /* Remove mana. */
+                        resources_per_sec["mana"] -= 50;
+                        buildings["s_manastone"].amount -= 50;
+                        /* Redraw manastone amount. */
+                        $("#building_s_manastone > .building_amount").html(format_num(buildings["s_manastone"].amount, false));
+                        /* And unlock production control...*/
+                        adventure_data["auto_events"] = true;
+                        $("#pc_box").parent().removeClass("hidden");
+                        $("#events_content").html("The machines continue their functions, even as the tar in the ocean grows and obscures them from your view and rusts your shields.<br />");
+                        $("#events_content").append("<i>Note: you have unlocked event automation. Set the option number to 0 to instantly close an event. Otherwise, if an event matches it will close after 1 second.</i>");
+                        adventure_data["ship"].shields = null;
+                        update_inventory();
+                        setup_rules();
                     });
                 }
             }

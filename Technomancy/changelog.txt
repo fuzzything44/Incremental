@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.10.0: Event Automation
+Added event automation. There's an upgrade that lets you get free points from logic puzzles. Your affililiation with demons is shown. Logikittens are logged. 
+
 v3.9.1: The Wanderer
 All clouds of dust now lead to the Small Cloud. Added a suggested prestige amount. Getting sludge should work better if you refresh. 
 

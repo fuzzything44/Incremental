@@ -153,6 +153,7 @@ var events = [
             if (typeof event_flags["demon_trades"] == "undefined") {
                 event_flags["demon_trades"] = 0;
             }
+            $("#events_topbar").append(" " + format_num(event_flags["demon_trades"]));
             events[6].rejection = Math.min(50 - event_flags["demon_trades"] * 5, 80); /* The more trades you make, the more likely this is. */
             var content = "<span>Demon Traders have come to visit you.</span><br>";
             if (event_flags["demon_trades"] >= 10) {
@@ -442,6 +443,7 @@ var events = [
             /* I guess re-find solutions, shouldn't be a huge hit seeing as we've done it a few times. */
             var sols = find_solutions(all_statements)[0];
             /* Now to actually add it. */
+            add_log_elem("A weird kitten showed up.");
             var content = "You found a cute kitty... wait, what's it saying?<br /><form id='logicat'><table>";
             for (var i = 0; i < all_statements.length; i++) {
                 content += "<tr><td></td><th align='right'>" + num_to_name(i) + ":&nbsp;</td><td align='left'>" + all_statements[i].toString() + "</td></tr>";
@@ -493,6 +495,9 @@ var events = [
                     }
                     check_val++;
                 });
+                if (purchased_upgrades.indexOf("better_logic") != -1) {
+                    num_correct++;
+                }
                 $("#events_content").append("You had " + num_correct.toString() + " correct answers and " + num_incorrect.toString() + " wrong answers. Your total score is " + (num_correct - num_incorrect).toString() + ".<br />");
                 var total_points = adventure_data["logicat_points"] + num_correct - num_incorrect;
                 /* Level up every 5 points */
@@ -534,6 +539,13 @@ var events = [
                                     }
                                 }];
                         }
+                        else if (adventure_data["logicat_level"] >= 20 && adventure_data["logicat_points"] == undefined) {
+                            reward_list = [{
+                                    "name": "The DoRD has provided: Panther Rush", "effect": function () {
+                                        adventure_data["logicat_points"] = 1;
+                                    }
+                                }];
+                        }
                         else if (adventure_data["logicat_level"] >= 100 && !count_item("conv_cube", adventure_data.warehouse)) {
                             reward_list = [{
                                     "name": "Question Qube", "effect": function () {
@@ -550,7 +562,7 @@ var events = [
                 /* Set their point amount. */
                 adventure_data["logicat_points"] = total_points;
                 /* Perfect answer increases resource production for 3 minutes.*/
-                if (num_correct == sols.length && !_this.perfect_cat) {
+                if (num_correct >= sols.length && !_this.perfect_cat) {
                     _this.perfect_cat = true;
                     Object.keys(resources_per_sec).forEach(function (res) {
                         /* Don't double negatives. */
@@ -647,6 +659,7 @@ function force_event(id) {
         $("#events").removeClass("hidden");
     }
 }
+var erule_timeout = null;
 function handle_event(set_timer) {
     if (set_timer === void 0) { set_timer = true; }
     /* Reset our handle_event timeout */
@@ -683,12 +696,32 @@ function handle_event(set_timer) {
         while (chosen_event.rejection > Math.random() * 100) {
             chosen_event = valid_events_1[Math.floor(Math.random() * valid_events_1.length)];
         }
+        /* Before running, remove any AutoEvent timeout */
+        if (erule_timeout != null) {
+            clearTimeout(erule_timeout);
+            erule_timeout = null;
+        }
         /* Set name */
         $("#events_topbar").html(chosen_event.name);
         /* Run event function */
         chosen_event.run_event();
         /* Only show our event box when we're done */
         $("#events").removeClass("hidden");
+        /* Check regex matches */
+        erules.forEach(function (rule) {
+            if ($("#events_topbar").text().match(rule[0])) {
+                if (rule[1] == "0") {
+                    $("#events").addClass("hidden");
+                }
+                else {
+                    erule_timeout = setTimeout(function () { return $("#events").addClass("hidden"); }, 1000);
+                }
+                if ($("#events span.clickable").length >= parseInt(rule[1])) {
+                    $("#events span.clickable")[parseInt(rule[1]) - 1].click();
+                }
+                throw "Finished event, we're done here.";
+            }
+        });
     }
 }
 /* Continuous events */

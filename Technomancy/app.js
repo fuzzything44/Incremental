@@ -1663,6 +1663,23 @@ function set_initial_state() {
             "image": "",
             "repeats": false,
         },
+        "better_logic": {
+            "unlock": function () {
+                if (adventure_data["logicat_level"] >= 20) {
+                    this.cost = {};
+                    return true;
+                }
+                return adventure_data["logicat_points"] <= -20;
+            },
+            "purchase": function () { },
+            "cost": {
+                "fuel": 100,
+            },
+            "tooltip": "Logicats give 1 free answer.",
+            "name": "Logic Boost",
+            "image": "",
+            "repeats": false,
+        },
         "trade": {
             "unlock": function () { return false; },
             "purchase": function () { },
@@ -1779,6 +1796,7 @@ function save() {
     localStorage["adventure"] = JSON.stringify(adventure_data);
     localStorage["groupings"] = JSON.stringify(groupings);
     localStorage["rules"] = JSON.stringify(rules);
+    localStorage["erules"] = JSON.stringify(erules);
     $('#save_text').css('opacity', '1');
     setTimeout(function () { return $('#save_text').css({ 'opacity': '0', 'transition': 'opacity 1s' }); }, 1000);
     console.log("Saved");
@@ -1841,6 +1859,10 @@ function load() {
         if (adventure_data["rules_unlocked"]) {
             $("#pc_box").parent().removeClass("hidden");
         }
+    }
+    console.log("Loading erules");
+    if (localStorage.getItem("erules")) {
+        erules = JSON.parse(localStorage.getItem("erules"));
     }
     console.log("Loading theme");
     if (!localStorage.getItem("theme")) {
@@ -2002,6 +2024,16 @@ function update() {
     last_update = Date.now();
     if (delta_time > 15000) {
         resources["time"].amount += delta_time / 1000; /* 1 sec of production, rest goes to time. */
+        /* This is where offline events go. We say we get 1 every 30 minutes. */
+        if (false) {
+            /* Cap at 20 events.*/
+            var num_events = Math.min(20, Math.round(delta_time / (60000 * 30)));
+            /* while num_events goes to 0. */
+            while (num_events-- > 0) {
+                $("#events").addClass("hidden"); /* Hide it for next event. */
+                handle_event(false); /* Run an event. */
+            }
+        }
         return;
     }
     if (time_on) {
@@ -2547,6 +2579,14 @@ var rules = {};
 function setup_rules() {
     /* Clear group name box*/
     $("#rule_names").html("<table></table>");
+    if (adventure_data["auto_events"] != undefined) {
+        $("#rule_names > table").append("<tr></tr>");
+        $("#rule_names tr").last().append("<td style='overflow: auto; max-width: 5em;'>AutoEvent</td>");
+        $("#rule_names tr").last().append("<td><span class='clickable'>Edit</span></td>");
+        $("#rule_names span").last().click(function () {
+            draw_erule();
+        });
+    }
     Object.keys(rules).forEach(function (rule) {
         $("#rule_names > table").append("<tr></tr>");
         $("#rule_names tr").last().append("<td style='overflow: auto; max-width: 5em;'>" + rule + "</td>");
@@ -2651,6 +2691,29 @@ function draw_rule(name) {
     $("#rule_amt").val(rules[name]["res_amt"]);
     $("#fail_group_select").val(rules[name]["fail_group"]);
     $("#fail_on_off").val(rules[name]["fail_on_off"]);
+}
+var erules = [];
+function draw_erule() {
+    $("#rule_data").html("Note: Titles are matched using <a href='https://www.regular-expressions.info/tutorial.html' target='_blank' class='fgc'>regular expressions.</a><br />");
+    var i = 0;
+    erules.forEach(function (rule) {
+        var index = i;
+        $("#rule_data").append("<span id='rule_" + i.toString() + "'>Events with title <input type='text' class='fgc bgc_second'></input> will choose option number <input type='number' class='fgc bgc_second'></input></span><br />");
+        $("#rule_data #rule_" + i.toString() + " input").first().change(function (e) {
+            rule[0] = $(this).val();
+        });
+        $("#rule_data #rule_" + i.toString() + " input").first().val(rule[0]);
+        $("#rule_data #rule_" + i.toString() + " input").last().change(function (e) {
+            rule[1] = $(this).val();
+        });
+        $("#rule_data #rule_" + i.toString() + " input").last().val(rule[1]);
+        i++;
+    });
+    $("#rule_data").append("<span class='clickable'>+</span>");
+    $("#rule_data span").last().click(function () {
+        erules.push(["", ""]);
+        draw_erule();
+    });
 }
 function run_rules() {
     Object.keys(rules).forEach(function (rname) {
