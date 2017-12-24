@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.11.0: Merry Christmas!
+Added a giant drill. You can now open your present. Demons now come for you slightly earlier and it shows how much in debt you are there. The logikitten boost for more points now unlocks correctly. Changed a small interaction involving perfect logikittens. Merry Christmas!
+
 v3.10.0: Event Automation
 Added event automation. There's an upgrade that lets you get free points from logic puzzles. Your affililiation with demons is shown. Logikittens are logged. 
 

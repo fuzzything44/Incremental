@@ -806,14 +806,11 @@ var equipment = {
             if (data.open) {
                 switch (data.year) {
                     case "2017": {
-                        self.name = "Cheater.";
-                        //self.name = "Spaceship Figurine (2017)";
+                        self.name = "Spaceship Figurine (2017)";
                         self.use = function (index, location) {
-                            $("#events_content").html("Hey! How did you open this?<br />");
-                            //$("#events_content").html("You admire your figurine. It's pretty cool. <br />");
+                            $("#events_content").html("You admire your figurine. It's pretty cool. <br />");
                             if (!presents_used["2017"]) {
-                                Object.keys(resources).forEach(function (res) { return resources[res].mult = 0; });
-                                //resources["fuel"].mult *= 1.1;
+                                resources["fuel"].mult *= 1.1;
                                 presents_used["2017"] = true;
                             }
                             else {
@@ -829,10 +826,8 @@ var equipment = {
                 self.use = function (index, location) {
                     switch (data.year) {
                         case "2017": {
-                            $("#events_content").html("Wait until Christmas to open your present.");
-                            //$("#events_content").html("You tear open the bright red present. Inside, there's a small figurine of your spaceship.");
-                            //break;
-                            return 1;
+                            $("#events_content").html("You tear open the bright red present. Inside, there's a small figurine of your spaceship.");
+                            break;
                         }
                     }
                     data.open = true;

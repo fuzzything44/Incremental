@@ -192,8 +192,9 @@ var events = [
         "rejection": 50,
     }),
     ({
-        "condition": function () { return typeof event_flags["demon_trades"] != "undefined" && event_flags["demon_trades"] > 10; },
+        "condition": function () { return event_flags["demon_trades"] >= 10; },
         "run_event": function () {
+            $("#events_topbar").append(" " + format_num(event_flags["demon_trades"]));
             var content = "<span>Demon Traders have come for you.</span><br>";
             /* Choose a resource */
             var chosen_resource = Object.keys(resources)[Math.floor(Math.random() * Object.keys(resources).length)];
@@ -216,7 +217,7 @@ var events = [
                 content += "<span style='color: red'>You are still in debt.</span>";
             }
             resources[chosen_resource].amount -= resource_loss;
-            add_log_elem("Demons came for your " + chosen_resource.replace("_", " ") + ".");
+            add_log_elem("Demons came for your " + chosen_resource.replace(/_/g, " ") + ".");
             $("#events_content").html(content);
         },
         "name": "Demonic Pact",
@@ -539,10 +540,10 @@ var events = [
                                     }
                                 }];
                         }
-                        else if (adventure_data["logicat_level"] >= 20 && adventure_data["logicat_points"] == undefined) {
+                        else if (adventure_data["logicat_level"] >= 20 && adventure_data["logicat_rush"] == undefined && purchased_upgrades.indexOf("better_logic") != -1) {
                             reward_list = [{
                                     "name": "The DoRD has provided: Panther Rush", "effect": function () {
-                                        adventure_data["logicat_points"] = 1;
+                                        adventure_data["logicat_rush"] = 1;
                                     }
                                 }];
                         }
@@ -573,10 +574,11 @@ var events = [
                         resources_per_sec[res] += ps_add;
                         setTimeout(function () { return resources_per_sec[res] -= ps_add; }, 60000 * 3);
                     });
-                    setTimeout(function () { _this.perfect_cat = false, 60000 * 3; add_log_elem("Logikitten bonus wore off."); buildings["logging"].tooltip = "console.log('Logikitten super mode engaged')"; });
+                    setTimeout(function () { _this.perfect_cat = false, 60000 * 3; add_log_elem("Logikitten bonus wore off."); });
                     $("#events_content").append("Perfect answer! Production increased.<br />");
                     if (buildings["s_goldboost"].on) {
                         buildings["logging"].tooltip = "�������";
+                        setTimeout(function () { return buildings["logging"].tooltip = "console.log('Logikitten super mode engaged')"; });
                     }
                 }
             });
@@ -640,7 +642,7 @@ var events = [
         "rejection": 80,
     }),
 ];
-/* Literally only for testing purposes. */
+/* Literally only for testing purposes. And logikittens I guess. */
 function force_event(id) {
     /* Only start a new event if the old one finished. */
     if ($("#events").hasClass("hidden")) {

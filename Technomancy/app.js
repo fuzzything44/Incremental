@@ -74,7 +74,8 @@ var UNLOCK_TREE = {
     "fuel_maker": [],
     "magnet": ["steel_smelter"],
     "steel_smelter": [],
-    "mithril_smelter": [],
+    "mithril_smelter": ["drill"],
+    "drill": [],
     "big_bank": ["big_mine"],
     "big_mine": [],
     "hydrogen_mine": [],
@@ -818,13 +819,39 @@ function set_initial_state() {
             "base_cost": {},
             "price_ratio": {},
             "generation": {
-                "mithril": 0.1,
                 "gold": -5,
                 "refined_mana": -25,
+                "mithril": 0.1,
             },
             "multipliers": {},
             "free": 0,
             "flavor": "",
+        },
+        "drill": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {
+                "mithril": 50,
+                "diamond": 10,
+                "steel_beam": 100,
+            },
+            "price_ratio": {
+                "mithril": 1.11,
+                "diamond": 1.13,
+                "steel_beam": 1.05,
+            },
+            "generation": {
+                "water": -5,
+                "energy": -5,
+                "stone": 20,
+                "diamond": 0.1,
+                "iron_ore": 1,
+            },
+            "multipliers": {
+                "iron_ore": 0.05
+            },
+            "free": 0,
+            "flavor": "A massive, water-cooled drill to recover materials from the center of the earth. It's pretty bore-ing.",
         },
         "big_bank": {
             "on": true,

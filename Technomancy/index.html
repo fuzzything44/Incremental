@@ -501,6 +501,15 @@
             </span>
             <span id="toggle_mithril_smelter" class="building_state_on" onclick="toggle_building_state('mithril_smelter')">On</span>
         </div>
+        <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('drill')" class="building_remove">X</span>
+            <span id="building_drill" class="building tooltip" onclick="purchase_building('drill');">
+                <span class="building_name">Giant Drill</span>
+                <span class="building_amount">0</span>
+                <span class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()"></span>
+            </span>
+            <span id="toggle_drill" class="building_state_on" onclick="toggle_building_state('drill')">On</span>
+        </div>
         <br />
 
         <!-- Managed Buildings -->
