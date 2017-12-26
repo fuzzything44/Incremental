@@ -73,6 +73,7 @@ var UNLOCK_TREE = {
     "hydrogen_gen": [],
     "fuel_maker": [],
     "magnet": ["steel_smelter"],
+    "book_boost": [],
     "steel_smelter": [],
     "mithril_smelter": ["drill"],
     "drill": [],
@@ -793,6 +794,21 @@ function set_initial_state() {
             "free": 0,
             "flavor": "It's just a big magnet.",
         },
+        "book_boost": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {},
+            "price_ratio": {},
+            "generation": {
+                "energy": -1,
+                "book": -0.1,
+            },
+            "multipliers": {
+                "book": 0.15
+            },
+            "free": 0,
+            "flavor": "",
+        },
         "steel_smelter": {
             "on": true,
             "amount": 0,
@@ -805,9 +821,10 @@ function set_initial_state() {
                 "stone": 1.1,
             },
             "generation": {
-                "steel_beam": 1,
+                "manager": -1,
                 "iron": -25,
                 "coal": -25,
+                "steel_beam": 1,
             },
             "multipliers": {},
             "free": 0,
@@ -819,6 +836,7 @@ function set_initial_state() {
             "base_cost": {},
             "price_ratio": {},
             "generation": {
+                "manager": -1,
                 "gold": -5,
                 "refined_mana": -25,
                 "mithril": 0.1,
@@ -1696,14 +1714,33 @@ function set_initial_state() {
                     this.cost = {};
                     return true;
                 }
-                return adventure_data["logicat_points"] <= -20;
+                return adventure_data["logicat_rush"] != undefined;
             },
             "purchase": function () { },
             "cost": {
                 "fuel": 100,
             },
             "tooltip": "Logicats give 1 free answer.",
-            "name": "Logic Boost",
+            "name": "Panther Rush",
+            "image": "",
+            "repeats": false,
+        },
+        "cheaper_skyscraper": {
+            "unlock": function () { return buildings["steel_smelter"].amount >= 1; },
+            "purchase": function () {
+                buildings["skyscraper"].price_ratio = {
+                    "money": 1.05,
+                    "steel_beam": 1.05,
+                    "glass": 1.05,
+                };
+            },
+            "cost": {
+                "iron": 100000,
+                "steel_beam": 5000,
+                "diamond": 10000,
+            },
+            "tooltip": "Skyscrapers are cheaper to buy.",
+            "name": "Stronger Alloys<br />",
             "image": "",
             "repeats": false,
         },

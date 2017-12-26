@@ -564,7 +564,7 @@ let events = [
                                     adventure_data["logicat_explore"] = 1;
                                 }
                             }];
-                        } else if (adventure_data["logicat_level"] >= 20 && adventure_data["logicat_rush"] == undefined && purchased_upgrades.indexOf("better_logic") != -1) {
+                        } else if (adventure_data["logicat_level"] >= 20 && adventure_data["logicat_rush"] == undefined && purchased_upgrades.indexOf("better_logic") == -1) {
                             reward_list = [{
                                 "name": "The DoRD has provided: Panther Rush", "effect": function () {
                                     adventure_data["logicat_rush"] = 1;

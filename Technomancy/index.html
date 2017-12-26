@@ -484,6 +484,15 @@
             <span id="toggle_magnet" class="building_state_on" onclick="toggle_building_state('magnet')">On</span>
         </div>
         <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('book_boost')" class="building_remove">X</span>
+            <span id="building_book_boost" class="building tooltip" onclick="purchase_building('book_boost');">
+                <span class="building_name">Book Recycler</span>
+                <span class="building_amount">0</span>
+                <span class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()"></span>
+            </span>
+            <span id="toggle_book_boost" class="building_state_on" onclick="toggle_building_state('book_boost')">On</span>
+        </div>
+        <div style="position: relative" class="hidden">
             <span onclick="destroy_building('steel_smelter')" class="building_remove">X</span>
             <span id="building_steel_smelter" class="building tooltip" onclick="purchase_building('steel_smelter');">
                 <span class="building_name">Steel Foundry</span>

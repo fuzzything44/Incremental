@@ -151,10 +151,10 @@
                             $("#events_content span").last().click(function () {
                                 buildings["library"].free = buildings["library"].amount;
                                 event_flags["know_pts"]--;
-                                buildings["library"].price_ratio["iron"] *= 1.05;
-                                buildings["library"].price_ratio["wood"] *= 1.05;
-                                buildings["library"].price_ratio["book"] *= 1.05;
-                                buildings["library"].price_ratio["money"] *= 1.05;
+                                buildings["library"].price_ratio["iron"] += .025;
+                                buildings["library"].price_ratio["wood"] += .025;
+                                buildings["library"].price_ratio["book"] += .025;
+                                buildings["library"].price_ratio["money"] += .025;
                                 study();
                             });
                         }
@@ -211,6 +211,28 @@
                                     $("#events_content").prepend("No machine part found. Check your warehouse.<br />");
                                 }
                             }); /* End building magnet. */
+                            $("#events_content").append("<span class='clickable'>Make</span> a Book Recycler (Costs 1 KP)<br />");
+                            $("#events_content > span").last().click(function () {
+                                if (event_flags["know_pts"]) {
+                                    var build_state = buildings["book_boost"].on;
+                                    if (build_state) {
+                                        toggle_building_state("book_boost");
+                                    }
+                                    /* Give a free magnet. */
+                                    buildings["book_boost"].amount++;
+                                    if (build_state) {
+                                        toggle_building_state("book_boost");
+                                    }
+                                    /* Spend costs. */
+                                    event_flags["know_pts"]--;
+                                    /* Redraw. */
+                                    study();
+                                    purchase_building("book_boost", 0);
+                                }
+                                else {
+                                    $("#events_content").prepend("Not enough Knowledge Points. Build more libraries.<br />");
+                                }
+                            }); /* End building books. */
                             if (buildings["steel_smelter"].amount > 1) {
                                 $("#events_content").append("<span class='clickable'>Upgrade</span> a Steel Foundry (Costs 1 KP)<br />");
                                 $("#events_content > span").last().click(function () {
@@ -238,9 +260,9 @@
                                             /* Spend knowledge point. */
                                             event_flags["know_pts"]--;
                                             /* Redraw amounts. */
+                                            study();
                                             purchase_building("steel_smelter", 0);
                                             purchase_building("mithril_smelter", 0);
-                                            study();
                                         }
                                         else {
                                             $("#events_content").prepend("Not enough Knowledge Points. Build more libraries.<br />");

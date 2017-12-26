@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.12.0:
+Made the increased scaling cost of libraries lower. Added a book recycler. Fixed a bug with Mithril Forges not updating KP left. It is past Christmas so you can't get a gift anymore. Steel and Mithril machines now take managers to run (starting from your next prestige). However, there's an upgrade to make Skyscrapers cheaper. Fixed a bug with Panther Rush. 
+
 v3.11.0: Merry Christmas!
 Added a giant drill. You can now open your present. Demons now come for you slightly earlier and it shows how much in debt you are there. The logikitten boost for more points now unlocks correctly. Changed a small interaction involving perfect logikittens. Merry Christmas!
 

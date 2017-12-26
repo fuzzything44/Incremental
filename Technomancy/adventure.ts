@@ -52,12 +52,12 @@ function start_adventure() {
         $("#events_content").append("<span class='clickable' onclick='travel(\"home\");'>Go Home (0)</span>")
     }
 
-    /* Give Christmas present. */
-    if (adventure_data["last_gift"] == undefined || adventure_data["last_gift"] < 2017) {
+    /* Give Christmas present. 
+    if (adventure_data["last_gift"] == undefined || adventure_data["last_gift"] < 2018) {
         $("#events_content").append("<br /><br />Merry Christmas!<br />A small gift has been added to your warehouse!");
-        adventure_data.warehouse.push({ name: "present", year: "2017", open: false });
-        adventure_data["last_gift"] = 2017;
-    }
+        adventure_data.warehouse.push({ name: "present", year: "2018", open: false });
+        adventure_data["last_gift"] = 2018;
+    } */
 }
 
 function get_location(where: string) {
