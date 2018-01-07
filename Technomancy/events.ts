@@ -230,7 +230,7 @@ let events = [
         "rejection": 0,
     }), /* End demon stealing */
     ({
-        "condition": function () { return typeof event_flags["bribed_politician"] == "undefined" && buildings["big_bank"].amount >= 5 && purchased_upgrades.indexOf("coal_mines") != -1 && buildings["s_manastone"].amount >= 150; },
+        "condition": function () { return typeof event_flags["bribed_politician"] == "undefined" && buildings["big_bank"].amount >= 5 && buildings["s_manastone"].amount >= 150; },
         "run_event": function () {
             let content = "<span>Business isn't doing well. Regulations are really holding you back.</span><br>";
             if (buildings["bank"].amount >= 180) {
@@ -624,11 +624,11 @@ let events = [
         "rejection": 75,
     }), /* End carrot */
     ({
-        "condition": function () { return adventure_data["rules_unlocked"] && event_flags["crisis_averted"] && event_flags["wanderer_knowledge"] == undefined; },
+        "condition": function () { return event_flags["crisis_averted"] && event_flags["wanderer_knowledge"] == undefined; },
         "run_event": function () {
             $("#events_content").html("<span>A mysterious traveler has arrived.</span><br>");
             if (buildings["library"].amount > 50) {
-                $("#events_content").append("<span>" + (Math.random() > 0 ? "She" : "He") + " is willing to teach you secrets. </span><br />");
+                $("#events_content").append("<span>" + (Math.random() > 0.5 ? "She" : "He") + " is willing to teach you secrets. </span><br />");
                 $("#events_content").append("<i>This destroys 50 libraries (cost DOES NOT RESET) and is available once per prestige. Choose wisely.</i><br /><br />");
 
                 /* Magic! */
@@ -1003,7 +1003,9 @@ function bribe_environment() {
     if (build_state) {
         toggle_building_state("mine");
     }
-    buildings["mine"].generation["coal"] *= 10;
+    if (purchased_upgrades.indexOf("coal_mines") != -1) {
+        buildings["mine"].generation["coal"] *= 10;
+    }
     buildings["mine"].generation["stone"] *= 10;
     buildings["mine"].generation["iron_ore"] *= 10;
     if (build_state) { /* Only turn on if it already was on */

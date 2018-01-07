@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.13.0: QoL Update
+Fixed small issue with last resource having a border when it wasn't needed. Resources now have a tooltip showing what's modifying them. Note that some sources won't be tracked (and there might be some bugs with it), so please report those as bugs if you find any. Water collector tooltip says exactly how much mana you need. You can bribe politicians without having coal mining (but you should get coal mining first anyways). Added a weird new upgrade and a way to undo it. Wanderer can show up without you doing any adventure mode stuff. Wanderer can be male or female.
+
 v3.12.0:
 Made the increased scaling cost of libraries lower. Added a book recycler. Fixed a bug with Mithril Forges not updating KP left. It is past Christmas so you can't get a gift anymore. Steel and Mithril machines now take managers to run (starting from your next prestige). However, there's an upgrade to make Skyscrapers cheaper. Fixed a bug with Panther Rush. 
 

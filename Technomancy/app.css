@@ -75,13 +75,26 @@ label + input[type=radio] + label {
     left: 1em;
 }
 
-#resource_bar > * {
+#resource_bar > *:not(:last-child) {
     border-bottom: solid 1px;
 }
 
 .res_gen {
     float: right;
 }
+
+.change_track {
+    min-width: 10em;
+}
+
+.change_track tr:not(:last-child) td {
+    border-bottom: 1px dashed;
+}
+
+.change_track td {
+    padding-right: 20%;
+}
+
 #buildings {
     position: absolute;
     top: 1.5em;

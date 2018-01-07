@@ -103,36 +103,36 @@ function set_initial_state() {
             changes: List of [string, value] elements. Tracks what's modifying the /s gain to be displayed later. TODO: Actually do stuff with this.
     */
     resources = {
-        "time": { "amount": 0, "value": -2, "mult": 1, "changes": [] },
-        "refined_mana": { "amount": 0, "value": -1, "mult": 1, "changes": [] },
-        "fuel": { "amount": 0, "value": -1000, "mult": 1, "changes": [] },
-        "mana": { "amount": 0, "value": 0, "mult": 1, "changes": [] },
-        "energy": { "amount": 0, "value": 0, "mult": 1, "changes": [] },
-        "research": { "amount": 0, "value": 0, "mult": 1, "changes": [] },
-        "manager": { "amount": 0, "value": 0, "mult": 1, "changes": [] },
-        "sludge": { "amount": 0, "value": 0, "mult": 1, "changes": [] },
-        "money": { "amount": 10, "value": 1, "mult": 1, "changes": [] },
-        "stone": { "amount": 0, "value": 0.5, "mult": 1, "changes": [] },
-        "wood": { "amount": 0, "value": 0.5, "mult": 1, "changes": [] },
-        "iron_ore": { "amount": 0, "value": 1, "mult": 1, "changes": [] },
-        "coal": { "amount": 0, "value": 1, "mult": 1, "changes": [] },
-        "iron": { "amount": 0, "value": 4, "mult": 1, "changes": [] },
-        "gold": { "amount": 0, "value": 50, "mult": 1, "changes": [] },
-        "diamond": { "amount": 0, "value": 75, "mult": 1, "changes": [] },
-        "jewelry": { "amount": 0, "value": 300, "mult": 1, "changes": [] },
-        "oil": { "amount": 0, "value": 2, "mult": 1, "changes": [] },
-        "paper": { "amount": 0, "value": 4, "mult": 1, "changes": [] },
-        "ink": { "amount": 0, "value": 10, "mult": 1, "changes": [] },
-        "book": { "amount": 0, "value": 400, "mult": 1, "changes": [] },
-        "sand": { "amount": 0, "value": 3, "mult": 1, "changes": [] },
-        "glass": { "amount": 0, "value": 20, "mult": 1, "changes": [] },
-        "water": { "amount": 0, "value": 2, "mult": 1, "changes": [] },
-        "hydrogen": { "amount": 0, "value": 5, "mult": 1, "changes": [] },
-        "steel_beam": { "amount": 0, "value": 200, "mult": 1, "changes": [] },
-        "uranium": { "amount": 0, "value": 500, "mult": 1, "changes": [] },
-        "sandcastle": { "amount": 0, "value": 10000000, "mult": 1, "changes": [] },
-        "glass_bottle": { "amount": 0, "value": 25000, "mult": 1, "changes": [] },
-        "mithril": { "amount": 0, "value": 3500, "mult": 1, "changes": [] },
+        "time": { "amount": 0, "value": -2, "mult": 1, "changes": {}, "ps_change": "" },
+        "refined_mana": { "amount": 0, "value": -1, "mult": 1, "changes": {}, "ps_change": "" },
+        "fuel": { "amount": 0, "value": -1000, "mult": 1, "changes": {}, "ps_change": "" },
+        "mana": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
+        "energy": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
+        "research": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
+        "manager": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
+        "sludge": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
+        "money": { "amount": 10, "value": 1, "mult": 1, "changes": {}, "ps_change": "" },
+        "stone": { "amount": 0, "value": 0.5, "mult": 1, "changes": {}, "ps_change": "" },
+        "wood": { "amount": 0, "value": 0.5, "mult": 1, "changes": {}, "ps_change": "" },
+        "iron_ore": { "amount": 0, "value": 1, "mult": 1, "changes": {}, "ps_change": "" },
+        "coal": { "amount": 0, "value": 1, "mult": 1, "changes": {}, "ps_change": "" },
+        "iron": { "amount": 0, "value": 4, "mult": 1, "changes": {}, "ps_change": "" },
+        "gold": { "amount": 0, "value": 50, "mult": 1, "changes": {}, "ps_change": "" },
+        "diamond": { "amount": 0, "value": 75, "mult": 1, "changes": {}, "ps_change": "" },
+        "jewelry": { "amount": 0, "value": 300, "mult": 1, "changes": {}, "ps_change": "" },
+        "oil": { "amount": 0, "value": 2, "mult": 1, "changes": {}, "ps_change": "" },
+        "paper": { "amount": 0, "value": 4, "mult": 1, "changes": {}, "ps_change": "" },
+        "ink": { "amount": 0, "value": 10, "mult": 1, "changes": {}, "ps_change": "" },
+        "book": { "amount": 0, "value": 400, "mult": 1, "changes": {}, "ps_change": "" },
+        "sand": { "amount": 0, "value": 3, "mult": 1, "changes": {}, "ps_change": "" },
+        "glass": { "amount": 0, "value": 20, "mult": 1, "changes": {}, "ps_change": "" },
+        "water": { "amount": 0, "value": 2, "mult": 1, "changes": {}, "ps_change": "" },
+        "hydrogen": { "amount": 0, "value": 5, "mult": 1, "changes": {}, "ps_change": "" },
+        "steel_beam": { "amount": 0, "value": 200, "mult": 1, "changes": {}, "ps_change": "" },
+        "uranium": { "amount": 0, "value": 500, "mult": 1, "changes": {}, "ps_change": "" },
+        "sandcastle": { "amount": 0, "value": 10000000, "mult": 1, "changes": {}, "ps_change": "" },
+        "glass_bottle": { "amount": 0, "value": 25000, "mult": 1, "changes": {}, "ps_change": "" },
+        "mithril": { "amount": 0, "value": 3500, "mult": 1, "changes": {}, "ps_change": "" },
     };
     /* Set resources_per_sec */
     Object.keys(resources).forEach(function (res) {
@@ -372,7 +372,7 @@ function set_initial_state() {
             },
             "multipliers": {},
             "free": 0,
-            "flavor": "To find sand, first you must collect enough mana.",
+            "flavor": "To find sand, first you must collect 10 mana.",
         },
         "skyscraper": {
             "on": true,
@@ -1016,7 +1016,12 @@ function set_initial_state() {
                 if (mines_state) {
                     toggle_building_state("mine");
                 }
-                buildings["mine"]["generation"]["coal"] = 0.2;
+                if (event_flags["bribed_politician"] == "environment") {
+                    buildings["mine"]["generation"]["coal"] = 2;
+                }
+                else {
+                    buildings["mine"]["generation"]["coal"] = 0.2;
+                }
                 if (mines_state) {
                     toggle_building_state("mine");
                 }
@@ -1744,6 +1749,41 @@ function set_initial_state() {
             "image": "",
             "repeats": false,
         },
+        "all_1": {
+            "unlock": function () { return buildings["s_manastone"].amount >= 500; },
+            "purchase": function () {
+                Object.keys(resources).forEach(function (res) {
+                    resources[res].mult = 0;
+                    setInterval(function () {
+                        resources[res].amount++;
+                        resources_per_sec[res] = 1;
+                    }, 1000);
+                });
+            },
+            "onload": function () {
+                this.purchase();
+            },
+            "cost": {
+                "refined_mana": 10000,
+            },
+            "tooltip": "Multiplies ALL rates by 0 and then adds 1.",
+            "name": "Chairs sit on people<br />",
+            "image": "",
+            "repeats": false,
+        },
+        "fix_1": {
+            "unlock": function () { return purchased_upgrades.indexOf("all_1") != -1; },
+            "purchase": function () {
+                purchased_upgrades.splice(purchased_upgrades.indexOf("all_1"), 1);
+                save();
+                location.reload();
+            },
+            "cost": {},
+            "tooltip": "Undo Chairs sit on People.",
+            "name": "Broken Chair<br />",
+            "image": "",
+            "repeats": false,
+        },
         "trade": {
             "unlock": function () { return false; },
             "purchase": function () { },
@@ -1935,6 +1975,9 @@ function load() {
     change_theme(localStorage.getItem("theme"));
     purchased_upgrades.forEach(function (upg) {
         var upg_name = remaining_upgrades[upg].name;
+        if (remaining_upgrades[upg]["onload"] != undefined) {
+            remaining_upgrades[upg]["onload"]();
+        }
         delete remaining_upgrades[upg]; /* They shouldn't be able to get the same upgrade twice, so delete what was bought. */
         update_total_upgrades(upg_name);
     });
@@ -1946,6 +1989,8 @@ function load() {
             Object.keys(buildings[name].generation).forEach(function (key) {
                 /* And increase production */
                 resources_per_sec[key] += buildings[name].amount * buildings[name].generation[key];
+                resources[key].changes[$("#building_" + name + " > .building_name").text()] = buildings[name].amount * buildings[name].generation[key];
+                resource_tooltip();
             });
             /* And add the multiplier */
             Object.keys(buildings[name].multipliers).forEach(function (key) {
@@ -2021,6 +2066,20 @@ function load_from_clip() {
     }
     location.reload();
 }
+function resource_tooltip() {
+    Object.keys(resources).forEach(function (res) {
+        if (!$.isEmptyObject(resources[res].changes)) {
+            var changes_1 = "";
+            /* Iterate through all things changing, sorted by amount they provide. */
+            Object.keys(resources[res].changes).sort(function (a, b) { return resources[res].changes[b] - resources[res].changes[a]; }).forEach(function (changer) {
+                if (resources[res].changes[changer] != 0) {
+                    changes_1 += "<tr><td>" + changer + "</td><td>" + format_num(resources[res].changes[changer], true) + "</td></tr>";
+                }
+            });
+            resources[res].ps_change = "<table class='change_track'>" + changes_1 + "</table>";
+        }
+    });
+}
 function toggle_building_state(name) {
     if (buildings[name].on) {
         if (name == "s_mana_refinery") {
@@ -2034,6 +2093,8 @@ function toggle_building_state(name) {
             if (resources[key].value == 0) {
                 resources[key].amount -= buildings[name].amount * buildings[name].generation[key];
             }
+            delete resources[key].changes[$("#building_" + name + " > .building_name").text()];
+            resource_tooltip();
         });
         Object.keys(buildings[name].multipliers).forEach(function (key) {
             resources[key].mult /= 1 + buildings[name].amount * (buildings[name].multipliers[key]);
@@ -2065,6 +2126,8 @@ function toggle_building_state(name) {
             if (resources[key].value == 0) {
                 resources[key].amount += buildings[name].amount * buildings[name].generation[key];
             }
+            resources[key].changes[$("#building_" + name + " > .building_name").text()] = buildings[name].amount * buildings[name].generation[key];
+            resource_tooltip();
         });
         /* Add multipliers. */
         Object.keys(buildings[name].multipliers).forEach(function (key) {
@@ -2185,6 +2248,14 @@ function update() {
         if (resources_per_sec[key] > 0 && Math.abs(resources[key].mult - 1) > 0.001) {
             var color = resources[key].mult > 1 ? "green" : "red";
             $("#" + key + "_per_sec").append(" <span style='color:" + color + "'>(x" + format_num(resources[key].mult) + ")</span>");
+        }
+        /* Add tooltip */
+        if ($("#" + key + " .tooltiptext").length == 0) {
+            $("#" + key).addClass("tooltip");
+            $("#" + key).append("<span class='tooltiptext fgc bgc_second'>" + resources[key].ps_change + "</span>");
+        }
+        else {
+            $("#" + key + " .tooltiptext").html(resources[key].ps_change);
         }
         /* Don't color special resources */
         if (resources[key].value <= 0) {
