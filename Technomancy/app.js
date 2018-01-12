@@ -1647,7 +1647,7 @@ function set_initial_state() {
                 "time": 1,
                 "mana": 100,
             },
-            "tooltip": "Does some stuff with time.",
+            "tooltip": "You can use time faster.<br />Also makes more stuff affected by speed time.",
             "name": "Chronomancy",
             "image": "",
             "repeats": false,
@@ -1753,11 +1753,12 @@ function set_initial_state() {
             "unlock": function () { return buildings["s_manastone"].amount >= 500; },
             "purchase": function () {
                 Object.keys(resources).forEach(function (res) {
-                    resources[res].mult = 0;
                     setInterval(function () {
-                        resources[res].amount++;
-                        resources_per_sec[res] = 1;
-                    }, 1000);
+                        if (resources[res].value > 0) {
+                            resources[res].mult = 1;
+                            resources_per_sec[res] = 1;
+                        }
+                    }, 50);
                 });
             },
             "onload": function () {

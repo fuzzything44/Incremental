@@ -159,6 +159,8 @@
 
                     if (event_flags["wanderer_knowledge"] == "magic") {
                         $("#events_content").append("Yay, you can do magic! Message fuzzything44 on Discord if you get this far.<br />");
+                        $("#events_content").append("Also, please note that this is how the skill tree will look when finished. But it currently doesn't do anything than look pretty.<br />");
+
                         $("#events_content").append("<span class='clickable'>Make</span> a Bag of Holding (requires one of each magic orb)<br />");
                         $("#events_content span").last().click(function () {
                             if (count_item("magic_orb", adventure_data.warehouse, { elem: "time" }) &&
@@ -175,6 +177,66 @@
                                 $("#events_content").prepend("You're missing an orb. Check your warehouse.<br />");
                             }
                         });
+
+                        $("#events_content").append("<div id='skill_tree'></div>");
+                        /* Tier 1 */
+                        $("#skill_tree").append("<div class='skill_box purchased' style='position: absolute; left: 23em; top: 0em; z-index: 1;'><br />Artificing<br />1 KP</div>");
+
+                        /* Connecting lines */
+                        $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:360px;height: 280px;position: absolute; left: 30em; top: -12.5em; transform: rotate(20deg);'></div>");
+                        $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:360px;height: 280px;position: absolute; left: 5em; top: -12.5em; transform: rotate(340deg);'></div>");
+                        $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:50px;height: 280px;position: absolute; left: 36em; top: -2em; transform: rotate(90deg);'></div>");
+
+                        /* Tier 2 */
+                        $("#skill_tree").append("<div class='skill_box buyable bgc_second' style='position: absolute; left: 4em;  top: 8em; z-index: 1;'><br />Efficient Refining<br />1 KP</div>");
+                        $("#skill_tree").append("<div class='skill_box bgc_second' style='position: absolute; left: 23em; top: 8em; z-index: 1;'><br />EVENTS<br />1 KP</div>")
+                        $("#skill_tree").append("<div class='skill_box bgc_second' style='position: absolute; left: 43em; top: 8em; z-index: 1;'><br />LOOT<br />1 KP</div>");
+
+                        /* Connecting lines */
+                        $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:150px;height: 280px;position: absolute; left: 12em; top: 9em; transform: rotate(100deg);'></div>");
+                        $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:150px;height: 280px;position: absolute; left: 54em; top: 5em; transform: rotate(80deg);'></div>");
+                        $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:150px;height: 280px;position: absolute; left: 26em; top: 13em; transform: rotate(140deg);'></div>");
+                        $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:150px;height: 280px;position: absolute; left: 34em; top: 0em; transform: rotate(40deg);'></div>");
+
+                        /* Tier 3 */
+                        $("#skill_tree").append("<div class='skill_box bgc_second' style='position: absolute; left: 3em;  top: 18em; z-index: 1;'><br />Distributed Mana<br />1 KP</div>");
+                        $("#skill_tree").append("<div class='skill_box bgc_second' style='position: absolute; left: 17em; top: 16em; z-index: 1;'><br />COMBAT I<br />1 KP</div>");
+                        $("#skill_tree").append("<div class='skill_box bgc_second' style='position: absolute; left: 30em; top: 16em; z-index: 1;'><br />NONCOMBAT I<br />1 KP</div>");
+                        $("#skill_tree").append("<div class='skill_box bgc_second' style='position: absolute; left: 44em; top: 18em; z-index: 1;'><br />LOOT II?<br />1 KP</div>");
+
+                        /* Connecting lines */
+                        $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:150px;height: 280px;position: absolute; left: 11.5em; top: 15em; transform: rotate(90deg);'></div>");
+                        $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:150px;height: 280px;position: absolute; left: 55em; top: 18em; transform: rotate(90deg);'></div>");
+                        $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:100px;height: 280px;position: absolute; left: 28em; top: 14em; transform: rotate(90deg);'></div>");
+                        $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:100px;height: 280px;position: absolute; left: 41em; top: 14em; transform: rotate(90deg);'></div>");
+
+                        /* Tier 4 */
+                        $("#skill_tree").append("<div class='skill_box bgc_second' style='position: absolute; left: 3em;  top: 28em; z-index: 1;'><br />Instant Mana<br />2 KP</div>");
+                        $("#skill_tree").append("<div class='skill_box bgc_second' style='position: absolute; left: 17em; top: 25em; z-index: 1;'><br />COMBAT II<br />2 KP</div>");
+                        $("#skill_tree").append("<div class='skill_box bgc_second' style='position: absolute; left: 30em; top: 25em; z-index: 1;'><br />NONCOMBAT II<br />2 KP</div>");
+                        $("#skill_tree").append("<div class='skill_box bgc_second' style='position: absolute; left: 44em; top: 28em; z-index: 1;'><br />LOOT III?<br />2 KP</div>");
+
+                        /* Connecting lines */
+                        $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:150px;height: 280px;position: absolute; left: 12em; top: 27em; transform: rotate(80deg);'></div>");
+                        $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:150px;height: 280px;position: absolute; left: 54em; top: 27em; transform: rotate(100deg);'></div>");
+                        $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:150px;height: 280px;position: absolute; left: 24em; top: 15em; transform: rotate(40deg);'></div>");
+                        $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:150px;height: 280px;position: absolute; left: 34em; top: 30em; transform: rotate(140deg);'></div>");
+
+                        /* Tier 5 */
+                        $("#skill_tree").append("<div class='skill_box bgc_second' style='position: absolute; left: 5em; top: 37em; z-index: 1;'><br />LIBRARY<br />2 KP</div>");
+                        $("#skill_tree").append("<div class='skill_box bgc_second' style='position: absolute; left: 23em; top: 33em; z-index: 1;'><br />Foresight<br />3 KP</div>");
+                        $("#skill_tree").append("<div class='skill_box bgc_second' style='position: absolute; left: 42em; top: 37em; z-index: 1;'><br />LOOT IV?<br />2 KP</div>");
+
+                        /* Connecting Lines */
+                        $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:200px;height: 280px;position: absolute; left: 18em; top: 26em; transform: rotate(40deg);'></div>");
+                        $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:200px;height: 280px;position: absolute; left: 37em; top: 41em; transform: rotate(145deg);'></div>");
+                        $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:100px;height: 280px;position: absolute; left: 34.5em; top: 33em; transform: rotate(90deg);'></div>");
+
+
+                        /* Ultimate Skill */
+                        $("#skill_tree").append("<div class='skill_box bgc_second' style='position: absolute; left: 23em; top: 42em; z-index: 1;'><br />Super Skill<br />4 KP</div>");
+                        $("#events_content").append("<br /><br />");
+
                     } else if (event_flags["wanderer_knowledge"] == "alchemy") {
                         $("#events_content").append("Yay, you can do alchemy! Message fuzzything44 on Discord if you get this far.<br />");
                     } else if (event_flags["wanderer_knowledge"] == "inventor") {

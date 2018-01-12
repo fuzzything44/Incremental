@@ -363,3 +363,52 @@ hr {
     border: 1px solid darkred;
     background-color: red;
 }
+
+#skill_tree {
+    position: relative;
+    height: 50em;
+    top: 2em;
+}
+
+.skill_box {
+    border: 2px solid;
+    border-radius: 3px;
+    width: 10em;
+    height: 5em;
+    padding: .5em;
+}
+
+.skill_box.purchased {
+    border-color: green;
+    background-color: aqua;
+    color: black;
+}
+
+.skill_box.purchased:hover {
+    background-color: aquamarine;
+}
+
+.skill_box:not(.purchased):not(.buyable) {
+    border-color: red;
+}
+
+.skill_box:not(.purchased):hover {
+    background-color: royalblue;
+}
+
+.skill_box.buyable {
+    border-color: green;
+}
+
+/*
+    p0lotow
+    Gefke
+    Kekoma
+    Orientius
+    SlipperyDoge2145718
+    ninjastrikes29
+    iKrAcKeRi
+    UnstoppableSage46793
+    TheHajjar
+
+*/

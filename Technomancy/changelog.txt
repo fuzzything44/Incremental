@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.13.1: Skill Tree
+Added a skill tree for the mage. There aren't skills yet, but the tree looks nice. Changed Chronomancy description. Changed how Chairs Sit On People works slightly. Now it's probably even more broken. 
+
 v3.13.0: QoL Update
 Fixed small issue with last resource having a border when it wasn't needed. Resources now have a tooltip showing what's modifying them. Note that some sources won't be tracked (and there might be some bugs with it), so please report those as bugs if you find any. Water collector tooltip says exactly how much mana you need. You can bribe politicians without having coal mining (but you should get coal mining first anyways). Added a weird new upgrade and a way to undo it. Wanderer can show up without you doing any adventure mode stuff. Wanderer can be male or female.
 
