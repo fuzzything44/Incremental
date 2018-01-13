@@ -190,7 +190,7 @@
                             var SKILL_ADVENTURE_FINAL = 14;
                             var SKILL_FINAL = 15;
                             $("#events_content").append("Yay, you can do magic! Message fuzzything44 on Discord if you get this far.<br />");
-                            $("#events_content").append("Also, please note that this is how the skill tree will look when finished. But it currently doesn't do anything than look pretty.<br />");
+                            $("#events_content").append("Please note that some skills don't do anything yet. They're coming soon! Anything with an actual tooltip should work though.<br />");
                             if (event_flags["skills"][SKILL_MAKE_BAG]) {
                                 $("#events_content").append("<span class='clickable'>Make</span> a Bag of Holding (requires one of each magic orb)<br />");
                                 $("#events_content span").last().click(function () {
