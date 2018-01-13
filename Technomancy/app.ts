@@ -2292,7 +2292,7 @@ function update() {
         resources["time"].amount += delta_time / 1000; /* 1 sec of production, rest goes to time. */
 
         /* This is where offline events go. We say we get 1 every 30 minutes. */
-        if (false) {
+        if (event_flags["skills"] && event_flags["skills"][2]) {
             /* Cap at 20 events.*/
             let num_events = Math.min(20, Math.round(delta_time / (60000 * 30)));
             /* while num_events goes to 0. */

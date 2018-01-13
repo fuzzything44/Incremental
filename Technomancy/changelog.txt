@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.14.0: Actual Skill Tree
+It's clearer that you'll lose ship parts when you get PC/AutoEvents. The skill tree for Magic option from wanderer is now interactive and skills are buyable. Only some of them work (anything with a non-TODO tooltip).
+
 v3.13.1: Skill Tree
 Added a skill tree for the mage. There aren't skills yet, but the tree looks nice. Changed Chronomancy description. Changed how Chairs Sit On People works slightly. Now it's probably even more broken. 
 

@@ -143,6 +143,9 @@
                                 destroy_building("library", 25); /* Remove libraries. */
                                 buildings["library"].free -= 25;
                                 event_flags["know_pts"]++;
+                                if (event_flags["skills"] && event_flags["skills"][12]) {
+                                    event_flags["know_pts"]++;
+                                }
                                 study(); /* Redraw. */
                             });
                         }
@@ -151,79 +154,177 @@
                             $("#events_content span").last().click(function () {
                                 buildings["library"].free = buildings["library"].amount;
                                 event_flags["know_pts"]--;
-                                buildings["library"].price_ratio["iron"] += .025;
-                                buildings["library"].price_ratio["wood"] += .025;
-                                buildings["library"].price_ratio["book"] += .025;
-                                buildings["library"].price_ratio["money"] += .025;
+                                if (event_flags["skills"] && event_flags["skills"][12]) {
+                                    buildings["library"].price_ratio["iron"] += .02;
+                                    buildings["library"].price_ratio["wood"] += .02;
+                                    buildings["library"].price_ratio["book"] += .02;
+                                    buildings["library"].price_ratio["money"] += .02;
+                                }
+                                else {
+                                    buildings["library"].price_ratio["iron"] += .025;
+                                    buildings["library"].price_ratio["wood"] += .025;
+                                    buildings["library"].price_ratio["book"] += .025;
+                                    buildings["library"].price_ratio["money"] += .025;
+                                }
                                 study();
                             });
                         }
                         if (event_flags["wanderer_knowledge"] == "magic") {
+                            if (event_flags["skills"] == undefined) {
+                                event_flags["skills"] = Array(16);
+                            }
+                            var SKILL_MAKE_BAG = 0;
+                            var SKILL_BETTER_REFINE = 1;
+                            var SKILL_EVENTS = 2;
+                            var SKILL_LOOT = 3;
+                            var SKILL_MANA_FORMULA = 4;
+                            var SKILL_COMBAT = 5;
+                            var SKILL_NONCOMBAT = 6;
+                            var SKILL_ADVENTURE = 7;
+                            var SKILL_QUICK_MANA = 8;
+                            var SKILL_COMBAT_STRONG = 9;
+                            var SKILL_NONCOMBAT_STRONG = 10;
+                            var SKILL_ADVENTURE_STRONG = 11;
+                            var SKILL_LIBRARY = 12;
+                            var SKILL_FORESIGHT = 13;
+                            var SKILL_ADVENTURE_FINAL = 14;
+                            var SKILL_FINAL = 15;
                             $("#events_content").append("Yay, you can do magic! Message fuzzything44 on Discord if you get this far.<br />");
                             $("#events_content").append("Also, please note that this is how the skill tree will look when finished. But it currently doesn't do anything than look pretty.<br />");
-                            $("#events_content").append("<span class='clickable'>Make</span> a Bag of Holding (requires one of each magic orb)<br />");
-                            $("#events_content span").last().click(function () {
-                                if (count_item("magic_orb", adventure_data.warehouse, { elem: "time" }) &&
-                                    count_item("magic_orb", adventure_data.warehouse, { elem: "space" }) &&
-                                    count_item("magic_orb", adventure_data.warehouse, { elem: "energy" }) &&
-                                    count_item("magic_orb", adventure_data.warehouse, { elem: "force" })) {
-                                    adventure_data.warehouse.splice(find_item("magic_orb", adventure_data.warehouse, { elem: "force" }), 1);
-                                    adventure_data.warehouse.splice(find_item("magic_orb", adventure_data.warehouse, { elem: "time" }), 1);
-                                    adventure_data.warehouse.splice(find_item("magic_orb", adventure_data.warehouse, { elem: "energy" }), 1);
-                                    adventure_data.warehouse.splice(find_item("magic_orb", adventure_data.warehouse, { elem: "space" }), 1);
-                                    adventure_data.warehouse.push({ name: "bag" });
-                                }
-                                else {
-                                    $("#events_content").prepend("You're missing an orb. Check your warehouse.<br />");
-                                }
-                            });
+                            if (event_flags["skills"][SKILL_MAKE_BAG]) {
+                                $("#events_content").append("<span class='clickable'>Make</span> a Bag of Holding (requires one of each magic orb)<br />");
+                                $("#events_content span").last().click(function () {
+                                    if (count_item("magic_orb", adventure_data.warehouse, { elem: "time" }) &&
+                                        count_item("magic_orb", adventure_data.warehouse, { elem: "space" }) &&
+                                        count_item("magic_orb", adventure_data.warehouse, { elem: "energy" }) &&
+                                        count_item("magic_orb", adventure_data.warehouse, { elem: "force" })) {
+                                        adventure_data.warehouse.splice(find_item("magic_orb", adventure_data.warehouse, { elem: "force" }), 1);
+                                        adventure_data.warehouse.splice(find_item("magic_orb", adventure_data.warehouse, { elem: "time" }), 1);
+                                        adventure_data.warehouse.splice(find_item("magic_orb", adventure_data.warehouse, { elem: "energy" }), 1);
+                                        adventure_data.warehouse.splice(find_item("magic_orb", adventure_data.warehouse, { elem: "space" }), 1);
+                                        adventure_data.warehouse.push({ name: "bag" });
+                                    }
+                                    else {
+                                        $("#events_content").prepend("You're missing an orb. Check your warehouse.<br />");
+                                    }
+                                });
+                            }
                             $("#events_content").append("<div id='skill_tree'></div>");
                             /* Tier 1 */
-                            $("#skill_tree").append("<div class='skill_box purchased' style='position: absolute; left: 23em; top: 0em; z-index: 1;'><br />Artificing<br />1 KP</div>");
+                            $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 23em; top: 0em; z-index: 16;'><br />Artificing<br />1 KP<span class='tooltiptext fgc bgc_second'>Lets you make bags of holding.</span></div>");
                             /* Connecting lines */
-                            $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:360px;height: 280px;position: absolute; left: 30em; top: -12.5em; transform: rotate(20deg);'></div>");
-                            $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:360px;height: 280px;position: absolute; left: 5em; top: -12.5em; transform: rotate(340deg);'></div>");
-                            $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:50px;height: 280px;position: absolute; left: 36em; top: -2em; transform: rotate(90deg);'></div>");
+                            var color = "gray";
+                            color = event_flags["skills"][SKILL_MAKE_BAG] ? "blue" : "gray";
+                            $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:360px;height: 1px;position: absolute; left: 30em; top: 5em; transform: rotate(20deg);'></div>");
+                            $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:360px;height: 1px;position: absolute; left: 5em; top: 5em; transform: rotate(340deg);'></div>");
+                            $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:50px;height: 1px;position: absolute; left: 27em; top: 7em; transform: rotate(90deg);'></div>");
                             /* Tier 2 */
-                            $("#skill_tree").append("<div class='skill_box buyable bgc_second' style='position: absolute; left: 4em;  top: 8em; z-index: 1;'><br />Efficient Refining<br />1 KP</div>");
-                            $("#skill_tree").append("<div class='skill_box bgc_second' style='position: absolute; left: 23em; top: 8em; z-index: 1;'><br />EVENTS<br />1 KP</div>");
-                            $("#skill_tree").append("<div class='skill_box bgc_second' style='position: absolute; left: 43em; top: 8em; z-index: 1;'><br />LOOT<br />1 KP</div>");
+                            $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 4em;  top: 8em; z-index: 15;'><br />Efficient Refining<br />1 KP<span class='tooltiptext fgc bgc_second'>Get double mana when you refine.</span></div>");
+                            $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 23em; top: 8em; z-index: 14;'><br />Temporal Permanance<br />1 KP<span class='tooltiptext fgc bgc_second'>You can get events while offline. Works best with AutoEvents.</span></div>");
+                            $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 43em; top: 8em; z-index: 13;'><br />LOOT<br />1 KP<span class='tooltiptext fgc bgc_second'>TODO: TOOLTIP</span></div>");
                             /* Connecting lines */
-                            $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:150px;height: 280px;position: absolute; left: 12em; top: 9em; transform: rotate(100deg);'></div>");
-                            $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:150px;height: 280px;position: absolute; left: 54em; top: 5em; transform: rotate(80deg);'></div>");
-                            $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:150px;height: 280px;position: absolute; left: 26em; top: 13em; transform: rotate(140deg);'></div>");
-                            $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:150px;height: 280px;position: absolute; left: 34em; top: 0em; transform: rotate(40deg);'></div>");
+                            color = event_flags["skills"][SKILL_BETTER_REFINE] ? "blue" : "gray";
+                            $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:150px;height: 280px;position: absolute; left: 12em; top: 9em; transform: rotate(100deg);'></div>");
+                            color = event_flags["skills"][SKILL_LOOT] ? "blue" : "gray";
+                            $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:150px;height: 280px;position: absolute; left: 54em; top: 5em; transform: rotate(80deg);'></div>");
+                            color = event_flags["skills"][SKILL_EVENTS] ? "blue" : "gray";
+                            $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:150px;height: 280px;position: absolute; left: 26em; top: 13em; transform: rotate(140deg);'></div>");
+                            $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:150px;height: 280px;position: absolute; left: 34em; top: 0em; transform: rotate(40deg);'></div>");
                             /* Tier 3 */
-                            $("#skill_tree").append("<div class='skill_box bgc_second' style='position: absolute; left: 3em;  top: 18em; z-index: 1;'><br />Distributed Mana<br />1 KP</div>");
-                            $("#skill_tree").append("<div class='skill_box bgc_second' style='position: absolute; left: 17em; top: 16em; z-index: 1;'><br />COMBAT I<br />1 KP</div>");
-                            $("#skill_tree").append("<div class='skill_box bgc_second' style='position: absolute; left: 30em; top: 16em; z-index: 1;'><br />NONCOMBAT I<br />1 KP</div>");
-                            $("#skill_tree").append("<div class='skill_box bgc_second' style='position: absolute; left: 44em; top: 18em; z-index: 1;'><br />LOOT II?<br />1 KP</div>");
+                            $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 3em;  top: 18em; z-index: 12;'><br />Distributed Mana<br />1 KP<span class='tooltiptext fgc bgc_second'>TODO: TOOLTIP</span></div>");
+                            $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 17em; top: 16em; z-index: 11;'><br />COMBAT I<br />1 KP<span class='tooltiptext fgc bgc_second'>TODO: TOOLTIP</span></div>");
+                            $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 30em; top: 16em; z-index: 10;'><br />NONCOMBAT I<br />1 KP<span class='tooltiptext fgc bgc_second'>TODO: TOOLTIP</span></div>");
+                            $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 44em; top: 18em; z-index: 9;'><br />LOOT II?<br />1 KP<span class='tooltiptext fgc bgc_second'>TODO: TOOLTIP</span></div>");
                             /* Connecting lines */
-                            $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:150px;height: 280px;position: absolute; left: 11.5em; top: 15em; transform: rotate(90deg);'></div>");
-                            $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:150px;height: 280px;position: absolute; left: 55em; top: 18em; transform: rotate(90deg);'></div>");
-                            $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:100px;height: 280px;position: absolute; left: 28em; top: 14em; transform: rotate(90deg);'></div>");
-                            $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:100px;height: 280px;position: absolute; left: 41em; top: 14em; transform: rotate(90deg);'></div>");
+                            color = event_flags["skills"][SKILL_MANA_FORMULA] ? "blue" : "gray";
+                            $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:150px;height: 280px;position: absolute; left: 11.5em; top: 15em; transform: rotate(90deg);'></div>");
+                            color = event_flags["skills"][SKILL_COMBAT] ? "blue" : "gray";
+                            $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:100px;height: 280px;position: absolute; left: 28em; top: 14em; transform: rotate(90deg);'></div>");
+                            color = event_flags["skills"][SKILL_NONCOMBAT] ? "blue" : "gray";
+                            $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:100px;height: 280px;position: absolute; left: 41em; top: 14em; transform: rotate(90deg);'></div>");
+                            color = event_flags["skills"][SKILL_ADVENTURE] ? "blue" : "gray";
+                            $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:150px;height: 280px;position: absolute; left: 55em; top: 18em; transform: rotate(90deg);'></div>");
                             /* Tier 4 */
-                            $("#skill_tree").append("<div class='skill_box bgc_second' style='position: absolute; left: 3em;  top: 28em; z-index: 1;'><br />Instant Mana<br />2 KP</div>");
-                            $("#skill_tree").append("<div class='skill_box bgc_second' style='position: absolute; left: 17em; top: 25em; z-index: 1;'><br />COMBAT II<br />2 KP</div>");
-                            $("#skill_tree").append("<div class='skill_box bgc_second' style='position: absolute; left: 30em; top: 25em; z-index: 1;'><br />NONCOMBAT II<br />2 KP</div>");
-                            $("#skill_tree").append("<div class='skill_box bgc_second' style='position: absolute; left: 44em; top: 28em; z-index: 1;'><br />LOOT III?<br />2 KP</div>");
+                            $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 3em;  top: 28em; z-index: 8;'><br />Instant Mana<br />2 KP<span class='tooltiptext fgc bgc_second'>TODO: TOOLTIP</span></div>");
+                            $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 17em; top: 25em; z-index: 7;'><br />COMBAT II<br />2 KP<span class='tooltiptext fgc bgc_second'>TODO: TOOLTIP</span></div>");
+                            $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 30em; top: 25em; z-index: 6;'><br />NONCOMBAT II<br />2 KP<span class='tooltiptext fgc bgc_second'>TODO: TOOLTIP</span></div>");
+                            $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 44em; top: 28em; z-index: 5;'><br />LOOT III?<br />2 KP<span class='tooltiptext fgc bgc_second'>TODO: TOOLTIP</span></div>");
                             /* Connecting lines */
-                            $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:150px;height: 280px;position: absolute; left: 12em; top: 27em; transform: rotate(80deg);'></div>");
-                            $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:150px;height: 280px;position: absolute; left: 54em; top: 27em; transform: rotate(100deg);'></div>");
-                            $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:150px;height: 280px;position: absolute; left: 24em; top: 15em; transform: rotate(40deg);'></div>");
-                            $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:150px;height: 280px;position: absolute; left: 34em; top: 30em; transform: rotate(140deg);'></div>");
+                            color = event_flags["skills"][SKILL_QUICK_MANA] ? "blue" : "gray";
+                            $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:150px;height: 280px;position: absolute; left: 12em; top: 27em; transform: rotate(80deg);'></div>");
+                            color = event_flags["skills"][SKILL_COMBAT_STRONG] ? "blue" : "gray";
+                            $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:150px;height: 280px;position: absolute; left: 24em; top: 15em; transform: rotate(40deg);'></div>");
+                            color = event_flags["skills"][SKILL_NONCOMBAT_STRONG] ? "blue" : "gray";
+                            $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:150px;height: 280px;position: absolute; left: 34em; top: 30em; transform: rotate(140deg);'></div>");
+                            color = event_flags["skills"][SKILL_ADVENTURE_STRONG] ? "blue" : "gray";
+                            $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:150px;height: 280px;position: absolute; left: 54em; top: 27em; transform: rotate(100deg);'></div>");
                             /* Tier 5 */
-                            $("#skill_tree").append("<div class='skill_box bgc_second' style='position: absolute; left: 5em; top: 37em; z-index: 1;'><br />LIBRARY<br />2 KP</div>");
-                            $("#skill_tree").append("<div class='skill_box bgc_second' style='position: absolute; left: 23em; top: 33em; z-index: 1;'><br />Foresight<br />3 KP</div>");
-                            $("#skill_tree").append("<div class='skill_box bgc_second' style='position: absolute; left: 42em; top: 37em; z-index: 1;'><br />LOOT IV?<br />2 KP</div>");
+                            $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 5em; top: 37em; z-index: 4;'><br />Magic Tomes<br />2 KP<span class='tooltiptext fgc bgc_second'>Gain twice the KP when sacrificing libraries.</span></div>");
+                            $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 23em; top: 33em; z-index: 3;'><br />Foresight<br />3 KP<span class='tooltiptext fgc bgc_second'>TODO: TOOLTIP</span></div>");
+                            $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 42em; top: 37em; z-index: 2;'><br />LOOT IV?<br />2 KP<span class='tooltiptext fgc bgc_second'>TODO: TOOLTIP</span></div>");
                             /* Connecting Lines */
-                            $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:200px;height: 280px;position: absolute; left: 18em; top: 26em; transform: rotate(40deg);'></div>");
-                            $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:200px;height: 280px;position: absolute; left: 37em; top: 41em; transform: rotate(145deg);'></div>");
-                            $("#skill_tree").append("<div style='border-bottom: 5px solid gray;width:100px;height: 280px;position: absolute; left: 34.5em; top: 33em; transform: rotate(90deg);'></div>");
+                            color = event_flags["skills"][SKILL_LIBRARY] ? "blue" : "gray";
+                            $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:200px;height: 280px;position: absolute; left: 18em; top: 26em; transform: rotate(40deg);'></div>");
+                            color = event_flags["skills"][SKILL_ADVENTURE_FINAL] ? "blue" : "gray";
+                            $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:200px;height: 280px;position: absolute; left: 37em; top: 41em; transform: rotate(145deg);'></div>");
+                            color = event_flags["skills"][SKILL_FORESIGHT] ? "blue" : "gray";
+                            $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:100px;height: 280px;position: absolute; left: 34.5em; top: 33em; transform: rotate(90deg);'></div>");
                             /* Ultimate Skill */
-                            $("#skill_tree").append("<div class='skill_box bgc_second' style='position: absolute; left: 23em; top: 42em; z-index: 1;'><br />Super Skill<br />4 KP</div>");
+                            $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 23em; top: 42em; z-index: 1;'><br />Super Skill<br />4 KP<span class='tooltiptext fgc bgc_second'>TODO: TOOLTIP</span></div>");
                             $("#events_content").append("<br /><br />");
+                            var _loop_3 = function (i) {
+                                if (event_flags["skills"][i]) {
+                                    $("#skill_tree .skill_box").eq(i).addClass("purchased");
+                                }
+                                else {
+                                    var COSTS_1 = [
+                                        1,
+                                        1, 1, 1,
+                                        1, 1, 1, 1,
+                                        2, 2, 2, 2,
+                                        2, 3, 2,
+                                        4
+                                    ];
+                                    var REQUIREMENTS_1 = [
+                                        [],
+                                        [SKILL_MAKE_BAG],
+                                        [SKILL_MAKE_BAG],
+                                        [SKILL_MAKE_BAG],
+                                        [SKILL_BETTER_REFINE],
+                                        [SKILL_EVENTS],
+                                        [SKILL_EVENTS],
+                                        [SKILL_LOOT],
+                                        [SKILL_MANA_FORMULA],
+                                        [SKILL_COMBAT],
+                                        [SKILL_NONCOMBAT],
+                                        [SKILL_ADVENTURE],
+                                        [SKILL_QUICK_MANA],
+                                        [SKILL_COMBAT_STRONG, SKILL_NONCOMBAT_STRONG],
+                                        [SKILL_ADVENTURE_STRONG],
+                                        [SKILL_LIBRARY, SKILL_FORESIGHT, SKILL_ADVENTURE_FINAL] /* Final skill */
+                                    ];
+                                    function prereqs_satisfied(skill) {
+                                        for (var i_1 = 0; i_1 < REQUIREMENTS_1[skill].length; i_1++) {
+                                            if (event_flags["skills"][REQUIREMENTS_1[skill][i_1]] == undefined) {
+                                                return false;
+                                            }
+                                        }
+                                        return true;
+                                    }
+                                    var index_1 = i;
+                                    if (event_flags["know_pts"] >= COSTS_1[index_1] && prereqs_satisfied(index_1)) {
+                                        $("#skill_tree .skill_box").eq(index_1).click(function () {
+                                            event_flags["skills"][index_1] = true;
+                                            event_flags["know_pts"] -= COSTS_1[index_1];
+                                            study();
+                                        });
+                                        $("#skill_tree .skill_box").eq(index_1).addClass("buyable");
+                                    }
+                                }
+                            };
+                            for (var i = 0; i < event_flags["skills"].length; i++) {
+                                _loop_3(i);
+                            }
                         }
                         else if (event_flags["wanderer_knowledge"] == "alchemy") {
                             $("#events_content").append("Yay, you can do alchemy! Message fuzzything44 on Discord if you get this far.<br />");

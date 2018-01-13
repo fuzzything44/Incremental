@@ -303,6 +303,7 @@ hr {
     visibility: hidden;
     width: 15em;
     text-align: center;
+    border: 1px solid;
     border-radius: 3px;
 
     

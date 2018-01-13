@@ -153,6 +153,9 @@ function s_refinery(amount: number) {
 
     resources_per_sec["mana"] -= amount;
     resources["refined_mana"].amount += amount * 1000;
+    if (event_flags["skills"] && event_flags["skills"][1]) { /* They get double from refining. */
+        resources["refined_mana"].amount += amount * 1000;
+    }
     buildings["s_mana_refinery"].generation["mana"] -=amount; /* Take away per sec right now and add per sec cost to building for reloads.*/
 }
 
