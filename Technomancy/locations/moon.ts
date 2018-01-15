@@ -19,7 +19,12 @@
                         },
                         function () {
                             resources["ink"].amount += 10000;
-                            $("#events_content").html("You beat the squid! It turns out space squids have a lot of ink.<br/>Gained 10000 ink.<br/>");
+                            if (event_flags["skills"] && event_flags["skills"][3]) {
+                                resources["ink"].amount += 10000;
+                                $("#events_content").html("You beat the squid! You even found some extra ink!<br/>Gained 20000 ink.<br/>");
+                            } else {
+                                $("#events_content").html("You beat the squid! It turns out space squids have a lot of ink.<br/>Gained 10000 ink.<br/>");
+                            }
                             $("#events_content").append("<span class='clickable' onclick='start_adventure()'>Done</span>")
                         },
                         function () {

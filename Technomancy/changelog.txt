@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.15.0: No more π.
+Implemented 3 more mage skills: Adventure encounter selectors and a skill to get more stuff from enemies.
+
 v3.14.1(59): Pi
 Fixed a bug where perfect logikittens could infinitely stack (due to the wearing off message happening too quickly.) 
 

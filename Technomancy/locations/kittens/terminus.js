@@ -43,7 +43,13 @@
                         "energy_left": 5,
                     }, function () {
                         resources["water"].amount += 20000;
-                        $("#events_content").html("You beat the ice giant. You collect the ice shards and melt them. <br/>Gained 20000 water.<br/>");
+                        if (event_flags["skills"] && event_flags["skills"][3]) {
+                            resources["water"].amount += 20000;
+                            $("#events_content").html("You beat the ice giant. There's a ton of water here. <br/>Gained 40000 water.<br/>");
+                        }
+                        else {
+                            $("#events_content").html("You beat the ice giant. You collect the ice shards and melt them. <br/>Gained 20000 water.<br/>");
+                        }
                         $("#events_content").append("<span class='clickable' onclick='start_adventure()'>Done</span>");
                     }, function () {
                         enemy_data["actions_left"] -= 1;

@@ -236,6 +236,14 @@ function run_adventure(location) {
             if (loc.weight > 0) {
                 available_encounters.push(loc); /* Add encounter */
                 total_weight += loc.weight; /* Add weight to total. */
+                if (event_flags["skills"]) {
+                    if (event_flags["skills"][5] && loc.types.indexOf("combat") != -1) {
+                        total_weight += loc.weight; /* Add weight to total. */
+                    }
+                    if (event_flags["skills"][6] && loc.types.indexOf("noncombat") != -1) {
+                        total_weight += loc.weight; /* Add weight to total. */
+                    }
+                }
             }
             else {
                 forced_encounters.push(loc); /* Add it to forced encounters. */
@@ -249,12 +257,22 @@ function run_adventure(location) {
     else if (available_encounters.length > 0) {
         var roll_1 = Math.floor(Math.random() * total_weight);
         available_encounters.some(function (enc) {
-            if (roll_1 < enc.weight) {
+            var wght = enc.weight;
+            /* Encounters of the proper type have double weight. */
+            if (event_flags["skills"]) {
+                if (event_flags["skills"][5] && enc.types.indexOf("combat") != -1) {
+                    wght += enc.weight; /* Add weight to total. */
+                }
+                if (event_flags["skills"][6] && enc.types.indexOf("noncombat") != -1) {
+                    wght += enc.weight; /* Add weight to total. */
+                }
+            }
+            if (roll_1 < wght) {
                 chosen_encounter = enc;
                 return true;
             }
             else {
-                roll_1 -= enc.weight;
+                roll_1 -= wght;
                 return false;
             }
         });
