@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.14.1(59): Pi
+Fixed a bug where perfect logikittens could infinitely stack (due to the wearing off message happening too quickly.) 
+
 v3.14.0: Actual Skill Tree
 It's clearer that you'll lose ship parts when you get PC/AutoEvents. The skill tree for Magic option from wanderer is now interactive and skills are buyable. Only some of them work (anything with a non-TODO tooltip).
 

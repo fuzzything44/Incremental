@@ -600,7 +600,9 @@ let events = [
                         resources_per_sec[res] += ps_add;
                         setTimeout(() => resources_per_sec[res] -= ps_add, 60000 * 3);
                     });
-                    setTimeout(() => { this.perfect_cat = false, 60000 * 3; add_log_elem("Logikitten bonus wore off."); });
+                    setTimeout(() => {
+                        this.perfect_cat = false; add_log_elem("Logikitten bonus wore off.");
+                    }, 60000 * 3);
                     $("#events_content").append("Perfect answer! Production increased.<br />");
                     if (buildings["s_goldboost"].on) {
                         buildings["logging"].tooltip = "�������";
