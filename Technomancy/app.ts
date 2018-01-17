@@ -2148,12 +2148,14 @@ function load() {
 }
 
 function save_to_clip() { /* Put save data in clipboard. Copied from Stack Overflow :) */
+    function b64EncodeUnicode(str) {
+        return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
+            return String.fromCharCode(parseInt(p1, 16))
+        }))
+    }
+
     save();
-    let save_data = {};
-    Object.keys(localStorage).forEach(function (item) {
-        save_data[item] = localStorage[item];
-    });
-    let text = btoa(JSON.stringify(save_data));
+    let text = b64EncodeUnicode(JSON.stringify(localStorage));
     let textArea: any = document.createElement("textarea");
 
     /* Styling to make sure it doesn't do much if the element gets rendered */
@@ -2181,7 +2183,13 @@ function save_to_clip() { /* Put save data in clipboard. Copied from Stack Overf
 }
 
 function load_from_clip() {
-    let loaded_data = atob(prompt("Paste your save data here."))
+    function b64DecodeUnicode(str) {
+        return decodeURIComponent(Array.prototype.map.call(atob(str), function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+        }).join(''))
+    }
+
+    let loaded_data = b64DecodeUnicode(prompt("Paste your save data here."))
     try {
         loaded_data = JSON.parse(loaded_data);
 

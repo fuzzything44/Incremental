@@ -109,7 +109,7 @@ let events = [
         "rejection": 95,
     }), /* End time warping */
     ({
-        "condition": function () { return buildings["oil_well"].amount > buildings["oil_well"].free && buildings["oil_well"].base_cost["iron"]; },
+        "condition": function () { return buildings["oil_well"].amount > buildings["oil_well"].free && buildings["oil_well"].base_cost["iron"]; }, /* Only if they aren't min-priced and environmental disaster isn't finished (makes oil wells unbuyable) */
         "run_event": function () {
             buildings["oil_well"].free++; /* Make oil cheaper */
             $("#building_oil_well > .tooltiptext").html(gen_building_tooltip("oil_well")); /* Set tooltip */

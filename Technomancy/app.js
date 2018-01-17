@@ -2009,12 +2009,13 @@ function load() {
     });
 }
 function save_to_clip() {
+    function b64EncodeUnicode(str) {
+        return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
+            return String.fromCharCode(parseInt(p1, 16));
+        }));
+    }
     save();
-    var save_data = {};
-    Object.keys(localStorage).forEach(function (item) {
-        save_data[item] = localStorage[item];
-    });
-    var text = btoa(JSON.stringify(save_data));
+    var text = b64EncodeUnicode(JSON.stringify(localStorage));
     var textArea = document.createElement("textarea");
     /* Styling to make sure it doesn't do much if the element gets rendered */
     /* Place in top-left corner of screen regardless of scroll position. */
@@ -2046,7 +2047,12 @@ function save_to_clip() {
     document.body.removeChild(textArea);
 }
 function load_from_clip() {
-    var loaded_data = atob(prompt("Paste your save data here."));
+    function b64DecodeUnicode(str) {
+        return decodeURIComponent(Array.prototype.map.call(atob(str), function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+    }
+    var loaded_data = b64DecodeUnicode(prompt("Paste your save data here."));
     try {
         loaded_data = JSON.parse(loaded_data);
         Object.keys(loaded_data).forEach(function (key) {
