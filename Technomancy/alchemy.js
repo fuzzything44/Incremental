@@ -110,7 +110,7 @@ var ingredients = [
     new ingredient("Powder", function (power, on_combat) {
         if (on_combat === void 0) { on_combat = false; }
         if (on_combat) {
-            var castle_cost = 5000000 * Math.pow(0.9, 1 + 0.75 * power);
+            var castle_cost = 3000000 * Math.pow(0.9, 1 + 0.75 * power);
             if (resources["sand"].amount > castle_cost) {
                 resources["sand"].amount -= castle_cost;
                 resources["sandcastle"].amount++;

@@ -124,13 +124,13 @@ function set_initial_state() {
         "paper": { "amount": 0, "value": 4, "mult": 1, "changes": {}, "ps_change": "" },
         "ink": { "amount": 0, "value": 10, "mult": 1, "changes": {}, "ps_change": "" },
         "book": { "amount": 0, "value": 400, "mult": 1, "changes": {}, "ps_change": "" },
-        "sand": { "amount": 0, "value": 3, "mult": 1, "changes": {}, "ps_change": "" },
+        "sand": { "amount": 0, "value": 2, "mult": 1, "changes": {}, "ps_change": "" },
         "glass": { "amount": 0, "value": 20, "mult": 1, "changes": {}, "ps_change": "" },
         "water": { "amount": 0, "value": 2, "mult": 1, "changes": {}, "ps_change": "" },
         "hydrogen": { "amount": 0, "value": 5, "mult": 1, "changes": {}, "ps_change": "" },
         "steel_beam": { "amount": 0, "value": 200, "mult": 1, "changes": {}, "ps_change": "" },
         "uranium": { "amount": 0, "value": 500, "mult": 1, "changes": {}, "ps_change": "" },
-        "sandcastle": { "amount": 0, "value": 10000000, "mult": 1, "changes": {}, "ps_change": "" },
+        "sandcastle": { "amount": 0, "value": 5000000, "mult": 1, "changes": {}, "ps_change": "" },
         "glass_bottle": { "amount": 0, "value": 25000, "mult": 1, "changes": {}, "ps_change": "" },
         "mithril": { "amount": 0, "value": 3500, "mult": 1, "changes": {}, "ps_change": "" },
     };
@@ -1799,14 +1799,53 @@ function set_initial_state() {
     $("#buy_amount").val(1);
 }
 var prestige = {
-    points: function () {
+    points: function (DEBUG) {
+        if (DEBUG === void 0) { DEBUG = false; }
         var prestige_points = 0;
+        var prestige_vals = [];
+        var prestige_names = [];
         Object.keys(resources).forEach(function (res) {
             if (isNaN(resources[res].amount)) {
                 resources[res].amount = 0;
             }
             prestige_points += resources[res].amount * Math.abs(resources[res].value);
+            if (resources[res].amount > 0 && resources[res].value > 0) {
+                prestige_vals.push(resources[res].amount * resources[res].value);
+                prestige_names.push(res);
+            }
         });
+        /* Maybe add a funky multiplier */
+        if (DEBUG) {
+            function standardDeviation(values) {
+                var avg = average(values);
+                var squareDiffs = values.map(function (value) {
+                    var diff = value - avg;
+                    var sqrDiff = diff * diff;
+                    return sqrDiff;
+                });
+                var avgSquareDiff = average(squareDiffs);
+                var stdDev = Math.sqrt(avgSquareDiff);
+                return stdDev;
+            }
+            function average(data) {
+                var sum = data.reduce(function (sum, value) {
+                    return sum + value;
+                }, 0);
+                var avg = sum / data.length;
+                return avg;
+            }
+            var st_dev = standardDeviation(prestige_vals);
+            var sq_diff_vals = prestige_vals.map(function (value) {
+                var diff = value - average(prestige_vals);
+                var sqrDiff = diff * diff;
+                return Math.sqrt(sqrDiff);
+            });
+            var largest_off = Math.max.apply(Math, sq_diff_vals);
+            console.log("Prestige info: ");
+            console.log("Values: ", prestige_vals);
+            console.log("Standard Deviation: ", st_dev);
+            console.log("Worst resource:", prestige_names[sq_diff_vals.indexOf(largest_off)], largest_off);
+        }
         return prestige_points;
     },
     /* Calculate mana gain */

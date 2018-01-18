@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.15.2:
+Nerfed sandcastles a bit because with Chairs Sit on People they're super powerful. Also added code to start getting some data on one of the mage upgrades.
+
 v3.15.1: π breaks stuff.
 Having some characters like π in the changelog should no longer break exporting.
 
