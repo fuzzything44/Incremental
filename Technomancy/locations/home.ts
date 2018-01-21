@@ -188,7 +188,10 @@
                         const SKILL_ADVENTURE_FINAL = 14;
                         const SKILL_FINAL = 15;
 
-                        $("#events_content").append("Yay, you can do magic! Message fuzzything44 on Discord if you get this far.<br />");
+                        if (event_flags["skills"][SKILL_FINAL]) {
+                            $("#events_content").append("Yay, you can do magic! Message fuzzything44 on Discord if you get this far.<br />");
+                        }
+
                         $("#events_content").append("Please note that some skills don't do anything yet. They're coming soon! Anything with an actual tooltip should work though.<br />");
 
                         if (event_flags["skills"][SKILL_MAKE_BAG]) {
@@ -387,10 +390,16 @@
                             }
                         }
                     } else if (event_flags["wanderer_knowledge"] == "alchemy") {
-                        $("#events_content").append("Yay, you can do alchemy! Message fuzzything44 on Discord if you get this far.<br />");
+                        $("#events_content").append("There's nothing here... try becoming an inventor or mage. Or check back in a few weeks.<br />");
+                        $("#events_content").append("<span class='clickable'>Reset</span> class choice<br />");
+                        $("#events_content span").last().click(function () {
+                            buildings["library"].free += 50;
+                            delete event_flags["wanderer_knowledge"];
+                            $("#events").addClass("hidden");
+                            $("#character").addClass("hidden");
+                            force_event(12);
+                        });
                     } else if (event_flags["wanderer_knowledge"] == "inventor") {
-                        $("#events_content").append("Yay, you can make machines! Message fuzzything44 on Discord if you get this far.<br />");
-
                         $("#events_content").append("<span class='clickable'>Make</span> a Giant Magnet (Costs 1 Machine Part and 1 KP)<br />");
                         $("#events_content > span").last().click(function () {
                             if (count_item("machine_part", adventure_data.warehouse)) {

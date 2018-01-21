@@ -234,6 +234,10 @@ var events = [
                 content += "<span onclick='bribe_finance();' class='clickable'>Remove Financial Regulations</span><i style='text: small'>This provides a massive boost to banks and investment companies.</i><br />";
                 /* No environmental regulations. Mines and logging camps much stronger. */
                 content += "<span onclick='bribe_environment();' class='clickable'>Remove Environmental Regulations</span><i style='text: small'>This provides a massive boost to mines and logging camps.</i><br />";
+                if (buildings["s_manastone"].amount >= 250) {
+                    var regs = buildings["s_manastone"].amount % 100 >= 50 ? "financial" : "environmental";
+                    content += "Removing " + regs + " regulations seems like it might be risky though...";
+                }
             }
             else {
                 content += "Sadly, you don't have the influence needed. <br /><em>(You need 180 banks.)</em>";
@@ -720,9 +724,9 @@ function handle_event(set_timer) {
                 }
                 else {
                     erule_timeout = setTimeout(function () { return $("#events").addClass("hidden"); }, 1000);
-                }
-                if ($("#events span.clickable").length >= parseInt(rule[1])) {
-                    $("#events span.clickable")[parseInt(rule[1]) - 1].click();
+                    if ($("#events span.clickable").length >= parseInt(rule[1])) {
+                        $("#events span.clickable")[parseInt(rule[1]) - 1].click();
+                    }
                 }
                 throw "Finished event, we're done here.";
             }

@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.15.3:
+Choosing alchemy from the wanderer sucks less (this change will be removed when Alchemist actually gets stuff). Slightly nerfed Chairs Sit on People (you now need some of a resource for it to be set to 1/s). Further nerfed sandcastle prestige value. When bribing, if you have enough mana for a disaster to happen there's an extra message telling you which to bribe (or not bribe). Fixed a weird internal bug that had no effect on gameplay.
+
 v3.15.2:
 Nerfed sandcastles a bit because with Chairs Sit on People they're super powerful. Also added code to start getting some data on one of the mage upgrades.
 

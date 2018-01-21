@@ -1885,7 +1885,7 @@ function set_initial_state() {
             "purchase": function () {
                 Object.keys(resources).forEach(function (res) {
                     setInterval(function () {
-                        if (resources[res].value > 0) {
+                        if (resources[res].value > 0 && resources[res].amount > 0) {
                             resources[res].mult = 1;
                             resources_per_sec[res] = 1;
                         }
@@ -1942,10 +1942,14 @@ let prestige = {
             if (isNaN(resources[res].amount)) {
                 resources[res].amount = 0;
             }
-            prestige_points += resources[res].amount * Math.abs(resources[res].value);
-            if (resources[res].amount > 0 && resources[res].value > 0) {
-                prestige_vals.push(resources[res].amount * resources[res].value);
-                prestige_names.push(res);
+            if (res == "sandcastle") {
+                prestige_points += 5000000 * Math.pow(resources[res].amount, .9);
+            } else {
+                prestige_points += resources[res].amount * Math.abs(resources[res].value);
+                if (resources[res].amount > 0 && resources[res].value > 0) {
+                    prestige_vals.push(resources[res].amount * resources[res].value);
+                    prestige_names.push(res);
+                }
             }
         });
 
