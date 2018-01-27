@@ -868,5 +868,31 @@ var equipment = {
             }
         },
     },
+    "replicator": {
+        type: "item",
+        name: "Replicator",
+        modify: function (self, data) {
+            self.use = function (index, location) {
+                $("#character").addClass("hidden");
+                $("#events_topbar").html("Replicator");
+                $("#events_content").html("What would you like to replicate?<br />");
+                /* Let them replicate something. */
+                Object.keys(resources).forEach(function (res) {
+                    if (resources[res].value > 0 && resources[res].amount > 0 && event_flags["replicated_" + res] == undefined) {
+                        var amount_2 = resources[res].amount / 2;
+                        $("#events_content").append("<span class='clickable'>Copy</span> " + format_num(amount_2, true) + " " + res.replace("_", " ") + "<br >");
+                        $("#events_content > span").last().click(function () {
+                            resources[res].amount += amount_2;
+                            event_flags["replicated_" + res] = true;
+                            adventure_data[location].splice(index, 1);
+                            update_inventory();
+                            start_adventure();
+                        });
+                    }
+                });
+                return 1;
+            };
+        },
+    },
 };
 //# sourceMappingURL=equipment_data.js.map

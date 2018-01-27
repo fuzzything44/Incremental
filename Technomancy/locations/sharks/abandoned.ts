@@ -51,15 +51,32 @@
                         setup_rules();
                     });
                 }
+                $("#events_content").append("<br />" + exit_button("Leave"));
             }
         }),
         ({
             "condition": function () { return false; },
-            "types": [],
+            "types": ["noncombat"],
             "weight": 3,
             "title": "Self-Replication",
             "run_encounter": function () {
-                /* TODO: add maybe a building that self-replicates or something? */
+                if (adventure_data["repl_time"] == undefined) {
+                    adventure_data["repl_time"] = Date.now();
+                }
+                let num_machines = Math.pow(1.00001, Date.now() - adventure_data["repl_time"]);
+
+                if (num_machines == Infinity) {
+                    $("#events_content").html("The replicators are everywhere. <br />");
+                    $("#events_content").append("<span class='clickable'>Take</span> one.");
+                    $("#events_content span").click(function () {
+                        $("#events_content").html("You take one. But where are the rest of them?");
+                        adventure_data["repl_time"] = Date.now();
+                        adventure_data["warehouse"].push({name: "replicator"});
+                    });
+                } else {
+                    $("#events_content").html("There are currently " + format_num(num_machines, true) + " replicators here.<br />");
+                }
+
             },
         }),
     ],

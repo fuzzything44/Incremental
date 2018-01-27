@@ -80,6 +80,7 @@ var UNLOCK_TREE = {
     "big_bank": ["big_mine"],
     "big_mine": [],
     "hydrogen_mine": [],
+    "mana_purifier": [],
 };
 var SPELL_BUILDINGS = [
     "s_manastone",
@@ -105,6 +106,7 @@ function set_initial_state() {
     resources = {
         "time": { "amount": 0, "value": -2, "mult": 1, "changes": {}, "ps_change": "" },
         "refined_mana": { "amount": 0, "value": -1, "mult": 1, "changes": {}, "ps_change": "" },
+        "purified_mana": { "amount": 0, "value": -2500, "mult": 1, "changes": {}, "ps_change": "" },
         "fuel": { "amount": 0, "value": -1000, "mult": 1, "changes": {}, "ps_change": "" },
         "mana": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
         "energy": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
@@ -932,6 +934,21 @@ function set_initial_state() {
             "free": 0,
             "flavor": "The moon rocks. And now you can have those rocks.",
         },
+        "mana_purifier": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {},
+            "price_ratio": {},
+            "generation": {
+                "refined_mana": -1,
+                "energy": -25,
+                "mana": -50,
+                "purified_mana": 0.001,
+            },
+            "multipliers": {},
+            "free": 0,
+            "flavor": "Makes purified mana.",
+        },
     };
     purchased_upgrades = [];
     remaining_upgrades = {
@@ -1749,8 +1766,21 @@ function set_initial_state() {
             "image": "",
             "repeats": false,
         },
+        "fake_all_1": {
+            "unlock": function () { return buildings["s_manastone"].amount < 500 && adventure_data["logicat_chairs"]; },
+            "purchase": function () {
+                alert("Uhh... how did you buy this?");
+            },
+            "cost": {
+                "mana": 500,
+            },
+            "tooltip": "Multiplies ALL rates by 0 and then adds 1.",
+            "name": "Chairs sit on people<br />",
+            "image": "",
+            "repeats": false,
+        },
         "all_1": {
-            "unlock": function () { return buildings["s_manastone"].amount >= 500; },
+            "unlock": function () { return buildings["s_manastone"].amount >= 500 && adventure_data["logicat_chairs"]; },
             "purchase": function () {
                 Object.keys(resources).forEach(function (res) {
                     setInterval(function () {
@@ -2983,6 +3013,9 @@ window.onload = function () {
         if (resources["money"].amount < 10) {
             resources["money"].amount = 10;
         }
+        if (buildings["s_manastone"].amount >= 400) {
+            resources["fuel"].amount += 1;
+        }
         /* What building each mana gives. */
         var start_buildings = ["bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "furnace", "gold_finder", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "compressor", "", "", "", "", "oil_well", "bank", "bank", "bank", "bank", "oil_well", "", "", "", "", "library", "library", "library", "library", "library", "library", "bank", "bank", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "", "", "", "", "oil_engine", "solar_panel", "solar_panel", "solar_panel", "solar_panel", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "", "", "", "", "skyscraper", "bank", "skyscraper", "bank", "skyscraper", "bank", "skyscraper", "bank", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "furnace", "gold_finder", "compressor", "paper_mill", "ink_refinery", "paper_mill"];
         /* Only go as much as they have mana for or we boosts exist for. */
@@ -3026,6 +3059,17 @@ window.onload = function () {
             toggle_building_state("hydrogen_mine");
         }
         $("#building_hydrogen_mine  > .building_amount").html(format_num(buildings["hydrogen_mine"].amount, false));
+    }
+    if (adventure_data["mana_purifier"]) {
+        var comp_state = buildings["mana_purifier"].on;
+        if (comp_state) {
+            toggle_building_state("mana_purifier");
+        }
+        buildings["mana_purifier"].amount = adventure_data["mana_purifier"];
+        if (comp_state) {
+            toggle_building_state("mana_purifier");
+        }
+        $("#building_mana_purifier  > .building_amount").html(format_num(buildings["mana_purifier"].amount, false));
     }
     setup_groups();
     setup_rules();
@@ -3073,6 +3117,11 @@ window.onload = function () {
             else if (e.key.toLowerCase() == "f") {
                 if (!$("#refined_mana").hasClass("hidden")) {
                     $("#refined_mana .res_gen").click();
+                }
+            }
+            else if (e.key.toLowerCase() == "c") {
+                if (!$("#purified_mana").hasClass("hidden")) {
+                    $("#purified_mana .res_gen").click();
                 }
             }
             else if (e.key.toLowerCase() == "t") {

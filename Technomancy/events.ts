@@ -7,7 +7,7 @@ let events = [
             add_log_elem("Nothing interesting happened.");
             throw Error("Nope, we're not doing an event.");
         },
-        "name": "",
+        "name": "Lack of an event",
         "rejection": 0,
     }), /* End lack of event */
     ({
@@ -575,6 +575,42 @@ let events = [
                                     adventure_data["logicat_rush"] = 1;
                                 }
                             }];
+                        } else if (adventure_data["logicat_level"] >= 42) {
+                            reward_list.push(
+                                {
+                                    "name": "Temporal Duplication",
+                                    "effect": function () { resources["time"].amount += 120; }
+                                },
+                                {
+                                    "name": "Ninja Stealth Streak",
+                                    "effect": function () {
+                                        if (adventure_data["logicat_stealth"] == undefined) {
+                                            adventure_data["logicat_stealth"] = 1;
+                                        }
+                                        $("#events_content").append(" (Stealth level at " + format_num(adventure_data["logicat_stealth"], false) + ")");
+                                        /* Refuel ship */
+                                        adventure_data["inventory_fuel"] += Math.ceil(Math.sqrt(adventure_data["logicat_stealth"]) / 10);
+                                        update_inventory();
+                                        adventure_data["logicat_stealth"]++;
+                                    }
+                                },
+                                {
+                                "name": "Redundant redundancy",
+                                "effect": function () {
+                                    $("#events_content").append(" <span class='clickable'>Hide</span>");
+                                    $("#events_content > span").last().click(function () {
+                                        $("#events").addClass("hidden");
+                                        force_event(10);
+                                    });
+                                }
+                            });
+                        } else if (adventure_data["logicat_level"] >= 42 && adventure_data["logicat_chairs"] == undefined) {
+                            reward_list = [{
+                                "name": "People Sit on Chairs",
+                                "effect": function () {
+                                    adventure_data["logicat_chairs"] = true;
+                                }
+                            }];
                         } else if (adventure_data["logicat_level"] >= 100 && !count_item("conv_cube", adventure_data.warehouse)) {
                             reward_list = [{
                                 "name": "Question Qube", "effect": function () {
@@ -585,8 +621,10 @@ let events = [
 
                         /* Choose random reward from list. */
                         let reward = reward_list[prng(adventure_data["logicat_level"]) % reward_list.length];
-                        $("#events_content").append(reward.name + "<br />");
+                        $("#events_content").append(reward.name);
                         reward.effect();
+                        $("#events_content").append("<br />");
+
                     } /* End level up loop */
 
                 } /* End level up. */ 
@@ -603,10 +641,18 @@ let events = [
                         if (res == "mana" || resources[res].value < 0) { ps_add = 0; } /* Don't add mana or special resources. Do give other stuff. */
 
                         resources_per_sec[res] += ps_add;
-                        setTimeout(() => resources_per_sec[res] -= ps_add, 60000 * 3);
+                        resources[res].changes["Logicat bonus"] = ps_add; /* Add it to the change list. */
+                        setTimeout(() => {
+                            resources_per_sec[res] -= ps_add
+                            delete resources["res"].changes["Logicat bonus"];
+                        }, 60000 * 3);
                     });
+                    resource_tooltip(); /* Update resource tooltips after change lists updated.*/
+
                     setTimeout(() => {
-                        this.perfect_cat = false; add_log_elem("Logikitten bonus wore off.");
+                        this.perfect_cat = false;
+                        add_log_elem("Logikitten bonus wore off.");
+                        resource_tooltip();
                     }, 60000 * 3);
                     $("#events_content").append("Perfect answer! Production increased.<br />");
                     if (buildings["s_goldboost"].on) {
@@ -681,6 +727,39 @@ let events = [
 
 ];
 
+/* Used by purified mana. */
+function choose_event() {
+    /* No event currently going on. */
+    if ($("#events").hasClass("hidden")) {
+        /* They can afford it. */
+        if (resources["purified_mana"].amount >= 1) {
+            $("#events_topbar").html("Choose an event");
+            $("#events_content").html("Choose an event. This will use up purified mana.<br />");
+            /* Go through all possible events, see which they can do. */
+            events.forEach(function (event) {
+                /* If true, then that event is possible to normally get. */
+                if (event.condition()) {
+                    /* Purified mana cost is proportional to the rejection rate. */
+                    let cost = Math.ceil(event.rejection / 5) + 1;
+                    /* So add a button letting them choose it. */
+                    $("#events_content").append("<span class='clickable'>Choose</span> " + event.name + " (" + format_num(cost, false) + ") <br />");
+                    /* Pretty normal event running, but we'll take a purified mana first. Only done here in case they change their mind. */
+                    $("#events_content span").last().click(function () {
+                        resources["purified_mana"].amount -= cost;
+                        $("#events_topbar").html(event.name);
+                        event.run_event();
+                    });
+                }
+            });
+            /* Show them stuff. */
+            $("#events").removeClass("hidden");
+        } else {
+            alert("You need more purified mana");
+        }
+    } else {
+        alert("There's already an event going on!");
+    }
+}
 /* Literally only for testing purposes. And logikittens I guess. */
 function force_event(id: number) {
     /* Only start a new event if the old one finished. */

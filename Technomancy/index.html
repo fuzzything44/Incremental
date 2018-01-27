@@ -60,6 +60,13 @@
             </span>
             <br />
         </div>
+        <div id="purified_mana" class="hidden" style="padding-bottom: .3em; border-bottom-color: darkred;">
+            <span style="color: darkred; text-shadow: skyblue 0px 0px 7px; vertical-align: middle;">Purified mana: 0</span>
+            <span class="res_gen " onclick="choose_event()" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid; border-radius: 3px;">
+                Choose Event
+            </span>
+            <br />
+        </div>
         <div id="fuel" class="hidden" style="padding-bottom: .3em; border-bottom-color: greenyellow;">
             <span style="color: greenyellow; text-shadow: yellow 1px 0px 10px; vertical-align: middle;">Refined mana: 0</span>
             <span class="res_gen " onclick="if (resources['fuel'].amount < 1 && adventure_data['inventory_fuel'] < 1) { alert('You need more fuel.'); } else { start_adventure(); }" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid; border-radius: 3px;">
@@ -552,6 +559,15 @@
                 <span class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()"></span>
             </span>
             <span id="toggle_hydrogen_mine" class="building_state_on" onclick="toggle_building_state('hydrogen_mine')">On</span>
+        </div>
+        <div style="position: relative" class="hidden">
+            <span onclick="destroy_building('mana_purifier')" class="building_remove">X</span>
+            <span id="building_mana_purifier" class="building tooltip">
+                <span class="building_name">Mana Purifier</span>
+                <span class="building_amount">0</span>
+                <span class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()"></span>
+            </span>
+            <span id="toggle_mana_purifier" class="building_state_on" onclick="toggle_building_state('mana_purifier')">On</span>
         </div>
     <!-- End of building list. -->
     </div>

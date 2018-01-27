@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.16.0: Purified Mana and More
+There's now some machines that self-replicate on the Abandoned World (not colony). They can give you some good loot. Added purified mana and a building to make it. There's no way to get that building yet though. Added another small starting bonus - if you have 400 or more mana, you start with 1 free fuel. There's some new logikitten rewards too. The perfect cat bonus should now theoretically show up in the tracking tooltips for resources. 
+
 v3.15.3:
 Choosing alchemy from the wanderer sucks less (this change will be removed when Alchemist actually gets stuff). Slightly nerfed Chairs Sit on People (you now need some of a resource for it to be set to 1/s). Further nerfed sandcastle prestige value. When bribing, if you have enough mana for a disaster to happen there's an extra message telling you which to bribe (or not bribe). Fixed a weird internal bug that had no effect on gameplay.
 
