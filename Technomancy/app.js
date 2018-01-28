@@ -1815,6 +1815,28 @@ function set_initial_state() {
             "image": "",
             "repeats": false,
         },
+        "make_purifier": {
+            "unlock": function () { return adventure_data["mana_purifier"] == undefined && event_flags["know_pts"] >= 10; },
+            "purchase": function () {
+                adventure_data["mana_purifier"] = 1;
+                var build_state = buildings["mana_purifier"].on;
+                if (build_state) {
+                    toggle_building_state("mana_purifier");
+                }
+                buildings["mana_purifier"].amount = 1;
+                if (build_state) {
+                    toggle_building_state("mana_purifier");
+                }
+                $("#building_mana_purifier  > .building_amount").html(format_num(buildings["mana_purifier"].amount, false));
+            },
+            "cost": {
+                "refined_mana": 50000,
+            },
+            "tooltip": "Constructs a mana purifier. Can only be purchased once.",
+            "name": "Mana Mastery<br />",
+            "image": "",
+            "repeats": false,
+        },
         "trade": {
             "unlock": function () { return false; },
             "purchase": function () { },
@@ -2911,6 +2933,8 @@ function draw_rule(name) {
 var erules = [];
 function draw_erule() {
     $("#rule_data").html("Note: Titles are matched using <a href='https://www.regular-expressions.info/tutorial.html' target='_blank' class='fgc'>regular expressions.</a><br />");
+    erules = erules.filter(function (rule) { return rule[0] != "" || rule[1] != ""; });
+    erules.push(["", ""]);
     var i = 0;
     erules.forEach(function (rule) {
         var index = i;
@@ -2927,7 +2951,6 @@ function draw_erule() {
     });
     $("#rule_data").append("<span class='clickable'>+</span>");
     $("#rule_data span").last().click(function () {
-        erules.push(["", ""]);
         draw_erule();
     });
 }

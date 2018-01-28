@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.16.1: Purified Mana and More
+Unlocking AutoEvents now will actually destroy your shields. You can now construct a mana purifier (if you have a lot of KP). Fixed a bug with AutoEvents always triggering because of blank fields. Fixed a bug with high-level logicat rewards being impossible to get. Oh, and once you get purified mana the hotkey to use it is C.
+
 v3.16.0: Purified Mana and More
 There's now some machines that self-replicate on the Abandoned World (not colony). They can give you some good loot. Added purified mana and a building to make it. There's no way to get that building yet though. Added another small starting bonus - if you have 400 or more mana, you start with 1 free fuel. There's some new logikitten rewards too. The perfect cat bonus should now theoretically show up in the tracking tooltips for resources. 
 

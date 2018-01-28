@@ -43,7 +43,7 @@
                         $("#pc_box").parent().removeClass("hidden");
                         $("#events_content").html("The machines continue their functions, even as the tar in the ocean grows and obscures them from your view and rusts your shields.<br />");
                         $("#events_content").append("<i>Note: you have unlocked event automation. Set the option number to 0 to instantly close an event. Otherwise, if an event matches it will close after 1 second.</i>");
-                        adventure_data["ship"].shields = null;
+                        adventure_data["ship"].shield = null;
                         update_inventory();
                         setup_rules();
                     });

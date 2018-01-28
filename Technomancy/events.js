@@ -6,7 +6,7 @@ var events = [
             add_log_elem("Nothing interesting happened.");
             throw Error("Nope, we're not doing an event.");
         },
-        "name": "Lack of an event",
+        "name": "",
         "rejection": 0,
     }),
     ({
@@ -529,32 +529,10 @@ var events = [
                         if (adventure_data["sandcastle_boost_unlocked"]) {
                             reward_list.push({ "name": "ONG!", "effect": function () { adventure_data["sandcastle_boost_unlocked"] = 1; } });
                         }
-                        /* Fixed level rewards */
-                        if (adventure_data["logicat_level"] >= 5 && adventure_data["sandcastle_boost_unlocked"] == undefined) {
-                            reward_list = [{
-                                    "name": "Sandcastles", "effect": function () {
-                                        adventure_data["sandcastle_boost_unlocked"] = 1;
-                                    }
-                                }];
-                        }
-                        else if (adventure_data["logicat_level"] >= 10 && adventure_data["logicat_explore"] == undefined) {
-                            reward_list = [{
-                                    "name": "The DoRD has provided: Starchart", "effect": function () {
-                                        adventure_data["logicat_explore"] = 1;
-                                    }
-                                }];
-                        }
-                        else if (adventure_data["logicat_level"] >= 20 && adventure_data["logicat_rush"] == undefined && purchased_upgrades.indexOf("better_logic") == -1) {
-                            reward_list = [{
-                                    "name": "The DoRD has provided: Panther Rush", "effect": function () {
-                                        adventure_data["logicat_rush"] = 1;
-                                    }
-                                }];
-                        }
-                        else if (adventure_data["logicat_level"] >= 42) {
+                        if (adventure_data["logicat_level"] >= 33) {
                             reward_list.push({
-                                "name": "Temporal Duplication",
-                                "effect": function () { resources["time"].amount += 120; }
+                                "name": "Temporal Triplication",
+                                "effect": function () { resources["time"].amount += 180; }
                             }, {
                                 "name": "Ninja Stealth Streak",
                                 "effect": function () {
@@ -577,6 +555,28 @@ var events = [
                                     });
                                 }
                             });
+                        }
+                        /* Fixed level rewards */
+                        if (adventure_data["logicat_level"] >= 5 && adventure_data["sandcastle_boost_unlocked"] == undefined) {
+                            reward_list = [{
+                                    "name": "Sandcastles", "effect": function () {
+                                        adventure_data["sandcastle_boost_unlocked"] = 1;
+                                    }
+                                }];
+                        }
+                        else if (adventure_data["logicat_level"] >= 10 && adventure_data["logicat_explore"] == undefined) {
+                            reward_list = [{
+                                    "name": "The DoRD has provided: Starchart", "effect": function () {
+                                        adventure_data["logicat_explore"] = 1;
+                                    }
+                                }];
+                        }
+                        else if (adventure_data["logicat_level"] >= 20 && adventure_data["logicat_rush"] == undefined && purchased_upgrades.indexOf("better_logic") == -1) {
+                            reward_list = [{
+                                    "name": "The DoRD has provided: Panther Rush", "effect": function () {
+                                        adventure_data["logicat_rush"] = 1;
+                                    }
+                                }];
                         }
                         else if (adventure_data["logicat_level"] >= 42 && adventure_data["logicat_chairs"] == undefined) {
                             reward_list = [{
@@ -702,7 +702,7 @@ function choose_event() {
             /* Go through all possible events, see which they can do. */
             events.forEach(function (event) {
                 /* If true, then that event is possible to normally get. */
-                if (event.condition()) {
+                if (event.condition() && event.name != "") {
                     /* Purified mana cost is proportional to the rejection rate. */
                     var cost_1 = Math.ceil(event.rejection / 5) + 1;
                     /* So add a button letting them choose it. */
@@ -795,7 +795,7 @@ function handle_event(set_timer) {
         $("#events").removeClass("hidden");
         /* Check regex matches */
         erules.forEach(function (rule) {
-            if ($("#events_topbar").text().match(rule[0])) {
+            if (rule[0] != "" && $("#events_topbar").text().match(rule[0])) {
                 if (rule[1] == "0") {
                     $("#events").addClass("hidden");
                 }

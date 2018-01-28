@@ -7,7 +7,7 @@ let events = [
             add_log_elem("Nothing interesting happened.");
             throw Error("Nope, we're not doing an event.");
         },
-        "name": "Lack of an event",
+        "name": "",
         "rejection": 0,
     }), /* End lack of event */
     ({
@@ -556,6 +556,38 @@ let events = [
                         if (adventure_data["sandcastle_boost_unlocked"]) {
                             reward_list.push({ "name": "ONG!", "effect": function () { adventure_data["sandcastle_boost_unlocked"] = 1; }})
                         }
+                        if (adventure_data["logicat_level"] >= 33) {
+                            reward_list.push(
+                                {
+                                    "name": "Temporal Triplication",
+                                    "effect": function () { resources["time"].amount += 180; }
+                                },
+                                {
+                                    "name": "Ninja Stealth Streak",
+                                    "effect": function () {
+                                        if (adventure_data["logicat_stealth"] == undefined) {
+                                            adventure_data["logicat_stealth"] = 1;
+                                        }
+                                        $("#events_content").append(" (Stealth level at " + format_num(adventure_data["logicat_stealth"], false) + ")");
+                                        /* Refuel ship */
+                                        adventure_data["inventory_fuel"] += Math.ceil(Math.sqrt(adventure_data["logicat_stealth"]) / 10);
+                                        update_inventory();
+                                        adventure_data["logicat_stealth"]++;
+                                    }
+                                },
+                                {
+                                    "name": "Redundant redundancy",
+                                    "effect": function () {
+                                        $("#events_content").append(" <span class='clickable'>Hide</span>");
+                                        $("#events_content > span").last().click(function () {
+                                            $("#events").addClass("hidden");
+                                            force_event(10);
+                                        });
+                                    }
+                                }
+                            );
+                        }
+
                         /* Fixed level rewards */
                         if (adventure_data["logicat_level"] >= 5 && adventure_data["sandcastle_boost_unlocked"] == undefined) {
                             reward_list = [{
@@ -575,36 +607,9 @@ let events = [
                                     adventure_data["logicat_rush"] = 1;
                                 }
                             }];
-                        } else if (adventure_data["logicat_level"] >= 42) {
-                            reward_list.push(
-                                {
-                                    "name": "Temporal Duplication",
-                                    "effect": function () { resources["time"].amount += 120; }
-                                },
-                                {
-                                    "name": "Ninja Stealth Streak",
-                                    "effect": function () {
-                                        if (adventure_data["logicat_stealth"] == undefined) {
-                                            adventure_data["logicat_stealth"] = 1;
-                                        }
-                                        $("#events_content").append(" (Stealth level at " + format_num(adventure_data["logicat_stealth"], false) + ")");
-                                        /* Refuel ship */
-                                        adventure_data["inventory_fuel"] += Math.ceil(Math.sqrt(adventure_data["logicat_stealth"]) / 10);
-                                        update_inventory();
-                                        adventure_data["logicat_stealth"]++;
-                                    }
-                                },
-                                {
-                                "name": "Redundant redundancy",
-                                "effect": function () {
-                                    $("#events_content").append(" <span class='clickable'>Hide</span>");
-                                    $("#events_content > span").last().click(function () {
-                                        $("#events").addClass("hidden");
-                                        force_event(10);
-                                    });
-                                }
-                            });
-                        } else if (adventure_data["logicat_level"] >= 42 && adventure_data["logicat_chairs"] == undefined) {
+                        }
+                        /* We have extra boosts added at 33, filling in this gap. */
+                        else if (adventure_data["logicat_level"] >= 42 && adventure_data["logicat_chairs"] == undefined) {
                             reward_list = [{
                                 "name": "People Sit on Chairs",
                                 "effect": function () {
@@ -738,7 +743,7 @@ function choose_event() {
             /* Go through all possible events, see which they can do. */
             events.forEach(function (event) {
                 /* If true, then that event is possible to normally get. */
-                if (event.condition()) {
+                if (event.condition() && event.name != "") {
                     /* Purified mana cost is proportional to the rejection rate. */
                     let cost = Math.ceil(event.rejection / 5) + 1;
                     /* So add a button letting them choose it. */
@@ -828,7 +833,7 @@ function handle_event(set_timer: boolean = true) {
 
         /* Check regex matches */
         erules.forEach(function (rule) {
-            if ($("#events_topbar").text().match(rule[0])) {
+            if (rule[0] != "" && $("#events_topbar").text().match(rule[0])) {
 
                 if (rule[1] == "0") {
                     $("#events").addClass("hidden");
