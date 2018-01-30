@@ -1795,7 +1795,7 @@ function set_initial_state() {
                 this.purchase();
             },
             "cost": {
-                "refined_mana": 10000,
+                "refined_mana": 100000,
             },
             "tooltip": "Multiplies ALL rates by 0 and then adds 1.",
             "name": "Chairs sit on people<br />",
@@ -1813,7 +1813,7 @@ function set_initial_state() {
             "tooltip": "Undo Chairs sit on People.",
             "name": "Broken Chair<br />",
             "image": "",
-            "repeats": false,
+            "repeats": true,
         },
         "make_purifier": {
             "unlock": function () { return adventure_data["mana_purifier"] == undefined && event_flags["know_pts"] >= 10; },
@@ -1830,7 +1830,7 @@ function set_initial_state() {
                 $("#building_mana_purifier  > .building_amount").html(format_num(buildings["mana_purifier"].amount, false));
             },
             "cost": {
-                "refined_mana": 50000,
+                "refined_mana": 500000,
             },
             "tooltip": "Constructs a mana purifier. Can only be purchased once.",
             "name": "Mana Mastery<br />",
@@ -3037,7 +3037,7 @@ window.onload = function () {
             resources["money"].amount = 10;
         }
         if (buildings["s_manastone"].amount >= 400) {
-            resources["fuel"].amount += 1;
+            resources["fuel"].amount += 0.3;
         }
         /* What building each mana gives. */
         var start_buildings = ["bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "furnace", "gold_finder", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "compressor", "", "", "", "", "oil_well", "bank", "bank", "bank", "bank", "oil_well", "", "", "", "", "library", "library", "library", "library", "library", "library", "bank", "bank", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "", "", "", "", "oil_engine", "solar_panel", "solar_panel", "solar_panel", "solar_panel", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "", "", "", "", "skyscraper", "bank", "skyscraper", "bank", "skyscraper", "bank", "skyscraper", "bank", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "furnace", "gold_finder", "compressor", "paper_mill", "ink_refinery", "paper_mill"];

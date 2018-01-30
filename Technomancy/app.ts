@@ -1927,7 +1927,7 @@ function set_initial_state() {
                 this.purchase();
             },
             "cost": {
-                "refined_mana": 10000,
+                "refined_mana": 100000,
             },
             "tooltip": "Multiplies ALL rates by 0 and then adds 1.",
             "name": "Chairs sit on people<br />",
@@ -1946,7 +1946,7 @@ function set_initial_state() {
             "tooltip": "Undo Chairs sit on People.",
             "name": "Broken Chair<br />",
             "image": "",
-            "repeats": false,
+            "repeats": true,
         },
         "make_purifier": {
             "unlock": function () { return adventure_data["mana_purifier"] == undefined && event_flags["know_pts"] >= 10; },
@@ -1964,7 +1964,7 @@ function set_initial_state() {
 
             },
             "cost": {
-                "refined_mana": 50000,
+                "refined_mana": 500000,
             },
             "tooltip": "Constructs a mana purifier. Can only be purchased once.",
             "name": "Mana Mastery<br />",
@@ -3206,7 +3206,7 @@ window.onload = () => {
             resources["money"].amount = 10;
         }
         if (buildings["s_manastone"].amount >= 400) {
-            resources["fuel"].amount += 1;
+            resources["fuel"].amount += 0.3;
         }
 
         /* What building each mana gives. */
