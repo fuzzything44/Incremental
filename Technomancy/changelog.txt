@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.17.0:
+Added a casino you can lose money at. Seriously, the slots have a 2.7% return. Don't play them.
+
 v3.16.2:
 Fix CSOP and mana purifier cost (should be 10x what it was). Broken chair can be bought more than once. Reduced free fuel per prestige and fuel required to adventure.
 

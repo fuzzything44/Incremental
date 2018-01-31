@@ -69,18 +69,20 @@
                     $("#events_content").html("The replicators are everywhere. <br />");
                     $("#events_content").append("<span class='clickable'>Take</span> one.");
                     $("#events_content span").click(function () {
-                        $("#events_content").html("You take one. But where are the rest of them?");
+                        $("#events_content").html("You take one. But where are the rest of them?<br />");
+                        $("#events_content").append(exit_button("Leave"));
                         adventure_data["repl_time"] = Date.now();
                         adventure_data["warehouse"].push({name: "replicator"});
                     });
                 } else {
                     $("#events_content").html("There are currently " + format_num(num_machines, true) + " replicators here.<br />");
+                    $("#events_content").append(exit_button("leave"));
                 }
 
             },
         }),
     ],
-    "connects_to": ["sharks/haven"],
+    "connects_to": ["sharks/marine", "sharks/haven"],
     "enter_cost": 8,
     "leave_cost": 3,
     "name": "Abandoned World",
