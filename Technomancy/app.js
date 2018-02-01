@@ -3006,7 +3006,7 @@ function prng(seed) {
 window.onload = function () {
     set_initial_state();
     load();
-    setInterval(update, 35);
+    setInterval(update, 50);
     /* Add upgrades to be unhidden*/
     /* Loop through all remaining upgrades */
     Object.keys(remaining_upgrades).forEach(function (upg_name) {

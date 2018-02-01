@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.17.1:
+Improved the slot machine at the casino. It still probably isn't worth it, but why not try it out and upgrade it a bit? Also decreased the update rate to improve performance.
+
 v3.17.0:
 Added a casino you can lose money at. Seriously, the slots have a 2.7% return. Don't play them.
 

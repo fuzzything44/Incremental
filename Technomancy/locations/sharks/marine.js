@@ -8,11 +8,22 @@
             "weight": 0,
             "title": "Deep Sea Casino",
             "run_encounter": function () {
+                var _this = this;
                 /* Use a special token for the table in case it gets closed/reopened before the interval clears. */
-                var CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                var TOKEN_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
                 var table_token = "slots_";
                 for (var i = 0; i < 5; i++) {
-                    table_token += CHARS.charAt(Math.floor(Math.random() * CHARS.length));
+                    table_token += TOKEN_CHARS.charAt(Math.floor(Math.random() * TOKEN_CHARS.length));
+                }
+                /* Define all our adventure data we need to keep track of. This lets us later use it without caring if it's in adventure data (it is). */
+                if (adventure_data["casino_tokens"] == undefined) {
+                    adventure_data["casino_tokens"] = 0;
+                }
+                if (adventure_data["slots_less"] == undefined) {
+                    adventure_data["slots_less"] = 0;
+                }
+                if (adventure_data["slots_time"] == undefined) {
+                    adventure_data["slots_time"] = 1;
                 }
                 $("#character").addClass("hidden");
                 $("#events_content").html("Welcome to the Casino of Bad Slot Machines!<br />");
@@ -34,8 +45,17 @@
                     "<td id='slot_2_2'>N</td>" +
                     "</tr>" +
                     "</table><br />");
+                function token_updates() {
+                    if (!$("#events").hasClass("hidden") && $("#" + table_token).length != 0) {
+                        setTimeout(token_updates, 50);
+                        $("#casino_tokens").html(format_num(adventure_data["casino_tokens"]));
+                    }
+                }
+                token_updates();
                 /* Run our slot machine! */
                 var slot_strength = 0;
+                var chars = "ABCDEFabcdefVWXYwvxy$?!";
+                chars = chars.slice(adventure_data["slots_less"], chars.length);
                 function slots() {
                     /* Move up all columns. Sometimes we'll skip one. So 70% chance of skipping a random column. */
                     var colskip = Math.random() > 0.7 ? Math.floor(Math.random() * 3) : -1;
@@ -45,8 +65,7 @@
                                 continue;
                             var char = "*";
                             if (i == 2) {
-                                var CHARS_1 = "ABCDEFabcdefVWXYwvxy$?!";
-                                char = CHARS_1[Math.floor(Math.random() * CHARS_1.length)];
+                                char = chars[Math.floor(Math.random() * chars.length)];
                             }
                             else {
                                 char = $("#" + table_token + " #slot_" + (i + 1).toString() + "_" + j.toString()).html();
@@ -58,17 +77,23 @@
                     if (!$("#events").hasClass("hidden") && $("#" + table_token).length != 0) {
                         slot_strength--;
                         if (slot_strength > 0) {
-                            setTimeout(slots, 300 - (slot_strength * 6));
+                            var time = 300 - (slot_strength * 6);
+                            time /= adventure_data["slots_time"];
+                            setTimeout(slots, time);
                         }
                         else {
                             /* Slot machine finished, so total up results. */
                             if ($("#" + table_token + " #slot_1_0").html() == $("#" + table_token + " #slot_1_1").html() && $("#" + table_token + " #slot_1_0").html() == $("#" + table_token + " #slot_1_2").html()) {
                                 $("#slot_results").html("You win!");
-                                resources["money"].amount += 10000000; /* Give a laughable 10M */
+                                adventure_data["casino_tokens"] += 5;
                                 if ($("#" + table_token + " #slot_1_0").html() == "$") {
-                                    $("#slot_results").append(" Jackpot!");
-                                    resources["money"].amount += 100000000; /* Give a laughable 100M */
+                                    $("#slot_results").append(" Jackpot! That's a lot of these tokens!");
+                                    adventure_data["casino_tokens"] += 100;
                                 }
+                            }
+                            else if ($("#" + table_token + " #slot_1_0").html() == $("#" + table_token + " #slot_1_1").html() || $("#" + table_token + " #slot_1_1").html() == $("#" + table_token + " #slot_1_2").html()) {
+                                $("#slot_results").html("You won! You get... a plastic coin? Come on!");
+                                adventure_data["casino_tokens"]++;
                             }
                             else {
                                 $("#slot_results").html("You lose :(");
@@ -86,7 +111,26 @@
                         slots();
                     }
                 });
-                return;
+                if (adventure_data["slots_less"] < 17) {
+                    $("#events_content").append("<span class='clickable'>Improve</span> slot machine odds (" + format_num(adventure_data["slots_less"] + 1, false) + " tokens)<br />");
+                    $("#events_content span").last().click(function () {
+                        if (adventure_data["casino_tokens"] > adventure_data["slots_less"]) {
+                            adventure_data["slots_less"]++;
+                            adventure_data["casino_tokens"] -= adventure_data["slots_less"];
+                            _this.run_encounter();
+                        }
+                    });
+                }
+                if (adventure_data["slots_time"] < 7) {
+                    $("#events_content").append("<span class='clickable'>Increase</span> slot machine speed (" + format_num(adventure_data["slots_time"], false) + " tokens)<br />");
+                    $("#events_content span").last().click(function () {
+                        if (adventure_data["casino_tokens"] >= adventure_data["slots_time"]) {
+                            adventure_data["casino_tokens"] -= adventure_data["slots_time"];
+                            adventure_data["slots_time"]++;
+                            _this.run_encounter();
+                        }
+                    });
+                }
             }
         }),
     ],
