@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.17.2:
+More slot machine improvements. There's now many more upgrades you can get for it. Still probably not worth playing.
+
 v3.17.1:
 Improved the slot machine at the casino. It still probably isn't worth it, but why not try it out and upgrade it a bit? Also decreased the update rate to improve performance.
 

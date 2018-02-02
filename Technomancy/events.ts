@@ -230,7 +230,7 @@ let events = [
         "rejection": 0,
     }), /* End demon stealing */
     ({
-        "condition": function () { return typeof event_flags["bribed_politician"] == "undefined" && buildings["big_bank"].amount >= 5 && buildings["s_manastone"].amount >= 150; },
+        "condition": function () { return event_flags["bribed_politician"] == undefined && buildings["big_bank"].amount >= 5 && buildings["s_manastone"].amount >= 150; },
         "run_event": function () {
             let content = "<span>Business isn't doing well. Regulations are really holding you back.</span><br>";
             if (buildings["bank"].amount >= 180) {
