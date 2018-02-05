@@ -139,9 +139,10 @@ function set_initial_state() {
         "hydrogen": { "amount": 0, "value": 5, "mult": 1, "changes": {}, "ps_change": "" },
         "steel_beam": { "amount": 0, "value": 200, "mult": 1, "changes": {}, "ps_change": "" },
         "uranium": { "amount": 0, "value": 500, "mult": 1, "changes": {}, "ps_change": "" },
-        "sandcastle": { "amount": 0, "value": 5000000, "mult": 1, "changes": {}, "ps_change": "" }, /* Woah, worth 5M */
+        "sandcastle": { "amount": 0, "value": 5000000, "mult": 1, "changes": {}, "ps_change": "" }, /* Value for these is weird when prestiging. */
         "glass_bottle": { "amount": 0, "value": 25000, "mult": 1, "changes": {}, "ps_change": "" }, /* Not much above glass value, but they're useful! */
         "mithril": { "amount": 0, "value": 3500, "mult": 1, "changes": {}, "ps_change": "" },
+        "void": { "amount": 0, "value": 100000, "mult": 1, "changes": {}, "ps_change": "" }, /* Actually less than the fuel that goes into it. */
 
     };
     /* Set resources_per_sec */
@@ -1916,7 +1917,7 @@ function set_initial_state() {
             "purchase": function () {
                 Object.keys(resources).forEach(function (res) {
                     setInterval(function () {
-                        if (resources[res].value > 0 && resources[res].amount > 0) {
+                        if (resources[res].value > 0 && resources[res].amount > 0 && resources_per_sec[res] != 0) {
                             resources[res].mult = 1;
                             resources_per_sec[res] = 1;
                         }
@@ -1970,6 +1971,175 @@ function set_initial_state() {
             "name": "Mana Mastery<br />",
             "image": "",
             "repeats": false,
+        },
+        "garden": {
+            "unlock": function () { return event_flags["garden"] != undefined; },
+            "current_seed": -1,
+            "purchase": function (clicked = true) {
+                if (clicked) { this.current_seed = -1; }
+
+                $("#events_topbar").html("Gardening");
+                $("#events_content").html("<span id='current_seed'></span>");
+                if (this.current_seed != -1) {
+                    if (this.current_seed > 0) {
+                        $("#current_seed").html("Currently planting: " + event_flags["seeds"][this.current_seed].name);
+                    } else if (this.current_seed == -2) {
+                        $("#current_seed").html("Currently watering");
+                    } else if (this.current_seed == -3) {
+                        $("#current_seed").html("Currently fertilizing");
+                    } else if (this.current_seed == -4) {
+                        $("#current_seed").html("Clearing plants");
+                    }
+                }
+                $("#events_content").append(
+                    "<table class='fgc' style='border: none; background-color: darkgreen; border-collapse: collapse;'>" + 
+                    "<tr style='height: 10em;'>             " +
+                    "    <td style='width: 10em; border: 1px solid;'></td>      " +
+                    "    <td style='width: 10em; border: 1px solid;'></td>      " +
+                    "    <td style='width: 10em; border: 1px solid;'></td>      " +
+                    "    <td class='bgc_second' style='border: none;'></td>      " +
+                    "</tr>                                  " +
+                    "<tr style='height: 10em;'>             " +
+                    "    <td style='width: 10em; border: 1px solid;'></td>      " +
+                    "    <td style='width: 10em; border: 1px solid;'></td>      " +
+                    "    <td style='width: 10em; border: 1px solid;'></td>      " +
+                    "    <td class='bgc_second' style='width: 10em; border: 1px solid;'></td>      " +
+                    "</tr>                                  " +
+                    "<tr style='height: 10em;'>             " +
+                    "    <td style='width: 10em; border: 1px solid;'></td>      " +
+                    "    <td style='width: 10em; border: 1px solid;'></td>      " +
+                    "    <td style='width: 10em; border: 1px solid;'></td>      " +
+                    "    <td class='bgc_second' style='border: none'></td>      " +
+                    "</tr></table>");
+
+                /* Set up bar to the right. */
+                $("#events_content table tr:eq(1) td:eq(3)").html("<span class='clickable'>Water</span><br />");
+                $("#events_content table tr:eq(1) td:eq(3) span").last().click(() => {
+                    console.log("Started watering");
+                    this.current_seed = -2;
+                    $("#current_seed").html("Currently watering");
+                });
+                $("#events_content table tr:eq(1) td:eq(3)").append("<span class='clickable'>Fertilize</span><br />");
+                $("#events_content table tr:eq(1) td:eq(3) span").last().click(() => {
+                    console.log("Started feeding");
+                    this.current_seed = -3;
+                    $("#current_seed").html("Currently fertilizing");
+                });
+                $("#events_content table tr:eq(1) td:eq(3)").append("<span class='clickable'>Remove</span>");
+                $("#events_content table tr:eq(1) td:eq(3) span").last().click(() => {
+                    console.log("Started removing");
+                    this.current_seed = -4;
+                    $("#current_seed").html("Clearing plants");
+                });
+
+                /* Set up all cell contents. */
+                for (let i = 0; i < 3; i++) {
+                    for (let j = 0; j < 3; j++) {
+                        let plot = $("#events_content table tr:eq(" + j.toString() + ") td:eq(" + i.toString() + ")");
+                        let plot_data = event_flags["garden"][i][j]
+                        if (event_flags["garden"][i][j] == null) {
+                            plot.html("Nothing<br /> Planted");
+                            plot.click(() => {
+                                if (this.current_seed >= 0) {
+                                    event_flags["garden"][i][j] = event_flags["seeds"].splice(this.current_seed, 1)[0];
+                                    event_flags["garden"][i][j]["water"] = 100; /* Set initial nutrient levels. */
+                                    event_flags["garden"][i][j]["food"] = 10;
+                                    event_flags["garden"][i][j]["time_left"] = event_flags["garden"][i][j]["grow_time"];
+                                    event_flags["garden"][i][j]["last_update"] = Date.now();
+                                    this.current_seed = -1;
+                                    this.purchase(false);
+                                }
+                            });
+                        } else {
+                            /* First, we need to update it. */
+                            let time = (Date.now() - plot_data.last_update) / 1000;
+                            time = Math.min(time, plot_data.time_left, plot_data.water, plot_data.food); /* Only run as far as possible. */
+                            plot_data.time_left -= time; 
+                            plot_data.water -= time;
+                            plot_data.food -= time;
+                            plot_data.last_update = Date.now();
+
+                            plot.html(event_flags["garden"][i][j].name + "<br />");
+                            if (plot_data.time_left > 0) {
+                                /* Time */
+                                let time_length = 8 * plot_data.time_left / plot_data.grow_time;
+                                plot.append("<div class='clickable' style='width: " + time_length.toString() + "em; height: .5em; background-color: green;'></div><br />");
+                                /* Water */
+                                let water_length = 8 * event_flags["garden"][i][j].water / 100;
+                                if (water_length > 0) {
+                                    plot.append("<div class='clickable' style='width: " + water_length.toString() + "em; height: .5em; background-color: blue;'></div><br />");
+                                } else {
+                                    plot.append("<div class='clickable' style='background-color: blue;'>WATER</div><br />");
+                                }
+
+                                /* Food */
+                                let food_length = 8 * event_flags["garden"][i][j].food / 100;
+                                if (food_length > 0) {
+                                    plot.append("<div class='clickable' style='width: " + food_length.toString() + "em; height: .5em; background-color: brown;'></div><br />");
+                                } else {
+                                    plot.append("<div class='clickable' style='background-color: brown;'>FEED</div><br />");
+                                }
+
+                                plot.click(() => {
+                                    if (this.current_seed == -2) {
+                                        plot_data.water += 10;
+                                        if (plot_data.water > 100) {
+                                            plot_data.water = 100;
+                                        }
+                                        console.log("Plant watered.");
+                                    } else if (this.current_seed == -3) {
+                                        plot_data.food += 10;
+                                        if (plot_data.water > 100) {
+                                            plot_data.water = 100;
+                                        }
+                                        console.log("Plant fed");
+                                    } else if (this.current_seed == -4) {
+                                        event_flags["garden"][i][j] = null;
+                                    }
+                                    this.purchase(false);
+                                });
+                            } else { /* Fully grown, ready to pick I guess. */
+                                plot.append("Ready for harvest");
+                                plot.click(() => {
+                                    let message = SEED_FUNCS[plot_data.harvest](plot_data);
+                                    alert(message);
+                                    event_flags["garden"][i][j] = null;
+
+                                    this.purchase(false);
+                                    
+                                });
+                            }
+
+
+                        }
+                    }
+                }
+                for (let i = 0; i < event_flags["seeds"].length; i++) {
+                    let index = i;
+                    let seed = event_flags["seeds"][i];
+                    $("#events_content").append("<span class='clickable'>Plant</span> " + seed.name + "<br />");
+                    $("#events_content span").last().click(() => {
+                        $("#current_seed").html("Currently planting: " + seed.name);
+                        this.current_seed = index;
+                    });
+                }
+
+                $("#events").removeClass("hidden");
+
+                /* Keep refreshing for plant updates. */
+                setTimeout(() => {
+                    if ($("#events_topbar").text() == "Gardening" && !$("#events").hasClass("hidden")) {
+                        this.purchase(false);
+                    }
+                }, 1000);
+            },
+            "cost": {
+                "fuel": 25,
+            },
+            "tooltip": "Take a trip to your greenhouse.",
+            "name": "Greenhouse<br />",
+            "image": "",
+            "repeats": true,
         },
 
 

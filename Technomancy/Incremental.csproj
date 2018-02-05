@@ -51,6 +51,7 @@
     <TypeScriptCompile Include="locations\sharks\maze\3.ts" />
     <TypeScriptCompile Include="locations\sharks\maze\exit.ts" />
     <TypeScriptCompile Include="locations\warpgate.ts" />
+    <TypeScriptCompile Include="seeds.ts" />
     <TypeScriptCompile Include="spells.ts" />
   </ItemGroup>
   <ItemGroup>

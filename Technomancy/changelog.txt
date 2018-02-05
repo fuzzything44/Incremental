@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.18.0: Gardening
+Added a new encounter and resource/use for fuel: void. What will it do? Another nerf to CSOP: you need to have a nonzero resources/s for it to give you stuff of each resource. Added some basic gardening. Currently you can grow... 1 carrot per prestige. More seeds will probably be added later. 
+
 v3.17.2:
 More slot machine improvements. There's now many more upgrades you can get for it. Still probably not worth playing.
 

@@ -86,6 +86,25 @@
 
             },
         }), /* Ship storage boost */
+        ({
+            "condition": function () { return resources["fuel"].amount > 1000 && adventure_data["umbra_throwaway"] > 25; },
+            "types": ["noncombat"],
+            "weight": 1,
+            "title": "Tiny Black Hole",
+            "run_encounter": function () {
+                $("#events_content").html("You found out how to compress stuff to incredible levels.<br />");
+                $("#events_content").append("<span class='clickable'>Compress</span> 1000 fuel.<br />");
+                $("#events_content span").last().click(function () {
+                    if (resources["fuel"].amount > 1000) {
+                        resources["fuel"].amount -= 1000;
+                        resources["void"].amount++;
+                        $("#events_content").html("You compress fuel into a ball of incredibly dense matter. You gained 1 void.<br />");
+                        $("#events_content").append(exit_button("Done"));
+                    }
+                });
+                $("#events_content").append(exit_button("Done"));
+            },
+        }), /* Get a mini black hole */
 
 
     ],

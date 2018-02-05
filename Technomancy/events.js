@@ -636,11 +636,30 @@ var events = [
         "rejection": 5,
     }),
     ({
-        "condition": function () { return adventure_data["alchemy_ingredients"] != undefined && adventure_data["alchemy_ingredients"]["Carrot"] != undefined; },
+        "condition": function () { return adventure_data["alchemy_ingredients"] != undefined && adventure_data["alchemy_ingredients"]["Carrot"] != undefined && event_flags["garden"] == undefined; },
         "run_event": function () {
             add_log_elem("You got a CARROT!");
-            $("#events_content").html("Oh look! In your garden! You grew a carrot! Yay, you're such a good farmer!");
+            $("#events_content").html("Oh look! In your garden! You grew a carrot! Yay, you're such a good farmer!<br />");
             adventure_data.alchemy_ingredients["Carrot"]++;
+            if (adventure_data.alchemy_ingredients["Carrot"] > 100) {
+                $("#events_content").append("Hmm... you have a whole lot of carrots now. Maybe you could start a garden!<br />");
+                $("#events_content").append("<span class='clickable'>Buy</span> a nearby greenhouse to garden in (costs 1M diamond)<br />");
+                $("#events_content span").last().click(function () {
+                    if (resources["diamond"].amount >= 1000000) {
+                        resources["diamond"].amount -= 1000000;
+                        event_flags["garden"] = [[null, null, null], [null, null, null], [null, null, null]]; /* 3x3 array of plots. Who knows what'll go in them.  */
+                        event_flags["seeds"] = [{
+                                "name": "Carrot",
+                                "desc": "A large, tasty carrot. Just what the doctor ordered!",
+                                "regrows": false,
+                                "grow_time": 60,
+                                "grow_difficulty": 1,
+                                "quality": 1,
+                                "harvest": "carrot",
+                            }];
+                    }
+                });
+            }
         },
         "name": "Farming",
         "rejection": 75,
