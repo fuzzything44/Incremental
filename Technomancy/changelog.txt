@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.18.1:
+Fixed a bug where sometimes the logikitten perfect bonus was still in the resource/second change list but not accounted for. You can now get more than 1 carrot seed per prestige. 
+
 v3.18.0: Gardening
 Added a new encounter and resource/use for fuel: void. What will it do? Another nerf to CSOP: you need to have a nonzero resources/s for it to give you stuff of each resource. Added some basic gardening. Currently you can grow... 1 carrot per prestige. More seeds will probably be added later. 
 

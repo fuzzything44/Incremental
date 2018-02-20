@@ -616,13 +616,13 @@ var events = [
                         setTimeout(function () {
                             resources_per_sec[res] -= ps_add;
                             delete resources["res"].changes["Logicat bonus"];
+                            resource_tooltip();
                         }, 60000 * 3);
                     });
                     resource_tooltip(); /* Update resource tooltips after change lists updated.*/
                     setTimeout(function () {
                         _this.perfect_cat = false;
                         add_log_elem("Logikitten bonus wore off.");
-                        resource_tooltip();
                     }, 60000 * 3);
                     $("#events_content").append("Perfect answer! Production increased.<br />");
                     if (buildings["s_goldboost"].on) {
@@ -636,12 +636,12 @@ var events = [
         "rejection": 5,
     }),
     ({
-        "condition": function () { return adventure_data["alchemy_ingredients"] != undefined && adventure_data["alchemy_ingredients"]["Carrot"] != undefined && event_flags["garden"] == undefined; },
+        "condition": function () { return adventure_data["alchemy_ingredients"] != undefined && adventure_data["alchemy_ingredients"]["Carrot"] != undefined; },
         "run_event": function () {
             add_log_elem("You got a CARROT!");
             $("#events_content").html("Oh look! In your garden! You grew a carrot! Yay, you're such a good farmer!<br />");
             adventure_data.alchemy_ingredients["Carrot"]++;
-            if (adventure_data.alchemy_ingredients["Carrot"] > 100) {
+            if (adventure_data.alchemy_ingredients["Carrot"] > 100 && event_flags["garden"] == undefined) {
                 $("#events_content").append("Hmm... you have a whole lot of carrots now. Maybe you could start a garden!<br />");
                 $("#events_content").append("<span class='clickable'>Buy</span> a nearby greenhouse to garden in (costs 1M diamond)<br />");
                 $("#events_content span").last().click(function () {
@@ -658,6 +658,18 @@ var events = [
                                 "harvest": "carrot",
                             }];
                     }
+                });
+            }
+            else if (event_flags["garden"] != undefined) {
+                /* They have a garden, so give them some seeds! */
+                event_flags["seeds"].push({
+                    "name": "Carrot",
+                    "desc": "A large, tasty carrot. Just what the doctor ordered!",
+                    "regrows": false,
+                    "grow_time": 60,
+                    "grow_difficulty": 1,
+                    "quality": 1,
+                    "harvest": "carrot",
                 });
             }
         },
