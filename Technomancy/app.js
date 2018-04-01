@@ -1,6 +1,7 @@
 /// <reference path ="events.ts" />
 /// <reference path ="spells.ts" />
 function format_num(num, show_decimals) {
+    return "7";
     if (show_decimals === void 0) { show_decimals = true; }
     /* If our numberformatting library broke, we fallback to a terrible option instead. This should really only happen in development when it's being worked on online, so it doesn't matter too much.*/
     if (typeof numberformat == "undefined") {
