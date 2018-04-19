@@ -2088,12 +2088,30 @@ var prestige = {
     mana: function (round) {
         if (round === void 0) { round = true; }
         var prestige_points = prestige.points();
-        var mana = buildings["s_manastone"].amount;
+        var mana_this_prestige = event_flags["mage_quickmana"]; /* How much instant mana has given them. */
+        if (mana_this_prestige == undefined) {
+            mana_this_prestige = 0;
+        }
+        var mana = buildings["s_manastone"].amount - mana_this_prestige; /* Don't count mana gained this prestige in here. */
         var mana_gain = prestige_points / 15000 - Math.pow(mana, 1.3) * .5; /* One for every 20k pp, and apply reduction based off of current mana */
         mana_gain = Math.pow(Math.max(0, mana_gain), .36); /* Then raise to .33 power and apply some rounding/checking */
         mana_gain = mana_gain / (1 + Math.floor(mana / 50) * .5); /* Then divide gain by a number increasing every 50 mana. */
         if (mana_gain > 50) {
             mana_gain = 50 + (mana_gain - 50) / 2;
+        }
+        mana_gain -= mana_this_prestige; /* Take out what they already got. */
+        if (event_flags["skills"] != undefined && event_flags["skills"][8]) {
+            if (event_flags["mage_quickmana"] == undefined) {
+                event_flags["mage_quickmana"] = 0;
+            }
+            if (mana_gain > 1) {
+                var gained = Math.floor(mana_gain);
+                event_flags["mage_quickmana"] += gained;
+                buildings["s_manastone"].amount += gained;
+                purchase_building("s_manastone", 0);
+                resources_per_sec["mana"] += buildings["s_manastone"].generation["mana"] * gained;
+                mana_gain -= gained;
+            }
         }
         if (round) {
             return Math.floor(mana_gain);
@@ -2103,7 +2121,7 @@ var prestige = {
         }
     },
     percent_through: function () {
-        if (prestige.mana() < 1) {
+        if (prestige.mana() < 1 && event_flags["mage_quickmana"] == undefined) {
             return Math.max(0, Math.min(100, Math.floor((prestige.points() / 15000) / (Math.pow(buildings["s_manastone"].amount, 1.3) * .5 + 1) * 100)));
         }
         else {
@@ -3354,6 +3372,12 @@ window.onload = function () {
         }
         else if (hotkey_mode == 1) {
             /* Potentially add chaining of hotkeys? Maybe for later stuff, but probably good for now. */
+        }
+    });
+    /* Add building prefixes */
+    Object.keys(buildings).forEach(function (build) {
+        if (buildings[build]["prefix"] != undefined) {
+            $("#building_" + build + " .building_prefix").html(buildings[build]["prefix"] + ' ');
         }
     });
     /* Only set to save last in case something messes up. */

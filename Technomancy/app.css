@@ -32,12 +32,6 @@ input[type=radio] {
   display: none;
 }
 
-input[type=radio] {
-  position: absolute;
-  visibility: hidden;
-  display: none;
-}
-
 label {
   color: #9a929e;
   display: inline-block;

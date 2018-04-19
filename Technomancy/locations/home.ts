@@ -498,7 +498,36 @@
                                 }
                             });
                         }
-                    }
+
+                        if (buildings["mana_purifier"].amount > 0 && event_flags["know_pts"] > 10) {
+                            if (event_flags["buildings_fortified"] == undefined) {
+                                event_flags["buildings_fortified"] = 0;
+                            }
+                            let cost = 1000 * (event_flags["buildings_fortified"] + 1) * (event_flags["buildings_fortified"] + 1);
+                            $("#events_content").append("You could fortify a building for " + cost.toString() + " steel and 10 KP<br />");
+                            Object.keys(buildings).forEach(function (build) {
+                                if (SPELL_BUILDINGS.indexOf(build) == -1 && buildings[build].amount > 10 && buildings[build]["prefix"] == undefined) { /* Regular building, they have a bunch of them, and not already upgrades. */
+                                    $("#events_content").append("<span class='clickable'>Fortify</span> your " + $("#building_" + build + " .building_name").text() + "<br />");
+                                    $("#events_content > span").last().click(function () {
+                                        if (resources["steel_beam"].amount > cost && event_flags["know_pts"] >= 10) {
+                                            resources["steel_beam"].amount -= cost; /* Spend everything */
+                                            event_flags["know_pts"] -= 10;
+                                            event_flags["buildings_fortified"]++; /* Next fortify costs more. */
+
+                                            buildings[build]["prefix"] = "Fortified"; /* Give it the prefix */
+                                            $("#building_" + build + " .building_prefix").html("Fortified ");
+
+                                            /* Double all production of it. */
+                                            Object.keys(buildings[build].generation).forEach(function (res) {
+                                                buildings[build].generation[res] *= 2;
+                                            });
+                                            study(); /* Refresh display. */
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    } /* End Inventor*/
                     $("#events_content").append(exit_button("Done"));
                 }); /* End study */
 

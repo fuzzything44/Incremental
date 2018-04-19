@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.19.0: Surprise!
+Inventors can now Fortify some buildings, doubling ALL production rates (including negative ones). One more mage skill (Mana Frontloading) has been implemented. It's probably pretty buggy. 
+
 v3.18.1:
 Fixed a bug where sometimes the logikitten perfect bonus was still in the resource/second change list but not accounted for. You can now get more than 1 carrot seed per prestige. 
 
