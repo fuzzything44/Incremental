@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.20.0: Mage stuff
+Finished more mage skills: COMBAT II, NONCOMBAT II (they still need names) and Foresight are now implemented. They may have bugs. 
+
 v3.19.0: Surprise!
 Inventors can now Fortify some buildings, doubling ALL production rates (including negative ones). One more mage skill (Mana Frontloading) has been implemented. It's probably pretty buggy. 
 

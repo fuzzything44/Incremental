@@ -257,6 +257,28 @@
                                     $("#c_nc_off").prop("checked", true);
                                 }
                             }
+                            if (event_flags["skills"][SKILL_COMBAT_STRONG] != undefined || event_flags["skills"][SKILL_NONCOMBAT_1] != undefined) {
+                                if (event_flags["c_nc_strong"] == undefined) {
+                                    event_flags["c_nc_strong"] = false;
+                                }
+                                $("#events_content").append("<br/><div id='c_nc_strong_group' class='radio-group'></div>");
+                                $("#c_nc_strong_group").append("<input type='radio' name='c_nc_strong_group' id='c_nc_strong_on' value='strong'><label for='c_nc_strong_on'>Strong</label></input>");
+                                $("#c_nc_strong_group").append("<input type='radio' name='c_nc_strong_group' id='c_nc_strong_off' value='weak'><label for='c_nc_strong_off'>Weak</label></input>");
+                                $("input[type=radio][name=c_nc_strong_group]").change(function () {
+                                    if (this.value == "strong") {
+                                        event_flags["c_nc_strong"] = true;
+                                    }
+                                    else {
+                                        event_flags["c_nc_strong"] = false;
+                                    }
+                                });
+                                if (event_flags["c_nc_strong"]) {
+                                    $("#c_nc_strong_on").prop("checked", true);
+                                }
+                                else {
+                                    $("#c_nc_strong_off").prop("checked", true);
+                                }
+                            }
                             $("#events_content").append("<div id='skill_tree'></div>");
                             /* Tier 1 */
                             $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 23em; top: 0em; z-index: 16;'><br />Artificing<br />1 KP<span class='tooltiptext fgc bgc_second'>Lets you make bags of holding.</span></div>");

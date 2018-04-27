@@ -219,7 +219,8 @@ function set_equipment() {
     });
 }
 /* Selects an adventure at a given location and runs it */
-function run_adventure(location) {
+function run_adventure(location, can_reroll) {
+    if (can_reroll === void 0) { can_reroll = true; }
     /* Get location data. */
     var location_data = get_location(location);
     var global_data = get_location("global");
@@ -234,14 +235,24 @@ function run_adventure(location) {
     encounters.forEach(function (loc) {
         if (loc.condition()) {
             if (loc.weight > 0) {
-                available_encounters.push(loc); /* Add encounter */
-                total_weight += loc.weight; /* Add weight to total. */
-                if (event_flags["skills"]) {
-                    if (event_flags["skills"][5] && loc.types.indexOf("combat") != -1) {
-                        total_weight += loc.weight; /* Add weight to total. */
+                if (event_flags["c_nc_strong"]) {
+                    if ((event_flags["skills"][5] && loc.types.indexOf("combat") != -1) ||
+                        (event_flags["skills"][6] && loc.types.indexOf("noncombat") != -1)) {
+                        available_encounters.push(loc);
+                        total_weight += loc.weight;
                     }
-                    if (event_flags["skills"][6] && loc.types.indexOf("noncombat") != -1) {
-                        total_weight += loc.weight; /* Add weight to total. */
+                    /* Don't add it here. It doesn't match the selection. */
+                }
+                else {
+                    available_encounters.push(loc); /* Add encounter */
+                    total_weight += loc.weight; /* Add weight to total. */
+                    if (event_flags["skills"]) {
+                        if (event_flags["skills"][5] && loc.types.indexOf("combat") != -1) {
+                            total_weight += loc.weight; /* Add weight to total. */
+                        }
+                        if (event_flags["skills"][6] && loc.types.indexOf("noncombat") != -1) {
+                            total_weight += loc.weight; /* Add weight to total. */
+                        }
                     }
                 }
             }
@@ -283,7 +294,21 @@ function run_adventure(location) {
         return;
     }
     $("#events_topbar").html(chosen_encounter.title);
-    chosen_encounter.run_encounter();
+    /* They have the reroll power, haven't used it this selection, and it's not a forced encounter. */
+    if (can_reroll && event_flags["skills"] && event_flags["skills"][13] && chosen_encounter.weight != 0) {
+        $("#events_content").html("You predict that you will encounter: " + chosen_encounter.title + ". Will you keep it or change your fate?<br />");
+        $("#events_content").append("<span class='clickable'>Keep</span>");
+        $("#events_content > span").last().click(function () {
+            chosen_encounter.run_encounter();
+        });
+        $("#events_content").append("<span class='clickable'>Reroll</span>");
+        $("#events_content > span").last().click(function () {
+            run_adventure(location, false);
+        });
+    }
+    else {
+        chosen_encounter.run_encounter();
+    }
 }
 /* Sets up combat */
 var on_win = function () { }; /* Called when player wins. If they lose, nothing gets called. */
