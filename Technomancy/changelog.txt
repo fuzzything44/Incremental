@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.20.1: Oops
+Hotfix for a bug with strong encounter selection skills. You could previously have Temporal Slow, Temporal Anger, and Temporal Rage and get the effects of Temporal Absence. Now you can't (probably). Also, they have tooltips!
+
 v3.20.0: Mage stuff
 Finished more mage skills: COMBAT II, NONCOMBAT II (they still need names) and Foresight are now implemented. They may have bugs. 
 

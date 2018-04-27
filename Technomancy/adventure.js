@@ -235,7 +235,9 @@ function run_adventure(location, can_reroll) {
     encounters.forEach(function (loc) {
         if (loc.condition()) {
             if (loc.weight > 0) {
-                if (event_flags["c_nc_strong"]) {
+                if (event_flags["skills"] && event_flags["c_nc_strong"] &&
+                    ((event_flags["skills"][5] && event_flags["skills"][10]) ||
+                        (event_flags["skills"][6] && event_flags["skills"][11]))) {
                     if ((event_flags["skills"][5] && loc.types.indexOf("combat") != -1) ||
                         (event_flags["skills"][6] && loc.types.indexOf("noncombat") != -1)) {
                         available_encounters.push(loc);

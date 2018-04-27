@@ -316,8 +316,8 @@
                             $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:150px;height: 280px;position: absolute; left: 55em; top: 18em; transform: rotate(90deg);'></div>");
                             /* Tier 4 */
                             $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 3em;  top: 28em; z-index: 8;'><br />Instant Mana<br />2 KP<span class='tooltiptext fgc bgc_second'>TODO: TOOLTIP</span></div>");
-                            $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 17em; top: 25em; z-index: 7;'><br />Temporal Rage<br />2 KP<span class='tooltiptext fgc bgc_second'>TODO: TOOLTIP</span></div>");
-                            $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 30em; top: 25em; z-index: 6;'><br />Temporal Absence<br />2 KP<span class='tooltiptext fgc bgc_second'>TODO: TOOLTIP</span></div>");
+                            $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 17em; top: 25em; z-index: 7;'><br />Temporal Rage<br />2 KP<span class='tooltiptext fgc bgc_second'>Increases the strength of Temporal Anger</span></div>");
+                            $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 30em; top: 25em; z-index: 6;'><br />Temporal Absence<br />2 KP<span class='tooltiptext fgc bgc_second'>Increases the strength of Temporal Slow</span></div>");
                             $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 44em; top: 28em; z-index: 5;'><br />LOOT III?<br />2 KP<span class='tooltiptext fgc bgc_second'>TODO: TOOLTIP</span></div>");
                             /* Connecting lines */
                             color = event_flags["skills"][SKILL_QUICK_MANA] != undefined ? "blue" : "gray";
@@ -330,7 +330,7 @@
                             $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:150px;height: 280px;position: absolute; left: 54em; top: 27em; transform: rotate(100deg);'></div>");
                             /* Tier 5 */
                             $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 5em; top: 37em; z-index: 4;'><br />Magic Tomes<br />2 KP<span class='tooltiptext fgc bgc_second'>Gain twice the KP when sacrificing libraries.</span></div>");
-                            $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 23em; top: 33em; z-index: 3;'><br />Foresight<br />3 KP<span class='tooltiptext fgc bgc_second'>TODO: TOOLTIP</span></div>");
+                            $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 23em; top: 33em; z-index: 3;'><br />Foresight<br />3 KP<span class='tooltiptext fgc bgc_second'>Allows you to change your fate</span></div>");
                             $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 42em; top: 37em; z-index: 2;'><br />LOOT IV?<br />2 KP<span class='tooltiptext fgc bgc_second'>TODO: TOOLTIP</span></div>");
                             /* Connecting Lines */
                             color = event_flags["skills"][SKILL_LIBRARY] != undefined ? "blue" : "gray";
