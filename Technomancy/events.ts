@@ -570,7 +570,7 @@ let events = [
                                         }
                                         $("#events_content").append(" (Stealth level at " + format_num(adventure_data["logicat_stealth"], false) + ")");
                                         /* Refuel ship */
-                                        adventure_data["inventory_fuel"] += Math.ceil(Math.sqrt(adventure_data["logicat_stealth"]) / 10);
+                                        adventure_data["inventory_fuel"] += Math.ceil(Math.sqrt(adventure_data["logicat_stealth"]) / 2);
                                         update_inventory();
                                         adventure_data["logicat_stealth"]++;
                                     }

@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.21.0: I guess this is a version
+How do you like unfinished content? I love it! Anyways, there's a new spell building available. It's kind of like the workshop, but more useless, mostly because you can't do anything with it. Oh, also ninja stealth is now stealthily more powerful. 
+
 v3.20.1: Oops
 Hotfix for a bug with strong encounter selection skills. You could previously have Temporal Slow, Temporal Anger, and Temporal Rage and get the effects of Temporal Absence. Now you can't (probably). Also, they have tooltips!
 

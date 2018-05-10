@@ -1,10 +1,10 @@
 ﻿var spell_funcs = {
     "nop": nop,
-//    "goldboost": s_goldboost,
     "trade": s_trade,
     "time": s_time,
     "refinery": s_refinery_buff,
     "workshop": s_workshop_update,
+    "enchantment": s_enchant_update,
     "final": s_final,
 }
 
@@ -359,6 +359,43 @@ function s_workshop_update(delta_time: number) {
                 add_log_elem("Finished crafting " + workshop_item.replace("_", " "))
             }
             workshop_item = "";
+        }
+    }
+}
+
+let enchantments = {
+   // "item": {
+   //     "time": 60 * 1000,
+   //     /* Other relevant stuff... */
+   // },
+}
+function s_enchant_set(enchant: string) {
+    if (buildings["s_enchantment"].item == "") {
+        buildings["s_enchantment"].time_started = Date.now();
+        buildings["s_enchantment"].item = enchant;
+        $("#enchantment_progress_bar").css("width", "0");
+    }
+}
+
+function s_enchant_update(delta_time: number) {
+    /* Tick building */
+    if (buildings["s_enchantment"].item == "") { /* No item set. Progress bar full. */
+        buildings["s_enchantment"].time_started = 0;
+        $("#enchantment_progress_bar").css("width", "17.5em");
+        $("#enchantment_progress_bar").css("background-color", "green");
+    } else {
+        /* Set width. 17.5em is full bar. */
+        let elapsed_time = Date.now() - buildings["s_enchantment"].time_started; /* milliseconds since they started it. */
+        let width = 17.5 * Math.min(1, elapsed_time / enchantments[buildings["s_enchantment"].item].time);
+        $("#enchantment_progress_bar").css("width", width.toString() + "em");
+        $("#enchantment_progress_bar").css("background-color", "red");
+        $("#enchant_" + buildings["s_enchantment"].item).css("color", "gold");
+        /* Enchantment finished! */
+        if (elapsed_time >= enchantments[buildings["s_enchantment"].item].time) {
+            /* TODO: Do something here? */
+            alert("Go you!")
+            $("#enchant_" + buildings["s_enchantment"].item).css("color", "");
+            buildings["s_enchantment"].item = "";
         }
     }
 }

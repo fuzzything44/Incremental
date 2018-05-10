@@ -48,6 +48,7 @@ var UNLOCK_TREE = {
     "s_workshop": [],
     "s_time_maker": [],
     "s_workshop_2": [],
+    "s_enchantment": [],
     "s_final": [],
     "bank": ["mine", "logging"],
     "oil_well": ["oil_engine"],
@@ -93,6 +94,7 @@ var SPELL_BUILDINGS = [
     "s_time_maker",
     "s_mana_refinery",
     "s_workshop_2",
+    "s_enchantment",
     "s_final",
 ];
 function set_initial_state() {
@@ -282,6 +284,21 @@ function set_initial_state() {
             "update": "workshop",
             "free": 0,
             "flavor": "Work. Work. Work. Work. Shop.",
+        },
+        "s_enchantment": {
+            "on": false,
+            "amount": 500,
+            "base_cost": {},
+            "price_ratio": {},
+            "generation": {
+                "mana": -1,
+            },
+            "multipliers": {},
+            "update": "enchantment",
+            "item": "",
+            "time_started": 0,
+            "free": 0,
+            "flavor": "Ooh, sparkly.",
         },
         "s_final": {
             "on": false,
