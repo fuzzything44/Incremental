@@ -322,7 +322,7 @@ function set_initial_state() {
             },
             "update": "enchantment",
             "item": "",
-            "time_started": 0,
+            "time_left": 0,
             "free": 0,
             "flavor": "Ooh, sparkly.",
         },

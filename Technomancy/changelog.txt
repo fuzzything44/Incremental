@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.22.0: Enchantments!
+There's now some enchantments you can make. Effectively, you start it, wait a while (1-24hrs, affected by time speed), and can then claim it for a reward! (Click the GREEN button on the dropdown to get your reward). Note that you'll need to prestige to be able to do this.
+
 v3.21.0: I guess this is a version
 How do you like unfinished content? I love it! Anyways, there's a new spell building available. It's kind of like the workshop, but more useless, mostly because you can't do anything with it. Oh, also ninja stealth is now stealthily more powerful. 
 
