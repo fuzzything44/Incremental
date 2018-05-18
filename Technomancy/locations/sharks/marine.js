@@ -175,7 +175,27 @@
                         }
                     });
                 }
-            }
+                if (adventure_data["casino_tokens"] >= 25) {
+                    $("#events_content").append("<table id='slot_prizes'><caption>Prize Wall</caption></table>");
+                    $("#slot_prizes").append("<tr><th>Prize</td><th>Token Cost</td></tr>");
+                    $("#slot_prizes").append("<tr><td class='clickable'>500 Diamonds</td><td>10</td></tr>");
+                    $("#slot_prizes td.clickable").last().click(function () {
+                        alert("A weiner is you!");
+                    });
+                    $("#slot_prizes").append("<tr><td class='clickable'>1000 Diamonds</td><td>11</td></tr>");
+                    $("#slot_prizes td.clickable").last().click(function () {
+                        alert("Yer a spishey weiner!");
+                    });
+                    $("#slot_prizes").append("<tr><td class='clickable'>5000 Diamonds</td><td>12</td></tr>");
+                    $("#slot_prizes td.clickable").last().click(function () {
+                        alert("Mama mia, that's a spicy meatball!");
+                    });
+                    $("#slot_prizes").append("<tr><td class='clickable'>5 Diamonds</td><td>1T</td></tr>");
+                    $("#slot_prizes td.clickable").last().click(function () {
+                        alert("Wow, sucker.");
+                    });
+                }
+            } /* End run_encounter*/
         }),
     ],
     "connects_to": ["sharks/abandoned"],
