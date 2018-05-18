@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.22.1: Small changes you don't care about
+Added a tooltip for another mage skill, fixed being able to prestige for negative mana. Also, there's a new enchantment. You can get casino tokens easier now!
+
 v3.22.0: Enchantments!
 There's now some enchantments you can make. Effectively, you start it, wait a while (1-24hrs, affected by time speed), and can then claim it for a reward! (Click the GREEN button on the dropdown to get your reward). Note that you'll need to prestige to be able to do this.
 

@@ -2269,7 +2269,7 @@ let prestige = {
                 mana_gain -= gained
             }
         }
-
+        mana_gain = Math.max(0, mana_gain) /* Can't get negative mana. */
         if (round) {
             return Math.floor(mana_gain);
         } else {

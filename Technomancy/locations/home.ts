@@ -330,7 +330,7 @@
                         
 
                         /* Tier 4 */
-                        $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 3em;  top: 28em; z-index: 8;'><br />Instant Mana<br />2 KP<span class='tooltiptext fgc bgc_second'>TODO: TOOLTIP</span></div>");
+                        $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 3em;  top: 28em; z-index: 8;'><br />Instant Mana<br />2 KP<span class='tooltiptext fgc bgc_second'>Gives you your mana instantly without need for prestige.</span></div>");
                         $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 17em; top: 25em; z-index: 7;'><br />Temporal Rage<br />2 KP<span class='tooltiptext fgc bgc_second'>Increases the strength of Temporal Anger</span></div>");
                         $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 30em; top: 25em; z-index: 6;'><br />Temporal Absence<br />2 KP<span class='tooltiptext fgc bgc_second'>Increases the strength of Temporal Slow</span></div>");
                         $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 44em; top: 28em; z-index: 5;'><br />LOOT III?<br />2 KP<span class='tooltiptext fgc bgc_second'>TODO: TOOLTIP</span></div>");

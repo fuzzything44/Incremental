@@ -416,6 +416,19 @@ var enchantments = {
             $("#building_s_manastone > .building_amount").html(format_num(buildings["s_manastone"].amount, false)); /* Update amount shown. */
         },
     },
+    "tokens": {
+        "time": 12 * 60 * 60 * 1000,
+        "effect": function () {
+            /* Use all money, give casino tokens based on how much used. */
+            if (adventure_data["casino_tokens"] == undefined) {
+                adventure_data["casino_tokens"] = 0;
+            }
+            var amt = Math.floor(Math.log(resources["money"].amount / 1000000) / Math.LOG2E); /* Just log base 2 of money / 1m */
+            adventure_data["casino_tokens"] += amt;
+            adventure_data["money"].amount = 0;
+            add_log_elem("You got " + amt.toString() + " casino tokens in exchange for your money.");
+        },
+    },
 };
 function s_enchant_set(enchant) {
     if (buildings["s_enchantment"].item == "") {
