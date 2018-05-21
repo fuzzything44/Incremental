@@ -34,7 +34,7 @@
                 if (Math.random() > .5) {
                     setTimeout(function () { return $("#events_content").append("Another one of those strange kittens appears. What do they want?<br />"); }, 1000);
                     setTimeout(function () {
-                        $("#events_content").append("<span class='clickable'>Okay?</span>");
+                        $("#events_content").append("<span class='clickable'>Okay?</span><br>");
                         $("#events_content > span").last().click(function () {
                             /* Enter them into logicat. */
                             $('#events').addClass('hidden');
@@ -46,7 +46,14 @@
                 }
                 else {
                     $("#events_content").append("You don't find anything notable. <br/>");
-                    $("#events_content").append(exit_button("Okay"));
+                    $("#events_content").append(exit_button("Okay") + "<br/>");
+                }
+                /* At the end of it, show stats. */
+                if (adventure_data["logicat_level"]) {
+                    $("#events_content").append("Your logicat level is " + adventure_data["logicat_level"].toString() + ".<br/>");
+                }
+                if (adventure_data["logicat_stealth"]) {
+                    $("#events_content").append("Your stealth level is " + adventure_data["logicat_stealth"].toString() + ".<br/>");
                 }
             }
         }),

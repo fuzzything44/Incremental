@@ -104,7 +104,7 @@
                 });
                 $("#events_content").append(exit_button("Done"));
             },
-        }), /* Get a mini black hole */
+        }), /* Get void */
 
 
     ],

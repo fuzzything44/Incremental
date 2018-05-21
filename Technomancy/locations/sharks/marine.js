@@ -178,21 +178,31 @@
                 if (adventure_data["casino_tokens"] >= 25) {
                     $("#events_content").append("<table id='slot_prizes'><caption>Prize Wall</caption></table>");
                     $("#slot_prizes").append("<tr><th>Prize</td><th>Token Cost</td></tr>");
-                    $("#slot_prizes").append("<tr><td class='clickable'>500 Diamonds</td><td>10</td></tr>");
+                    $("#slot_prizes").append("<tr><td class='clickable'>500 Steel</td><td>10</td></tr>");
                     $("#slot_prizes td.clickable").last().click(function () {
-                        alert("A weiner is you!");
                     });
-                    $("#slot_prizes").append("<tr><td class='clickable'>1000 Diamonds</td><td>11</td></tr>");
+                    $("#slot_prizes").append("<tr><td class='clickable'>250 Fuel</td><td>10</td></tr>");
                     $("#slot_prizes td.clickable").last().click(function () {
-                        alert("Yer a spishey weiner!");
+                        if (adventure_data["casino_tokens"] >= 10) {
+                            adventure_data["casino_tokens"] -= 10;
+                            resources["fuel"] += 250;
+                        }
                     });
-                    $("#slot_prizes").append("<tr><td class='clickable'>5000 Diamonds</td><td>12</td></tr>");
+                    if (resources["mithril"].amount >= 100) {
+                        $("#slot_prizes").append("<tr><td class='clickable'>100 Mithril</td><td>25</td></tr>");
+                        $("#slot_prizes td.clickable").last().click(function () {
+                            if (adventure_data["casino_tokens"] >= 25) {
+                                adventure_data["casino_tokens"] -= 25;
+                                resources["mithril"] += 100;
+                            }
+                        });
+                    }
+                    $("#slot_prizes").append("<tr><td class='clickable'>1 Void</td><td>50</td></tr>");
                     $("#slot_prizes td.clickable").last().click(function () {
-                        alert("Mama mia, that's a spicy meatball!");
-                    });
-                    $("#slot_prizes").append("<tr><td class='clickable'>5 Diamonds</td><td>1T</td></tr>");
-                    $("#slot_prizes td.clickable").last().click(function () {
-                        alert("Wow, sucker.");
+                        if (adventure_data["casino_tokens"] >= 50) {
+                            adventure_data["casino_tokens"] -= 50;
+                            resources["void"] += 1;
+                        }
                     });
                 }
             } /* End run_encounter*/

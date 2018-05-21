@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.22.2: 
+Your logicat level and stealth level are now shown at the place where you first find them. You can now buy some prizes at the casino. How useful are they? Find out!
+
 v3.22.1: Small changes you don't care about
 Added a tooltip for another mage skill, fixed being able to prestige for negative mana. Also, there's a new enchantment. You can get casino tokens easier now! And there's an interface to spend them on prizes, but it doesn't let you do that yet. Feel free to give me suggestions for specific prizes!
 
