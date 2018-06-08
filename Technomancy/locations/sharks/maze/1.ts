@@ -53,7 +53,7 @@
             }
         }),
     ],
-    "connects_to": ["sharks/maze/0", "sharks/maze/2", "sharks/maze/exit", "sharks/maze/3"],
+    "connects_to": ["sharks/maze/0", "sharks/maze/2", "sharks/maze/exit", "sharks/maze/3", "sharks/maze/exit"],
     "enter_cost": 0,
     "leave_cost": 1,
     "name": "Hot Cloud of Dust",
