@@ -53,8 +53,8 @@ let equipment = {
     },
     "const_shield": {
         on_combat: function (slot: string) {
-            player_data["max_shields"] += 3;
-            player_data["shields"] += 3;
+            player_data["max_shields"] += 4;
+            player_data["shields"] += 4;
             player_data["power_shields"] += 1;
         },
         type: "shield",

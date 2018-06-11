@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.22.3: I need to add a settings menu sometime
+Sandcastles give 10m prestige value again (instead of their previous weird formula). You can now set the update rate - it switches between 100ms (fast) and 1000ms (slow). Mithril plating now gives more shields. It's also called mithril plating when you craft it (not adamantium). 
+
 v3.22.2: 
 Your logicat level and stealth level are now shown at the place where you first find them. You can now buy some prizes at the casino. How useful are they? Find out!
 

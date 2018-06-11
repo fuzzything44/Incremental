@@ -134,7 +134,7 @@ function set_initial_state() {
         "hydrogen": { "amount": 0, "value": 5, "mult": 1, "changes": {}, "ps_change": "" },
         "steel_beam": { "amount": 0, "value": 200, "mult": 1, "changes": {}, "ps_change": "" },
         "uranium": { "amount": 0, "value": 500, "mult": 1, "changes": {}, "ps_change": "" },
-        "sandcastle": { "amount": 0, "value": 5000000, "mult": 1, "changes": {}, "ps_change": "" },
+        "sandcastle": { "amount": 0, "value": 10000000, "mult": 1, "changes": {}, "ps_change": "" },
         "glass_bottle": { "amount": 0, "value": 25000, "mult": 1, "changes": {}, "ps_change": "" },
         "mithril": { "amount": 0, "value": 3500, "mult": 1, "changes": {}, "ps_change": "" },
         "void": { "amount": 0, "value": 100000, "mult": 1, "changes": {}, "ps_change": "" },
@@ -2056,15 +2056,10 @@ var prestige = {
             if (isNaN(resources[res].amount)) {
                 resources[res].amount = 0;
             }
-            if (res == "sandcastle") {
-                prestige_points += 5000000 * Math.pow(resources[res].amount, .9);
-            }
-            else {
-                prestige_points += resources[res].amount * Math.abs(resources[res].value);
-                if (resources[res].amount > 0 && resources[res].value > 0) {
-                    prestige_vals.push(resources[res].amount * resources[res].value);
-                    prestige_names.push(res);
-                }
+            prestige_points += resources[res].amount * Math.abs(resources[res].value);
+            if (res != "sandcastle" && resources[res].amount > 0 && resources[res].value > 0) {
+                prestige_vals.push(resources[res].amount * resources[res].value);
+                prestige_names.push(res);
             }
         });
         /* Maybe add a funky multiplier */
@@ -2110,8 +2105,8 @@ var prestige = {
             mana_this_prestige = 0;
         }
         var mana = buildings["s_manastone"].amount - mana_this_prestige; /* Don't count mana gained this prestige in here. */
-        var mana_gain = prestige_points / 15000 - Math.pow(mana, 1.3) * .5; /* One for every 20k pp, and apply reduction based off of current mana */
-        mana_gain = Math.pow(Math.max(0, mana_gain), .36); /* Then raise to .33 power and apply some rounding/checking */
+        var mana_gain = prestige_points / 15000 - Math.pow(mana, 1.3) * .5; /* One for every 15k pp, and apply reduction based off of current mana */
+        mana_gain = Math.pow(Math.max(0, mana_gain), .36); /* Then raise to .36 power and apply some rounding/checking */
         mana_gain = mana_gain / (1 + Math.floor(mana / 50) * .5); /* Then divide gain by a number increasing every 50 mana. */
         if (mana_gain > 50) {
             mana_gain = 50 + (mana_gain - 50) / 2;
@@ -3218,10 +3213,25 @@ function prng(seed) {
     }
     return seed * 16807 % 2147483647;
 }
+var update_handler = 0;
+function change_update() {
+    clearInterval(update_handler);
+    if (localStorage["update_interval"] != 100) {
+        localStorage["update_interval"] = 100;
+        $("#update_speed_setting").html("Update Slow");
+    }
+    else {
+        localStorage["update_interval"] = 1000;
+        $("#update_speed_setting").html("Update Fast");
+    }
+    update_handler = setInterval(update, localStorage["update_interval"]);
+}
 window.onload = function () {
     set_initial_state();
     load();
-    setInterval(update, 50);
+    if (localStorage["update_interval"] == undefined)
+        localStorage["update_interval"] = 100;
+    update_handler = setInterval(update, localStorage["update_interval"]);
     /* Add upgrades to be unhidden*/
     /* Loop through all remaining upgrades */
     Object.keys(remaining_upgrades).forEach(function (upg_name) {
