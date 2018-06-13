@@ -1,6 +1,6 @@
 ﻿Technomancy Changelog
 
-v3.22.4 (6/13/18): Bugfixes.
+v3.22.4: (6/13/18) Bugfixes.
 Fixed a bug where (theoretically) you could get NaN mana on prestige. Getting mana before prestige from the mage skill should now correctly unlock new spells without needing to refresh. Moved some code around to hopefully make it more performant. Also, started some stuff for the implementation of challenges! Get hyped! Oh, and I'm putting dates in the changelog now.
 
 v3.22.3: I need to add a settings menu sometime
