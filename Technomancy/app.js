@@ -37,6 +37,10 @@ var resources_per_sec = {};
 var buildings = {};
 var purchased_upgrades = []; /* Names of all purchased upgrades */
 var remaining_upgrades = {}; /* All remaining upgrades that need to be purchased */
+var CHALLENGES = {
+    NONE: 0,
+    POVERTY: 1,
+};
 var UNLOCK_TREE = {
     "s_manastone": [],
     "s_mana_refinery": [],
@@ -2123,9 +2127,18 @@ var prestige = {
                 purchase_building("s_manastone", 0);
                 resources_per_sec["mana"] += buildings["s_manastone"].generation["mana"] * gained;
                 mana_gain -= gained;
+                /* Show more buildings with the gained mana. */
+                SPELL_BUILDINGS.forEach(function (build) {
+                    if (buildings["s_manastone"].amount * 2 >= buildings[build].amount * -buildings[build].generation["mana"]) {
+                        $("#building_" + build).parent().removeClass("hidden");
+                    }
+                });
             }
         }
         mana_gain = Math.max(0, mana_gain); /* Can't get negative mana. */
+        if (isNaN(mana_gain)) {
+            mana_gain = 0;
+        } /* Can't get NaN mana. */
         if (round) {
             return Math.floor(mana_gain);
         }
@@ -2592,43 +2605,13 @@ function update() {
             $("#" + key + "_per_sec").text("");
         }
     });
-    /* Unhide buildings */
-    Object.keys(buildings).forEach(function (build) {
-        if (SPELL_BUILDINGS.indexOf(build) == -1) {
-            $('#building_' + build + " > .tooltiptext").html(gen_building_tooltip(build)); /* Generate tooltip for it. */
+    if (adventure_data["challenge"] == CHALLENGES.POVERTY) {
+        var MULT = 40;
+        if (resources["money"].amount > 30 && resources["money"].amount > resources_per_sec["money"] * resources["money"].mult * MULT) {
+            resources["money"].amount = Math.max(30, resources_per_sec["money"] * resources["money"].mult * MULT);
+            $("#money span").first().html("Money: " + format_num(resources["money"].amount, false));
         }
-        if (buildings[build].amount > 0 && SPELL_BUILDINGS.indexOf(build) == -1) {
-            $("#building_" + build).parent().removeClass("hidden"); /* Any owned building is unlocked. Needed in case they sell previous ones and reload. */
-            UNLOCK_TREE[build].forEach(function (unlock) {
-                $("#building_" + unlock).parent().removeClass("hidden");
-            });
-        }
-        try {
-            var amount_1 = parseInt($("#buy_amount").val());
-            if (isNaN(amount_1)) {
-                amount_1 = 1;
-            }
-            Object.keys(buildings[build].base_cost).forEach(function (key) {
-                var cost = buildings[build].base_cost[key] * Math.pow(buildings[build].price_ratio[key], buildings[build].amount - buildings[build].free) * (1 - Math.pow(buildings[build].price_ratio[key], amount_1)) / (1 - buildings[build].price_ratio[key]);
-                if (Math.pow(buildings[build].price_ratio[key], buildings[build].amount + amount_1 - 1 - buildings[build].free) == Infinity) {
-                    cost = Infinity;
-                }
-                if (cost > resources[key].amount) {
-                    throw Error("Not enough resources!");
-                }
-            });
-            $("#building_" + build).removeClass("building_expensive");
-        }
-        catch (e) {
-            $("#building_" + build).addClass("building_expensive");
-        }
-    });
-    /* Show favicon */
-    if ($("#events").hasClass("hidden")) {
-        $("#icon").attr("href", "images/favicon.ico");
-    }
-    else {
-        $("#icon").attr("href", "images/favicon2.ico");
+        $("#money span").first().append(" / " + format_num(Math.max(30, resources_per_sec["money"] * resources["money"].mult * MULT)));
     }
 }
 /* Not in update as this could change a lot if they have too many unpurchased upgrades. */
@@ -2797,6 +2780,26 @@ function purchase_building(name, amount) {
         toggle_building_state(name);
     }
     $('#building_' + name + " > .building_amount").html(format_num(buildings[name].amount, false));
+    /* Update purchasable/not color */
+    try {
+        var amount_1 = parseInt($("#buy_amount").val());
+        if (isNaN(amount_1)) {
+            amount_1 = 1;
+        }
+        Object.keys(buildings[name].base_cost).forEach(function (key) {
+            var cost = buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount - buildings[name].free) * (1 - Math.pow(buildings[name].price_ratio[key], amount_1)) / (1 - buildings[name].price_ratio[key]);
+            if (Math.pow(buildings[name].price_ratio[key], buildings[name].amount + amount_1 - 1 - buildings[name].free) == Infinity) {
+                cost = Infinity;
+            }
+            if (cost > resources[key].amount) {
+                throw Error("Not enough resources!");
+            }
+        });
+        $("#building_" + name).removeClass("building_expensive");
+    }
+    catch (e) {
+        $("#building_" + name).addClass("building_expensive");
+    }
 }
 function destroy_building(name, amount) {
     if (amount === void 0) { amount = null; }
@@ -3408,6 +3411,46 @@ window.onload = function () {
             $("#building_" + build + " .building_prefix").html(buildings[build]["prefix"] + ' ');
         }
     });
+    setInterval(function () {
+        /* Unhide buildings */
+        Object.keys(buildings).forEach(function (build) {
+            if (SPELL_BUILDINGS.indexOf(build) == -1) {
+                $('#building_' + build + " > .tooltiptext").html(gen_building_tooltip(build)); /* Generate tooltip for it. */
+            }
+            if (buildings[build].amount > 0 && SPELL_BUILDINGS.indexOf(build) == -1) {
+                $("#building_" + build).parent().removeClass("hidden"); /* Any owned building is unlocked. Needed in case they sell previous ones and reload. */
+                UNLOCK_TREE[build].forEach(function (unlock) {
+                    $("#building_" + unlock).parent().removeClass("hidden");
+                });
+            }
+            try {
+                var amount_2 = parseInt($("#buy_amount").val());
+                if (isNaN(amount_2)) {
+                    amount_2 = 1;
+                }
+                Object.keys(buildings[build].base_cost).forEach(function (key) {
+                    var cost = buildings[build].base_cost[key] * Math.pow(buildings[build].price_ratio[key], buildings[build].amount - buildings[build].free) * (1 - Math.pow(buildings[build].price_ratio[key], amount_2)) / (1 - buildings[build].price_ratio[key]);
+                    if (Math.pow(buildings[build].price_ratio[key], buildings[build].amount + amount_2 - 1 - buildings[build].free) == Infinity) {
+                        cost = Infinity;
+                    }
+                    if (cost > resources[key].amount) {
+                        throw Error("Not enough resources!");
+                    }
+                });
+                $("#building_" + build).removeClass("building_expensive");
+            }
+            catch (e) {
+                $("#building_" + build).addClass("building_expensive");
+            }
+        });
+        /* Show favicon */
+        if ($("#events").hasClass("hidden")) {
+            $("#icon").attr("href", "images/favicon.ico");
+        }
+        else {
+            $("#icon").attr("href", "images/favicon2.ico");
+        }
+    }, 1000);
     /* Only set to save last in case something messes up. */
     setInterval(save, 30000);
 };
