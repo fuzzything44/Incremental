@@ -71,7 +71,7 @@
         </div>
         <div id="fuel" class="hidden" style="padding-bottom: .3em; border-bottom-color: greenyellow;">
             <span style="color: greenyellow; text-shadow: yellow 1px 0px 10px; vertical-align: middle;">Refined mana: 0</span>
-            <span class="res_gen " onclick="if (resources['fuel'].amount < 1 && adventure_data['inventory_fuel'] < 0.1) { alert('You need more fuel.'); } else { start_adventure(); }" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid; border-radius: 3px;">
+            <span class="res_gen " onclick="if (resources['fuel'].amount < 1 && adventure_data['inventory_fuel'] < 0.1) { alert('You need more fuel.'); } else { if (adventure_data['challenge']) { challenge_menu(); } else start_adventure(); }" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid; border-radius: 3px;">
                 Adventure
             </span>
             <br />

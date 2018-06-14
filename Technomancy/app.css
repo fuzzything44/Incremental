@@ -22,10 +22,6 @@ table {
     margin-right: auto;
 }
 
-th {
-    font-weight: normal;
-}
-
 input[type=radio] {
   position: absolute;
   visibility: hidden;

@@ -205,10 +205,11 @@
                         }
                     });
                 }
+                $("#events_content").append(exit_button("Leave") + " the casino.<br/>");
             } /* End run_encounter*/
         }),
     ],
-    "connects_to": ["sharks/abandoned"],
+    "connects_to": ["sharks/abandoned", "sharks/gate"],
     "enter_cost": 7,
     "leave_cost": 3,
     "name": "Marine World",

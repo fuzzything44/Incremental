@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v3.23.0: (6/13/18) Challenge stuff
+Added a new "planet", right off of Marine World (the casino). You can see the current planned challenges there, and it'll be where you start them! Oh, also I changed some CSS stuff with tables, so if you notice a place where they look terrible tell me. And challenges should be coming soon! More hype!
+
 v3.22.4: (6/13/18) Bugfixes.
 Fixed a bug where (theoretically) you could get NaN mana on prestige. Getting mana before prestige from the mage skill should now correctly unlock new spells without needing to refresh. Moved some code around to hopefully make it more performant. Also, started some stuff for the implementation of challenges! Get hyped! Oh, and I'm putting dates in the changelog now.
 

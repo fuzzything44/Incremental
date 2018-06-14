@@ -39,8 +39,17 @@ var purchased_upgrades = []; /* Names of all purchased upgrades */
 var remaining_upgrades = {}; /* All remaining upgrades that need to be purchased */
 var CHALLENGES = {
     NONE: 0,
-    POVERTY: 1,
+    BASIC: 1,
+    POVERTY: 2,
+    METEORS: 3,
+    LOAN: 4,
+    TOTAL_AMOUNT: 5
 };
+function challenge_menu() {
+    $("#events_topbar").html("Challenge Progress");
+    $("#events_content").html("Now how did you get here? You shouldn't be seeing this...");
+    $("#events").removeClass("hidden");
+}
 var UNLOCK_TREE = {
     "s_manastone": [],
     "s_mana_refinery": [],
