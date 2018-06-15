@@ -349,7 +349,7 @@ function set_initial_state() {
             "base_cost": {
                 "money": 1000,
                 "stone": 1000,
-                "iron": 500
+                "iron": 100
             },
             "price_ratio": {
                 "money": 1.2,
@@ -595,7 +595,7 @@ function set_initial_state() {
             "base_cost": {
                 "money": 100,
                 "stone": 300,
-                "iron": 100
+                "iron": 50
             },
             "price_ratio": {
                 "money": 1.3,
@@ -675,8 +675,8 @@ function set_initial_state() {
             "amount": 0,
             "base_cost": {
                 "money": 200,
-                "iron": 200,
-                "oil": 100,
+                "iron": 100,
+                "oil": 50,
             },
             "price_ratio": {
                 "money": 1.1,
@@ -697,8 +697,8 @@ function set_initial_state() {
             "amount": 0,
             "base_cost": {
                 "money": 200,
-                "iron": 200,
-                "oil": 100,
+                "iron": 100,
+                "oil": 50,
             },
             "price_ratio": {
                 "money": 1.1,
@@ -719,8 +719,8 @@ function set_initial_state() {
             "amount": 0,
             "base_cost": {
                 "money": 500,
-                "iron": 500,
-                "oil": 200,
+                "iron": 100,
+                "oil": 100,
             },
             "price_ratio": {
                 "money": 1.2,
@@ -742,8 +742,8 @@ function set_initial_state() {
             "amount": 0,
             "base_cost": {
                 "money": 5000,
-                "iron": 700,
-                "oil": 500,
+                "iron": 500,
+                "oil": 300,
             },
             "price_ratio": {
                 "money": 1.2,
@@ -999,7 +999,7 @@ function set_initial_state() {
             "cost": {
                 "money": 2000,
                 "stone": 500,
-                "iron": 250,
+                "iron": 150,
             },
             "tooltip": "Mines produce double stone and 5x iron.",
             "name": "Improve Mines",
@@ -1022,7 +1022,7 @@ function set_initial_state() {
             "cost": {
                 "money": 2000,
                 "wood": 500,
-                "iron": 500,
+                "iron": 250,
             },
             "tooltip": "console.error('Upgrade not purchased, player needs to buy it!');<br /><i>(Provides an upgrade to logging camps)</i>",
             "name": "Magical Trees",
@@ -1173,7 +1173,7 @@ function set_initial_state() {
             },
             "cost": {
                 "money": 5000,
-                "iron": 1000,
+                "iron": 500,
             },
             "tooltip": "Banks are cheaper to buy.",
             "name": "Build a Vault <br />",
@@ -1220,8 +1220,8 @@ function set_initial_state() {
             },
             "cost": {
                 "money": 10000,
-                "stone": 30000,
-                "wood": 20000,
+                "stone": 20000,
+                "wood": 15000,
                 "coal": 2000,
             },
             "tooltip": "Much hotter furnaces run at 10x the previous rate and consume slightly less wood.",
@@ -1245,7 +1245,7 @@ function set_initial_state() {
             "cost": {
                 "money": 25000,
                 "gold": 500,
-                "iron": 1000,
+                "iron": 500,
             },
             "tooltip": "Special gold-plated magnets that attract only gold. And a bit of iron.",
             "name": "Gold Magnet<br />",

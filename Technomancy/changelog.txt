@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v4.0.1: (6/15/18) Challenges!
+Minor balance: reduced the costs of some stuff, mostly iron costs.
+
 v4.0.0: (6/15/18) Challenges!
 There's now a few challenges you can do! Theoretically all but meteor challenge should be working, but there's probably bugs. Oh, also you can go to adventure mode as soon as you have any fuel. 
 
