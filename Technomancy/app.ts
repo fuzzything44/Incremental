@@ -34,22 +34,6 @@ var buildings = {};
 var purchased_upgrades = []; /* Names of all purchased upgrades */
 var remaining_upgrades = {}; /* All remaining upgrades that need to be purchased */
 
-const CHALLENGES = { /* Challenge IDs*/
-    NONE: 0,
-    BASIC: 1,
-    POVERTY: 2,
-    METEORS: 3,
-    LOAN: 4,
-
-    TOTAL_AMOUNT: 5
-}
-
-function challenge_menu() {
-    $("#events_topbar").html("Challenge Progress");
-    $("#events_content").html("Now how did you get here? You shouldn't be seeing this...")
-    $("#events").removeClass("hidden");
-}
-
 const UNLOCK_TREE = { /* What buildings unlock */
     "s_manastone": [],
     "s_mana_refinery": [],
@@ -63,6 +47,8 @@ const UNLOCK_TREE = { /* What buildings unlock */
     "s_workshop_2": [],
     "s_enchantment": [],
     "s_final": [],
+
+    "s_challenge": [],
   
     "bank": ["mine", "logging"],
     "oil_well": ["oil_engine"],
@@ -115,6 +101,8 @@ const SPELL_BUILDINGS = [
     "s_workshop_2",
     "s_enchantment",
     "s_final",
+
+    "s_challenge",
   ];
 
 function set_initial_state() {
@@ -360,6 +348,21 @@ function set_initial_state() {
             "free": 0,
             "flavor": "MORE MANA!",
         },
+        "s_challenge": {
+            "on": true,
+            "amount": 1,
+            "base_cost": {},
+            "price_ratio": {},
+            "generation": {
+            },
+            "multipliers": {
+
+            },
+            "update": "nop",
+            "free": 0,
+            "flavor": "Good luck with challenges!",
+        },
+
 
         "bank": {
             "on": true,
@@ -2303,10 +2306,12 @@ let prestige = {
             return Math.round(100 * (prestige.mana(false) - prestige.mana(true) ));
         }
     },
-    run: function (ask = true) {
+    run: function (ask = true, callback = function () { }) {
         let mana_gain = prestige.mana();
         let mana = buildings["s_manastone"].amount;
         if (mana_gain < 1 && ask) {
+            if (adventure_data["challenge"] == CHALLENGES.LOAN) { alert("You can't prestige in this challenge."); return; }
+
             if (!confirm("Prestige now wouldn't produce mana! As you get more mana, it gets harder to make your first mana stone in a run. You are currently " + prestige.percent_through().toString() + "% of the way to your first mana. Prestige anyway?")) {
                 return;
             }
@@ -2316,19 +2321,23 @@ let prestige = {
             set_initial_state();
             buildings["s_manastone"].amount = total_mana;
             adventure_data.current_location = "home"; /* You have to prestige at home. */
-            /* Open bags of holding. Iterate backwards so we don't skip bags.  */
-            for (let i = adventure_data.inventory.length - 1; i >= 0; i--) {
-                if (adventure_data.inventory[i].name == "bag" && adventure_data.inventory[i].resource != undefined) {
-                    resources[adventure_data.inventory[i].resource].amount += adventure_data.inventory[i].amount;
-                    adventure_data.inventory.splice(i, 1);
+            /* Open bags of holding. Iterate backwards so we don't skip bags. Only do this if we're not in a challenge. */
+            if (!adventure_data["challenge"]) {
+                for (let i = adventure_data.inventory.length - 1; i >= 0; i--) {
+                    if (adventure_data.inventory[i].name == "bag" && adventure_data.inventory[i].resource != undefined) {
+                        resources[adventure_data.inventory[i].resource].amount += adventure_data.inventory[i].amount;
+                        adventure_data.inventory.splice(i, 1);
+                    }
+                }
+                for (let i = adventure_data.warehouse.length - 1; i >= 0; i--) {
+                    if (adventure_data.warehouse[i].name == "bag" && adventure_data.warehouse[i].resource != undefined) {
+                        resources[adventure_data.warehouse[i].resource].amount += adventure_data.warehouse[i].amount;
+                        adventure_data.warehouse.splice(i, 1);
+                    }
                 }
             }
-            for (let i = adventure_data.warehouse.length - 1; i >= 0; i--) {
-                if (adventure_data.warehouse[i].name == "bag" && adventure_data.warehouse[i].resource != undefined) {
-                    resources[adventure_data.warehouse[i].resource].amount += adventure_data.warehouse[i].amount;
-                    adventure_data.warehouse.splice(i, 1);
-                }
-            }
+
+            callback(); 
             save();
             location.reload();
         }
@@ -2583,6 +2592,7 @@ function toggle_building_state(name: string) {
         $("#toggle_" + name).addClass("building_state_off");
         $("#toggle_" + name).removeClass("building_state_on");
         $("#toggle_" + name).text("Off");
+
     } else { /* Turn it on */
         /* Make sure we can run for 1s first */
         try {
@@ -3437,13 +3447,13 @@ window.onload = () => {
         }
     });
 
-    /* Give spell rewards */
-    if (buildings["s_manastone"].amount > 0 && event_flags["start_buildings"] == undefined) {
+    /* Give start of prestige rewards */
+    if (event_flags["start_buildings"] == undefined) {
         event_flags["start_buildings"] = true;
         if (resources["money"].amount < 10) {
             resources["money"].amount = 10;
         }
-        if (buildings["s_manastone"].amount >= 400) {
+        if (buildings["s_manastone"].amount >= 400 || adventure_data["challenge"]) { /* Lets them open adventure/challenge menu right away. */
             resources["fuel"].amount += 0.3;
         }
 
@@ -3464,6 +3474,50 @@ window.onload = () => {
                 toggle_building_state(bname);
             }
             $("#building_" + bname + "  > .building_amount").html(format_num(buildings[bname].amount, false));
+        }
+
+        if (adventure_data["challenges_completed"]) { /* This has been defined */
+            /* They have a basic challenge completion.  */
+            if (adventure_data["challenges_completed"].length >= CHALLENGES.BASIC && adventure_data["challenges_completed"][CHALLENGES.BASIC]) {
+                /* Make sure it's defined to not get fuzzy production. */
+                if (buildings["s_challenge"].generation["money"] == undefined) { buildings["s_challenge"].generation["money"] = 0; }
+                buildings["s_challenge"].generation["money"] += 1; /* +1 money/s */
+
+                resources_per_sec["money"] += 1; /* Previous stuff is for when they reload it. This sets it up until then. */
+                resources["money"].changes["Challenge"] = buildings["s_challenge"].generation["money"]; /* Add it to the resource tooltip. */
+            }
+
+            /* They have a poverty challenge completion.  */
+            if (adventure_data["challenges_completed"].length >= CHALLENGES.POVERTY && adventure_data["challenges_completed"][CHALLENGES.POVERTY]) {
+                /* Make sure it's defined to not get fuzzy production. */
+                if (buildings["s_challenge"].generation["money"] == undefined) { buildings["s_challenge"].generation["money"] = 0; }
+                buildings["s_challenge"].generation["money"] += 1; /* +1 money/s */
+
+                resources_per_sec["money"] += 1; /* Previous stuff is for when they reload it. This sets it up until then. */
+                resources["money"].changes["Challenge"] = buildings["s_challenge"].generation["money"]; /* Add it to the resource tooltip. */
+            }
+
+            /* They have a meteor challenge completion.  */
+            if (adventure_data["challenges_completed"].length >= CHALLENGES.METEORS && adventure_data["challenges_completed"][CHALLENGES.METEORS]) {
+                /* Make sure it's defined to not get fuzzy production. */
+                if (buildings["s_challenge"].generation["money"] == undefined) { buildings["s_challenge"].generation["money"] = 0; }
+                buildings["s_challenge"].generation["money"] += 1; /* +1 money/s */
+
+                resources_per_sec["money"] += 1; /* Previous stuff is for when they reload it. This sets it up until then. */
+                resources["money"].changes["Challenge"] = buildings["s_challenge"].generation["money"]; /* Add it to the resource tooltip. */
+            }
+
+            /* They have a loan challenge completion.  */
+            if (adventure_data["challenges_completed"].length >= CHALLENGES.LOAN && adventure_data["challenges_completed"][CHALLENGES.LOAN]) {
+                /* Make sure it's defined to not get fuzzy production. */
+                if (buildings["s_challenge"].generation["money"] == undefined) { buildings["s_challenge"].generation["money"] = 0; }
+                buildings["s_challenge"].generation["money"] += 1; /* +1 money/s */
+
+                resources_per_sec["money"] += 1; /* Previous stuff is for when they reload it. This sets it up until then. */
+                resources["money"].changes["Challenge"] = buildings["s_challenge"].generation["money"]; /* Add it to the resource tooltip. */
+            }
+
+            resource_tooltip(); /* Refresh resource tooltips to get the changes we've been adding. */
         }
     }
     /* Start our event system */

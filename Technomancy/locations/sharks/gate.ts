@@ -8,9 +8,15 @@
             "weight": 0,
             "title": "Gate of Reality",
             "run_encounter": function challenge_display() {
-                function challenge_info(name, description, requirements, restrictions, reward, completed) {
+                function challenge_info(number, startfunc) {
+                    let name = CHALLENGE_INFO[number].name;
+                    let description = CHALLENGE_INFO[number].description;
+                    let requirements = CHALLENGE_INFO[number].requirements;
+                    let restrictions = CHALLENGE_INFO[number].restrictions;
+                    let reward = CHALLENGE_INFO[number].reward;
+
                     $("#events_content").html(name);
-                    if (completed) { $("#events_content").append(" (Completed)") };
+                    if (adventure_data["challenges_completed"][number]) { $("#events_content").append(" (Completed)") };
                     $("#events_content").append("<table id='challenge_table'></table>");
                     $("#challenge_table").append("<tr><th align='right'>Description:</th><td align='left'>" + description + "</td>");
                     $("#challenge_table").append("<tr><th align='right'>Completion Requirements:</th><td align='left'>" + requirements + "</td>");
@@ -19,7 +25,11 @@
 
                     $("#events_content").append("<span class='clickable'>Start!</span>");
                     $("#events_content span").last().click(function () {
-                        alert("Sorry, challenges aren't a thing yet.");
+                        if (confirm("Are you sure you want to start this challenge?")) {
+                            adventure_data["challenge"] = number;
+                            adventure_data["challenge_mana"] = buildings["s_manastone"].amount; /* No, they don't get mana from prestige. */
+                            prestige.run(false, startfunc);
+                        }
                     });
                     $("#events_content").append("<span class='clickable'>Not Yet</span>");
                     $("#events_content span").last().click(challenge_display);
@@ -45,7 +55,10 @@
                 }
                 $("#events_content").append("<span class='clickable'>Info</span> Basic Challenge<br/>");
                 $("#events_content span").last().click(function () {
-                    challenge_info("Basic Challenge", "Go back to 0 mana, get back up to 200. Nothing fancy. Mana is restored when you complete the challenge.", "Get to 200 mana to complete this challenge", "You start back at 0 mana", "Who knows? Got an idea for a reward? Tell me in the discord!", adventure_data["challenges_completed"][CHALLENGES.BASIC]);
+                    challenge_info(CHALLENGES.BASIC, function () {
+                        /* Basic challenge adds no special restrictions, so just reset mana */
+                        buildings["s_manastone"].amount = 0;
+                    });
                 });
 
                 if (adventure_data["challenges_completed"][CHALLENGES.POVERTY]) {
@@ -53,7 +66,10 @@
                 }
                 $("#events_content").append("<span class='clickable'>Info</span> Poverty Challenge<br/>");
                 $("#events_content span").last().click(function () {
-                    challenge_info("Poverty", "You have taken a vow of poverty and therefore have almost no money.", "Get to 200 mana to complete this challenge", "Go back to 0 mana, and you can't have more than 40 seconds of money production.", "Get a permanant extra 1 money production", adventure_data["challenges_completed"][CHALLENGES.POVERTY]);
+                    challenge_info(CHALLENGES.POVERTY, function () {
+                        /* Restriction here is coded elsewhere. Just reset mana. */
+                        buildings["s_manastone"].amount = 0;
+                    });
                 });
 
                 if (adventure_data["challenges_completed"][CHALLENGES.METEORS]) {
@@ -61,7 +77,10 @@
                 }
                 $("#events_content").append("<span class='clickable'>Info</span> Meteor Challenge<br/>");
                 $("#events_content span").last().click(function () {
-                    challenge_info("Meteor Challenge", "Meteors aren't falling just in your backyard anymore. They're falling on your buildings!", "Get to 200 mana to complete this challenge", "Go back to 0 mana. Every so often, a meteor will fall and destroy some of your buildings! Oh no!", "IDK, maybe auto-build? Seems like it could be a good reward.", adventure_data["challenges_completed"][CHALLENGES.METEORS]);
+                    challenge_info(CHALLENGES.METEORS, function () {
+                        /* Probably also coded elsewhere? Oh no! We can't do this! Abort! */
+                        adventure_data["challenge"] = CHALLENGES.NONE
+                    });
                 });
 
                 if (adventure_data["challenges_completed"][CHALLENGES.LOAN]) {
@@ -69,7 +88,11 @@
                 }
                 $("#events_content").append("<span class='clickable'>Info</span> A Small Loan<br/>");
                 $("#events_content span").last().click(function () {
-                    challenge_info("A Small Loan", "Be a tycoon of business and grow your empire!", "Get 10 million money to complete this challenge", "Go back to 0 mana. You can't prestige. You start with 1 million money, but lose 30/second. Can you get enough to pay off your loan?", "Once again, I'm out of good ideas for rewards.", adventure_data["challenges_completed"][CHALLENGES.LOAN]);
+                    challenge_info(CHALLENGES.LOAN, function () {
+                        buildings["s_manastone"].amount = 100; /* They can have a good bit of mana */
+                        resources["money"].amount = 1000000; /* ALL the money! */
+                        buildings["s_challenge"].generation["money"] = -30; /* Here's the cost to it. */
+                    });
                 });
             }
         }),

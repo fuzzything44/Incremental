@@ -1,0 +1,92 @@
+var CHALLENGES = {
+    NONE: 0,
+    BASIC: 1,
+    POVERTY: 2,
+    METEORS: 3,
+    LOAN: 4,
+    TOTAL_AMOUNT: 5
+};
+function challenge_menu() {
+    $("#events_topbar").html("Challenge Progress");
+    var number = adventure_data["challenge"];
+    var name = CHALLENGE_INFO[number].name;
+    var description = CHALLENGE_INFO[number].description;
+    var requirements = CHALLENGE_INFO[number].requirements;
+    var restrictions = CHALLENGE_INFO[number].restrictions;
+    var reward = CHALLENGE_INFO[number].reward;
+    $("#events_content").html(name);
+    if (adventure_data["challenges_completed"][number]) {
+        $("#events_content").append(" (Completed)");
+    }
+    ;
+    $("#events_content").append("<table id='challenge_table'></table>");
+    $("#challenge_table").append("<tr><th align='right'>Description:</th><td align='left'>" + description + "</td>");
+    $("#challenge_table").append("<tr><th align='right'>Completion Requirements:</th><td align='left'>" + requirements + "</td>");
+    $("#challenge_table").append("<tr><th align='right'>Challenge Restrictions:</th><td align='left'>" + restrictions + "</td>");
+    $("#challenge_table").append("<tr><th align='right'>Challenge Reward:</th><td align='left'>" + reward + "</td>");
+    if (CHALLENGE_INFO[number].test_completed()) {
+        $("#events_content").append("You have completed the challenge. Finish the challenge to exit it (and prestige). <br/><span class='clickable'>Finish</span> the challenge!");
+        $("#events_content > span").last().click(function () {
+            adventure_data["challenge"] = CHALLENGES.NONE; /* No longer in a challenge. */
+            adventure_data["challenges_completed"][number] = true; /* Completed challenge!*/
+            prestige.run(false, function () {
+                buildings["s_manastone"].amount = adventure_data["challenge_mana"]; /* Give back mana*/
+            });
+        });
+    }
+    else {
+        $("#events_content").append("You haven't completed the challenge yet.<br/><span class='clickable'>Abandon</span> the challenge.");
+        $("#events_content > span").last().click(function () {
+            if (confirm("Are you sure you want to abandon the challenge?")) {
+                adventure_data["challenge"] = CHALLENGES.NONE;
+                prestige.run(false, function () {
+                    buildings["s_manastone"].amount = adventure_data["challenge_mana"]; /* Give back mana*/
+                });
+            }
+        });
+    }
+    $("#events").removeClass("hidden");
+}
+var CHALLENGE_INFO = [
+    {
+        "name": "",
+        "description": "",
+        "requirements": "",
+        "restrictions": "",
+        "reward": "",
+        "test_completed": function () { return true; }
+    },
+    {
+        "name": "Basic Challenge",
+        "description": "Go back to 0 mana, get back up to 200. Nothing fancy. Mana is restored when you complete the challenge.",
+        "requirements": "Get to 200 mana to complete this challenge.",
+        "restrictions": "You start back at 0 mana.",
+        "reward": "Who knows? Got an idea for a reward? Tell me in the discord!",
+        "test_completed": function () { return buildings["s_manastone"].amount >= 200; }
+    },
+    {
+        "name": "Poverty",
+        "description": "You have taken a vow of poverty and therefore have almost no money.",
+        "requirements": "Get to 200 mana to complete this challenge",
+        "restrictions": "Go back to 0 mana, and you can't have more than 40 seconds of money production.",
+        "reward": "Get a permanant extra 1 money production.",
+        "test_completed": function () { return buildings["s_manastone"].amount >= 200; }
+    },
+    {
+        "name": "Meteor Challenge",
+        "description": "Meteors aren't falling just in your backyard anymore. They're falling on your buildings!",
+        "requirements": "Get to 200 mana to complete this challenge",
+        "restrictions": "Go back to 0 mana. Every so often, a meteor will fall and destroy some of your buildings! Oh no!",
+        "reward": "IDK, maybe auto-build? Seems like it could be a good reward.",
+        "test_completed": function () { return buildings["s_manastone"].amount >= 200; }
+    },
+    {
+        "name": "A Small Loan",
+        "description": "Be a tycoon of business and grow your empire!",
+        "requirements": "Get 10 million money to complete this challenge",
+        "restrictions": "Go back to 0 mana. You can't prestige. You start with 1 million money, but lose 30/second. Can you get enough to pay off your loan?",
+        "reward": "Once again, I'm out of good ideas for rewards.",
+        "test_completed": function () { return resources["money"].amount >= 10000000; }
+    },
+];
+//# sourceMappingURL=challenges.js.map

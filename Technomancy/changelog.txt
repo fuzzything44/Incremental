@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v4.0.0: (6/15/18) Challenges!
+There's now a few challenges you can do! Theoretically all but meteor challenge should be working, but there's probably bugs. Oh, also you can go to adventure mode as soon as you have any fuel. 
+
 v3.23.0: (6/13/18) Challenge stuff
 Added a new "planet", right off of Marine World (the casino). You can see the current planned challenges there, and it'll be where you start them! Oh, also I changed some CSS stuff with tables, so if you notice a place where they look terrible tell me. And challenges should be coming soon! More hype!
 

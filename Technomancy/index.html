@@ -15,6 +15,7 @@
     <script src="equipment_data.js" defer></script>
     <script src="location_data.js" defer></script>
     <script src="alchemy.js" defer></script>
+    <script src="challenges.js"></script>
 
     <script src="//cdn.rawgit.com/erosson/swarm-numberformat/v0.1.0/dist/swarm-numberformat.min.js"></script>
     <script src="app.js" ></script>
@@ -71,7 +72,7 @@
         </div>
         <div id="fuel" class="hidden" style="padding-bottom: .3em; border-bottom-color: greenyellow;">
             <span style="color: greenyellow; text-shadow: yellow 1px 0px 10px; vertical-align: middle;">Refined mana: 0</span>
-            <span class="res_gen " onclick="if (resources['fuel'].amount < 1 && adventure_data['inventory_fuel'] < 0.1) { alert('You need more fuel.'); } else { if (adventure_data['challenge']) { challenge_menu(); } else start_adventure(); }" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid; border-radius: 3px;">
+            <span class="res_gen " onclick="if (adventure_data['challenge']) challenge_menu(); else start_adventure();" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid; border-radius: 3px;">
                 Adventure
             </span>
             <br />
@@ -301,6 +302,11 @@
             <div style="position: relative; display: none;" class="">
                 <span id="building_s_final" class="building tooltip" style="color: fuchsia; text-shadow: #0FF 1px 0px 10px;" onclick="s_final_upgrade()"><span class="building_name"><span class="building_prefix"></span>???</span><span class="building_amount">500</span><span class="tooltiptext fgc bgc_second">???</span></span>
                 <span id="toggle_s_final" class="building_state_off" onclick="toggle_building_state('s_final')">Off</span>
+            </div>
+
+            <!-- Challenge building, should never be shown. Here so that the production values on resources can grab it's name. -->
+            <div style="position: relative; display: none;" class="">
+                <span id="building_s_challenge" class="building tooltip" style="color: fuchsia; text-shadow: #0FF 1px 0px 10px;"><span class="building_name"><span class="building_prefix"></span>Challenge</span><span class="building_amount">1</span><span class="tooltiptext fgc bgc_second">Hmm...</span></span>
             </div>
             <hr />
         </div>

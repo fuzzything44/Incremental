@@ -32,6 +32,7 @@
     <TypeScriptCompile Include="adventure.ts" />
     <TypeScriptCompile Include="alchemy.ts" />
     <TypeScriptCompile Include="app.ts" />
+    <TypeScriptCompile Include="challenges.ts" />
     <TypeScriptCompile Include="equipment_data.ts" />
     <TypeScriptCompile Include="events.ts" />
     <TypeScriptCompile Include="locations\global.ts" />
