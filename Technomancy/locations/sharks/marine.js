@@ -180,12 +180,16 @@
                     $("#slot_prizes").append("<tr><th>Prize</td><th>Token Cost</td></tr>");
                     $("#slot_prizes").append("<tr><td class='clickable'>500 Steel</td><td>10</td></tr>");
                     $("#slot_prizes td.clickable").last().click(function () {
+                        if (adventure_data["casino_tokens"] >= 10) {
+                            adventure_data["casino_tokens"] -= 10;
+                            resources["steel_beam"].amount += 500;
+                        }
                     });
                     $("#slot_prizes").append("<tr><td class='clickable'>250 Fuel</td><td>10</td></tr>");
                     $("#slot_prizes td.clickable").last().click(function () {
                         if (adventure_data["casino_tokens"] >= 10) {
                             adventure_data["casino_tokens"] -= 10;
-                            resources["fuel"] += 250;
+                            resources["fuel"].amount += 250;
                         }
                     });
                     if (resources["mithril"].amount >= 100) {
@@ -193,7 +197,7 @@
                         $("#slot_prizes td.clickable").last().click(function () {
                             if (adventure_data["casino_tokens"] >= 25) {
                                 adventure_data["casino_tokens"] -= 25;
-                                resources["mithril"] += 100;
+                                resources["mithril"].amount += 100;
                             }
                         });
                     }
@@ -201,7 +205,7 @@
                     $("#slot_prizes td.clickable").last().click(function () {
                         if (adventure_data["casino_tokens"] >= 50) {
                             adventure_data["casino_tokens"] -= 50;
-                            resources["void"] += 1;
+                            resources["void"].amount += 1;
                         }
                     });
                 }

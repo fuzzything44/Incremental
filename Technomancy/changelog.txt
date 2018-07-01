@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v4.0.2: (7/1/18) 
+Fixed some stuff with the casino rewards. They should now actually purchase correctly.
+
 v4.0.1: (6/15/18) Challenges!
 Minor balance: reduced the costs of some stuff, mostly iron costs.
 
