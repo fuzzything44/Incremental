@@ -57,12 +57,12 @@ function challenge_menu() {
 
 let CHALLENGE_INFO = [
     { /* No challenge here. */
-        "name": "",
-        "description": "",
-        "requirements": "",
-        "restrictions": "",
-        "reward": "",
-        "test_completed": function () { return true; }
+        "name": "Oops",
+        "description": "This... shouldn't happen.",
+        "requirements": "None",
+        "restrictions": "None",
+        "reward": "None",
+        "test_completed": function () { return false; }
     },
     { /* Basic challenge */
         "name": "Basic Challenge",

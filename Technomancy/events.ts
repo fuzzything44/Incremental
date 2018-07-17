@@ -1072,7 +1072,7 @@ function setup_events() {
     }, 1000);
 
     /* Meteor challenge */
-    if (adventure_data["challenge"] = CHALLENGES.METEORS) {
+    if (adventure_data["challenge"] == CHALLENGES.METEORS) {
         setInterval(function () {
             if (event_flags["meteor_amount"] == undefined) {
                 event_flags["meteor_amount"] = 0; /* Seed starting at 0 */

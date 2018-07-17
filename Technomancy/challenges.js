@@ -49,12 +49,12 @@ function challenge_menu() {
 }
 var CHALLENGE_INFO = [
     {
-        "name": "",
-        "description": "",
-        "requirements": "",
-        "restrictions": "",
-        "reward": "",
-        "test_completed": function () { return true; }
+        "name": "Oops",
+        "description": "This... shouldn't happen.",
+        "requirements": "None",
+        "restrictions": "None",
+        "reward": "None",
+        "test_completed": function () { return false; }
     },
     {
         "name": "Basic Challenge",
