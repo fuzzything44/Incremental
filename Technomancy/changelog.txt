@@ -1,6 +1,6 @@
 ﻿Technomancy Changelog
 
-v4.1.0: (7/16/18) More challenge
+v4.1.1: (7/16/18) More challenge
 Oops, it now shouldn't force you into meteor challenge.
 
 v4.1.0: (7/16/18) More challenge
