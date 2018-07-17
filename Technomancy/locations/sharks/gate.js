@@ -8,6 +8,10 @@
             "weight": 0,
             "title": "Gate of Reality",
             "run_encounter": function challenge_display() {
+                /* Add this as a warp location. */
+                if (adventure_data["warp_locations"].indexOf("sharks/gate") == -1) {
+                    adventure_data["warp_locations"].push("sharks/gate");
+                }
                 function challenge_info(number, startfunc) {
                     var name = CHALLENGE_INFO[number].name;
                     var description = CHALLENGE_INFO[number].description;
@@ -28,8 +32,8 @@
                     $("#events_content span").last().click(function () {
                         if (confirm("Are you sure you want to start this challenge?")) {
                             adventure_data["challenge"] = number;
-                            adventure_data["challenge_mana"] = buildings["s_manastone"].amount; /* No, they don't get mana from prestige. */
-                            prestige.run(false, startfunc);
+                            adventure_data["challenge_mana"] = buildings["s_manastone"].amount;
+                            prestige.run(false, startfunc); /* No, they don't get mana from prestige. It's reset after mana gains. */
                         }
                     });
                     $("#events_content").append("<span class='clickable'>Not Yet</span>");
@@ -74,8 +78,8 @@
                 $("#events_content").append("<span class='clickable'>Info</span> Meteor Challenge<br/>");
                 $("#events_content span").last().click(function () {
                     challenge_info(CHALLENGES.METEORS, function () {
-                        /* Probably also coded elsewhere? Oh no! We can't do this! Abort! */
-                        adventure_data["challenge"] = CHALLENGES.NONE;
+                        /* Coded in the events system.  */
+                        buildings["s_manastone"].amount = 0;
                     });
                 });
                 if (adventure_data["challenges_completed"][CHALLENGES.LOAN]) {

@@ -2623,7 +2623,7 @@ function update() {
         }
     });
     if (adventure_data["challenge"] == CHALLENGES.POVERTY) {
-        var MULT = 40;
+        var MULT = 20;
         if (resources["money"].amount > 30 && resources["money"].amount > resources_per_sec["money"] * resources["money"].mult * MULT) {
             resources["money"].amount = Math.max(30, resources_per_sec["money"] * resources["money"].mult * MULT);
             $("#money span").first().html("Money: " + format_num(resources["money"].amount, false));

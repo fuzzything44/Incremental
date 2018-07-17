@@ -98,6 +98,12 @@ function s_workshop(newopt) {
         "glass": "Melts 10 sand into 10 glass per second.",
         "steel": "Uses 100 iron ore and 30 coal to make 1 steel beam per second.",
     };
+    var inventor_tooltips = {
+        "iron": "Extracts 20 iron from 50 stone per second. Yay you!",
+        "wood": "Farms trees for 150 wood per second.",
+        "glass": "Molds 10 sand into 20 glass per second.",
+        "steel": "Forges 100 iron ore and 30 coal into 2 steel beams per second.",
+    };
     /* What option corresponds to what production */
     var workshop_items = {
         "iron": {
@@ -127,12 +133,15 @@ function s_workshop(newopt) {
                 buildings["s_workshop"].generation[res] *= 2;
             }
         });
+        $("#workshop_prod").html(inventor_tooltips[newopt]); /* Set tooltip to new val, but using inventor ones. */
+    }
+    else {
+        $("#workshop_prod").html(workshop_tooltips[newopt]); /* Set tooltip to new val */
     }
     if (comp_state) {
         resources["mana"].amount = 50; /* Make sure they have enough mana because it hasn't been set yet. */
         toggle_building_state("s_workshop");
     }
-    $("#workshop_prod").html(workshop_tooltips[newopt]); /* Set tooltip to new val */
 }
 function s_refinery(amount) {
     if (isNaN(amount)) {

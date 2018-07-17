@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v4.1.0: (7/16/18) More challenge
+The challenge gate is now a warp gate location. Meteor challenge should actually be a thing now. Poverty challenge max money reduced (40s of production -> 20s, because I remembered money printers exist). Manufacturing tooltips are correct if you're an inventor now. Halloween theme is once again available, because why not.
+
 v4.0.2: (7/1/18) 
 Fixed some stuff with the casino rewards. They should now actually purchase correctly.
 

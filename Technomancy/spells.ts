@@ -99,6 +99,12 @@ function s_workshop(newopt: string) {
         "steel": "Uses 100 iron ore and 30 coal to make 1 steel beam per second.",
     }
 
+    let inventor_tooltips = {
+        "iron": "Extracts 20 iron from 50 stone per second. Yay you!",
+        "wood": "Farms trees for 150 wood per second.",
+        "glass": "Molds 10 sand into 20 glass per second.",
+        "steel": "Forges 100 iron ore and 30 coal into 2 steel beams per second.",
+    }
     /* What option corresponds to what production */
     let workshop_items = {
         "iron": {
@@ -130,6 +136,10 @@ function s_workshop(newopt: string) {
                 buildings["s_workshop"].generation[res] *= 2;
             }
         });
+        $("#workshop_prod").html(inventor_tooltips[newopt]); /* Set tooltip to new val, but using inventor ones. */
+    } else {
+        $("#workshop_prod").html(workshop_tooltips[newopt]); /* Set tooltip to new val */
+
     }
 
     if (comp_state) { /* Only turn on if it already was on */
@@ -137,8 +147,7 @@ function s_workshop(newopt: string) {
         toggle_building_state("s_workshop");
     }
 
-
-    $("#workshop_prod").html(workshop_tooltips[newopt]); /* Set tooltip to new val */
+    
 }
 
 function s_refinery(amount: number) {

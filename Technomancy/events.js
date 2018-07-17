@@ -871,7 +871,7 @@ function setup_events() {
                 }
                 buildings["bank"]["generation"]["money"] *= 0.7;
                 /* Yes, this happens. It gets small enough that rounding errors make it weird. */
-                if (buildings["bank"].base_cost["money"] * 0.7 == buildings["bank"].base_cost["money"]) {
+                if (buildings["bank"].base_cost["money"] * 0.7 >= buildings["bank"].base_cost["money"]) {
                     buildings["bank"].base_cost["money"] = 0;
                 }
                 if (comp_state) {
@@ -1019,6 +1019,38 @@ function setup_events() {
             $("#potion").addClass("hidden");
         }
     }, 1000);
+    /* Meteor challenge */
+    if (adventure_data["challenge"] = CHALLENGES.METEORS) {
+        setInterval(function () {
+            if (event_flags["meteor_amount"] == undefined) {
+                event_flags["meteor_amount"] = 0; /* Seed starting at 0 */
+            }
+            var available_buildings = [];
+            /* All buildings they have are available for hitting. Except the mana purifier. */
+            Object.keys(buildings).forEach(function (build) {
+                if (buildings[build].amount >= 1 && build != "mana_purifier") {
+                    available_buildings.push(build);
+                }
+            });
+            /* We can actually destroy something. */
+            if (available_buildings.length > 0) {
+                var destroyed = available_buildings[prng(event_flags["meteor_amount"]) % available_buildings.length];
+                var amt = (prng(event_flags["meteor_amount"]) % buildings[destroyed].amount) + 1;
+                /* Now we know what we're destroying and how many. Time to kill!*/
+                var build_state = buildings[destroyed].on;
+                if (build_state) {
+                    toggle_building_state(destroyed);
+                }
+                buildings[destroyed].amount -= amt;
+                if (build_state) {
+                    toggle_building_state(destroyed);
+                }
+                /* And log it.*/
+                add_log_elem("Oh no! A meteor fell on your " + $("#building_" + destroyed + " .building_name").text() + ", destroying " + amt.toString() + "!");
+            }
+            event_flags["meteor_amount"]++; /* Increment seed. */
+        }, 1000 * 30); /* Every 30s, hit with a destroy. */
+    }
 }
 /* Functions because putting all of this in an onclick is too much. */
 function bribe_finance() {
