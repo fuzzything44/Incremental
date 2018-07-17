@@ -1060,7 +1060,7 @@ function set_initial_state() {
             "base_cost": { }, /* Free, but you can't buy it. */
             "price_ratio": { },
             "generation": {
-                "hydrogen": 30,
+                "hydrogen": 10,
             },
             "multipliers": {
 
@@ -3541,6 +3541,10 @@ window.onload = () => {
 
         }
         buildings["hydrogen_mine"].amount = adventure_data["hydrogen_mines"];
+        if (adventure_data["challenge"] && buildings["hydrogen_mine"].amount > 5) { /* If they're in a challenge, cap at 5 */
+            buildings["hydrogen_mine"].amount = 5; /* TODO: Maybe a challenge reward raises this cap? */
+        }
+
         if (comp_state) { /* Only turn on if it already was on */
             toggle_building_state("hydrogen_mine");
         }

@@ -959,7 +959,7 @@ function set_initial_state() {
             "base_cost": {},
             "price_ratio": {},
             "generation": {
-                "hydrogen": 30,
+                "hydrogen": 10,
             },
             "multipliers": {},
             "free": 0,
@@ -3366,6 +3366,9 @@ window.onload = function () {
             toggle_building_state("hydrogen_mine");
         }
         buildings["hydrogen_mine"].amount = adventure_data["hydrogen_mines"];
+        if (adventure_data["challenge"] && buildings["hydrogen_mine"].amount > 5) {
+            buildings["hydrogen_mine"].amount = 5; /* TODO: Maybe a challenge reward raises this cap? */
+        }
         if (comp_state) {
             toggle_building_state("hydrogen_mine");
         }

@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v4.1.2: (7/17/18) More challenge
+When in a challenge you can now only have 5 hydrogen mines. This should make them harder. Hydrogen mines also generate less hydrogen, but since they're still uncapped, eh.
+
 v4.1.1: (7/16/18) More challenge
 Oops, it now shouldn't force you into meteor challenge.
 
