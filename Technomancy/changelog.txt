@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v4.1.2: (7/18/18) More challenge
+Meteors no longer hit mana stones and spell buildings. They also should update the amount it displays you have. Also, the meteor event is now no longer a good thing when in the challenge. It's very painful actually.
+
 v4.1.2: (7/17/18) More challenge
 When in a challenge you can now only have 5 hydrogen mines. This should make them harder. Hydrogen mines also generate less hydrogen, but since they're still uncapped, eh.
 

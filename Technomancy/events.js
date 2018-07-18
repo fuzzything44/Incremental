@@ -67,7 +67,7 @@ var events = [
         "rejection": 10,
     }),
     ({
-        "condition": function () { return true; },
+        "condition": function () { return adventure_data["challenge"] != CHALLENGES.METEORS; },
         "run_event": function () {
             var content = "<span>Woah, a meteor just hit in your backyard!</span><br>";
             content += "<span onclick='resources.stone.amount += 50000; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 50000 stone\");' class='clickable'>Gather stone</span><br>";
@@ -88,6 +88,19 @@ var events = [
                     content += "<span onclick='resources.diamond.amount += 10; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 10 diamond\");' class='clickable'>Wait, what's that?</span><br>";
                 }
             }
+            add_log_elem("A meteor fell!");
+            $("#events_content").html(content);
+        },
+        "name": "Meteor!",
+        "rejection": 30,
+    }),
+    ({
+        "condition": function () { return adventure_data["challenge"] == CHALLENGES.METEORS; },
+        "run_event": function () {
+            var content = "<span>Woah, a meteor just hit in your everything!</span><br>";
+            meteor_hit();
+            meteor_hit();
+            meteor_hit();
             add_log_elem("A meteor fell!");
             $("#events_content").html(content);
         },
@@ -1021,35 +1034,7 @@ function setup_events() {
     }, 1000);
     /* Meteor challenge */
     if (adventure_data["challenge"] == CHALLENGES.METEORS) {
-        setInterval(function () {
-            if (event_flags["meteor_amount"] == undefined) {
-                event_flags["meteor_amount"] = 0; /* Seed starting at 0 */
-            }
-            var available_buildings = [];
-            /* All buildings they have are available for hitting. Except the mana purifier. */
-            Object.keys(buildings).forEach(function (build) {
-                if (buildings[build].amount >= 1 && build != "mana_purifier") {
-                    available_buildings.push(build);
-                }
-            });
-            /* We can actually destroy something. */
-            if (available_buildings.length > 0) {
-                var destroyed = available_buildings[prng(event_flags["meteor_amount"]) % available_buildings.length];
-                var amt = (prng(event_flags["meteor_amount"]) % buildings[destroyed].amount) + 1;
-                /* Now we know what we're destroying and how many. Time to kill!*/
-                var build_state = buildings[destroyed].on;
-                if (build_state) {
-                    toggle_building_state(destroyed);
-                }
-                buildings[destroyed].amount -= amt;
-                if (build_state) {
-                    toggle_building_state(destroyed);
-                }
-                /* And log it.*/
-                add_log_elem("Oh no! A meteor fell on your " + $("#building_" + destroyed + " .building_name").text() + ", destroying " + amt.toString() + "!");
-            }
-            event_flags["meteor_amount"]++; /* Increment seed. */
-        }, 1000 * 30); /* Every 30s, hit with a destroy. */
+        setInterval(meteor_hit, 30 * 1000);
     }
 }
 /* Functions because putting all of this in an onclick is too much. */
@@ -1130,5 +1115,36 @@ function bribe_environment() {
     event_flags["bribed_politician"] = "environment";
     $("#events").addClass("hidden");
     add_log_elem("Removed all environmental regulations.");
+}
+function meteor_hit() {
+    if (event_flags["meteor_amount"] == undefined) {
+        event_flags["meteor_amount"] = 0; /* Seed starting at 0 */
+    }
+    event_flags["meteor_amount"]++; /* Increment seed. */
+    var available_buildings = [];
+    /* All buildings they have are available for hitting. Except the mana purifier. */
+    Object.keys(buildings).forEach(function (build) {
+        if (buildings[build].amount >= 1 && SPELL_BUILDINGS.indexOf(build) == -1 && build != "mana_purifier") {
+            available_buildings.push(build);
+        }
+    });
+    /* We can actually destroy something. */
+    if (available_buildings.length > 0) {
+        var destroyed = available_buildings[prng(event_flags["meteor_amount"]) % available_buildings.length];
+        var amt = (prng(event_flags["meteor_amount"]) % buildings[destroyed].amount) + 1;
+        /* Now we know what we're destroying and how many. Time to kill!*/
+        var build_state = buildings[destroyed].on;
+        if (build_state) {
+            toggle_building_state(destroyed);
+        }
+        buildings[destroyed].amount -= amt;
+        if (build_state) {
+            toggle_building_state(destroyed);
+        }
+        /* And log it.*/
+        add_log_elem("Oh no! A meteor fell on your " + $("#building_" + destroyed + " .building_name").text() + ", destroying " + amt.toString() + "!");
+        /* Update amount of it shown */
+        purchase_building(destroyed, 0);
+    }
 }
 //# sourceMappingURL=events.js.map
