@@ -95,19 +95,6 @@ var events = [
         "rejection": 30,
     }),
     ({
-        "condition": function () { return adventure_data["challenge"] == CHALLENGES.METEORS; },
-        "run_event": function () {
-            var content = "<span>Woah, a meteor just hit in your everything!</span><br>";
-            meteor_hit();
-            meteor_hit();
-            meteor_hit();
-            add_log_elem("A meteor fell!");
-            $("#events_content").html(content);
-        },
-        "name": "Meteor!",
-        "rejection": 30,
-    }),
-    ({
         "condition": function () { return buildings["s_manastone"].amount < 50; },
         "run_event": function () {
             resources["time"].amount += 300;
@@ -733,6 +720,19 @@ var events = [
         },
         "name": "A Visit",
         "rejection": 80,
+    }),
+    ({
+        "condition": function () { return adventure_data["challenge"] == CHALLENGES.METEORS; },
+        "run_event": function () {
+            var content = "<span>Woah, a meteor just hit in your everything!</span><br>";
+            meteor_hit();
+            meteor_hit();
+            meteor_hit();
+            add_log_elem("A meteor fell!");
+            $("#events_content").html(content);
+        },
+        "name": "Meteor!",
+        "rejection": 30,
     }),
 ];
 /* Used by purified mana. */

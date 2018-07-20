@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v4.1.3: (7/19/18) More Challenge
+You should now actually get a logicat when adventuring where logicats appear.
+
 v4.1.2: (7/18/18) More challenge
 Meteors no longer hit mana stones and spell buildings. They also should update the amount it displays you have. Also, the meteor event is now no longer a good thing when in the challenge. It's very painful actually.
 

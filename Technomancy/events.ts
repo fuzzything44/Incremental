@@ -99,22 +99,6 @@ let events = [
         "rejection": 30,
     }), /* End meteor */
     ({
-        "condition": function () { return adventure_data["challenge"] == CHALLENGES.METEORS; },
-        "run_event": function () {
-            let content = "<span>Woah, a meteor just hit in your everything!</span><br>";
-
-            meteor_hit();
-            meteor_hit();
-            meteor_hit();
-
-            add_log_elem("A meteor fell!");
-            $("#events_content").html(content);
-
-        },
-        "name": "Meteor!",
-        "rejection": 30,
-    }), /* End meteor (challenge version) */
-    ({
         "condition": function () { return buildings["s_manastone"].amount < 50; },
         "run_event": function () {
             resources["time"].amount += 300;
@@ -778,6 +762,22 @@ let events = [
         "name": "A Visit",
         "rejection": 80,
     }), /* End wanderer */
+    ({
+        "condition": function () { return adventure_data["challenge"] == CHALLENGES.METEORS; },
+        "run_event": function () {
+            let content = "<span>Woah, a meteor just hit in your everything!</span><br>";
+
+            meteor_hit();
+            meteor_hit();
+            meteor_hit();
+
+            add_log_elem("A meteor fell!");
+            $("#events_content").html(content);
+
+        },
+        "name": "Meteor!",
+        "rejection": 30,
+    }), /* End meteor (challenge version) */
 
 ];
 
