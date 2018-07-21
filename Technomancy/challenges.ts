@@ -4,8 +4,10 @@
     POVERTY: 2,
     METEORS: 3,
     LOAN: 4,
+    CASCADE: 5,
+    DISCO: 6,
 
-    TOTAL_AMOUNT: 5
+    TOTAL_AMOUNT: 7
 }
 
 function challenge_menu() {
@@ -96,6 +98,19 @@ let CHALLENGE_INFO = [
         "reward": "Once again, I'm out of good ideas for rewards.",
         "test_completed": function () { return resources["money"].amount >= 10000000; }
     },
-
-
+    { /* Cascade*/
+        "name": "Cascade",
+        "description": "Buying a building buys more than just what you chose. Good luck managing your resources.",
+        "requirements": "Get 100 mana.",
+        "restrictions": "Go back to 0 mana. Whenever you buy a building, you also buy each building that it unlocks, if possible. Same for selling!",
+        "reward": "Once again, I'm out of good ideas for rewards.",
+        "test_completed": function () { return buildings["s_manastone"].amount >= 100; }
+    },
+    { /* Disco */
+        "name": "Disco",
+        "description": "A basic challenge, but in the best theme! What's not to love about this?",
+        "requirements": "Get 200 mana.",
+        "restrictions": "A basic challenge, but it's stuck in disco theme.",
+        "test_completed": function () { return buildings["s_manastone"].amount >= 200; }
+    },
 ]

@@ -99,6 +99,28 @@
                         buildings["s_challenge"].generation["money"] = -30; /* Here's the cost to it. */
                     });
                 });
+
+                if (adventure_data["challenges_completed"][CHALLENGES.CASCADE]) {
+                    $("#events_content").append("<span style='color:green'>\u2714 </span>"); /* If completed, add check mark. */
+                }
+                $("#events_content").append("<span class='clickable'>Info</span> Cascade<br/>");
+                $("#events_content span").last().click(function () {
+                    challenge_info(CHALLENGES.CASCADE, function () {
+                        /* Coded in the buy/sell system.  */
+                        buildings["s_manastone"].amount = 0;
+                    });
+                });
+
+                if (adventure_data["challenges_completed"][CHALLENGES.DISCO]) {
+                    $("#events_content").append("<span style='color:green'>\u2714 </span>"); /* If completed, add check mark. */
+                }
+                $("#events_content").append("<span class='clickable'>Info</span> Disco<br/>");
+                $("#events_content span").last().click(function () {
+                    challenge_info(CHALLENGES.DISCO, function () {
+                        /* Coded in the buy/sell system.  */
+                        buildings["s_manastone"].amount = 0;
+                    });
+                });
             }
         }),
     ],

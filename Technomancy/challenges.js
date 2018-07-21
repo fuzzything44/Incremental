@@ -4,7 +4,9 @@ var CHALLENGES = {
     POVERTY: 2,
     METEORS: 3,
     LOAN: 4,
-    TOTAL_AMOUNT: 5
+    CASCADE: 5,
+    DISCO: 6,
+    TOTAL_AMOUNT: 7
 };
 function challenge_menu() {
     $("#events_topbar").html("Challenge Progress");
@@ -87,6 +89,21 @@ var CHALLENGE_INFO = [
         "restrictions": "Go back to 0 mana. You can't prestige. You start with 1 million money, but lose 30/second. Can you get enough to pay off your loan?",
         "reward": "Once again, I'm out of good ideas for rewards.",
         "test_completed": function () { return resources["money"].amount >= 10000000; }
+    },
+    {
+        "name": "Cascade",
+        "description": "Buying a building buys more than just what you chose. Good luck managing your resources.",
+        "requirements": "Get 100 mana.",
+        "restrictions": "Go back to 0 mana. Whenever you buy a building, you also buy each building that it unlocks, if possible. Same for selling!",
+        "reward": "Once again, I'm out of good ideas for rewards.",
+        "test_completed": function () { return buildings["s_manastone"].amount >= 100; }
+    },
+    {
+        "name": "Disco",
+        "description": "A basic challenge, but in the best theme! What's not to love about this?",
+        "requirements": "Get 200 mana.",
+        "restrictions": "A basic challenge, but it's stuck in disco theme.",
+        "test_completed": function () { return buildings["s_manastone"].amount >= 200; }
     },
 ];
 //# sourceMappingURL=challenges.js.map

@@ -2966,6 +2966,15 @@ function purchase_building(name: string, amount = null) {
         $("#building_" + name).addClass("building_expensive");
     }
 
+    /* If in cascade, buy all buildings this one unlocks */
+    if (adventure_data["challenge"] == CHALLENGES.CASCADE) {
+        UNLOCK_TREE[name].forEach(function (build) {
+            try {
+                /* And yes, it is recursive. Also buys same amount, so there's probably some interesting stuff that can be done with buy multiple. */
+                purchase_building(build);
+            } finally { }
+        });
+    }
 }
 
 function destroy_building(name: string, amount = null) {
@@ -2993,6 +3002,15 @@ function destroy_building(name: string, amount = null) {
         });
 
         $('#building_' + name + " > .building_amount").html(format_num(buildings[name].amount, false));
+    }
+
+    /* If in cascade challenge, destroy all unlocked by this. */
+    if (adventure_data["challenge"] == CHALLENGES.CASCADE) {
+        UNLOCK_TREE[name].forEach(function (build) {
+            try {
+                destroy_building(build);
+            } finally { }
+        });
     }
 
 }
@@ -3059,7 +3077,7 @@ function change_theme(new_theme: string) {
         "christmas": ".bgc {background-color: #400;}.fgc {color: #0A0;} .bgc_second {background-color: #050;}",
         "crazy": "                                              \
           .bgc, .bgc_second, .fgc {                             \
-            animation: strobe 750ms infinite;                  \
+            animation: strobe 500ms infinite;                  \
           }                                                     \
           @keyframes strobe {                                   \
               16% { background: red; color: blue; }             \
@@ -3079,6 +3097,11 @@ function change_theme(new_theme: string) {
         "christmas": "JXjQO0UixxM",
         "crazy": "MTrzTABzLfY",
     }
+
+    if (adventure_data["challenge"] == CHALLENGES.DISCO) {
+        new_theme = "crazy";
+    }
+
     /* Make sure the theme exists */
     if (themes[new_theme]) {
         /* Set a <style> field in the document. */

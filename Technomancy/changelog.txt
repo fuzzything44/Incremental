@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v4.2.0 (7/20/18) Even More Challenge
+Two new challenges: cascade and disco. Cascade will take some planning!
+
 v4.1.3: (7/19/18) More Challenge
 You should now actually get a logicat when adventuring where logicats appear.
 
