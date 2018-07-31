@@ -180,14 +180,14 @@
                             var SKILL_MANA_FORMULA = 4;
                             var SKILL_COMBAT_1 = 5;
                             var SKILL_NONCOMBAT_1 = 6;
-                            var SKILL_ADVENTURE = 7;
+                            var SKILL_LOOT_II = 7;
                             var SKILL_QUICK_MANA = 8;
                             var SKILL_COMBAT_STRONG = 9;
                             var SKILL_NONCOMBAT_STRONG = 10;
-                            var SKILL_ADVENTURE_STRONG = 11;
+                            var SKILL_LOOT_III = 11;
                             var SKILL_LIBRARY = 12;
                             var SKILL_FORESIGHT = 13;
-                            var SKILL_ADVENTURE_FINAL = 14;
+                            var SKILL_MAKE_PERM_BAG = 14;
                             var SKILL_FINAL = 15;
                             if (event_flags["skills"][SKILL_FINAL]) {
                                 $("#events_content").append("Yay, you can do magic! Message fuzzything44 on Discord if you get this far.<br />");
@@ -205,6 +205,24 @@
                                         adventure_data.warehouse.splice(find_item("magic_orb", adventure_data.warehouse, { elem: "energy" }), 1);
                                         adventure_data.warehouse.splice(find_item("magic_orb", adventure_data.warehouse, { elem: "space" }), 1);
                                         adventure_data.warehouse.push({ name: "bag" });
+                                    }
+                                    else {
+                                        $("#events_content").prepend("You're missing an orb. Check your warehouse.<br />");
+                                    }
+                                });
+                            }
+                            if (event_flags["skills"][SKILL_MAKE_PERM_BAG]) {
+                                $("#events_content").append("<span class='clickable'>Make</span> some mithril cloth. (Requires 1000 mithril and 5 void)<br />");
+                                $("#events_content span").last().click(function () {
+                                    if (resources["mithril"].amount >= 1000 && resources["void"].amount >= 5) {
+                                        resources["mithril"].amount -= 1000;
+                                        resources["void"].amount -= 5;
+                                        if (adventure_data["perm_resources"] == undefined) {
+                                            adventure_data["perm_resources"] = {};
+                                            adventure_data["perm_bag_bits"] = 0;
+                                        }
+                                        adventure_data["perm_bag_bits"]++;
+                                        resources_per_sec["magic_bag"] = 1;
                                     }
                                     else {
                                         $("#events_content").prepend("You're missing an orb. Check your warehouse.<br />");
@@ -312,7 +330,7 @@
                             $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:100px;height: 280px;position: absolute; left: 28em; top: 14em; transform: rotate(90deg);'></div>");
                             color = event_flags["skills"][SKILL_NONCOMBAT_1] != undefined ? "blue" : "gray";
                             $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:100px;height: 280px;position: absolute; left: 41em; top: 14em; transform: rotate(90deg);'></div>");
-                            color = event_flags["skills"][SKILL_ADVENTURE] != undefined ? "blue" : "gray";
+                            color = event_flags["skills"][SKILL_LOOT_II] != undefined ? "blue" : "gray";
                             $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:150px;height: 280px;position: absolute; left: 55em; top: 18em; transform: rotate(90deg);'></div>");
                             /* Tier 4 */
                             $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 3em;  top: 28em; z-index: 8;'><br />Instant Mana<br />2 KP<span class='tooltiptext fgc bgc_second'>Gives you your mana instantly without need for prestige.</span></div>");
@@ -326,16 +344,16 @@
                             $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:150px;height: 280px;position: absolute; left: 24em; top: 15em; transform: rotate(40deg);'></div>");
                             color = event_flags["skills"][SKILL_NONCOMBAT_STRONG] != undefined ? "blue" : "gray";
                             $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:150px;height: 280px;position: absolute; left: 34em; top: 30em; transform: rotate(140deg);'></div>");
-                            color = event_flags["skills"][SKILL_ADVENTURE_STRONG] != undefined ? "blue" : "gray";
+                            color = event_flags["skills"][SKILL_LOOT_III] != undefined ? "blue" : "gray";
                             $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:150px;height: 280px;position: absolute; left: 54em; top: 27em; transform: rotate(100deg);'></div>");
                             /* Tier 5 */
                             $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 5em; top: 37em; z-index: 4;'><br />Magic Tomes<br />2 KP<span class='tooltiptext fgc bgc_second'>Gain twice the KP when sacrificing libraries.</span></div>");
                             $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 23em; top: 33em; z-index: 3;'><br />Foresight<br />3 KP<span class='tooltiptext fgc bgc_second'>Allows you to change your fate</span></div>");
-                            $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 42em; top: 37em; z-index: 2;'><br />LOOT IV?<br />2 KP<span class='tooltiptext fgc bgc_second'>TODO: TOOLTIP</span></div>");
+                            $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 42em; top: 37em; z-index: 2;'><br />Advanced Artificing<br />2 KP<span class='tooltiptext fgc bgc_second'>Allows you to craft mithril cloth by using void. It has magical duplication properties.</span></div>");
                             /* Connecting Lines */
                             color = event_flags["skills"][SKILL_LIBRARY] != undefined ? "blue" : "gray";
                             $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:200px;height: 280px;position: absolute; left: 18em; top: 26em; transform: rotate(40deg);'></div>");
-                            color = event_flags["skills"][SKILL_ADVENTURE_FINAL] != undefined ? "blue" : "gray";
+                            color = event_flags["skills"][SKILL_MAKE_PERM_BAG] != undefined ? "blue" : "gray";
                             $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:200px;height: 280px;position: absolute; left: 37em; top: 41em; transform: rotate(145deg);'></div>");
                             color = event_flags["skills"][SKILL_FORESIGHT] != undefined ? "blue" : "gray";
                             $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:100px;height: 280px;position: absolute; left: 34.5em; top: 33em; transform: rotate(90deg);'></div>");
@@ -367,11 +385,11 @@
                                         [SKILL_MANA_FORMULA],
                                         [SKILL_COMBAT_1],
                                         [SKILL_NONCOMBAT_1],
-                                        [SKILL_ADVENTURE],
+                                        [SKILL_LOOT_II],
                                         [SKILL_QUICK_MANA],
                                         [SKILL_COMBAT_STRONG, SKILL_NONCOMBAT_STRONG],
-                                        [SKILL_ADVENTURE_STRONG],
-                                        [SKILL_LIBRARY, SKILL_FORESIGHT, SKILL_ADVENTURE_FINAL] /* Final skill */
+                                        [SKILL_LOOT_III],
+                                        [SKILL_LIBRARY, SKILL_FORESIGHT, SKILL_MAKE_PERM_BAG] /* Final skill */
                                     ];
                                     function prereqs_satisfied(skill) {
                                         for (var i_1 = 0; i_1 < REQUIREMENTS_1[skill].length; i_1++) {

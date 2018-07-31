@@ -112,6 +112,8 @@ function set_initial_state() {
         "refined_mana": { "amount": 0, "value": -1, "mult": 1, "changes": {}, "ps_change": "" },
         "purified_mana": { "amount": 0, "value": -2500, "mult": 1, "changes": {}, "ps_change": "" },
         "fuel": { "amount": 0, "value": -1000, "mult": 1, "changes": {}, "ps_change": "" },
+        "magic_bag": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
+        "antibag": { "amount": 0, "value": -1, "mult": 1, "changes": {}, "ps_change": "" },
         "mana": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
         "energy": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
         "research": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
@@ -3255,6 +3257,35 @@ function prng(seed) {
     }
     return seed * 16807 % 2147483647;
 }
+function perm_bag() {
+    $("#events_topbar").html("Magic Bag of Folding");
+    $("#events_content").html("This is your bag of folding. You put resources in, and then get a fraction of them out every prestige. You currently have " + adventure_data["perm_bag_bits"].toString() + " pieces of mithril cloth. Unlocking space for a new resource takes one piece of cloth. <br/><table></table>");
+    Object.keys(resources).forEach(function (res) {
+        if (resources[res].value > 0 && (resources[res].amount > 0 || adventure_data["perm_resources"][res])) {
+            var rname = (res.charAt(0).toUpperCase() + res.slice(1)).replace("_", " ");
+            if (adventure_data["perm_resources"][res] != undefined) {
+                var res_on_p = Math.pow(adventure_data["perm_resources"][res], 2 / 3);
+                $("#events_content table").append("<tr><td>" + rname + "</td><td>Current Stored: " + format_num(adventure_data["perm_resources"][res], true) + "</td><td>Gained on Prestige: " + format_num(res_on_p, true) + "</td><td><span class='clickable'>Deposit</span> all into bag. </td></tr>");
+                $("#events_content span").last().click(function () {
+                    adventure_data["perm_resources"][res] += resources[res].amount;
+                    resources[res].amount = 0;
+                    perm_bag();
+                });
+            }
+            else {
+                $("#events_content table").append("<tr><td>" + rname + "</td><td><span class='clickable'>Unlock</span></td></tr>");
+                $("#events_content span").last().click(function () {
+                    if (adventure_data["perm_bag_bits"] > 0) {
+                        adventure_data["perm_bag_bits"]--;
+                        adventure_data["perm_resources"][res] = 0;
+                        perm_bag();
+                    }
+                });
+            }
+        }
+    });
+    $("#events").removeClass("hidden");
+}
 var update_handler = 0;
 function change_update() {
     clearInterval(update_handler);
@@ -3305,6 +3336,17 @@ window.onload = function () {
         }
         if (buildings["s_manastone"].amount >= 400 || adventure_data["challenge"]) {
             resources["fuel"].amount += 0.3;
+        }
+        /* Give on prestige resources. */
+        if (adventure_data["perm_resources"]) {
+            Object.keys(adventure_data["perm_resources"]).forEach(function (res) {
+                var res_gain = Math.pow(adventure_data["perm_resources"][res], 2 / 3);
+                if (adventure_data["challenge"]) {
+                    res_gain = Math.min(res_gain, 10000 / resources[res].value);
+                }
+                resources[res].amount += res_gain;
+                resources["antibag"].amount -= res_gain * resources[res].value;
+            });
         }
         /* What building each mana gives. */
         var start_buildings = ["bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "furnace", "gold_finder", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "compressor", "", "", "", "", "oil_well", "bank", "bank", "bank", "bank", "oil_well", "", "", "", "", "library", "library", "library", "library", "library", "library", "bank", "bank", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "", "", "", "", "oil_engine", "solar_panel", "solar_panel", "solar_panel", "solar_panel", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "", "", "", "", "skyscraper", "bank", "skyscraper", "bank", "skyscraper", "bank", "skyscraper", "bank", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "furnace", "gold_finder", "compressor", "paper_mill", "ink_refinery", "paper_mill"];
@@ -3368,6 +3410,9 @@ window.onload = function () {
             }
             resource_tooltip(); /* Refresh resource tooltips to get the changes we've been adding. */
         }
+    }
+    if (adventure_data["perm_resources"] != undefined) {
+        resources_per_sec["magic_bag"] = 1;
     }
     /* Start our event system */
     var to_next_event = 2 * 60000 + Math.random() * 60000 * 2;

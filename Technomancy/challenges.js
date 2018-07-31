@@ -63,7 +63,7 @@ var CHALLENGE_INFO = [
         "description": "Go back to 0 mana, get back up to 200. Nothing fancy. Mana is restored when you complete the challenge.",
         "requirements": "Get to 200 mana to complete this challenge.",
         "restrictions": "You start back at 0 mana.",
-        "reward": "Who knows? Got an idea for a reward? Tell me in the discord!",
+        "reward": "Who knows? Got an idea for a reward? Tell me in the discord! I'm thinking extra buildings to start with post-100 mana.",
         "test_completed": function () { return buildings["s_manastone"].amount >= 200; }
     },
     {
@@ -71,7 +71,7 @@ var CHALLENGE_INFO = [
         "description": "You have taken a vow of poverty and therefore have almost no money.",
         "requirements": "Get to 200 mana to complete this challenge",
         "restrictions": "Go back to 0 mana, and you can't have more than 40 seconds of money production.",
-        "reward": "Get a permanant extra 1 money production.",
+        "reward": "Not sure. Probably a multiplier to money gains. Or maybe cost reduction on stuff that costs money. ",
         "test_completed": function () { return buildings["s_manastone"].amount >= 200; }
     },
     {
@@ -79,7 +79,7 @@ var CHALLENGE_INFO = [
         "description": "Meteors aren't falling just in your backyard anymore. They're falling on your buildings!",
         "requirements": "Get to 200 mana to complete this challenge",
         "restrictions": "Go back to 0 mana. Every so often, a meteor will fall and destroy some of your buildings! Oh no!",
-        "reward": "IDK, maybe auto-build? Seems like it could be a good reward.",
+        "reward": "IDK, maybe auto-build? Seems like it could be a good reward. Or maybe just better meteor event.",
         "test_completed": function () { return buildings["s_manastone"].amount >= 200; }
     },
     {
@@ -87,7 +87,7 @@ var CHALLENGE_INFO = [
         "description": "Be a tycoon of business and grow your empire!",
         "requirements": "Get 10 million money to complete this challenge",
         "restrictions": "Go back to 0 mana. You can't prestige. You start with 1 million money, but lose 30/second. Can you get enough to pay off your loan?",
-        "reward": "Once again, I'm out of good ideas for rewards.",
+        "reward": "1 money/s, probably getting changed to like 10/s or 15/s",
         "test_completed": function () { return resources["money"].amount >= 10000000; }
     },
     {
@@ -95,7 +95,7 @@ var CHALLENGE_INFO = [
         "description": "Buying a building buys more than just what you chose. Good luck managing your resources.",
         "requirements": "Get 100 mana.",
         "restrictions": "Go back to 0 mana. Whenever you buy a building, you also buy each building that it unlocks, if possible. Same for selling!",
-        "reward": "Once again, I'm out of good ideas for rewards.",
+        "reward": "Once again, I'm out of good ideas for rewards. Maybe this gives auto build?",
         "test_completed": function () { return buildings["s_manastone"].amount >= 100; }
     },
     {
@@ -103,6 +103,7 @@ var CHALLENGE_INFO = [
         "description": "A basic challenge, but in the best theme! What's not to love about this?",
         "requirements": "Get 200 mana.",
         "restrictions": "A basic challenge, but it's stuck in disco theme.",
+        "reward": "Once again, I'm out of good ideas for rewards. This should be pretty minor though.",
         "test_completed": function () { return buildings["s_manastone"].amount >= 200; }
     },
 ];

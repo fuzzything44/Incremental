@@ -31,7 +31,7 @@
         <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none;" class="fgc">Discord</a> |
         <span onclick="save_to_clip()">Export</span> |
         <span onclick="load_from_clip()">Import</span> |
-        <select id="theme_select" class="fgc bgc_second" onchange="if (event.target.value == 'crazy' && !confirm('Seizure warning: This has quickly flashing colors. Proceed?')) { return;} change_theme(event.target.value)">
+        <select id="theme_select" class="fgc bgc_second" onchange="if (event.target.value == 'crazy' && !confirm('Seizure warning: This has quickly flashing colors. Proceed?')) { return; } change_theme(event.target.value)">
             <option value="light">Lights On</option>
             <option value="dark">Lights Off</option>
             <option value="crazy">STROBE!</option>
@@ -74,6 +74,13 @@
             <span style="color: greenyellow; text-shadow: yellow 1px 0px 10px; vertical-align: middle;">Refined mana: 0</span>
             <span class="res_gen " onclick="if (adventure_data['challenge']) challenge_menu(); else start_adventure();" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid; border-radius: 3px;">
                 Adventure
+            </span>
+            <br />
+        </div>
+        <div id="magic_bag" class="hidden" style="padding-bottom: .3em; border-bottom-color: white;">
+            <span style="color: white; text-shadow: yellow 1px 0px 10px; vertical-align: middle;">Bag: 0</span>
+            <span class="res_gen " onclick="perm_bag()" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid; border-radius: 3px;">
+                Look Inside
             </span>
             <br />
         </div>

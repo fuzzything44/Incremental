@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v4.3.0: (7/30/18) Bag of Folding
+You're slightly likeier to get void, but it reduces the fullness of the black hole. Changed challenge rewards to describe what they likely will be. Check it out and if you have a good reward idea, please tell me! Also, added the bag of folding. It lets you throw resources in it, and then get some free resources at the start of each prestige!
+
 v4.2.0: (7/20/18) Even More Challenge
 Two new challenges: cascade and disco. Cascade will take some planning!
 
