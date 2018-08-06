@@ -6,7 +6,8 @@ var CHALLENGES = {
     LOAN: 4,
     CASCADE: 5,
     DISCO: 6,
-    TOTAL_AMOUNT: 7
+    NO_UPGRADE: , 7: ,
+    TOTAL_AMOUNT: 8
 };
 function challenge_menu() {
     $("#events_topbar").html("Challenge Progress");
@@ -104,6 +105,14 @@ var CHALLENGE_INFO = [
         "requirements": "Get 200 mana.",
         "restrictions": "A basic challenge, but it's stuck in disco theme.",
         "reward": "Once again, I'm out of good ideas for rewards. This should be pretty minor though.",
+        "test_completed": function () { return buildings["s_manastone"].amount >= 200; }
+    },
+    {
+        "name": "No Upgrade",
+        "description": "This will be tough. Upgrades make everything better. Sucks, because you don't get any.",
+        "requirements": "Get 200 mana.",
+        "restrictions": "Go back to 0 mana. You can't buy any upgrades.",
+        "reward": "A feral badger shipped to your house.",
         "test_completed": function () { return buildings["s_manastone"].amount >= 200; }
     },
 ];

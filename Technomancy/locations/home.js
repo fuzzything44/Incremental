@@ -212,10 +212,10 @@
                                 });
                             }
                             if (event_flags["skills"][SKILL_MAKE_PERM_BAG]) {
-                                $("#events_content").append("<span class='clickable'>Make</span> some mithril cloth. (Requires 1000 mithril and 5 void)<br />");
+                                $("#events_content").append("<span class='clickable'>Make</span> some mithril cloth. (Requires 150 mithril and 5 void)<br />");
                                 $("#events_content span").last().click(function () {
-                                    if (resources["mithril"].amount >= 1000 && resources["void"].amount >= 5) {
-                                        resources["mithril"].amount -= 1000;
+                                    if (resources["mithril"].amount >= 150 && resources["void"].amount >= 5) {
+                                        resources["mithril"].amount -= 150;
                                         resources["void"].amount -= 5;
                                         if (adventure_data["perm_resources"] == undefined) {
                                             adventure_data["perm_resources"] = {};

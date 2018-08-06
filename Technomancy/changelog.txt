@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v4.4.0: (8/5/18) Version 4.4.0: (8/5/18): Version Okay, that's enough.
+Added a new challenge: No upgrade challenge! You just don't get upgrades. Sounds fun. Mithril cloth mithril cost 1000 -> 150 (5 bags of holding). Enchanting table should now actually work with casino tokens.
+
 v4.3.0: (7/30/18) Bag of Folding
 You're slightly likeier to get void, but it reduces the fullness of the black hole. Changed challenge rewards to describe what they likely will be. Check it out and if you have a good reward idea, please tell me! Also, added the bag of folding. It lets you throw resources in it, and then get some free resources at the start of each prestige!
 

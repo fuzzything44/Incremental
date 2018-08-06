@@ -952,7 +952,6 @@ function setup_events() {
                 buildings["big_bank"].base_cost["money"] *= 0.5;
 
 
-
                 /* Decrease faster as we go on. */
                 if (buildings["bank"].base_cost["money"] > 1) {
                     event_flags["to_money_decrease"] = 60 * 5;

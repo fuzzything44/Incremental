@@ -434,7 +434,7 @@ var enchantments = {
             }
             var amt = Math.floor(Math.log(resources["money"].amount / 1000000) / Math.LOG2E); /* Just log base 2 of money / 1m */
             adventure_data["casino_tokens"] += amt;
-            adventure_data["money"].amount = 0;
+            resources["money"].amount = 0;
             add_log_elem("You got " + amt.toString() + " casino tokens in exchange for your money.");
         },
     },

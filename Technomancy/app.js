@@ -2637,6 +2637,11 @@ function update() {
 function update_upgrade_list() {
     /* Loop through all remaining upgrades */
     Object.keys(remaining_upgrades).forEach(function (upg_name) {
+        /* No upgrades visible in no upgrade challenge. */
+        if (adventure_data["challenge"] == CHALLENGES.NO_UPGRADE) {
+            $("#upgrade_" + upg_name).addClass("hidden");
+            return;
+        }
         if (remaining_upgrades[upg_name].unlock()) {
             $("#upgrade_" + upg_name).removeClass("hidden");
             var color_1 = ""; /* Set color to lightgray or red depending on if they can afford it */
@@ -2869,6 +2874,10 @@ function destroy_building(name, amount) {
     }
 }
 function purchase_upgrade(name) {
+    /* Can't buy upgrades in no upgrade challenge. */
+    if (adventure_data["challenge"] == CHALLENGES.NO_UPGRADE) {
+        return;
+    }
     var upg = remaining_upgrades[name];
     /* Check that they have enough */
     Object.keys(upg.cost).forEach(function (resource) {

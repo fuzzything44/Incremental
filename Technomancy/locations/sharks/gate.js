@@ -109,7 +109,15 @@
                 $("#events_content").append("<span class='clickable'>Info</span> Disco<br/>");
                 $("#events_content span").last().click(function () {
                     challenge_info(CHALLENGES.DISCO, function () {
-                        /* Coded in the buy/sell system.  */
+                        buildings["s_manastone"].amount = 0;
+                    });
+                });
+                if (adventure_data["challenges_completed"][CHALLENGES.NO_UPGRADE]) {
+                    $("#events_content").append("<span style='color:green'>\u2714 </span>"); /* If completed, add check mark. */
+                }
+                $("#events_content").append("<span class='clickable'>Info</span> No Upgrade<br/>");
+                $("#events_content span").last().click(function () {
+                    challenge_info(CHALLENGES.NO_UPGRADE, function () {
                         buildings["s_manastone"].amount = 0;
                     });
                 });
