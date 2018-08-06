@@ -36,6 +36,8 @@ var remaining_upgrades = {}; /* All remaining upgrades that need to be purchased
 
 const UNLOCK_TREE = { /* What buildings unlock */
     "s_manastone": [],
+    "s_essence": [],
+
     "s_mana_refinery": [],
     "s_goldboost": [],
     "s_energyboost": [],
@@ -90,6 +92,7 @@ const UNLOCK_TREE = { /* What buildings unlock */
 };
 const SPELL_BUILDINGS = [
     "s_manastone",
+    "s_essence",
     "s_goldboost",
     "s_energyboost",
     "s_trade",
@@ -122,6 +125,7 @@ function set_initial_state() {
         "antibag": { "amount": 0, "value": -1, "mult": 1, "changes": {}, "ps_change": "" },
 
         "mana": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
+        "essence": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
         "energy": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" }, 
         "research": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
         "manager": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
@@ -172,6 +176,48 @@ function set_initial_state() {
             "free": 0,
             "flavor": "A stone made out of pure crystallized mana. Use it to power spells!",
         },
+        "s_essence": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {},
+            "price_ratio": {},
+            "generation": {
+                "essence": 1,
+            },
+            "multipliers": {
+                "energy"    : 0.1,
+                "research"  : 0.1,
+                "manager"   : 0.1,
+
+                "money"     : 0.1,
+                "stone"     : 0.1,
+                "wood"      : 0.1,
+                "iron_ore"  : 0.1,
+                "coal"      : 0.1,
+                "iron"      : 0.1,
+                "gold"      : 0.1,
+                "diamond"   : 0.1,
+                "jewelry"   : 0.1,
+                "oil"       : 0.1,
+                "paper"     : 0.1,
+                "ink"       : 0.1,
+                "book"      : 0.1,
+                "sand"      : 0.1,
+                "glass"     : 0.1,
+                "water"     : 0.1,
+                "hydrogen"  : 0.1,
+                "steel_beam": 0.1,
+                "uranium"   : 0.1,
+                "sandcastle": 0.1,
+                "glass_bottle": 0.1,
+                "mithril"   : 0.1,
+                "void"      : 0.1,
+            },
+            "update": "nop",
+            "free": 0,
+            "flavor": "Hmm...",
+        },
+
         "s_mana_refinery": {
             "on": true,
             "amount": 1,
