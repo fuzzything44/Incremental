@@ -112,7 +112,7 @@ var CHALLENGE_INFO = [
         "description": "This will be tough. Upgrades make everything better. Sucks, because you don't get any.",
         "requirements": "Get 200 mana.",
         "restrictions": "Go back to 0 mana. You can't buy any upgrades.",
-        "reward": "A feral badger shipped to your house, you monster.",
+        "reward": "You can gain essence.",
         "test_completed": function () { return buildings["s_manastone"].amount >= 200; }
     },
 ];

@@ -3655,17 +3655,17 @@ window.onload = () => {
             let extra_mana = buildings["s_manastone"].amount - 100; /* How much mana over the 100 they are. */
             if (Math.pow(extra_mana / 10, 0.5) >= 1) { /* They get one at 10 extra, then 40 extra, then 90... */
                 let extra_basics = Math.min(25, Math.floor(Math.pow(extra_mana / 10, 0.5))); /* How many they're getting. Cap at 25 to not make the start list way too long. */
-                start_buildings += Array(extra_basics).fill("challenge_basic"); /* Add that many to the list. These all get added because each takes much more than 1 mana to get, so we'll definitely loop through it. */
+                start_buildings = start_buildings.concat(Array(extra_basics).fill("challenge_basic")); /* Add that many to the list. These all get added because each takes much more than 1 mana to get, so we'll definitely loop through it. */
             }
 
             if (Math.pow(extra_mana / 50, 0.5) >= 1) { /* Quadratic again, but * 50 instead of 10 */
                 let extra_basics = Math.min(25, Math.floor(Math.pow(extra_mana / 50, 0.5))); /* How many they're getting. Cap at 25 to not make the start list way too long. */
-                start_buildings += Array(extra_basics).fill("challenge_medium"); /* Add that many to the list. These all get added because each takes much more than 1 mana to get, so we'll definitely loop through it. */
+                start_buildings = start_buildings.concat(Array(extra_basics).fill("challenge_medium")); /* Add that many to the list. These all get added because each takes much more than 1 mana to get, so we'll definitely loop through it. */
             }
 
             if (Math.pow(extra_mana / 100, 0.5) >= 1) { /* And finally the hundreds. Is this too hard to get? Maybe. */
                 let extra_basics = Math.min(25, Math.floor(Math.pow(extra_mana / 100, 0.5))); /* How many they're getting. Cap at 25 to not make the start list way too long. */
-                start_buildings += Array(extra_basics).fill("challenge_advanced"); /* Add that many to the list. These all get added because each takes much more than 1 mana to get, so we'll definitely loop through it. */
+                start_buildings = start_buildings.concat(Array(extra_basics).fill("challenge_advanced")); /* Add that many to the list. These all get added because each takes much more than 1 mana to get, so we'll definitely loop through it. */
             }
         }
 
@@ -3687,16 +3687,6 @@ window.onload = () => {
         }
 
         if (adventure_data["challenges_completed"]) { /* This has been defined */
-            /* They have a basic challenge completion.  */
-            if (adventure_data["challenges_completed"].length >= CHALLENGES.BASIC && adventure_data["challenges_completed"][CHALLENGES.BASIC]) {
-                /* Make sure it's defined to not get fuzzy production. */
-                if (buildings["s_challenge"].generation["money"] == undefined) { buildings["s_challenge"].generation["money"] = 0; }
-                buildings["s_challenge"].generation["money"] += 1; /* +1 money/s */
-
-                resources_per_sec["money"] += 1; /* Previous stuff is for when they reload it. This sets it up until then. */
-                resources["money"].changes["Challenge"] = buildings["s_challenge"].generation["money"]; /* Add it to the resource tooltip. */
-            }
-
             /* They have a poverty challenge completion.  */
             if (adventure_data["challenges_completed"].length >= CHALLENGES.POVERTY && adventure_data["challenges_completed"][CHALLENGES.POVERTY]) {
                 /* Make sure it's defined to not get fuzzy production. */
@@ -3727,9 +3717,21 @@ window.onload = () => {
                 resources["money"].changes["Challenge"] = buildings["s_challenge"].generation["money"]; /* Add it to the resource tooltip. */
             }
 
+            /* They have a no upgrades challenge completion.  */
+            if (adventure_data["challenges_completed"].length >= CHALLENGES.NO_UPGRADE && adventure_data["challenges_completed"][CHALLENGES.NO_UPGRADE]) {
+                adventure_data["current_essence"] = 1;
+                adventure_data["total_essence"] = 1;
+            }
             resource_tooltip(); /* Refresh resource tooltips to get the changes we've been adding. */
         }
-    }
+
+        if (adventure_data["current_essence"]) {
+            buildings["s_essence"].amount = adventure_data["current_essence"];
+            resources_per_sec["essence"] = adventure_data["current_essence"];
+            try { purchase_building("s_essence", 0) } finally { } /* Update amount shown. */
+        }
+    } /* END start of prestige additions */
+
 
     if (adventure_data["perm_resources"] != undefined) {
         resources_per_sec["magic_bag"] = 1;
@@ -3835,6 +3837,14 @@ window.onload = () => {
             } else if (e.key.toLowerCase() == "a") {
                 if (!$("#fuel").hasClass("hidden")) {
                     $("#fuel .res_gen").click();
+                }
+            } else if (e.key.toLowerCase() == "b") {
+                if (!$("#magic_bag").hasClass("hidden")) {
+                    $("#magic_bag .res_gen").click();
+                }
+            } else if (e.key.toLowerCase() == "e") {
+                if (!$("#essence").hasClass("hidden")) {
+                    $("#essence .res_gen").click();
                 }
             } else if (e.key.toLowerCase() == "r") {
                 if (!$("#building_s_mana_refinery").hasClass("hidden")) {

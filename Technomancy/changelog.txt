@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v4.5.1: (8/7/18) The Tower
+Fixed a bug that made prestiging just not work at all. Magic bag now has hotkey "B". No upgrade challenge has a reward: you get 1 essence! Essence unlocks the tower, which lets you get even more essence. It also gives a 10% (additive) production bonus to most resources for each essence you have. (Tower hotkey is "T")
+
 v4.4.1: (8/6/18) Start challenge rewards
 Basic challenge now actually has a reward, but it'll take a lot of mana to get full use from it! Fixed a bug with getting quick mana from the mage skill. The game should actually load now. 
 

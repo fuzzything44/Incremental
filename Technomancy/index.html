@@ -16,6 +16,7 @@
     <script src="location_data.js" defer></script>
     <script src="alchemy.js" defer></script>
     <script src="challenges.js"></script>
+    <script src="tower.js"></script>
 
     <script src="//cdn.rawgit.com/erosson/swarm-numberformat/v0.1.0/dist/swarm-numberformat.min.js"></script>
     <script src="app.js" ></script>
@@ -79,8 +80,15 @@
         </div>
         <div id="magic_bag" class="hidden" style="padding-bottom: .3em; border-bottom-color: white;">
             <span style="color: white; text-shadow: yellow 1px 0px 10px; vertical-align: middle;">Bag: 0</span>
-            <span class="res_gen " onclick="perm_bag()" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid; border-radius: 3px;">
+            <span class="res_gen" onclick="perm_bag()" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid; border-radius: 3px;">
                 Look Inside
+            </span>
+            <br />
+        </div>
+        <div id="essence" class="hidden" style="padding-bottom: .3em; border-bottom-color: lightblue;">
+            <span style="color: lightblue; text-shadow: blue 1px 0px 10px; vertical-align: middle;">Essence: 0</span>
+            <span class="res_gen" onclick="tower()" style="margin: .1em; padding: .1em; padding-top: 0; border: 1px solid; border-radius: 3px;">
+                Tower
             </span>
             <br />
         </div>
@@ -137,6 +145,9 @@
         <div id="spells" class="hidden">
             <div style="position: relative">
                 <span id="building_s_manastone" class="building tooltip" style="color: mediumpurple;"><span class="building_name"><span class="building_prefix"></span>Mana Stone</span><span class="building_amount">0</span><span class="tooltiptext fgc bgc_second">Each stone generates 1 mana.</span></span>
+            </div>
+            <div style="position: relative">
+                <span id="building_s_essence" class="building tooltip" style="color: lightblue;"><span class="building_name"><span class="building_prefix"></span>Essence</span><span class="building_amount">0</span><span class="tooltiptext fgc bgc_second">Pure essence of Magic. Provides a boost to most resources.</span></span>
             </div>
             <div style="position: relative">
                 <span id="building_s_mana_refinery" class="building tooltip" style="color: #33f;" onclick="s_refinery(parseInt($('#buy_amount').val()))"><span class="building_name"><span class="building_prefix"></span>Mana Refinery</span><span class="building_amount">1</span><span class="tooltiptext fgc bgc_second">Refine your mana into a crystalline form.</span></span>

@@ -56,6 +56,7 @@
     <TypeScriptCompile Include="locations\warpgate.ts" />
     <TypeScriptCompile Include="seeds.ts" />
     <TypeScriptCompile Include="spells.ts" />
+    <TypeScriptCompile Include="tower.ts" />
   </ItemGroup>
   <ItemGroup>
     <None Include="web.Debug.config">
