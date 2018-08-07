@@ -52,6 +52,9 @@ var UNLOCK_TREE = {
     "s_enchantment": [],
     "s_final": [],
     "s_challenge": [],
+    "challenge_basic": [],
+    "challenge_medium": [],
+    "challenge_advanced": [],
     "bank": ["mine", "logging"],
     "oil_well": ["oil_engine"],
     "library": ["water_purifier", "solar_panel"],
@@ -371,6 +374,66 @@ function set_initial_state() {
             "update": "nop",
             "free": 0,
             "flavor": "Good luck with challenges!",
+        },
+        "challenge_basic": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {},
+            "price_ratio": {},
+            "generation": {
+                "money": 10,
+                "stone": 20,
+                "wood": 20,
+                "iron_ore": 10,
+                "coal": 5,
+            },
+            "multipliers": {
+                "money": 0.1,
+                "stone": 0.1,
+                "wood": 0.1,
+            },
+            "free": 0,
+            "flavor": "Congratulations on beating the basic challenge.",
+        },
+        "challenge_medium": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {},
+            "price_ratio": {},
+            "generation": {
+                "gold": 5,
+                "diamond": 5,
+                "oil": 15,
+                "paper": 5,
+                "ink": 5,
+            },
+            "multipliers": {
+                "oil": 0.1,
+                "book": 0.3,
+                "glass": 0.1,
+            },
+            "free": 0,
+            "flavor": "Another building to help you out.",
+        },
+        "challenge_advanced": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {},
+            "price_ratio": {},
+            "generation": {
+                "steel_beam": 3,
+                "uranium": 3,
+                "manager": 3,
+                "research": 5,
+                "energy": 10,
+            },
+            "multipliers": {
+                "steel_beam": 0.5,
+                "fuel": 0.5,
+                "hydrogen": 0.5
+            },
+            "free": 0,
+            "flavor": "Woah, that's a lot of mana.",
         },
         "bank": {
             "on": true,
@@ -2178,7 +2241,10 @@ var prestige = {
                 var gained = Math.floor(mana_gain);
                 event_flags["mage_quickmana"] += gained;
                 buildings["s_manastone"].amount += gained;
-                purchase_building("s_manastone", 0);
+                try {
+                    purchase_building("s_manastone", 0);
+                }
+                finally { }
                 resources_per_sec["mana"] += buildings["s_manastone"].generation["mana"] * gained;
                 mana_gain -= gained;
                 /* Show more buildings with the gained mana. */
@@ -3402,6 +3468,22 @@ window.onload = function () {
         }
         /* What building each mana gives. */
         var start_buildings = ["bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "furnace", "gold_finder", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "compressor", "", "", "", "", "oil_well", "bank", "bank", "bank", "bank", "oil_well", "", "", "", "", "library", "library", "library", "library", "library", "library", "bank", "bank", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "", "", "", "", "oil_engine", "solar_panel", "solar_panel", "solar_panel", "solar_panel", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "", "", "", "", "skyscraper", "bank", "skyscraper", "bank", "skyscraper", "bank", "skyscraper", "bank", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "furnace", "gold_finder", "compressor", "paper_mill", "ink_refinery", "paper_mill"];
+        /* Add more start buildings if they completed basic challenge. */
+        if (adventure_data["challenges_completed"] && adventure_data["challenges_completed"][CHALLENGES.BASIC]) {
+            var extra_mana = buildings["s_manastone"].amount - 100; /* How much mana over the 100 they are. */
+            if (Math.pow(extra_mana / 10, 0.5) >= 1) {
+                var extra_basics = Math.min(25, Math.floor(Math.pow(extra_mana / 10, 0.5))); /* How many they're getting. Cap at 25 to not make the start list way too long. */
+                start_buildings += Array(extra_basics).fill("challenge_basic"); /* Add that many to the list. These all get added because each takes much more than 1 mana to get, so we'll definitely loop through it. */
+            }
+            if (Math.pow(extra_mana / 50, 0.5) >= 1) {
+                var extra_basics = Math.min(25, Math.floor(Math.pow(extra_mana / 50, 0.5))); /* How many they're getting. Cap at 25 to not make the start list way too long. */
+                start_buildings += Array(extra_basics).fill("challenge_medium"); /* Add that many to the list. These all get added because each takes much more than 1 mana to get, so we'll definitely loop through it. */
+            }
+            if (Math.pow(extra_mana / 100, 0.5) >= 1) {
+                var extra_basics = Math.min(25, Math.floor(Math.pow(extra_mana / 100, 0.5))); /* How many they're getting. Cap at 25 to not make the start list way too long. */
+                start_buildings += Array(extra_basics).fill("challenge_advanced"); /* Add that many to the list. These all get added because each takes much more than 1 mana to get, so we'll definitely loop through it. */
+            }
+        }
         /* Only go as much as they have mana for or we boosts exist for. */
         for (var i = 0; i < Math.min(buildings["s_manastone"].amount, start_buildings.length); i++) {
             var bname = start_buildings[i];

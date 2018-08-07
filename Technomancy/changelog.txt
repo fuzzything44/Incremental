@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v4.4.1: (8/6/18) Start challenge rewards
+Basic challenge now actually has a reward, but it'll take a lot of mana to get full use from it! Fixed a bug with getting quick mana from the mage skill. The game should actually load now. 
+
 v4.4.0: (8/5/18) Version 4.4.0: (8/5/18): Version Okay, that's enough.
 Added a new challenge: No upgrade challenge! You just don't get upgrades. Sounds fun. Mithril cloth mithril cost 1000 -> 150 (5 bags of holding). Enchanting table should now actually work with casino tokens.
 
