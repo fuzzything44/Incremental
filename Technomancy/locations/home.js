@@ -180,7 +180,7 @@
                             var SKILL_MANA_FORMULA = 4;
                             var SKILL_COMBAT_1 = 5;
                             var SKILL_NONCOMBAT_1 = 6;
-                            var SKILL_LOOT_II = 7;
+                            var SKILL_OMNIVISION = 7;
                             var SKILL_QUICK_MANA = 8;
                             var SKILL_COMBAT_STRONG = 9;
                             var SKILL_NONCOMBAT_STRONG = 10;
@@ -319,10 +319,10 @@
                             $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:150px;height: 280px;position: absolute; left: 26em; top: 13em; transform: rotate(140deg);'></div>");
                             $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:150px;height: 280px;position: absolute; left: 34em; top: 0em; transform: rotate(40deg);'></div>");
                             /* Tier 3 */
-                            $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 3em;  top: 18em; z-index: 12;'><br />Distributed Mana<br />1 KP<span class='tooltiptext fgc bgc_second'>TODO: TOOLTIP</span></div>");
+                            $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 3em;  top: 18em; z-index: 12;'><br />Distributed Mana<br />1 KP<span class='tooltiptext fgc bgc_second'>Provides a boost to the value of resources. The boost increases the closer resources are to balanced (weighted average of their amount * value)</span></div>");
                             $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 17em; top: 16em; z-index: 11;'><br />Temporal Anger<br />1 KP<span class='tooltiptext fgc bgc_second'>When on, combat adventures are twice as likely.</span></div>");
                             $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 30em; top: 16em; z-index: 10;'><br />Temporal Slow<br />1 KP<span class='tooltiptext fgc bgc_second'>When on, noncombat adventures are twice as likely.</span></div>");
-                            $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 44em; top: 18em; z-index: 9;'><br />LOOT II?<br />1 KP<span class='tooltiptext fgc bgc_second'>TODO: TOOLTIP</span></div>");
+                            $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 44em; top: 18em; z-index: 9;'><br />Omnivision<br />1 KP<span class='tooltiptext fgc bgc_second'>More values are shown to you.</span></div>");
                             /* Connecting lines */
                             color = event_flags["skills"][SKILL_MANA_FORMULA] != undefined ? "blue" : "gray";
                             $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:150px;height: 280px;position: absolute; left: 11.5em; top: 15em; transform: rotate(90deg);'></div>");
@@ -330,7 +330,7 @@
                             $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:100px;height: 280px;position: absolute; left: 28em; top: 14em; transform: rotate(90deg);'></div>");
                             color = event_flags["skills"][SKILL_NONCOMBAT_1] != undefined ? "blue" : "gray";
                             $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:100px;height: 280px;position: absolute; left: 41em; top: 14em; transform: rotate(90deg);'></div>");
-                            color = event_flags["skills"][SKILL_LOOT_II] != undefined ? "blue" : "gray";
+                            color = event_flags["skills"][SKILL_OMNIVISION] != undefined ? "blue" : "gray";
                             $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:150px;height: 280px;position: absolute; left: 55em; top: 18em; transform: rotate(90deg);'></div>");
                             /* Tier 4 */
                             $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 3em;  top: 28em; z-index: 8;'><br />Instant Mana<br />2 KP<span class='tooltiptext fgc bgc_second'>Gives you your mana instantly without need for prestige.</span></div>");
@@ -385,7 +385,7 @@
                                         [SKILL_MANA_FORMULA],
                                         [SKILL_COMBAT_1],
                                         [SKILL_NONCOMBAT_1],
-                                        [SKILL_LOOT_II],
+                                        [SKILL_OMNIVISION],
                                         [SKILL_QUICK_MANA],
                                         [SKILL_COMBAT_STRONG, SKILL_NONCOMBAT_STRONG],
                                         [SKILL_LOOT_III],

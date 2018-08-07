@@ -2184,7 +2184,7 @@ var prestige = {
             }
         });
         /* Maybe add a funky multiplier */
-        if (DEBUG) {
+        if (event_flags["skills"] && event_flags["skills"][4]) {
             function standardDeviation(values) {
                 var avg = average(values);
                 var squareDiffs = values.map(function (value) {
@@ -2210,11 +2210,26 @@ var prestige = {
                 return Math.sqrt(sqrDiff);
             });
             var largest_off = Math.max.apply(Math, sq_diff_vals);
-            console.log("Prestige info: ");
-            console.log("Values: ", prestige_vals);
-            console.log("Standard Deviation: ", st_dev);
-            console.log("Worst resource:", prestige_names[sq_diff_vals.indexOf(largest_off)], largest_off);
+            if (DEBUG) {
+                console.log("Prestige info: ");
+                console.log("Values: ", prestige_vals);
+                console.log("Standard Deviation: ", st_dev);
+                console.log("Worst resource:", prestige_names[sq_diff_vals.indexOf(largest_off)], largest_off);
+            }
+            /* If close enough, multiply pp. */
+            if (st_dev < 0.05 * prestige_points) {
+                /* Go from 5x to 1x, higher st_dev in relation to pp gives a lower value. */
+                var multiplier = 5 - 4 * st_dev / (0.05 * prestige_points);
+                if (multiplier > 1) {
+                    prestige_points *= multiplier;
+                }
+                else {
+                    console.error("Something went wrong. We got a negative multiplier for pp");
+                }
+            }
         }
+        /* Add sandcastle prestige */
+        prestige_points += resources["sandcastle"].amount * Math.abs(resources["sandcastle"].value);
         return prestige_points;
     },
     /* Calculate mana gain */
@@ -2669,6 +2684,9 @@ function update() {
                 if (buildings[build].generation[res] < 0 && buildings[build].on && buildings[build].amount > 0) {
                     toggle_building_state(build);
                     console.log("Turned off " + build + ": Not enough " + res);
+                    if (event_flags["skills"] && event_flags["skills"][7]) {
+                        add_log_elem("Turned off " + build + ": Not enough " + res);
+                    }
                 }
             });
         }
@@ -2696,6 +2714,9 @@ function update() {
         }
         /* Formats it so that it says "Resource name: amount" */
         $("#" + key + " span").first().html((key.charAt(0).toUpperCase() + key.slice(1)).replace("_", " ") + ": " + format_num(resources[key].amount, false));
+        if (event_flags["skills"] && event_flags["skills"][7]) {
+            $("#" + key + " span").first().append(" (" + format_num(resources[key].amount) + " ea)");
+        }
         /* Same for per sec */
         $("#" + key + "_per_sec").text((resources_per_sec[key] > 0 ? "+" : "") + format_num(resources_per_sec[key]) + "/s");
         /* Display multiplier if positive RPS and mult not 1 (approx) */
@@ -3031,6 +3052,8 @@ function random_title() {
         "...",
         "Technomancy: Now with meta-bugs",
         "Even the bugs have bugs.",
+        "Are you reading this? I bet you're not reading this.",
+        "Definitely not ripping off any other games. Not at all.",
     ];
     document.title = TITLES.filter(function (item) { return item !== document.title; })[Math.floor(Math.random() * (TITLES.length - 1))];
 }

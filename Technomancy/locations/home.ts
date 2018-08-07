@@ -178,7 +178,7 @@
                         const SKILL_MANA_FORMULA = 4;
                         const SKILL_COMBAT = 5;
                         const SKILL_NONCOMBAT = 6;
-                        const SKILL_LOOT_II = 7;
+                        const SKILL_OMNIVISION = 7;
                         const SKILL_QUICK_MANA = 8;
                         const SKILL_COMBAT_STRONG = 9;
                         const SKILL_NONCOMBAT_STRONG = 10;
@@ -331,10 +331,10 @@
                         $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:150px;height: 280px;position: absolute; left: 34em; top: 0em; transform: rotate(40deg);'></div>");
 
                         /* Tier 3 */
-                        $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 3em;  top: 18em; z-index: 12;'><br />Distributed Mana<br />1 KP<span class='tooltiptext fgc bgc_second'>TODO: TOOLTIP</span></div>");
+                        $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 3em;  top: 18em; z-index: 12;'><br />Distributed Mana<br />1 KP<span class='tooltiptext fgc bgc_second'>Provides a boost to the value of resources. The boost increases the closer resources are to balanced (weighted average of their amount * value)</span></div>");
                         $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 17em; top: 16em; z-index: 11;'><br />Temporal Anger<br />1 KP<span class='tooltiptext fgc bgc_second'>When on, combat adventures are twice as likely.</span></div>");
                         $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 30em; top: 16em; z-index: 10;'><br />Temporal Slow<br />1 KP<span class='tooltiptext fgc bgc_second'>When on, noncombat adventures are twice as likely.</span></div>");
-                        $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 44em; top: 18em; z-index: 9;'><br />LOOT II?<br />1 KP<span class='tooltiptext fgc bgc_second'>TODO: TOOLTIP</span></div>");
+                        $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 44em; top: 18em; z-index: 9;'><br />Omnivision<br />1 KP<span class='tooltiptext fgc bgc_second'>More values are shown to you.</span></div>");
 
                         /* Connecting lines */
                         color = event_flags["skills"][SKILL_MANA_FORMULA] != undefined ? "blue" : "gray";
@@ -343,7 +343,7 @@
                         $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:100px;height: 280px;position: absolute; left: 28em; top: 14em; transform: rotate(90deg);'></div>");
                         color = event_flags["skills"][SKILL_NONCOMBAT] != undefined ? "blue" : "gray";
                         $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:100px;height: 280px;position: absolute; left: 41em; top: 14em; transform: rotate(90deg);'></div>");
-                        color = event_flags["skills"][SKILL_LOOT_II] != undefined ? "blue" : "gray";
+                        color = event_flags["skills"][SKILL_OMNIVISION] != undefined ? "blue" : "gray";
                         $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:150px;height: 280px;position: absolute; left: 55em; top: 18em; transform: rotate(90deg);'></div>");
 
                         
@@ -406,7 +406,7 @@
                                     [SKILL_MANA_FORMULA], /* Tier 4. */
                                     [SKILL_COMBAT],
                                     [SKILL_NONCOMBAT],
-                                    [SKILL_LOOT_II], 
+                                    [SKILL_OMNIVISION], 
                                     [SKILL_QUICK_MANA], /* Tier 5. */
                                     [SKILL_COMBAT_STRONG, SKILL_NONCOMBAT_STRONG],
                                     [SKILL_LOOT_III],
