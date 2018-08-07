@@ -1132,7 +1132,7 @@ function set_initial_state() {
                 "wood": 500,
                 "iron": 250,
             },
-            "tooltip": "console.error('Upgrade not purchased, player needs to buy it!');<br /><i>(Provides an upgrade to logging camps)</i>",
+            "tooltip": "<i>(Provides an upgrade to logging camps)</i>",
             "name": "Magical Trees",
             "image": "",
             "repeats": false,
