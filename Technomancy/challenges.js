@@ -6,7 +6,7 @@ var CHALLENGES = {
     LOAN: 4,
     CASCADE: 5,
     DISCO: 6,
-    NO_UPGRADE: , 7: ,
+    NO_UPGRADE: 7,
     TOTAL_AMOUNT: 8
 };
 function challenge_menu() {
