@@ -2549,10 +2549,13 @@ function resource_tooltip() {
         }
     });
 }
-function toggle_building_state(name) {
+function toggle_building_state(name, sudo) {
+    if (sudo === void 0) { sudo = false; }
     if (buildings[name].on) {
-        if (name == "s_mana_refinery") {
-            return; /* Can't turn off the refinery */
+        /* A couple buildings shouldn't be turned off unless forced off. */
+        if (name == "s_mana_refinery" || name == "s_essence") {
+            if (!sudo)
+                return; /* We could have used &&, but that just makes the conditional messier. */
         }
         buildings[name].on = false;
         /* Go through each resource it generates... */
@@ -3120,6 +3123,7 @@ function setup_groups() {
     groupings["Spells"] = JSON.parse(JSON.stringify(SPELL_BUILDINGS));
     groupings["Spells"].splice(groupings["Spells"].indexOf("s_manastone"), 1);
     groupings["Spells"].splice(groupings["Spells"].indexOf("s_mana_refinery"), 1);
+    groupings["Spells"].splice(groupings["Spells"].indexOf("s_essence"), 1);
     groupings["Spells"].splice(groupings["Spells"].indexOf("s_final"), 1); /* This building isn't officially a thing yet and we don't want it on. */
     /* Clear group name box*/
     $("#group_names").html("<table></table>");
@@ -3187,7 +3191,7 @@ function draw_group(name) {
         We're also specifically excluding two buildings because they should never be able to be turned off.
     */
     Object.keys(buildings).forEach(function (build) {
-        if (build != "s_manastone" && build != "s_mana_refinery" && !$("#building_" + build).parent().hasClass("hidden")) {
+        if (build != "s_manastone" && build != "s_mana_refinery" && build != "s_essence" && !$("#building_" + build).parent().hasClass("hidden")) {
             /* Get the name */
             var b_name = $("#building_" + build + " .building_name").text();
             /* Get the color. Red if not in the grouping, green if it is. */
@@ -3568,7 +3572,7 @@ window.onload = function () {
             try {
                 purchase_building("s_essence", 0);
             }
-            finally { } /* Update amount shown. */
+            catch (e) { } /* Update amount shown. */
         }
     } /* END start of prestige additions */
     if (adventure_data["perm_resources"] != undefined) {

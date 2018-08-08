@@ -189,7 +189,7 @@
                         const SKILL_FINAL = 15;
 
                         if (event_flags["skills"][SKILL_FINAL]) {
-                            $("#events_content").append("Yay, you can do magic! Message fuzzything44 on Discord if you get this far.<br />");
+                            $("#events_content").append("Good job getting this. But it's not quite implemented yet. <br />");
                         }
 
                         $("#events_content").append("Please note that some skills don't do anything yet. They're coming soon! Anything with an actual tooltip should work though.<br />");
@@ -434,7 +434,7 @@
                             }
                         }
                     } else if (event_flags["wanderer_knowledge"] == "alchemy") {
-                        $("#events_content").append("There's nothing here... try becoming an inventor or mage. Or check back in a few weeks.<br />");
+                        $("#events_content").append("There's nothing here... try becoming an inventor or mage. Or check back in a few weeks. Maybe months. <br />");
                         $("#events_content").append("<span class='clickable'>Reset</span> class choice<br />");
                         $("#events_content span").last().click(function () {
                             buildings["library"].free += 50;
