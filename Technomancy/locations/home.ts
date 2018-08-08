@@ -319,7 +319,7 @@
                         /* Tier 2 */
                         $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 4em;  top: 8em; z-index: 15;'><br />Efficient Refining<br />1 KP<span class='tooltiptext fgc bgc_second'>Get double mana when you refine.</span></div>");
                         $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 23em; top: 8em; z-index: 14;'><br />Temporal Permanance<br />1 KP<span class='tooltiptext fgc bgc_second'>You can get events while offline. Works best with AutoEvents.</span></div>")
-                        $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 43em; top: 8em; z-index: 13;'><br />Omnivision<br />1 KP<span class='tooltiptext fgc bgc_second'>You find more stuff when killing enemies.</span></div>");
+                        $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 43em; top: 8em; z-index: 13;'><br />Advanced Looting<br />1 KP<span class='tooltiptext fgc bgc_second'>You find more stuff when killing enemies.</span></div>");
 
                         /* Connecting lines */
                         color = event_flags["skills"][SKILL_BETTER_REFINE] != undefined ? "blue" : "gray";

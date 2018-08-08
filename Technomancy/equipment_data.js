@@ -400,6 +400,7 @@ var equipment = {
                         /* Cost 1s of production. */
                         resource_costs: JSON.parse(JSON.stringify(resources_per_sec)),
                     };
+                    delete modification.resource_costs["antibag"];
                     /* Apply our action. */
                     action(modification);
                     /* Apply all other actions. */

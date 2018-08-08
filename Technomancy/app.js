@@ -2718,7 +2718,7 @@ function update() {
         /* Formats it so that it says "Resource name: amount" */
         $("#" + key + " span").first().html((key.charAt(0).toUpperCase() + key.slice(1)).replace("_", " ") + ": " + format_num(resources[key].amount, false));
         if (event_flags["skills"] && event_flags["skills"][7]) {
-            $("#" + key + " span").first().append(" (" + format_num(resources[key].amount) + " ea)");
+            $("#" + key + " span").first().append(" (" + format_num(resources[key].value) + ")");
         }
         /* Same for per sec */
         $("#" + key + "_per_sec").text((resources_per_sec[key] > 0 ? "+" : "") + format_num(resources_per_sec[key]) + "/s");

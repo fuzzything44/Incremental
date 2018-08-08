@@ -1,6 +1,9 @@
 ﻿Technomancy Changelog
 
-v5.0.0: (8/7/16) The Tower
+v5.0.1: (8/8/18) The Tower
+Small bugfixes: Fixed omnivision (second one) to properly show values, not hoe much you have. It should no longer push some buttons down in the resource pane. Also, convolution cube no longer requires "antibag". 
+
+v5.0.0: (8/7/18) The Tower
 You can now actually do stuff at the tower. Climb up the tower, killing various bosses in a horrible game of rock paper scissors and gain great rewards along the way! But it'll really tax your mana - I hope you have a lot stored up.
 
 v4.6.0: (8/7/18) The Tower
