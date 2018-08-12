@@ -3666,12 +3666,17 @@ window.onload = () => {
             Object.keys(adventure_data["perm_resources"]).forEach(function (res) {
                 let res_gain = Math.pow(adventure_data["perm_resources"][res], 2 / 3);
                 if (adventure_data["challenge"]) {
-                    res_gain = Math.min(res_gain, 10000 / resources[res].value);
+                    if (adventure_data["challenges_completed"].length >= CHALLENGES.METEORS && adventure_data["challenges_completed"][CHALLENGES.METEORS]) {
+                        res_gain = Math.pow(res_gain, 4 / 5); /* If they have meteors, reduce it again. */
+                    } else {
+                        res_gain = Math.min(res_gain, 10000 / resources[res].value); /* Otherwise, cap it. */
+                    }
                 }
                 resources[res].amount += res_gain;
                 resources["antibag"].amount -= res_gain * resources[res].value;
             });
         }
+
         /* What building each mana gives. */
         let start_buildings = ["bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "furnace", "gold_finder", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "compressor", "", "", "", "", "oil_well", "bank", "bank", "bank", "bank", "oil_well", "", "", "", "", "library", "library", "library", "library", "library", "library", "bank", "bank", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "", "", "", "", "oil_engine", "solar_panel", "solar_panel", "solar_panel", "solar_panel", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "", "", "", "", "skyscraper", "bank", "skyscraper", "bank", "skyscraper", "bank", "skyscraper", "bank", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "furnace", "gold_finder", "compressor", "paper_mill", "ink_refinery", "paper_mill"];
 
@@ -3722,28 +3727,18 @@ window.onload = () => {
                 resources["money"].changes["Challenge"] = buildings["s_challenge"].generation["money"]; /* Add it to the resource tooltip. */
             }
 
-            /* They have a meteor challenge completion.  */
-            if (adventure_data["challenges_completed"].length >= CHALLENGES.METEORS && adventure_data["challenges_completed"][CHALLENGES.METEORS]) {
-                /* Make sure it's defined to not get fuzzy production. */
-                if (buildings["s_challenge"].generation["money"] == undefined) { buildings["s_challenge"].generation["money"] = 0; }
-                buildings["s_challenge"].generation["money"] += 1; /* +1 money/s */
-
-                resources_per_sec["money"] += 1; /* Previous stuff is for when they reload it. This sets it up until then. */
-                resources["money"].changes["Challenge"] = buildings["s_challenge"].generation["money"]; /* Add it to the resource tooltip. */
-            }
-
             /* They have a loan challenge completion.  */
             if (adventure_data["challenges_completed"].length >= CHALLENGES.LOAN && adventure_data["challenges_completed"][CHALLENGES.LOAN]) {
                 /* Make sure it's defined to not get fuzzy production. */
                 if (buildings["s_challenge"].generation["money"] == undefined) { buildings["s_challenge"].generation["money"] = 0; }
-                buildings["s_challenge"].generation["money"] += 1; /* +1 money/s */
+                buildings["s_challenge"].generation["money"] += 30; /* +1 money/s */
 
-                resources_per_sec["money"] += 1; /* Previous stuff is for when they reload it. This sets it up until then. */
+                resources_per_sec["money"] += 30; /* Previous stuff is for when they reload it. This sets it up until then. */
                 resources["money"].changes["Challenge"] = buildings["s_challenge"].generation["money"]; /* Add it to the resource tooltip. */
             }
 
-            /* They have a no upgrades challenge completion.  */
-            if (adventure_data["challenges_completed"].length >= CHALLENGES.NO_UPGRADE && adventure_data["challenges_completed"][CHALLENGES.NO_UPGRADE]) {
+            /* They have a no upgrades challenge completion and don't have essence unlocked yet. */
+            if (adventure_data["challenges_completed"].length >= CHALLENGES.NO_UPGRADE && adventure_data["challenges_completed"][CHALLENGES.NO_UPGRADE] && adventure_data["current_essence"] == undefined) {
                 adventure_data["current_essence"] = 1;
                 adventure_data["total_essence"] = 1;
             }
@@ -3783,8 +3778,12 @@ window.onload = () => {
 
         }
         buildings["hydrogen_mine"].amount = adventure_data["hydrogen_mines"];
-        if (adventure_data["challenge"] && buildings["hydrogen_mine"].amount > 5) { /* If they're in a challenge, cap at 5 */
-            buildings["hydrogen_mine"].amount = 5; /* TODO: Maybe a challenge reward raises this cap? */
+        let challenge_hydrogen_cap = 5;
+        if (adventure_data["challenges_completed"].length >= CHALLENGES.METEORS && adventure_data["challenges_completed"][CHALLENGES.METEORS]) {
+            challenge_hydrogen_cap = 50;
+        }
+        if (adventure_data["challenge"] && buildings["hydrogen_mine"].amount > challenge_hydrogen_cap) { /* If they're in a challenge, cap at 5 */
+            buildings["hydrogen_mine"].amount = challenge_hydrogen_cap; /* TODO: Maybe a challenge reward raises this cap? */
         }
 
         if (comp_state) { /* Only turn on if it already was on */

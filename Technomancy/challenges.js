@@ -80,7 +80,7 @@ var CHALLENGE_INFO = [
         "description": "Meteors aren't falling just in your backyard anymore. They're falling on your buildings!",
         "requirements": "Get to 200 mana to complete this challenge",
         "restrictions": "Go back to 0 mana. Every so often, a meteor will fall and destroy some of your buildings! Oh no!",
-        "reward": "Nothing yet. Maybe auto-build? Seems like it could be a good reward. Or maybe just better meteor event.",
+        "reward": "Increases items allowed in a challenge.",
         "test_completed": function () { return buildings["s_manastone"].amount >= 200; }
     },
     {
@@ -88,7 +88,7 @@ var CHALLENGE_INFO = [
         "description": "Be a tycoon of business and grow your empire!",
         "requirements": "Get 10 million money to complete this challenge",
         "restrictions": "Go back to 0 mana. You can't prestige. You start with 1 million money, but lose 30/second. Can you get enough to pay off your loan?",
-        "reward": "Nothing yet, probably getting changed to like 10 money/s or 15/s",
+        "reward": "30 money/s boost.",
         "test_completed": function () { return resources["money"].amount >= 10000000; }
     },
     {

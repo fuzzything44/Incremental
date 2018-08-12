@@ -217,9 +217,12 @@ var ingredients = [
             }
         }
     }, function () {
-        var power = adventure_data["current_potion"].power;
-        resources_per_sec["gold"] -= 25 * power;
-        resources_per_sec["diamond"] -= 5 * power;
+        /* Only remove these if they have been added yet. */
+        if (adventure_data["current_potion"].applied_effect != undefined) {
+            var power = adventure_data["current_potion"].power;
+            resources_per_sec["gold"] -= 25 * power;
+            resources_per_sec["diamond"] -= 5 * power;
+        }
     }, "You have good vision.", 150, 9, [], "Sight", "Still", "Fine"),
     new ingredient("Space Carrot", function (power, on_combat) {
         if (on_combat === void 0) { on_combat = false; }

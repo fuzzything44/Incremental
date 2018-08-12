@@ -291,9 +291,12 @@ let ingredients: ingredient[] = [
             }
         },
         function () {
-            let power = adventure_data["current_potion"].power;
-            resources_per_sec["gold"] -= 25 * power;
-            resources_per_sec["diamond"] -= 5 * power;
+            /* Only remove these if they have been added yet. */
+            if (adventure_data["current_potion"].applied_effect != undefined) {
+                let power = adventure_data["current_potion"].power;
+                resources_per_sec["gold"] -= 25 * power;
+                resources_per_sec["diamond"] -= 5 * power;
+            }
         },
         "You have good vision.",
         150,
