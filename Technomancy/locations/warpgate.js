@@ -12,7 +12,7 @@ List of all warp locations:
         ({
             "condition": function () { return true; },
             "types": [""],
-            "weight": 1,
+            "weight": 0,
             "title": "Enter the Gate",
             "run_encounter": function () {
                 /* Lets them warp to many different places. */

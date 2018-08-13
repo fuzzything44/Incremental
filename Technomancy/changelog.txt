@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.0.3 (8/13/18) More bugfixes
+Fixed a typo when getting cheese. Mage skills should no longer lock you out of the warpgate. Increased solar panel glass cost and generation post-environmental disaster.
+
 v5.0.2: (8/12/18) The Tower
 Fixed a bug where using some potions in quick succession could give you negative resources per second. If this continues to appear, tell me what potions you used and I'll fix it on those. Meteor and loan challenges now have rewards. Removed the option to delete some buildings (hydrogen mine, basic challenge rewards, and mana purifier)
 

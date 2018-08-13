@@ -1851,12 +1851,12 @@ function set_initial_state() {
                 /* And finally, the bonuses... */
                 buildings["solar_panel"].price_ratio = {
                     "money": 0.99,
-                    "glass": 1.04,
+                    "glass": 1.15,
                     "coal": 1.05,
                     "diamond": 1.05,
                 };
                 buildings["solar_panel"].free = 15;
-                buildings["solar_panel"].multipliers = { "diamond": .05, "glass": .05 };
+                buildings["solar_panel"].multipliers = { "diamond": .05, "glass": .1 };
                 buildings["solar_panel"].generation["fuel"] = 0.0002;
             },
             "cost": {
