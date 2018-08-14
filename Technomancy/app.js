@@ -2154,6 +2154,93 @@ function set_initial_state() {
             "image": "",
             "repeats": true,
         },
+        "better_essence": {
+            "unlock": function () { return adventure_data["tower_floor"] > 7; },
+            "purchase": function () {
+                toggle_building_state("s_essence", true);
+                Object.keys(buildings["s_essence"].multipliers).forEach(function (res) {
+                    buildings["s_essence"].multipliers[res] *= 2;
+                });
+                toggle_building_state("s_essence");
+            },
+            "cost": {
+                "refined_mana": 5000,
+                "research": 50,
+            },
+            "tooltip": "Makes your essence better!",
+            "name": "Essential Oils",
+            "image": "",
+            "repeats": false,
+        },
+        "better_booster": {
+            "unlock": function () { return adventure_data["tower_floor"] > 7; },
+            "purchase": function () {
+                /* Upgrade basic boosters */
+                var build_state = buildings["challenge_basic"].on;
+                if (build_state) {
+                    toggle_building_state("challenge_basic");
+                }
+                buildings["challenge_basic"]["amount"] *= 2;
+                buildings["challenge_basic"]["amount"] += 5;
+                update_building_amount("challenge_basic");
+                if (build_state) {
+                    toggle_building_state("challenge_basic");
+                }
+                /* Upgrade medium boosters */
+                build_state = buildings["challenge_medium"].on;
+                if (build_state) {
+                    toggle_building_state("challenge_medium");
+                }
+                buildings["challenge_medium"]["amount"] *= 2;
+                buildings["challenge_medium"]["amount"] += 5;
+                update_building_amount("challenge_medium");
+                if (build_state) {
+                    toggle_building_state("challenge_medium");
+                }
+                /* Upgrade advanced boosters */
+                build_state = buildings["challenge_advanced"].on;
+                if (build_state) {
+                    toggle_building_state("challenge_advanced");
+                }
+                buildings["challenge_advanced"]["amount"] *= 2;
+                buildings["challenge_advanced"]["amount"] += 5;
+                update_building_amount("challenge_advanced");
+                if (build_state) {
+                    toggle_building_state("challenge_advanced");
+                }
+            },
+            "cost": {
+                "refined_mana": 5000,
+                "research": 50,
+            },
+            "tooltip": "Makes your boosters bigger!",
+            "name": "Essential Boosts",
+            "image": "",
+            "repeats": false,
+        },
+        "essence_jeweler": {
+            "unlock": function () { return adventure_data["tower_floor"] > 7; },
+            "purchase": function () {
+                /* Upgrade */
+                var build_state = buildings["jewelry_store"].on;
+                if (build_state) {
+                    toggle_building_state("jewelry_store");
+                }
+                buildings["jewelry_store"]["generation"]["money"] *= 2;
+                update_building_amount("jewelry_store");
+                if (build_state) {
+                    toggle_building_state("jewelry_store");
+                }
+            },
+            "cost": {
+                "refined_mana": 5000,
+                "research": 50,
+            },
+            "tooltip": "Makes your jewelry sell for more!",
+            "name": "Essential Jewelry",
+            "image": "",
+            "repeats": false,
+        },
         "trade": {
             "unlock": function () { return false; },
             "purchase": function () { },
@@ -2887,10 +2974,13 @@ function gen_building_tooltip(name) {
     tooltip += flavor_text;
     return tooltip;
 }
+function update_building_amount(name) {
+    $('#building_' + name + " > .building_amount").html(format_num(buildings[name].amount, false));
+}
 function purchase_building(name, amount) {
     if (amount === void 0) { amount = null; }
     /* Sometimes we're calling this to update amount shown, so make sure we do so. */
-    $('#building_' + name + " > .building_amount").html(format_num(buildings[name].amount, false));
+    update_building_amount(name);
     if (amount == null) {
         amount = parseInt($("#buy_amount").val());
     }
@@ -2936,7 +3026,7 @@ function purchase_building(name, amount) {
     if (build_state) {
         toggle_building_state(name);
     }
-    $('#building_' + name + " > .building_amount").html(format_num(buildings[name].amount, false));
+    update_building_amount(name);
     /* Update purchasable/not color */
     try {
         var amount_1 = parseInt($("#buy_amount").val());
@@ -3485,7 +3575,10 @@ window.onload = function () {
         /* Give on prestige resources. */
         if (adventure_data["perm_resources"]) {
             Object.keys(adventure_data["perm_resources"]).forEach(function (res) {
-                var res_gain = Math.pow(adventure_data["perm_resources"][res], 2 / 3);
+                var res_gain = adventure_data["perm_resources"][res];
+                if (resources[res].value > 0) {
+                    res_gain = Math.pow(adventure_data["perm_resources"][res], 2 / 3);
+                }
                 if (adventure_data["challenge"]) {
                     if (adventure_data["challenges_completed"].length >= CHALLENGES.METEORS && adventure_data["challenges_completed"][CHALLENGES.METEORS]) {
                         res_gain = Math.pow(res_gain, 4 / 5); /* If they have meteors, reduce it again. */

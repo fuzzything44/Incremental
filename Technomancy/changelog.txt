@@ -1,6 +1,9 @@
 ﻿Technomancy Changelog
 
-v5.0.3 (8/13/18) More bugfixes
+v5.1.0: (8/13/18) Bugfixes and more tower
+Changed the no encounter text as it's now a known bug. I'll get around to fixing it eventually. 3 new upgrades added! Get them from beating tower boss 7. Also fixed a few bugs with the essence and mana not displaying properly until refresh. 
+
+v5.0.3: (8/13/18) More bugfixes
 Fixed a typo when getting cheese. Mage skills should no longer lock you out of the warpgate. Increased solar panel glass cost and generation post-environmental disaster.
 
 v5.0.2: (8/12/18) The Tower

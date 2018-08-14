@@ -293,8 +293,8 @@ function run_adventure(location: string, can_reroll: boolean = true) {
             }
         })
     } else {
-        $("#events_topbar").html("Oops...");
-        $("#events_content").html("Something went wrong and no encounter could be selected. Please contact fuzzything44 about this. Include in your report where you were trying to adventure.");
+        $("#events_topbar").html("Nothing");
+        $("#events_content").html("You find nothing here. Huh, maybe you should check your encounter settings if you're a mage.");
         return;
     }
     $("#events_topbar").html(chosen_encounter.title);

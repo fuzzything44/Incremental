@@ -28,11 +28,12 @@
         "text": "Seriously, what's with all these noodles?",
         "reward_text": "extra mana",
         reward: function () {
-            resources_per_sec["mana"] += 100;
-            buildings["s_manastone"].amount += 100;
-            try { purchase_building("s_manastone") } catch (e) { }        }
+            resources_per_sec["mana"] += 250;
+            buildings["s_manastone"].amount += 250;
+            update_building_amount("s_manastone");
+        }
     },
-    { /* Boss 3. */
+    { /* Boss 4. */
         "boss": "a guy named Mac",
         "text": "Finally, no more pasta. Oh wait, what's that? Dangit, looks like he has his own block of cheese with him.",
         "reward_text": "extra power",
@@ -40,13 +41,30 @@
             adventure_data["tower_power"] += 10;
         }
     },
-    { /* Boss 3. */
+    { /* Boss 5. */
         "boss": "the Flying Spaghetti Monster",
         "text": "Well, it's finally come to kill you. Guess you shouldn't have beaten up all those helpless bowls of pasta.",
         "reward_text": "extra toughness",
         reward: function () {
             adventure_data["tower_toughness"] += 10;
         }
+    },
+    { /* Boss 6. */
+        "boss": "a shrimp",
+        "text": "This is literally just a normal shrimp. How is it more powerful than the god you just killed?",
+        "reward_text": "start each prestige with 600 time",
+        reward: function () {
+            if (adventure_data["perm_resources"] == undefined) {
+                adventure_data["perm_resources"] = {};
+            }
+            adventure_data["perm_resources"]["time"] = 600;
+        }
+    },
+    { /* Boss 7. */
+        "boss": "a chimp",
+        "text": "Oh, now you're fighting a monkey. Of course. This is totally normal.",
+        "reward_text": "MORE UPGRADES",
+        reward: function () { }
     },
 ]
 
@@ -71,9 +89,11 @@ function tower() {
         if (buildings["s_manastone"].amount > essence_cost && resources["mana"].amount >= essence_cost) {
             buildings["s_manastone"].amount -= essence_cost;
             resources_per_sec["mana"] -= essence_cost;
+            update_building_amount("s_manastone")
 
-            toggle_building_state("s_essence");
+            toggle_building_state("s_essence", true);
             buildings["s_essence"].amount++;
+            update_building_amount("s_essence");
             toggle_building_state("s_essence");
 
             adventure_data["current_essence"]++;
@@ -97,6 +117,7 @@ function tower() {
             buildings["s_essence"].amount -= pow_increase;
             adventure_data["tower_power"] += pow_increase;
             adventure_data["current_essence"] -= pow_increase;
+            update_building_amount("s_essence");
 
             toggle_building_state("s_essence", true);
         }
@@ -119,6 +140,7 @@ function tower() {
             buildings["s_essence"].amount -= tough_increase;
             adventure_data["tower_toughness"] += tough_increase;
             adventure_data["current_essence"] -= tough_increase;
+            update_building_amount("s_essence");
 
             toggle_building_state("s_essence", true);
         }
@@ -132,7 +154,7 @@ function tower() {
     $("#events_content span").last().click(function () { climb_tower() });
 
     if (adventure_data["tower_floor"]) {
-        $("#events_content").append("Start at tower floor: " + format_num(adventure_data["tower_floor"]))
+        $("#events_content").append("You're at tower floor: " + format_num(adventure_data["tower_floor"]))
     }
 
     $("#events").removeClass("hidden");
@@ -197,7 +219,7 @@ function climb_tower(health = undefined, ehealth = undefined) {
                 health -= Math.pow(adventure_data["tower_floor"], 2);
                 ehealth -= adventure_data["tower_power"];
                 if (health <= 0) {
-                    $("#events_content").html("Ouch! You were defeated.<br /><span class='clickable'>Try</span> again?");
+                    $("#events_content").html("Ouch! You were defeated.<br /><span class='clickable'>Try</span> again? (Costs 1 mana stone)");
                     $("#events_content span").last().click(function () { climb_tower() });
                 } else if (ehealth <= 0) {
                     defeat_floor();
@@ -208,7 +230,7 @@ function climb_tower(health = undefined, ehealth = undefined) {
             } else {
                 health -= Math.pow(adventure_data["tower_floor"], 2);
                 if (health <= 0) {
-                    $("#events_content").html("Oof! You were defeated.<br /><span class='clickable'>Try</span> again?");
+                    $("#events_content").html("Oof! You were defeated.<br /><span class='clickable'>Try</span> again? (Costs 1 mana stone)");
                     $("#events_content span").last().click(function () { climb_tower() });
                 } else {
                     climb_tower(health, ehealth);
