@@ -144,16 +144,17 @@ function tower() {
     $("#events_content").append("<span class='clickable'>Enter</span> the tower. (Costs one mana stone). <br/>");
     $("#events_content span").last().click(function () { climb_tower(); });
     if (adventure_data["tower_floor"]) {
-        $("#events_content").append("You're at tower floor: " + format_num(adventure_data["tower_floor"]));
+        $("#events_content").append("You're at tower floor: " + format_num(adventure_data["tower_floor"]) + "<br/>");
     }
     if (adventure_data["grind_tower_time"] != undefined) {
         if (Date.now() - adventure_data["grind_tower_time"] > 24 * 60 * 60 * 1000) {
-            $("#events_content").append("<span class='clickable'>Enter</span> the small tower nearby. (Costs one mana stone). <br/>");
+            $("#events_content").append("<span class='clickable'>Enter</span> the small tower nearby. (Costs one mana stone, enterable once every 24 hours). <br/>");
             $("#events_content span").last().click(function () { climb_tower(undefined, undefined, true); });
         }
         else {
             var date = new Date(null);
-            date.setSeconds((Date.now() - adventure_data["grind_tower_time"]) / 1000);
+            var elapsed_time = (Date.now() - adventure_data["grind_tower_time"]) / 1000;
+            date.setSeconds(24 * 60 * 60 - elapsed_time);
             var dates = date.toISOString().substr(11, 8);
             var result = dates.split(":");
             $("#events_content").append("The small tower is still closed. Come back in " + parseInt(result[0]).toString() + "hours " + parseInt(result[1]).toString() + " minutes<br/>");
@@ -165,7 +166,12 @@ function climb_tower(health, ehealth, grinding) {
     if (health === void 0) { health = undefined; }
     if (ehealth === void 0) { ehealth = undefined; }
     if (grinding === void 0) { grinding = false; }
-    $("#events_topbar").html("Tower floor " + format_num(adventure_data["tower_floor"]));
+    if (grinding) {
+        $("#events_topbar").html("Small tower floor " + format_num(grinding_level));
+    }
+    else {
+        $("#events_topbar").html("Tower floor " + format_num(adventure_data["tower_floor"]));
+    }
     if (health == undefined) {
         if (resources_per_sec["mana"] >= 1) {
             resources_per_sec["mana"]--;
@@ -185,16 +191,20 @@ function climb_tower(health, ehealth, grinding) {
             return;
         }
     }
-    if (adventure_data["tower_floor"] >= TOWER_DATA.length) {
+    if (adventure_data["tower_floor"] >= TOWER_DATA.length && !grinding) {
         $("#events_content").html("You're at the current top of the tower!");
     }
     else {
-        var boss = TOWER_DATA[adventure_data["tower_floor"]].boss;
-        var description = TOWER_DATA[adventure_data["tower_floor"]].text;
+        var boss = "";
+        var description = "";
         if (grinding) {
             boss = TOWER_DATA[grinding_level].boss;
             description = TOWER_DATA[grinding_level].text;
             adventure_data["grind_tower_time"] = Date.now();
+        }
+        else {
+            boss = TOWER_DATA[adventure_data["tower_floor"]].boss;
+            description = TOWER_DATA[adventure_data["tower_floor"]].text;
         }
         $("#events_content").html("This floor contains " + boss + ". " + description + "<br/>");
         $("#events_content").append("Your health: " + format_num(health, true) + "<br/>");
@@ -226,12 +236,17 @@ function climb_tower(health, ehealth, grinding) {
                 /* Deal damage*/
                 ehealth -= adventure_data["tower_power"];
                 if (ehealth <= 0) {
-                    defeat_floor(health);
+                    if (grinding) {
+                        defeat_floor(health);
+                    }
+                    else {
+                        defeat_floor();
+                    }
                 }
                 else {
                     climb_tower(health, ehealth, grinding);
                 }
-                $("#events_content").append("You hit it!<br/>");
+                $("#events_content").prepend("You hit it!<br/>");
             }
             else if (winstate == "tie") {
                 /* Both take damage */
@@ -247,7 +262,12 @@ function climb_tower(health, ehealth, grinding) {
                     }
                 }
                 else if (ehealth <= 0) {
-                    defeat_floor(health);
+                    if (grinding) {
+                        defeat_floor(health);
+                    }
+                    else {
+                        defeat_floor();
+                    }
                 }
                 else {
                     climb_tower(health, ehealth, grinding);
@@ -270,7 +290,7 @@ function climb_tower(health, ehealth, grinding) {
                 }
                 $("#events_content").prepend("It hit you. That hurts.<br/>");
             }
-            var attack_message = "";
+            var attack_message = "You do something...";
             if (attack == "attack") {
                 attack_message = "You attack!";
             }
@@ -312,7 +332,7 @@ function defeat_floor(health) {
         $("#events_content span").last().click(function () { tower(); });
     }
     else {
-        $("#events_content").append("For defeating the boss on floor " + format_num(grinding_level) + ", you are awarded with 1 essence");
+        $("#events_content").append("For defeating the boss on floor " + format_num(grinding_level) + ", you are awarded with 1 essence<br/>");
         /* Give one essence */
         toggle_building_state("s_essence", true);
         buildings["s_essence"].amount++;
