@@ -16,6 +16,9 @@
 
                     let purchase_amount = resources["money"].amount / 20; /* Each trade they spend 5% of their money */
                     let sold_resources = ["wood", "gold", "oil", "coal", "iron_ore", "iron", "uranium", "steel_beam", "hydrogen"]; /* What kittens have for sale. */
+                    if (event_flags["bribed_politician"] == "environment" && event_flags["crisis_averted"]) {
+                        sold_resources.push("book");
+                    }
                     sold_resources.forEach(function (resource) {
                         if (adventure_data["c_sell_" + resource] == undefined) {
                             adventure_data["c_sell_" + resource] = 0;

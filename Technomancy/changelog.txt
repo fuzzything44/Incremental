@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.1.1: (8/16/18) Balance stuff and bugfixes
+If you've finished the environmental crisis you can now buy books at Cath. Also a few unbuyable buildings after it are now buyable, but at high costs. Getting a ton of time should no longer count against you. You can no longer destroy unbuyable buildings. Bags of holding say they disappear on prestige. Refined mana can no longer warp in resources you have a negative amount of. And that's pretty much it.
+
 v5.1.0: (8/13/18) Bugfixes and more tower
 Changed the no encounter text as it's now a known bug. I'll get around to fixing it eventually. 3 new upgrades added! Get them from beating tower boss 7. Also fixed a few bugs with the essence and mana not displaying properly until refresh. 
 

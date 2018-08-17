@@ -1820,7 +1820,7 @@ function set_initial_state() {
                 if (comp_state) {
                     toggle_building_state("oil_well");
                 }
-                buildings["oil_well"].amount = 15;
+                buildings["oil_well"].amount = 25;
                 purchase_building("oil_well", 0); /* Actually updates amount show. */
                 if (comp_state) {
                     toggle_building_state("oil_well");
@@ -1832,7 +1832,7 @@ function set_initial_state() {
                     toggle_building_state("oil_engine");
                 }
                 buildings["oil_engine"].amount = 10;
-                purchase_building("oil_engine", 0); /* Actually updates amount show. */
+                update_building_amount("oil_engine"); /* Actually updates amount show. */
                 if (comp_state) {
                     toggle_building_state("oil_engine");
                 }
@@ -1843,15 +1843,15 @@ function set_initial_state() {
                     toggle_building_state("ink_refinery");
                 }
                 buildings["ink_refinery"].amount = 5;
-                purchase_building("ink_refinery", 0); /* Actually updates amount show. */
+                update_building_amount("ink_refinery"); /* Actually updates amount show. */
                 if (comp_state) {
                     toggle_building_state("ink_refinery");
                 }
-                buildings["ink_refinery"].base_cost = {};
+                buildings["ink_refinery"].price_ratio["money"] = 2;
                 /* And finally, the bonuses... */
                 buildings["solar_panel"].price_ratio = {
                     "money": 0.99,
-                    "glass": 1.15,
+                    "glass": 1.10,
                     "coal": 1.05,
                     "diamond": 1.05,
                 };
@@ -2266,7 +2266,7 @@ var prestige = {
             }
             prestige_points += resources[res].amount * Math.abs(resources[res].value);
             if (res != "sandcastle" && resources[res].amount > 0 && resources[res].value > 0) {
-                prestige_vals.push(resources[res].amount * resources[res].value);
+                prestige_vals.push(resources[res].amount * Math.abs(resources[res].value));
                 prestige_names.push(res);
             }
         });
@@ -2339,14 +2339,11 @@ var prestige = {
             if (event_flags["mage_quickmana"] == undefined) {
                 event_flags["mage_quickmana"] = 0;
             }
-            if (mana_gain > 1) {
+            if (mana_gain >= 1) {
                 var gained = Math.floor(mana_gain);
                 event_flags["mage_quickmana"] += gained;
                 buildings["s_manastone"].amount += gained;
-                try {
-                    purchase_building("s_manastone", 0);
-                }
-                finally { }
+                update_building_amount("s_manastone");
                 resources_per_sec["mana"] += buildings["s_manastone"].generation["mana"] * gained;
                 mana_gain -= gained;
                 /* Show more buildings with the gained mana. */
@@ -3070,6 +3067,10 @@ function destroy_building(name, amount) {
         if (buildings[name].amount <= 1) {
             add_log_elem("You can't destroy your last building.");
             return; /* Can't sell last building */
+        }
+        if ($.isEmptyObject(buildings[name].base_cost)) {
+            add_log_elem("You can't destroy unbuyable buildings.");
+            return;
         }
         /* Remove resource gen */
         var build_state = buildings[name].on;

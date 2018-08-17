@@ -178,7 +178,7 @@ function s_refinery_buff(delta_time: number) {
         /* Give resources! */
         let chosen_resource = Object.keys(resources)[Math.floor(Math.random() * Object.keys(resources).length)];
         /* Make sure they have some (unless it's money. You can always get money) */
-        while (resources[chosen_resource].value == 0 || chosen_resource == "refined_mana" || (resources[chosen_resource].amount == 0 && chosen_resource != "money")) {
+        while (resources[chosen_resource].value == 0 || chosen_resource == "refined_mana" || (resources[chosen_resource].amount <= 0 && chosen_resource != "money")) {
             chosen_resource = Object.keys(resources)[Math.floor(Math.random() * Object.keys(resources).length)];
         }
         /* How much of it to give. We give 10 value per mana they spent for this. */

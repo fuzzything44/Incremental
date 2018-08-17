@@ -846,7 +846,7 @@ var equipment = {
                 self.use = function (index, location) {
                     $("#character").addClass("hidden");
                     $("#events_topbar").html("Bag of Holding");
-                    $("#events_content").html("What would you like to put in your bag?<br />");
+                    $("#events_content").html("What would you like to put in your bag?<br />(Bags of holding allow you to carry some resources into your next prestige, then disappear.)");
                     /* Let them put some resources in. */
                     Object.keys(resources).forEach(function (res) {
                         if (resources[res].value > 0 && resources[res].amount > 0) {
