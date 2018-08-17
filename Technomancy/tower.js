@@ -65,7 +65,16 @@ var TOWER_DATA = [
         "reward_text": "MORE UPGRADES",
         reward: function () { }
     },
+    {
+        "boss": "a blimp",
+        "text": "Zeppelin, blimp, airship, dirigible, whatever you want to call it. Okay, I know that those mean slightly different things, but does it really matter if you're about to destroy it?",
+        "reward_text": "another tower",
+        reward: function () {
+            adventure_data["grind_tower_time"] = 0;
+        }
+    },
 ];
+var grinding_level = 1;
 function tower() {
     if (adventure_data["tower_floor"] == undefined) {
         adventure_data["tower_floor"] = 0;
@@ -137,22 +146,39 @@ function tower() {
     if (adventure_data["tower_floor"]) {
         $("#events_content").append("You're at tower floor: " + format_num(adventure_data["tower_floor"]));
     }
+    if (adventure_data["grind_tower_time"] != undefined) {
+        if (Date.now() - adventure_data["grind_tower_time"] > 24 * 60 * 60 * 1000) {
+            $("#events_content").append("<span class='clickable'>Enter</span> the small tower nearby. (Costs one mana stone). <br/>");
+            $("#events_content span").last().click(function () { climb_tower(undefined, undefined, true); });
+        }
+        else {
+            var date = new Date(null);
+            date.setSeconds((Date.now() - adventure_data["grind_tower_time"]) / 1000);
+            var dates = date.toISOString().substr(11, 8);
+            var result = dates.split(":");
+            $("#events_content").append("The small tower is still closed. Come back in " + parseInt(result[0]).toString() + "hours " + parseInt(result[1]).toString() + " minutes<br/>");
+        }
+    }
     $("#events").removeClass("hidden");
 }
-function climb_tower(health, ehealth) {
+function climb_tower(health, ehealth, grinding) {
     if (health === void 0) { health = undefined; }
     if (ehealth === void 0) { ehealth = undefined; }
+    if (grinding === void 0) { grinding = false; }
     $("#events_topbar").html("Tower floor " + format_num(adventure_data["tower_floor"]));
     if (health == undefined) {
         if (resources_per_sec["mana"] >= 1) {
             resources_per_sec["mana"]--;
             buildings["s_manastone"].amount--;
-            try {
-                purchase_building("s_manastone");
-            }
-            catch (e) { }
+            update_building_amount("s_manastone");
             health = adventure_data["tower_toughness"];
-            ehealth = Math.pow(adventure_data["tower_floor"], 2);
+            if (grinding) {
+                grinding_level = 1;
+                ehealth = Math.pow(grinding_level, 2);
+            }
+            else {
+                ehealth = Math.pow(adventure_data["tower_floor"], 2);
+            }
         }
         else {
             $("#events_content").html("It seems you don't have enough mana to attempt fighting this boss. Maybe come back later?");
@@ -165,6 +191,11 @@ function climb_tower(health, ehealth) {
     else {
         var boss = TOWER_DATA[adventure_data["tower_floor"]].boss;
         var description = TOWER_DATA[adventure_data["tower_floor"]].text;
+        if (grinding) {
+            boss = TOWER_DATA[grinding_level].boss;
+            description = TOWER_DATA[grinding_level].text;
+            adventure_data["grind_tower_time"] = Date.now();
+        }
         $("#events_content").html("This floor contains " + boss + ". " + description + "<br/>");
         $("#events_content").append("Your health: " + format_num(health, true) + "<br/>");
         $("#events_content").append("Enemy health: " + format_num(ehealth, true) + "<br/>");
@@ -187,44 +218,78 @@ function climb_tower(health, ehealth) {
             else if ((attack == "attack" && enemy_attack == "dodge") || (attack == "dodge" && enemy_attack == "spaz") || (attack == "spaz" && enemy_attack == "attack")) {
                 winstate = "lost";
             }
+            var enemy_damage = Math.pow(adventure_data["tower_floor"], 2);
+            if (grinding) {
+                enemy_damage = Math.pow(grinding_level, 2);
+            }
             if (winstate == "won") {
                 /* Deal damage*/
                 ehealth -= adventure_data["tower_power"];
                 if (ehealth <= 0) {
-                    defeat_floor();
+                    defeat_floor(health);
                 }
                 else {
-                    climb_tower(health, ehealth);
-                    $("#events_content").append("You hit it!");
+                    climb_tower(health, ehealth, grinding);
                 }
+                $("#events_content").append("You hit it!<br/>");
             }
             else if (winstate == "tie") {
                 /* Both take damage */
-                health -= Math.pow(adventure_data["tower_floor"], 2);
+                health -= enemy_damage;
                 ehealth -= adventure_data["tower_power"];
                 if (health <= 0) {
-                    $("#events_content").html("Ouch! You were defeated.<br /><span class='clickable'>Try</span> again? (Costs 1 mana stone)");
-                    $("#events_content span").last().click(function () { climb_tower(); });
+                    if (grinding) {
+                        $("#events_content").html("Ouch! You were defeated.<br /> Well, that's all the grinding you can do right now. Come back in 24 hours.<br/>");
+                    }
+                    else {
+                        $("#events_content").html("Ouch! You were defeated.<br /><span class='clickable'>Try</span> again? (Costs 1 mana stone)");
+                        $("#events_content span").last().click(function () { climb_tower(); });
+                    }
                 }
                 else if (ehealth <= 0) {
-                    defeat_floor();
+                    defeat_floor(health);
                 }
                 else {
-                    climb_tower(health, ehealth);
-                    $("#events_content").append("You hit it! But it also hit you...");
+                    climb_tower(health, ehealth, grinding);
                 }
+                $("#events_content").prepend("You hit it! But it also hit you...<br/>");
             }
             else {
-                health -= Math.pow(adventure_data["tower_floor"], 2);
+                health -= enemy_damage;
                 if (health <= 0) {
-                    $("#events_content").html("Oof! You were defeated.<br /><span class='clickable'>Try</span> again? (Costs 1 mana stone)");
-                    $("#events_content span").last().click(function () { climb_tower(); });
+                    if (grinding) {
+                        $("#events_content").html("Ouch! You were defeated.<br /> Well, that's all the grinding you can do right now. Come back in 24 hours.<br/>");
+                    }
+                    else {
+                        $("#events_content").html("Oof! You were defeated.<br /><span class='clickable'>Try</span> again? (Costs 1 mana stone)");
+                        $("#events_content span").last().click(function () { climb_tower(); });
+                    }
                 }
                 else {
-                    climb_tower(health, ehealth);
-                    $("#events_content").append("It hit you. That hurts.");
+                    climb_tower(health, ehealth, grinding);
                 }
+                $("#events_content").prepend("It hit you. That hurts.<br/>");
             }
+            var attack_message = "";
+            if (attack == "attack") {
+                attack_message = "You attack!";
+            }
+            else if (attack == "defend") {
+                attack_message = "You defend!";
+            }
+            else if (attack == "spaz") {
+                attack_message = "You flail around!";
+            }
+            if (enemy_attack == "attack") {
+                attack_message += " Your enemy attacks!";
+            }
+            else if (enemy_attack == "defend") {
+                attack_message += " Your enemy defends!";
+            }
+            else if (enemy_attack == "spaz") {
+                attack_message += " Your enemy spins in circles for 20 minutes!";
+            }
+            $("#events_content").prepend(attack_message + "<br/>");
         }
         $("#events_content").append("<span class='clickable'>Attack</span>");
         $("#events_content span").last().click(function () { fight_enemy("attack"); });
@@ -234,14 +299,29 @@ function climb_tower(health, ehealth) {
         $("#events_content span").last().click(function () { fight_enemy("spaz"); });
     }
 }
-function defeat_floor() {
+function defeat_floor(health) {
+    if (health === void 0) { health = undefined; }
     $("#events_content").html("Yay, you won! That was a hard battle.<br/>");
-    $("#events_content").append("For defeating the boss on floor " + format_num(adventure_data["tower_floor"]) + ", you are awarded with " + TOWER_DATA[adventure_data["tower_floor"]].reward_text + ". You're also a floor higher now. <br/>");
-    TOWER_DATA[adventure_data["tower_floor"]].reward();
-    adventure_data["tower_floor"]++;
-    $("#events_content").append("<span class='clickable'>Continue</span> climbing the tower.<br/>");
-    $("#events_content span").last().click(function () { climb_tower(); });
-    $("#events_content").append("<span class='clickable'>Back</span> to tower base.<br/>");
-    $("#events_content span").last().click(function () { tower(); });
+    if (health == undefined) {
+        $("#events_content").append("For defeating the boss on floor " + format_num(adventure_data["tower_floor"]) + ", you are awarded with " + TOWER_DATA[adventure_data["tower_floor"]].reward_text + ". You're also a floor higher now. <br/>");
+        TOWER_DATA[adventure_data["tower_floor"]].reward();
+        adventure_data["tower_floor"]++;
+        $("#events_content").append("<span class='clickable'>Continue</span> climbing the tower.<br/>");
+        $("#events_content span").last().click(function () { climb_tower(); });
+        $("#events_content").append("<span class='clickable'>Back</span> to tower base.<br/>");
+        $("#events_content span").last().click(function () { tower(); });
+    }
+    else {
+        $("#events_content").append("For defeating the boss on floor " + format_num(grinding_level) + ", you are awarded with 1 essence");
+        /* Give one essence */
+        toggle_building_state("s_essence", true);
+        buildings["s_essence"].amount++;
+        update_building_amount("s_essence");
+        toggle_building_state("s_essence");
+        adventure_data["current_essence"]++;
+        grinding_level++;
+        $("#events_content").append("<span class='clickable'>Continue</span> climbing the tower.<br/>");
+        $("#events_content span").last().click(function () { climb_tower(health, Math.pow(grinding_level, 2), true); });
+    }
 }
 //# sourceMappingURL=tower.js.map

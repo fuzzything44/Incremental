@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.2.0: (8/17/18) More tower stuff
+Meteors challenge should no longer hit unbuyable buildings. Expect a nerf to speed time on it soon (meteors will hit faster if time is sped). Added floor 8 to the tower, which unlocks a smaller tower to grind some Essence. Oh, also that tower to grind essence might have horribly broken stuff with the regular tower and/or is horribly broken itself. Added some messages for tower buttons so they feel less meaningless.
+
 v5.1.1: (8/16/18) Balance stuff and bugfixes
 If you've finished the environmental crisis you can now buy books at Cath. Also a few unbuyable buildings after it are now buyable, but at high costs. Getting a ton of time should no longer count against you. You can no longer destroy unbuyable buildings. Bags of holding say they disappear on prestige. Refined mana can no longer warp in resources you have a negative amount of. And that's pretty much it.
 

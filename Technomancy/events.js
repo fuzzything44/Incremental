@@ -1124,7 +1124,7 @@ function meteor_hit() {
     var available_buildings = [];
     /* All buildings they have are available for hitting. Except the mana purifier. */
     Object.keys(buildings).forEach(function (build) {
-        if (buildings[build].amount >= 1 && SPELL_BUILDINGS.indexOf(build) == -1 && build != "mana_purifier") {
+        if (buildings[build].amount >= 1 && SPELL_BUILDINGS.indexOf(build) == -1 && !$.isEmptyObject(buildings[build].base_cost)) {
             available_buildings.push(build);
         }
     });
