@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.3.0: (8/19/18) More tower floors
+I actually tested stuff this time! Added a couple new tower floors and added a new spell: AI. It gives managers (currently at a terrible rate, but it should get upgrades to improve it later). Bag of folding is slightly better if you've finished meteor challenge and don't have a lot of resources in it. When grinding the tower, you now don't need to do it alone! Bring along a buddy to heal you... if you've gotten high enough. 
+
 v5.2.1: (8/17/18) Tower bugfixes
 I guess I should really test stuff first. Anyways, tower should be functional again. And if you play NGU, have you taken your drink?
 

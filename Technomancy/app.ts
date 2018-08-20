@@ -48,6 +48,7 @@ const UNLOCK_TREE = { /* What buildings unlock */
     "s_time_maker": [],
     "s_workshop_2": [],
     "s_enchantment": [],
+    "s_ai": [],
     "s_final": [],
 
     "s_challenge": [],
@@ -107,6 +108,7 @@ const SPELL_BUILDINGS = [
     "s_mana_refinery",
     "s_workshop_2",
     "s_enchantment",
+    "s_ai",
     "s_final",
 
     "s_challenge",
@@ -400,6 +402,23 @@ function set_initial_state() {
             "free": 0,
             "flavor": "MORE MANA!",
         },
+        "s_ai": {
+            "on": false,
+            "amount": Infinity,
+            "base_cost": {},
+            "price_ratio": {},
+            "generation": {
+                "mana": -1,
+                "manager": 1/50,
+            },
+            "multipliers": {
+
+            },
+            "update": "nop",
+            "free": 0,
+            "flavor": "Managed",
+        },
+
         "s_challenge": {
             "on": true,
             "amount": 1,
@@ -2385,6 +2404,27 @@ function set_initial_state() {
             "image": "",
             "repeats": false,
         },
+        "essence_ai": {
+            "unlock": function () { return adventure_data["tower_floor"] > 7; },
+            "purchase": function () {
+
+                /* Upgrade */
+                if (buildings["s_ai"].on) {
+                    toggle_building_state("s_ai");
+                }
+                buildings["s_ai"].amount = 100;
+                $("#building_s_ai").parent().removeClass("hidden");
+
+            },
+            "cost": {
+                "refined_mana": 5000,
+                "energy": 250,
+            },
+            "tooltip": "Create a Magic powered AI",
+            "name": "AI Creation",
+            "image": "",
+            "repeats": false,
+        },
 
 
         "trade": { /* Having it unlockable here lets the actual element get in the list. */
@@ -3770,7 +3810,7 @@ window.onload = () => {
                 }
                 if (adventure_data["challenge"]) {
                     if (adventure_data["challenges_completed"].length >= CHALLENGES.METEORS && adventure_data["challenges_completed"][CHALLENGES.METEORS]) {
-                        res_gain = Math.pow(res_gain, 4 / 5); /* If they have meteors, reduce it again. */
+                        res_gain = Math.max(Math.min(res_gain, 10000 / resources[res].value), Math.pow(res_gain, 4 / 5)); /* If they have meteors, reduce it again, unless it would reduce to lower than what they would get normally. */
                     } else {
                         res_gain = Math.min(res_gain, 10000 / resources[res].value); /* Otherwise, cap it. */
                     }
