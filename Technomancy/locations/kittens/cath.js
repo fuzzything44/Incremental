@@ -19,11 +19,11 @@
                         sold_resources.push("book");
                     }
                     sold_resources.forEach(function (resource) {
-                        if (adventure_data["c_sell_" + resource] == undefined) {
-                            adventure_data["c_sell_" + resource] = 0;
+                        if (event_flags["c_sell_" + resource] == undefined) {
+                            event_flags["c_sell_" + resource] = 0;
                         }
                         var resource_amount = purchase_amount / resources[resource].value;
-                        if (adventure_data["c_sell_" + resource] < Date.now() - 60000 * 10) {
+                        if (event_flags["c_sell_" + resource] < Date.now() - 60000 * 10) { /* Each resource can only be bought once every 10 minutes. */
                             $("#events_content").append("<span class='clickable'>Purchase</span> " + format_num(resource_amount, false) + " " + resource.replace("_", " ") + " (" + format_num(purchase_amount, false) + " money) <br />");
                             $("#events_content > span").last().click(function () {
                                 /* Make sure they still have enough money */
@@ -31,7 +31,7 @@
                                     resources["money"].amount -= purchase_amount;
                                     resources[resource].amount += resource_amount;
                                 }
-                                adventure_data["c_sell_" + resource] = Date.now();
+                                event_flags["c_sell_" + resource] = Date.now();
                                 cat_market();
                             });
                         }

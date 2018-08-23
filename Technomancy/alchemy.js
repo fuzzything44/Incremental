@@ -1,4 +1,4 @@
-var ingredient = (function () {
+var ingredient = /** @class */ (function () {
     /**
      *
      * @param name: The displayed name of the ingredient
@@ -59,7 +59,7 @@ var ingredient = (function () {
             var cost = this.cost[i]; /* Get the actual cost object. */
             if (cost.type == "adventure") {
                 /* Adventure mode cost. So just match an item. */
-                for (var j = 0; j < cost.amount; j++) {
+                for (var j = 0; j < cost.amount; j++) { /* Remove however many of the item from inventory. */
                     adventure_data.inventory.splice(find_item(cost.name, adventure_data.inventory, cost.requirements), 1);
                 }
             }

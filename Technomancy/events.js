@@ -265,7 +265,7 @@ var events = [
             function num_to_name(num) {
                 return "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[num];
             }
-            var logic_statement = (function () {
+            var logic_statement = /** @class */ (function () {
                 function logic_statement(state_list, op, a, a_truth, b, b_truth) {
                     if (op === void 0) { op = null; }
                     if (a === void 0) { a = null; }
@@ -508,7 +508,7 @@ var events = [
                 /* Level up every 5 points */
                 if (total_points >= 5) {
                     var levels = Math.floor(total_points / 5);
-                    for (var i = 0; i < levels && i < 5; i++) {
+                    for (var i = 0; i < levels && i < 5; i++) { /* Only level up 5 times per cat max. */
                         total_points -= 5; /* Actually spend points for level. */
                         /* Level them up*/
                         adventure_data["logicat_level"] += 1;
@@ -578,6 +578,7 @@ var events = [
                                     }
                                 }];
                         }
+                        /* We have extra boosts added at 33, filling in this gap. */
                         else if (adventure_data["logicat_level"] >= 42 && adventure_data["logicat_chairs"] == undefined) {
                             reward_list = [{
                                     "name": "People Sit on Chairs",
@@ -887,7 +888,7 @@ function setup_events() {
                 if (buildings["bank"].base_cost["money"] * 0.7 >= buildings["bank"].base_cost["money"]) {
                     buildings["bank"].base_cost["money"] = 0;
                 }
-                if (comp_state) {
+                if (comp_state) { /* Only turn on if it already was on */
                     toggle_building_state("bank");
                 }
                 buildings["bank"].base_cost["money"] *= 0.7;
@@ -897,7 +898,7 @@ function setup_events() {
                     toggle_building_state("big_bank");
                 }
                 buildings["big_bank"]["generation"]["money"] *= 0.5;
-                if (comp_state) {
+                if (comp_state) { /* Only turn on if it already was on */
                     resources["manager"].amount = resources_per_sec["manager"];
                     toggle_building_state("big_bank");
                 }
@@ -986,7 +987,7 @@ function setup_events() {
                 if (buildings["ink_refinery"].on) {
                     sludge_increase += buildings["ink_refinery"].amount * 7 + Math.floor(event_flags["sludge_level"] * 0.01);
                 }
-                if (!event_flags["crisis_averted"] && event_flags["to_oil_decrease"] < 0) {
+                if (!event_flags["crisis_averted"] && event_flags["to_oil_decrease"] < 0) { /* Stop increase if crisis averted or still starting. */
                     event_flags["sludge_level"] += sludge_increase + 1;
                     event_flags["sludge_level"] = Math.floor(event_flags["sludge_level"] * 0.95); /* Natural sludge reduction. */
                 }
@@ -1050,7 +1051,7 @@ function bribe_finance() {
         toggle_building_state("bank");
     }
     buildings["bank"].generation["money"] *= 50;
-    if (build_state) {
+    if (build_state) { /* Only turn on if it already was on */
         toggle_building_state("bank");
     }
     /* Boost investments */
@@ -1059,7 +1060,7 @@ function bribe_finance() {
         toggle_building_state("big_bank");
     }
     buildings["big_bank"].generation["money"] *= 10;
-    if (build_state) {
+    if (build_state) { /* Only turn on if it already was on */
         toggle_building_state("big_bank");
     }
     /* Boost printers */
@@ -1068,7 +1069,7 @@ function bribe_finance() {
         toggle_building_state("money_printer");
     }
     buildings["money_printer"].generation["money"] *= 3;
-    if (build_state) {
+    if (build_state) { /* Only turn on if it already was on */
         toggle_building_state("money_printer");
     }
     event_flags["bribed_politician"] = "money";
@@ -1091,7 +1092,7 @@ function bribe_environment() {
     }
     buildings["mine"].generation["stone"] *= 10;
     buildings["mine"].generation["iron_ore"] *= 10;
-    if (build_state) {
+    if (build_state) { /* Only turn on if it already was on */
         toggle_building_state("mine");
     }
     /* Boost logging */
@@ -1100,7 +1101,7 @@ function bribe_environment() {
         toggle_building_state("logging");
     }
     buildings["logging"].generation["wood"] *= 25;
-    if (build_state) {
+    if (build_state) { /* Only turn on if it already was on */
         toggle_building_state("logging");
     }
     /* Boost oil */
@@ -1109,7 +1110,7 @@ function bribe_environment() {
         toggle_building_state("oil_well");
     }
     buildings["oil_well"].generation["oil"] *= 2;
-    if (build_state) {
+    if (build_state) { /* Only turn on if it already was on */
         toggle_building_state("oil_well");
     }
     event_flags["bribed_politician"] = "environment";
@@ -1138,7 +1139,7 @@ function meteor_hit() {
             toggle_building_state(destroyed);
         }
         buildings[destroyed].amount -= amt;
-        if (build_state) {
+        if (build_state) { /* Only turn on if it already was on */
             toggle_building_state(destroyed);
         }
         /* And log it.*/

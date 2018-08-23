@@ -89,7 +89,7 @@
                         }
                         else {
                             /* Slot machine finished, so total up results. */
-                            if ($("#" + table_token + " #slot_1_0").html() == $("#" + table_token + " #slot_1_1").html() && $("#" + table_token + " #slot_1_0").html() == $("#" + table_token + " #slot_1_2").html()) {
+                            if ($("#" + table_token + " #slot_1_0").html() == $("#" + table_token + " #slot_1_1").html() && $("#" + table_token + " #slot_1_0").html() == $("#" + table_token + " #slot_1_2").html()) { /* All 3 in the center row match. */
                                 $("#slot_results").html("You win!");
                                 adventure_data["casino_tokens"] += 5 * adventure_data["slots_reward"];
                                 /* Check for special symbols and do what they do. */
@@ -134,7 +134,7 @@
                         slots();
                     }
                 });
-                if (adventure_data["slots_less"] < 17) {
+                if (adventure_data["slots_less"] < 17) { /* Arbitrary value less than 23. */
                     $("#events_content").append("<span class='clickable'>Improve</span> slot machine odds (" + format_num(adventure_data["slots_less"] + 1, false) + " tokens)<br />");
                     $("#events_content span").last().click(function () {
                         if (adventure_data["casino_tokens"] > adventure_data["slots_less"]) {
@@ -154,7 +154,7 @@
                         }
                     });
                 }
-                if (adventure_data["slots_time"] < 7) {
+                if (adventure_data["slots_time"] < 7) { /* Arbitrary value. */
                     $("#events_content").append("<span class='clickable'>Increase</span> slot machine speed (" + format_num(adventure_data["slots_time"], false) + " tokens)<br />");
                     $("#events_content span").last().click(function () {
                         if (adventure_data["casino_tokens"] >= adventure_data["slots_time"]) {
@@ -164,7 +164,7 @@
                         }
                     });
                 }
-                if (adventure_data["slots_reward"] < 5) {
+                if (adventure_data["slots_reward"] < 5) { /* Yet another arbitrary value. */
                     var cost_1 = Math.pow(2, adventure_data["slots_reward"]) + adventure_data["slots_reward"];
                     $("#events_content").append("<span class='clickable'>Increase</span> slot machine reward (" + format_num(cost_1, false) + " tokens)<br />");
                     $("#events_content span").last().click(function () {
@@ -175,7 +175,7 @@
                         }
                     });
                 }
-                if (adventure_data["casino_tokens"] >= 25) {
+                if (adventure_data["casino_tokens"] >= 25) { /* They have a bunch of tokens. */
                     $("#events_content").append("<table id='slot_prizes'><caption>Prize Wall</caption></table>");
                     $("#slot_prizes").append("<tr><th>Prize</td><th>Token Cost</td></tr>");
                     $("#slot_prizes").append("<tr><td class='clickable'>500 Steel</td><td>10</td></tr>");

@@ -138,7 +138,7 @@ function s_workshop(newopt) {
     else {
         $("#workshop_prod").html(workshop_tooltips[newopt]); /* Set tooltip to new val */
     }
-    if (comp_state) {
+    if (comp_state) { /* Only turn on if it already was on */
         resources["mana"].amount = 50; /* Make sure they have enough mana because it hasn't been set yet. */
         toggle_building_state("s_workshop");
     }
@@ -151,12 +151,12 @@ function s_refinery(amount) {
         return;
     }
     /* Check to make sure we have enough mana before refining. */
-    if (resources["mana"].amount < amount) {
+    if (resources["mana"].amount < amount) { /* Not enough! */
         amount = resources["mana"].amount; /* Only make as much as we can */
     }
     resources_per_sec["mana"] -= amount;
     resources["refined_mana"].amount += amount * 1000;
-    if (event_flags["skills"] && event_flags["skills"][1]) {
+    if (event_flags["skills"] && event_flags["skills"][1]) { /* They get double from refining. */
         resources["refined_mana"].amount += amount * 1000;
     }
     buildings["s_mana_refinery"].generation["mana"] -= amount; /* Take away per sec right now and add per sec cost to building for reloads.*/
@@ -334,7 +334,7 @@ function s_workshop_update(delta_time) {
         $("#workshop_const_shield").removeClass("hidden");
     }
     /* Tick building */
-    if (workshop_item == "") {
+    if (workshop_item == "") { /* No item set. Progress bar full. */
         workshop_elapsed_time = 0;
         $("#workshop_progress_bar").css("width", "17.5em");
         $("#workshop_progress_bar").css("background-color", "green");
@@ -377,7 +377,7 @@ var enchantments = {
                 buildings["s_enchantment"]["generation"]["gold"] = 0;
             }
             buildings["s_enchantment"]["generation"]["gold"] += 1 / 500;
-            if (build_state) {
+            if (build_state) { /* Only turn on if it already was on */
                 toggle_building_state("s_enchantment");
             }
         },
@@ -394,7 +394,7 @@ var enchantments = {
                 buildings["s_enchantment"]["generation"]["energy"] = 0;
             }
             buildings["s_enchantment"]["generation"]["energy"] += 1 / 500;
-            if (build_state) {
+            if (build_state) { /* Only turn on if it already was on */
                 toggle_building_state("s_enchantment");
             }
         },
@@ -411,7 +411,7 @@ var enchantments = {
                 buildings["s_enchantment"]["generation"]["research"] = 0;
             }
             buildings["s_enchantment"]["generation"]["research"] += 3 / 500;
-            if (build_state) {
+            if (build_state) { /* Only turn on if it already was on */
                 toggle_building_state("s_enchantment");
             }
         },
@@ -454,7 +454,7 @@ function s_enchant_set(enchant) {
 }
 function s_enchant_update(delta_time) {
     /* Tick building */
-    if (buildings["s_enchantment"].item == "") {
+    if (buildings["s_enchantment"].item == "") { /* No item set. Progress bar full. */
         buildings["s_enchantment"].time_left = 0;
         $("#enchantment_progress_bar").css("width", "17.5em");
         $("#enchantment_progress_bar").css("background-color", "green");

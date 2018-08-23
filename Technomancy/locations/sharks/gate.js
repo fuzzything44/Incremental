@@ -49,7 +49,7 @@
                 if (adventure_data["challenges_completed"] == undefined) {
                     adventure_data["challenges_completed"] = Array(CHALLENGES.TOTAL_AMOUNT).fill(false); /* Completed no challenges. */
                 }
-                if (adventure_data["challenges_completed"].length < CHALLENGES.TOTAL_AMOUNT) {
+                if (adventure_data["challenges_completed"].length < CHALLENGES.TOTAL_AMOUNT) { /* If not enough challenges in here, add them. */
                     adventure_data["challenges_completed"] = adventure_data["challenges_completed"].concat(Array(CHALLENGES.TOTAL_AMOUNT - adventure_data["challenges_completed"].length).fill(false));
                 }
                 if (adventure_data["challenges_completed"][CHALLENGES.BASIC]) {

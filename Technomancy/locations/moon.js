@@ -69,7 +69,7 @@
                             toggle_building_state("hydrogen_mine");
                         }
                         buildings["hydrogen_mine"].amount += 1;
-                        if (comp_state) {
+                        if (comp_state) { /* Only turn on if it already was on */
                             toggle_building_state("hydrogen_mine");
                         }
                         $("#building_hydrogen_mine > .building_amount").html(buildings["hydrogen_mine"].amount.toString());

@@ -344,7 +344,7 @@ var equipment = {
                         case "copper": {
                             return ((vsum + data.shape) % 4) == 1;
                         }
-                        case "lead": {
+                        case "lead": { /* Yes, we skipped == 2. There's intentionally no lever there. */
                             return ((vsum + data.shape) % 4) == 3;
                         }
                         case "squishy": {
@@ -476,10 +476,10 @@ var equipment = {
                     }
                     if (data.levers.ghostly) {
                         /* Collatz points. */
-                        if (data.points % 2) {
+                        if (data.points % 2) { /* Odd points */
                             modification.points += data.points * 2 + 1;
                         }
-                        else {
+                        else { /* Even points */
                             modification.points -= data.points / 2;
                         }
                     }

@@ -29,7 +29,7 @@
                 progress_values.forEach(function (val) {
                     if (adventure_data["maze_progress"][val]) {
                         progress.push(progress_text[val]);
-                        if (Math.random() > .5) {
+                        if (Math.random() > .5) { /* Some slight extra randomization. */
                             progress.reverse();
                         }
                     }

@@ -1,5 +1,5 @@
 ﻿let TOWER_DATA = [
-    { /* Boss 0. */
+    { /* Boss 0. "Noodles" */
         "boss": "a noodle",
         "text": "It's just a wet noodle",
         "reward_text": "nothing, sorry",
@@ -49,10 +49,10 @@
             adventure_data["tower_toughness"] += 10;
         }
     },
-    { /* Boss 6. */
+    { /* Boss 6. "Things that rhyme with Trimp" */
         "boss": "a shrimp",
         "text": "This is literally just a normal shrimp. How is it more powerful than the god you just killed?",
-        "reward_text": "starting each prestige with 600 time",
+        "reward_text": "600 starting time each prestige",
         reward: function () {
             if (adventure_data["perm_resources"] == undefined) {
                 adventure_data["perm_resources"] = {};
@@ -79,9 +79,6 @@
         "text": "He's about to mess up your face with his dope bling. Better fight back.",
         "reward_text": "a few (20) purified mana to start each prestige with",
         reward: function () {
-            if (adventure_data["perm_resources"] == undefined) {
-                adventure_data["perm_resources"] = {};
-            }
             adventure_data["perm_resources"]["purified_mana"] = 20;
         }
     },
@@ -91,6 +88,44 @@
         "reward_text": "a new party member",
         reward: function () {
             adventure_data["tower_healer"] = {"power": 10, "health": 5, "action": "heal"};
+        }
+    },
+    { /* Boss 11. "Spooky stuff" */
+        "boss": "the monster under your bed",
+        "text": "It's a completely different species than the monster in your closet.",
+        "reward_text": "an upgrade for your healer",
+        reward: function () {
+            adventure_data["tower_healer"].power *= 2;
+        }
+    },
+    { /* Boss 12 */
+        "boss": "the monster in your closet",
+        "text": "It's a completely different species than the monster under your bed.",
+        "reward_text": "an upgrade for your healer",
+        reward: function () {
+            adventure_data["tower_healer"].power *= 1.5;
+        }
+    },
+    { /* Boss 13 */
+        "boss": "a vampyre",
+        "text": "The y makes it spookier than your regular vampire. It also makes it much more flammable.",
+        "reward_text": "100 fuel every prestige",
+        reward: function () {
+            adventure_data["perm_resources"]["fuel"] = 100;
+        }
+    },
+    { /* Boss 14 */
+        "boss": "a glass of milk",
+        "text": "Wait, what's so scary about this?",
+        "reward_text": "a lowered cooldown on the tower of grinding",
+        reward: function () { }
+    },
+    { /* Boss 15 */
+        "boss": "mr. skeltal",
+        "text": "oh, no. he came to doot doot you because you didn't drink your milk. prepare your weak bones.",
+        "reward_text": "another party member (currently useless, because fuzzything44 is bad at stuff)",
+        reward: function () {
+            adventure_data["tower_warrior"] = { "power": 20, "health": 100, "action": "defend" };
         }
     },
 ]
@@ -186,13 +221,18 @@ function tower() {
     }
 
     if (adventure_data["grind_tower_time"] != undefined) {
-        if (Date.now() - adventure_data["grind_tower_time"] > 24 * 60 * 60 * 1000 || document.URL == "http://localhost:8000/") {
+        let grind_tower_time = 24 * 60 * 60;
+        if (adventure_data["tower_floor"] > 14) {
+            grind_tower_time -= 60 * 60; /* 1 hour quicker! */
+        }
+
+        if (Date.now() - adventure_data["grind_tower_time"] > grind_tower_time * 1000 || document.URL == "http://localhost:8000/") {
             $("#events_content").append("<span class='clickable'>Enter</span> the small tower nearby. (Costs one mana stone, enterable once every 24 hours). <br/>");
             $("#events_content span").last().click(function () { climb_tower(undefined, undefined, true) });
         } else {
             let date = new Date(null)
             let elapsed_time = (Date.now() - adventure_data["grind_tower_time"]) / 1000
-            date.setSeconds(24 * 60 * 60 - elapsed_time);
+            date.setSeconds(grind_tower_time - elapsed_time);
             let dates = date.toISOString().substr(11, 8);
             let result = dates.split(":")
             $("#events_content").append("The small tower is still closed. Come back in " + parseInt(result[0]).toString() + "hours " + parseInt(result[1]).toString() + " minutes<br/>");

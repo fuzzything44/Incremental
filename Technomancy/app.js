@@ -15,7 +15,7 @@ function format_num(num, show_decimals) {
     if (num == Infinity) {
         return "Yes";
     }
-    if (num < 100000) {
+    if (num < 100000) { /* Show more precise values if we aren't going to numberformat*/
         if (show_decimals) {
             return (Math.round(num * 1000) / 1000).toString();
         }
@@ -1116,7 +1116,7 @@ function set_initial_state() {
                 }
                 buildings["mine"]["generation"]["stone"] *= 2;
                 buildings["mine"]["generation"]["iron_ore"] *= 5;
-                if (mines_state) {
+                if (mines_state) { /* Only turn on if it already was on */
                     toggle_building_state("mine");
                 }
             },
@@ -1139,7 +1139,7 @@ function set_initial_state() {
                 }
                 buildings["logging"]["generation"]["wood"] *= 2;
                 buildings["logging"]["generation"]["coal"] *= 3;
-                if (build_state) {
+                if (build_state) { /* Only turn on if it already was on */
                     toggle_building_state("logging");
                 }
             },
@@ -1194,7 +1194,7 @@ function set_initial_state() {
                 else {
                     buildings["mine"]["generation"]["coal"] = 0.2;
                 }
-                if (mines_state) {
+                if (mines_state) { /* Only turn on if it already was on */
                     toggle_building_state("mine");
                 }
             },
@@ -1216,7 +1216,7 @@ function set_initial_state() {
                     toggle_building_state("compressor");
                 }
                 buildings["compressor"]["generation"]["coal"] *= 0.7;
-                if (comp_state) {
+                if (comp_state) { /* Only turn on if it already was on */
                     toggle_building_state("compressor");
                 }
             },
@@ -1237,7 +1237,7 @@ function set_initial_state() {
                     toggle_building_state("compressor");
                 }
                 buildings["compressor"]["generation"]["coal"] *= 0.9;
-                if (comp_state) {
+                if (comp_state) { /* Only turn on if it already was on */
                     toggle_building_state("compressor");
                 }
             },
@@ -1257,7 +1257,7 @@ function set_initial_state() {
                     toggle_building_state("oil_well");
                 }
                 buildings["oil_well"]["generation"]["oil"] *= 5;
-                if (comp_state) {
+                if (comp_state) { /* Only turn on if it already was on */
                     toggle_building_state("oil_well");
                 }
             },
@@ -1277,7 +1277,7 @@ function set_initial_state() {
                     toggle_building_state("oil_well");
                 }
                 buildings["oil_well"]["generation"]["oil"] *= 2;
-                if (comp_state) {
+                if (comp_state) { /* Only turn on if it already was on */
                     toggle_building_state("oil_well");
                 }
             },
@@ -1312,7 +1312,7 @@ function set_initial_state() {
                     toggle_building_state("paper_mill");
                 }
                 buildings["paper_mill"]["generation"]["paper"] *= 2;
-                if (comp_state) {
+                if (comp_state) { /* Only turn on if it already was on */
                     toggle_building_state("paper_mill");
                 }
             },
@@ -1338,7 +1338,7 @@ function set_initial_state() {
                     buildings["furnace"].generation[res] *= 10;
                 });
                 buildings["furnace"].generation["wood"] *= .7;
-                if (comp_state) {
+                if (comp_state) { /* Only turn on if it already was on */
                     toggle_building_state("furnace");
                 }
             },
@@ -1362,7 +1362,7 @@ function set_initial_state() {
                 }
                 buildings["gold_finder"].generation["gold"] *= 2;
                 buildings["gold_finder"].generation["iron"] = 0.05;
-                if (comp_state) {
+                if (comp_state) { /* Only turn on if it already was on */
                     toggle_building_state("gold_finder");
                 }
             },
@@ -1385,7 +1385,7 @@ function set_initial_state() {
                 }
                 buildings["hydrogen_burner"].generation["energy"] += 5;
                 buildings["hydrogen_burner"].generation["water"] += 3;
-                if (comp_state) {
+                if (comp_state) { /* Only turn on if it already was on */
                     toggle_building_state("hydrogen_burner");
                 }
             },
@@ -1409,7 +1409,7 @@ function set_initial_state() {
                 }
                 buildings["gold_finder"].generation["sand"] = 2;
                 buildings["gold_finder"].generation["gold"] *= 2;
-                if (comp_state) {
+                if (comp_state) { /* Only turn on if it already was on */
                     toggle_building_state("gold_finder");
                 }
             },
@@ -1432,7 +1432,7 @@ function set_initial_state() {
                 }
                 buildings["furnace"].generation["sand"] = -5;
                 buildings["furnace"].generation["glass"] = 1;
-                if (comp_state) {
+                if (comp_state) { /* Only turn on if it already was on */
                     toggle_building_state("furnace");
                 }
             },
@@ -1496,7 +1496,7 @@ function set_initial_state() {
                     toggle_building_state("jeweler");
                 }
                 buildings["jeweler"]["generation"]["diamond"] *= .8;
-                if (comp_state) {
+                if (comp_state) { /* Only turn on if it already was on */
                     toggle_building_state("jeweler");
                 }
             },
@@ -1520,7 +1520,7 @@ function set_initial_state() {
                 }
                 buildings["jewelry_store"]["generation"]["money"] *= 2;
                 buildings["jewelry_store"]["generation"]["manager"] = -1;
-                if (comp_state) {
+                if (comp_state) { /* Only turn on if it already was on */
                     toggle_building_state("jewelry_store");
                 }
             },
@@ -1565,7 +1565,7 @@ function set_initial_state() {
                     toggle_building_state("s_time_magic");
                 }
                 buildings["s_time_magic"]["amount"] -= 10;
-                if (comp_state) {
+                if (comp_state) { /* Only turn on if it already was on */
                     toggle_building_state("s_time_magic");
                 }
                 $("#building_s_time_magic > .building_amount").text("30");
@@ -1598,7 +1598,7 @@ function set_initial_state() {
                     toggle_building_state("big_mine");
                 }
                 buildings["big_mine"]["generation"]["uranium"] = .01;
-                if (comp_state) {
+                if (comp_state) { /* Only turn on if it already was on */
                     toggle_building_state("big_mine");
                 }
             },
@@ -1719,7 +1719,7 @@ function set_initial_state() {
                 }
                 buildings["glass_jeweler"]["generation"]["jewelry"] = 0;
                 buildings["glass_jeweler"]["generation"]["glass_bottle"] = 0.01;
-                if (comp_state) {
+                if (comp_state) { /* Only turn on if it already was on */
                     toggle_building_state("glass_jeweler");
                 }
             },
@@ -1750,7 +1750,7 @@ function set_initial_state() {
                 buildings["bank"]["generation"]["money"] *= 10;
                 event_flags["crisis_slow_1_increase"]++;
                 remaining_upgrades["money_crisis_slow_1"].name = ["Raise Taxes", "Lower Taxes"][Math.random() > 0.5 ? 1 : 0];
-                if (comp_state) {
+                if (comp_state) { /* Only turn on if it already was on */
                     toggle_building_state("bank");
                 }
             },
@@ -1789,7 +1789,7 @@ function set_initial_state() {
                     toggle_building_state("bank");
                 }
                 buildings["bank"].generation["money"] = 50;
-                if (comp_state) {
+                if (comp_state) { /* Only turn on if it already was on */
                     toggle_building_state("bank");
                 }
                 /* Fix investments */
@@ -1798,7 +1798,7 @@ function set_initial_state() {
                     toggle_building_state("big_bank");
                 }
                 buildings["big_bank"].generation["money"] = 500;
-                if (comp_state) {
+                if (comp_state) { /* Only turn on if it already was on */
                     toggle_building_state("big_bank");
                 }
             },
@@ -1838,7 +1838,7 @@ function set_initial_state() {
                 }
                 buildings["oil_well"].amount = 25;
                 purchase_building("oil_well", 0); /* Actually updates amount show. */
-                if (comp_state) {
+                if (comp_state) { /* Only turn on if it already was on */
                     toggle_building_state("oil_well");
                 }
                 buildings["oil_well"].base_cost = {};
@@ -1849,7 +1849,7 @@ function set_initial_state() {
                 }
                 buildings["oil_engine"].amount = 10;
                 update_building_amount("oil_engine"); /* Actually updates amount show. */
-                if (comp_state) {
+                if (comp_state) { /* Only turn on if it already was on */
                     toggle_building_state("oil_engine");
                 }
                 buildings["oil_engine"].base_cost = {};
@@ -1860,7 +1860,7 @@ function set_initial_state() {
                 }
                 buildings["ink_refinery"].amount = 5;
                 update_building_amount("ink_refinery"); /* Actually updates amount show. */
-                if (comp_state) {
+                if (comp_state) { /* Only turn on if it already was on */
                     toggle_building_state("ink_refinery");
                 }
                 buildings["ink_refinery"].price_ratio["money"] = 2;
@@ -1979,7 +1979,7 @@ function set_initial_state() {
                     toggle_building_state("mana_purifier");
                 }
                 buildings["mana_purifier"].amount = 1;
-                if (build_state) {
+                if (build_state) { /* Only turn on if it already was on */
                     toggle_building_state("mana_purifier");
                 }
                 $("#building_mana_purifier  > .building_amount").html(format_num(buildings["mana_purifier"].amount, false));
@@ -2056,7 +2056,7 @@ function set_initial_state() {
                     $("#current_seed").html("Clearing plants");
                 });
                 var _loop_1 = function (i) {
-                    var _loop_2 = function (j) {
+                    var _loop_3 = function (j) {
                         var plot = $("#events_content table tr:eq(" + j.toString() + ") td:eq(" + i.toString() + ")");
                         var plot_data = event_flags["garden"][i][j];
                         if (event_flags["garden"][i][j] == null) {
@@ -2123,7 +2123,7 @@ function set_initial_state() {
                                     _this.purchase(false);
                                 });
                             }
-                            else {
+                            else { /* Fully grown, ready to pick I guess. */
                                 plot.append("Ready for harvest");
                                 plot.click(function () {
                                     var message = SEED_FUNCS[plot_data.harvest](plot_data);
@@ -2135,14 +2135,14 @@ function set_initial_state() {
                         }
                     };
                     for (var j = 0; j < 3; j++) {
-                        _loop_2(j);
+                        _loop_3(j);
                     }
                 };
                 /* Set up all cell contents. */
                 for (var i = 0; i < 3; i++) {
                     _loop_1(i);
                 }
-                var _loop_3 = function (i) {
+                var _loop_2 = function (i) {
                     var index = i;
                     var seed = event_flags["seeds"][i];
                     $("#events_content").append("<span class='clickable'>Plant</span> " + seed.name + "<br />");
@@ -2152,7 +2152,7 @@ function set_initial_state() {
                     });
                 };
                 for (var i = 0; i < event_flags["seeds"].length; i++) {
-                    _loop_3(i);
+                    _loop_2(i);
                 }
                 $("#events").removeClass("hidden");
                 /* Keep refreshing for plant updates. */
@@ -2199,7 +2199,7 @@ function set_initial_state() {
                 buildings["challenge_basic"]["amount"] *= 2;
                 buildings["challenge_basic"]["amount"] += 5;
                 update_building_amount("challenge_basic");
-                if (build_state) {
+                if (build_state) { /* Only turn on if it already was on */
                     toggle_building_state("challenge_basic");
                 }
                 /* Upgrade medium boosters */
@@ -2210,7 +2210,7 @@ function set_initial_state() {
                 buildings["challenge_medium"]["amount"] *= 2;
                 buildings["challenge_medium"]["amount"] += 5;
                 update_building_amount("challenge_medium");
-                if (build_state) {
+                if (build_state) { /* Only turn on if it already was on */
                     toggle_building_state("challenge_medium");
                 }
                 /* Upgrade advanced boosters */
@@ -2221,7 +2221,7 @@ function set_initial_state() {
                 buildings["challenge_advanced"]["amount"] *= 2;
                 buildings["challenge_advanced"]["amount"] += 5;
                 update_building_amount("challenge_advanced");
-                if (build_state) {
+                if (build_state) { /* Only turn on if it already was on */
                     toggle_building_state("challenge_advanced");
                 }
             },
@@ -2244,7 +2244,7 @@ function set_initial_state() {
                 }
                 buildings["jewelry_store"]["generation"]["money"] *= 2;
                 update_building_amount("jewelry_store");
-                if (build_state) {
+                if (build_state) { /* Only turn on if it already was on */
                     toggle_building_state("jewelry_store");
                 }
             },
@@ -2266,6 +2266,7 @@ function set_initial_state() {
                 }
                 buildings["s_ai"].amount = 100;
                 $("#building_s_ai").parent().removeClass("hidden");
+                update_building_amount("s_ai"); /* Previously, there were infinite of these to keep it hidden. Let's update to proper amount. */
             },
             "cost": {
                 "refined_mana": 5000,
@@ -2366,15 +2367,15 @@ var prestige = {
         var mana_gain = prestige_points / 15000 - Math.pow(mana, 1.3) * .5; /* One for every 15k pp, and apply reduction based off of current mana */
         mana_gain = Math.pow(Math.max(0, mana_gain), .36); /* Then raise to .36 power and apply some rounding/checking */
         mana_gain = mana_gain / (1 + Math.floor(mana / 50) * .5); /* Then divide gain by a number increasing every 50 mana. */
-        if (mana_gain > 50) {
+        if (mana_gain > 50) { /* If they're getting a ton, they get less*/
             mana_gain = 50 + (mana_gain - 50) / 2;
         }
         mana_gain -= mana_this_prestige; /* Take out what they already got. */
-        if (event_flags["skills"] != undefined && event_flags["skills"][8]) {
-            if (event_flags["mage_quickmana"] == undefined) {
+        if (event_flags["skills"] != undefined && event_flags["skills"][8]) { /* They have the quick mana skill */
+            if (event_flags["mage_quickmana"] == undefined) { /* Quickly define this. */
                 event_flags["mage_quickmana"] = 0;
             }
-            if (mana_gain >= 1) {
+            if (mana_gain >= 1) { /* Give some mana. */
                 var gained = Math.floor(mana_gain);
                 event_flags["mage_quickmana"] += gained;
                 buildings["s_manastone"].amount += gained;
@@ -2464,7 +2465,7 @@ var prestige = {
     }
 };
 function add_log_elem(to_add) {
-    while ($("#log > span").length >= 10) {
+    while ($("#log > span").length >= 10) { /* We want to remove the last element(s) to bring length to 9.*/
         $("#log > span").last().remove(); /* Remove last child. Repeat until no more. */
     }
     $("#log").prepend("<span>" + to_add + "<br />" + "</span>");
@@ -2670,7 +2671,7 @@ function resource_tooltip() {
 }
 function toggle_building_state(name, sudo) {
     if (sudo === void 0) { sudo = false; }
-    if (buildings[name].on) {
+    if (buildings[name].on) { /* Turn it off */
         /* A couple buildings shouldn't be turned off unless forced off. */
         if (name == "s_mana_refinery" || name == "s_essence") {
             if (!sudo)
@@ -2694,7 +2695,7 @@ function toggle_building_state(name, sudo) {
         $("#toggle_" + name).removeClass("building_state_on");
         $("#toggle_" + name).text("Off");
     }
-    else {
+    else { /* Turn it on */
         /* Make sure we can run for 1s first */
         try {
             Object.keys(buildings[name].generation).forEach(function (key) {
@@ -2740,7 +2741,7 @@ function update() {
     /* Find time since last update. */
     var delta_time = Date.now() - last_update;
     last_update = Date.now();
-    if (delta_time > 15000) {
+    if (delta_time > 15000) { /* More than 15 sec between tics and it's offline gen time. */
         resources["time"].amount += delta_time / 1000; /* 1 sec of production, rest goes to time. */
         /* This is where offline events go. We say we get 1 every 30 minutes. */
         if (event_flags["skills"] && event_flags["skills"][2]) {
@@ -2756,12 +2757,12 @@ function update() {
     }
     if (time_on) {
         /* Find how much time they will use up */
-        if (resources["time"].amount < 10) {
+        if (resources["time"].amount < 10) { /* Not enough for a full addition to the tick. */
             delta_time += resources["time"].amount * 1000; /* Give extra production for however much they can get, and remove that much time. */
             toggle_time();
             resources["time"].amount = 0;
         }
-        else {
+        else { /* Add 10s of production to this tick and remove the time. */
             delta_time += 10000;
             resources["time"].amount -= 10;
             /* They bought a boost! Use time on a percent base.*/
@@ -2831,7 +2832,7 @@ function update() {
                 resources[key].amount += resources_per_sec[key] * delta_time / 1000;
             }
         }
-        else {
+        else { /* We have as much of specialty resources as we generate */
             resources[key].amount = resources_per_sec[key];
         }
         /* Formats it so that it says "Resource name: amount" */
@@ -2959,7 +2960,7 @@ function gen_building_tooltip(name) {
     var gen_text = "";
     /* Add resource gen, update how much each one generates. */
     Object.keys(buildings[name].generation).forEach(function (key) {
-        if (resources[key].value) {
+        if (resources[key].value) { /* Add X per second for regular resources */
             gen_text += format_num(buildings[name].generation[key]) + " " + key.replace("_", " ") + "/s, ";
         }
         else {
@@ -3140,7 +3141,7 @@ function purchase_upgrade(name) {
     var upg = remaining_upgrades[name];
     /* Check that they have enough */
     Object.keys(upg.cost).forEach(function (resource) {
-        if (resources[resource].amount < upg.cost[resource]) {
+        if (resources[resource].amount < upg.cost[resource]) { /* Don't have enough to buy upgrade */
             add_log_elem("Not enough resources! Missing: " + resource.replace("_", " "));
             throw Error("Not enough resources!");
         }
@@ -3482,7 +3483,7 @@ function draw_erule() {
 function run_rules() {
     Object.keys(rules).forEach(function (rname) {
         var rule = rules[rname];
-        if (rule["active"]) {
+        if (rule["active"]) { /* It's turned on, so we need to run it. */
             /* Check the condition. Set up a dict of funcs so we can easily compare. */
             var compares = { "<": function (a, b) { return a < b; }, ">": function (a, b) { return a > b; } };
             /* Check if the rule turns out to match. So if the proper comparison with the actual resource (need to get _s back) succeeds...*/
@@ -3532,9 +3533,9 @@ function perm_bag() {
     $("#events_topbar").html("Magic Bag of Folding");
     $("#events_content").html("This is your bag of folding. You put resources in, and then get a fraction of them out every prestige. You currently have " + adventure_data["perm_bag_bits"].toString() + " pieces of mithril cloth. Unlocking space for a new resource takes one piece of cloth. <br/><table></table>");
     Object.keys(resources).forEach(function (res) {
-        if (resources[res].value > 0 && (resources[res].amount > 0 || adventure_data["perm_resources"][res])) {
+        if (resources[res].value > 0 && (resources[res].amount > 0 || adventure_data["perm_resources"][res])) { /* We only can store resources with > 0 value. Also only show resources the player knows about. */
             var rname = (res.charAt(0).toUpperCase() + res.slice(1)).replace("_", " ");
-            if (adventure_data["perm_resources"][res] != undefined) {
+            if (adventure_data["perm_resources"][res] != undefined) { /* This is unlocked for storage*/
                 var res_on_p = Math.pow(adventure_data["perm_resources"][res], 2 / 3);
                 $("#events_content table").append("<tr><td>" + rname + "</td><td>Current Stored: " + format_num(adventure_data["perm_resources"][res], true) + "</td><td>Gained on Prestige: " + format_num(res_on_p, true) + "</td><td><span class='clickable'>Deposit</span> all into bag. </td></tr>");
                 $("#events_content span").last().click(function () {
@@ -3543,7 +3544,7 @@ function perm_bag() {
                     perm_bag();
                 });
             }
-            else {
+            else { /* Still need to unlock it. */
                 $("#events_content table").append("<tr><td>" + rname + "</td><td><span class='clickable'>Unlock</span></td></tr>");
                 $("#events_content span").last().click(function () {
                     if (adventure_data["perm_bag_bits"] > 0) {
@@ -3605,7 +3606,7 @@ window.onload = function () {
         if (resources["money"].amount < 10) {
             resources["money"].amount = 10;
         }
-        if (buildings["s_manastone"].amount >= 400 || adventure_data["challenge"]) {
+        if (buildings["s_manastone"].amount >= 400 || adventure_data["challenge"]) { /* Lets them open adventure/challenge menu right away. */
             resources["fuel"].amount += 0.3;
         }
         /* Give on prestige resources. */
@@ -3632,15 +3633,15 @@ window.onload = function () {
         /* Add more start buildings if they completed basic challenge. */
         if (adventure_data["challenges_completed"] && adventure_data["challenges_completed"][CHALLENGES.BASIC]) {
             var extra_mana = buildings["s_manastone"].amount - 100; /* How much mana over the 100 they are. */
-            if (Math.pow(extra_mana / 10, 0.5) >= 1) {
+            if (Math.pow(extra_mana / 10, 0.5) >= 1) { /* They get one at 10 extra, then 40 extra, then 90... */
                 var extra_basics = Math.min(25, Math.floor(Math.pow(extra_mana / 10, 0.5))); /* How many they're getting. Cap at 25 to not make the start list way too long. */
                 start_buildings = start_buildings.concat(Array(extra_basics).fill("challenge_basic")); /* Add that many to the list. These all get added because each takes much more than 1 mana to get, so we'll definitely loop through it. */
             }
-            if (Math.pow(extra_mana / 50, 0.5) >= 1) {
+            if (Math.pow(extra_mana / 50, 0.5) >= 1) { /* Quadratic again, but * 50 instead of 10 */
                 var extra_basics = Math.min(25, Math.floor(Math.pow(extra_mana / 50, 0.5))); /* How many they're getting. Cap at 25 to not make the start list way too long. */
                 start_buildings = start_buildings.concat(Array(extra_basics).fill("challenge_medium")); /* Add that many to the list. These all get added because each takes much more than 1 mana to get, so we'll definitely loop through it. */
             }
-            if (Math.pow(extra_mana / 100, 0.5) >= 1) {
+            if (Math.pow(extra_mana / 100, 0.5) >= 1) { /* And finally the hundreds. Is this too hard to get? Maybe. */
                 var extra_basics = Math.min(25, Math.floor(Math.pow(extra_mana / 100, 0.5))); /* How many they're getting. Cap at 25 to not make the start list way too long. */
                 start_buildings = start_buildings.concat(Array(extra_basics).fill("challenge_advanced")); /* Add that many to the list. These all get added because each takes much more than 1 mana to get, so we'll definitely loop through it. */
             }
@@ -3657,12 +3658,12 @@ window.onload = function () {
             }
             buildings[bname].amount++;
             buildings[bname].free++;
-            if (comp_state) {
+            if (comp_state) { /* Only turn on if it already was on */
                 toggle_building_state(bname);
             }
             $("#building_" + bname + "  > .building_amount").html(format_num(buildings[bname].amount, false));
         }
-        if (adventure_data["challenges_completed"]) {
+        if (adventure_data["challenges_completed"]) { /* This has been defined */
             /* They have a poverty challenge completion.  */
             if (adventure_data["challenges_completed"].length >= CHALLENGES.POVERTY && adventure_data["challenges_completed"][CHALLENGES.POVERTY]) {
                 /* Make sure it's defined to not get fuzzy production. */
@@ -3725,10 +3726,10 @@ window.onload = function () {
         if (adventure_data["challenges_completed"].length >= CHALLENGES.METEORS && adventure_data["challenges_completed"][CHALLENGES.METEORS]) {
             challenge_hydrogen_cap = 50;
         }
-        if (adventure_data["challenge"] && buildings["hydrogen_mine"].amount > challenge_hydrogen_cap) {
+        if (adventure_data["challenge"] && buildings["hydrogen_mine"].amount > challenge_hydrogen_cap) { /* If they're in a challenge, cap at 5 */
             buildings["hydrogen_mine"].amount = challenge_hydrogen_cap; /* TODO: Maybe a challenge reward raises this cap? */
         }
-        if (comp_state) {
+        if (comp_state) { /* Only turn on if it already was on */
             toggle_building_state("hydrogen_mine");
         }
         $("#building_hydrogen_mine  > .building_amount").html(format_num(buildings["hydrogen_mine"].amount, false));
@@ -3739,7 +3740,7 @@ window.onload = function () {
             toggle_building_state("mana_purifier");
         }
         buildings["mana_purifier"].amount = adventure_data["mana_purifier"];
-        if (comp_state) {
+        if (comp_state) { /* Only turn on if it already was on */
             toggle_building_state("mana_purifier");
         }
         $("#building_mana_purifier  > .building_amount").html(format_num(buildings["mana_purifier"].amount, false));

@@ -2415,6 +2415,7 @@ function set_initial_state() {
                 buildings["s_ai"].amount = 100;
                 $("#building_s_ai").parent().removeClass("hidden");
 
+                update_building_amount("s_ai"); /* Previously, there were infinite of these to keep it hidden. Let's update to proper amount. */
             },
             "cost": {
                 "refined_mana": 5000,

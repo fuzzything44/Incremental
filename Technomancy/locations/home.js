@@ -400,7 +400,7 @@
                                         return true;
                                     }
                                     var index_1 = i;
-                                    if (event_flags["know_pts"] >= COSTS_1[index_1] && prereqs_satisfied(index_1)) {
+                                    if (event_flags["know_pts"] >= COSTS_1[index_1] && prereqs_satisfied(index_1)) { /* Have enough KP */
                                         $("#skill_tree .skill_box").eq(index_1).click(function () {
                                             event_flags["skills"][index_1] = true;
                                             event_flags["know_pts"] -= COSTS_1[index_1];
@@ -437,7 +437,7 @@
                                         /* Give a free magnet. */
                                         buildings["magnet"].amount++;
                                         buildings["magnet"].free++;
-                                        if (build_state) {
+                                        if (build_state) { /* Only turn on if it already was on */
                                             toggle_building_state("magnet");
                                         }
                                         /* Spend costs. */
@@ -464,7 +464,7 @@
                                     }
                                     /* Give a free magnet. */
                                     buildings["book_boost"].amount++;
-                                    if (build_state) {
+                                    if (build_state) { /* Only turn on if it already was on */
                                         toggle_building_state("book_boost");
                                     }
                                     /* Spend costs. */
@@ -489,7 +489,7 @@
                                             }
                                             buildings["steel_smelter"].amount--;
                                             buildings["steel_smelter"].free--;
-                                            if (build_state) {
+                                            if (build_state) { /* Only turn on if it already was on */
                                                 toggle_building_state("steel_smelter");
                                             }
                                             /* Giving the forge. */
@@ -498,7 +498,7 @@
                                                 toggle_building_state("mithril_smelter");
                                             }
                                             buildings["mithril_smelter"].amount++;
-                                            if (build_state) {
+                                            if (build_state) { /* Only turn on if it already was on */
                                                 toggle_building_state("mithril_smelter");
                                             }
                                             /* Spend knowledge point. */
@@ -525,7 +525,7 @@
                                 var cost_1 = 1000 * (event_flags["buildings_fortified"] + 1) * (event_flags["buildings_fortified"] + 1);
                                 $("#events_content").append("You could fortify a building for " + cost_1.toString() + " steel and 10 KP<br />");
                                 Object.keys(buildings).forEach(function (build) {
-                                    if (SPELL_BUILDINGS.indexOf(build) == -1 && buildings[build].amount > 10 && buildings[build]["prefix"] == undefined) {
+                                    if (SPELL_BUILDINGS.indexOf(build) == -1 && buildings[build].amount > 10 && buildings[build]["prefix"] == undefined) { /* Regular building, they have a bunch of them, and not already upgrades. */
                                         $("#events_content").append("<span class='clickable'>Fortify</span> your " + $("#building_" + build + " .building_name").text() + "<br />");
                                         $("#events_content > span").last().click(function () {
                                             if (resources["steel_beam"].amount > cost_1 && event_flags["know_pts"] >= 10) {

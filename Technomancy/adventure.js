@@ -72,7 +72,7 @@ function travel(where) {
     if (where == adventure_data.current_location) {
         fuel_cost = to_where.leave_cost;
     }
-    if (where == "home") {
+    if (where == "home") { /* Going home never costs anything, not even exit costs. */
         fuel_cost = 0;
     }
     if (adventure_data.inventory_fuel >= fuel_cost) {
@@ -206,7 +206,7 @@ function set_equipment() {
         /* Add all engine items. */
         equip_mappings[type].forEach(function (item) {
             $("#events_content").append(item.equip.name);
-            if (type != "weapon") {
+            if (type != "weapon") { /* 3 weapon slots, so we need to treat them differently. */
                 $("#events_content").append("<span class='clickable' onclick='equip_item(\"" + type + "\"," + item.warehouse_index.toString() + ")'>Equip</span>");
             }
             else {
@@ -229,16 +229,16 @@ function run_adventure(location, can_reroll) {
     var forced_encounters = [];
     var total_weight = 0;
     var encounters = location_data.encounters;
-    if (location_data.leave_cost) {
+    if (location_data.leave_cost) { /* Global encounters can only happen in non-free zones. */
         encounters = encounters.concat(global_data.encounters);
     }
     encounters.forEach(function (loc) {
-        if (loc.condition()) {
-            if (loc.weight > 0) {
-                if (event_flags["skills"] && event_flags["c_nc_strong"] &&
-                    ((event_flags["skills"][5] && event_flags["skills"][10]) ||
-                        (event_flags["skills"][6] && event_flags["skills"][11]))) {
-                    if ((event_flags["skills"][5] && loc.types.indexOf("combat") != -1) ||
+        if (loc.condition()) { /* If the encounter can happen... */
+            if (loc.weight > 0) { /* If not forced encounter... */
+                if (event_flags["skills"] && event_flags["c_nc_strong"] && /* Strong encounter selection on.*/
+                    ((event_flags["skills"][5] && event_flags["skills"][10]) || /* They have normal and strong +combat*/
+                        (event_flags["skills"][6] && event_flags["skills"][11]))) { /* Or they have normal and strong -combat */
+                    if ( /* If it's a combat encounter and selection is set to combat, or it's noncombat and selection is set to noncombat...*/(event_flags["skills"][5] && loc.types.indexOf("combat") != -1) ||
                         (event_flags["skills"][6] && loc.types.indexOf("noncombat") != -1)) {
                         available_encounters.push(loc);
                         total_weight += loc.weight;
@@ -248,7 +248,7 @@ function run_adventure(location, can_reroll) {
                 else {
                     available_encounters.push(loc); /* Add encounter */
                     total_weight += loc.weight; /* Add weight to total. */
-                    if (event_flags["skills"]) {
+                    if (event_flags["skills"]) { /* Turn on combat/noncombat manipulators. */
                         if (event_flags["skills"][5] && loc.types.indexOf("combat") != -1) {
                             total_weight += loc.weight; /* Add weight to total. */
                         }
@@ -272,7 +272,7 @@ function run_adventure(location, can_reroll) {
         available_encounters.some(function (enc) {
             var wght = enc.weight;
             /* Encounters of the proper type have double weight. */
-            if (event_flags["skills"]) {
+            if (event_flags["skills"]) { /* Turn on combat/noncombat manipulators. */
                 if (event_flags["skills"][5] && enc.types.indexOf("combat") != -1) {
                     wght += enc.weight; /* Add weight to total. */
                 }
