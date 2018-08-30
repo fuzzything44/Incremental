@@ -24,12 +24,15 @@ function format_num(num, show_decimals) {
         }
     }
     else {
+        var sf = 3;
+        var fm = "standard";
+        if (localStorage["notation_sci"] == "true") {
+            fm = "scientific";
+        }
         if (show_decimals) {
-            return numberformat.formatShort(num, { sigfigs: 5 });
+            sf = 5;
         }
-        else {
-            return numberformat.formatShort(num, { sigfigs: 3 });
-        }
+        return numberformat.formatShort(num, { sigfigs: sf, format: fm });
     }
 }
 var resources = {};
@@ -3571,12 +3574,51 @@ function change_update() {
     }
     update_handler = setInterval(update, localStorage["update_interval"]);
 }
+function change_notation() {
+    if (localStorage["notation_sci"] == "true") {
+        localStorage["notation_sci"] = false;
+        $("#update_notation").html("Suffix Notation");
+    }
+    else {
+        localStorage["notation_sci"] = true;
+        $("#update_notation").html("Scientific Notation");
+    }
+}
+function cath_notifications() {
+    if (localStorage["cath_notify"] == "true") {
+        localStorage["cath_notify"] = false;
+        $("#update_cath_setting").html("Cath Notifications Off");
+    }
+    else {
+        localStorage["cath_notify"] = true;
+        $("#update_cath_setting").html("Cath Notifications On");
+    }
+}
 window.onload = function () {
     set_initial_state();
     load();
     if (localStorage["update_interval"] == undefined)
         localStorage["update_interval"] = 100;
     update_handler = setInterval(update, localStorage["update_interval"]);
+    /* Settings stuff */
+    if (localStorage["update_interval"] != 100) {
+        $("#update_speed_setting").html("Update Slow");
+    }
+    else {
+        $("#update_speed_setting").html("Update Fast");
+    }
+    if (localStorage["notation_sci"]) {
+        $("#update_notation").html("Suffix Notation");
+    }
+    else {
+        $("#update_notation").html("Scientific Notation");
+    }
+    if (localStorage["cath_notify"] == "true") {
+        $("#update_cath_setting").html("Cath Notifications Off");
+    }
+    else {
+        $("#update_cath_setting").html("Cath Notifications On");
+    }
     /* Add upgrades to be unhidden*/
     /* Loop through all remaining upgrades */
     Object.keys(remaining_upgrades).forEach(function (upg_name) {
@@ -3692,12 +3734,10 @@ window.onload = function () {
             resource_tooltip(); /* Refresh resource tooltips to get the changes we've been adding. */
         }
         if (adventure_data["current_essence"]) {
+            toggle_building_state("s_essence", true);
             buildings["s_essence"].amount = adventure_data["current_essence"];
-            resources_per_sec["essence"] = adventure_data["current_essence"];
-            try {
-                purchase_building("s_essence", 0);
-            }
-            catch (e) { } /* Update amount shown. */
+            toggle_building_state("s_essence");
+            update_building_amount("s_essence"); /* Update amount shown. */
         }
     } /* END start of prestige additions */
     if (adventure_data["perm_resources"] != undefined) {
@@ -3777,6 +3817,7 @@ window.onload = function () {
         if (e.key == "Escape" || e.key.toLowerCase() == "x") {
             $("#events").addClass("hidden");
             $("#character").addClass("hidden");
+            $("#settings").addClass("hidden");
         }
         /* Otherwise, we need to make sure we aren't actually trying to type something */
         if (document.activeElement.tagName == "INPUT") {
@@ -3832,6 +3873,9 @@ window.onload = function () {
                 if (!$("#building_s_energyboost").hasClass("hidden")) {
                     destroy_building('s_energyboost');
                 }
+            }
+            else if (e.key == "s") {
+                $("#settings").toggleClass("hidden");
             }
         }
         else if (hotkey_mode == 1) {

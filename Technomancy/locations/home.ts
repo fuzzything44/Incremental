@@ -50,7 +50,7 @@
             /* Handle adding of items to ship inventory. */
             $("#events_content > span").last().prev().click(function add_to_inv() {
                 $("#events_topbar").html("Stock Your Ship");
-                $("#events_content").html("<span>Add Fuel: <input id='add_fuel' type='number' min='1'/><span class='clickable'>Add!</span></span> (You have " + format_num(resources["fuel"].amount, false) + " fuel)<br />");
+                $("#events_content").html("<span>Add Fuel: <input id='add_fuel' type='number' min='1'/><span class='clickable'>Add!</span></span> (You have " + format_num(resources["fuel"].amount) + " fuel)<br />");
                 $("#events_content > span > span").last().click(function () {
                     let fuel_to_add = parseInt($("#add_fuel").val())
                     /* Check to make sure the ship has enough space. Space is total size - used space. */

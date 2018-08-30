@@ -33,6 +33,13 @@
                                 }
                                 event_flags["c_sell_" + resource] = Date.now();
                                 cat_market();
+                                setTimeout(60000 * 10, function () {
+                                    if (localStorage["cath_notify"] == "true") {
+                                        $("#events_topbar").html("Cath Resources Available!");
+                                        $("#events_content").html("You can now buy more " + resource.replace("_", " ") + " at Cath!");
+                                        $("#events").removeClass("hidden");
+                                    }
+                                });
                             });
                         }
                     });

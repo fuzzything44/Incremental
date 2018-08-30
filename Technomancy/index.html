@@ -25,21 +25,10 @@
 </head>
 <body class="bgc fgc">
     <div style="font-size: small; position:absolute; top: 0;">
-        <span id="version">?.?.?</span> | 
+        <a id="version" href="changelog.txt" target="_blank" class="fgc">?.?.?</a> |
+
         <span id="music"></span>
-        <a href="changelog.txt" target="_blank" style="text-decoration: none;" class="fgc">Changelog</a> |
-        <a href="http://crappy-incremental.wikia.com/wiki/Crappy_Incremental_Wiki" target="_blank" style="text-decoration: none;" class="fgc">Wiki</a> |
-        <a href="https://discord.gg/78AGWku" target="_blank" style="text-decoration: none;" class="fgc">Discord</a> |
-        <span onclick="save_to_clip()">Export</span> |
-        <span onclick="load_from_clip()">Import</span> |
-        <select id="theme_select" class="fgc bgc_second" onchange="if (event.target.value == 'crazy' && !confirm('Seizure warning: This has quickly flashing colors. Proceed?')) { return; } change_theme(event.target.value)">
-            <option value="light">Lights On</option>
-            <option value="dark">Lights Off</option>
-            <option value="crazy">STROBE!</option>
-            <option value="halloween">Lights Spooky</option>
-            <option value="christmas">Christmas Lights</option>
-        </select> |
-        <span id="update_speed_setting" onclick="change_update()">Update Slow</span>
+        <a href="#" onclick="$('#settings').toggleClass('hidden');" style="text-decoration: none;" class="fgc">Settings and Stuff</a>
         
         <span style="position: absolute; left: 42em; top: 0em; white-space: nowrap">Buy Amount: <input id="buy_amount" class="fgc bgc_second" style="border: none; width: 4em;" type="number" min="0"/></span>
         <span id="upgrade_count" class="tooltip" style="position: absolute; left: 55em; top: 0; white-space: nowrap;">
@@ -668,7 +657,6 @@
     <!-- End of building list. -->
     </div>
     <div id="upgrades">
-        <span id="reset" class="tooltip" onclick="if(confirm('Are you sure? This resets EVERYTHING!') && prompt('If you\'re absolutely sure, enter \'reset\'.') == 'reset') { localStorage.clear(); location.reload();}"><span>Reset</span><span class="tooltiptext fgc bgc_second">Resets ALL progress. There is NO bonus for this!</span></span>
         <span id="save" onclick="save();">Save</span>
         <span id="prestige" onclick="prestige.run();" class="tooltip">
             <span>Prestige</span>
@@ -713,9 +701,36 @@
         <div id="character_content"></div>
     </div>
     <div id="settings" class="hidden fgc bgc_second">
-        <div class="window_topbar">Settings</div>
+        <div class="window_topbar">
+            Settings
+            <span id="close_settings" onclick="$('#settings').addClass('hidden');">X</span>
+        </div>
         <div id="settings_content">
-            Settings will go here I guess. 
+            <b>Important Links and Resources</b><br />
+            <a href="changelog.txt" target="_blank" class="fgc">Changelog</a> |
+            <a href="http://crappy-incremental.wikia.com/wiki/Crappy_Incremental_Wiki" target="_blank" class="fgc">Wiki</a> |
+            <a href="https://discord.gg/78AGWku" target="_blank" class="fgc">Discord</a> |
+            <a href="#" class="fgc" onclick="save_to_clip()">Export</a> |
+            <a href="#" class="fgc" onclick="load_from_clip()">Import</a> <br />
+            <br />
+            <b>Settings</b><br />
+            <select id="theme_select" class="fgc bgc_second" onchange="if (event.target.value == 'crazy' && !confirm('Seizure warning: This has quickly flashing colors. Proceed?')) { return; } change_theme(event.target.value)">
+                <option value="light">Lights On</option>
+                <option value="dark">Lights Off</option>
+                <option value="crazy">STROBE!</option>
+                <option value="halloween">Lights Spooky</option>
+                <option value="christmas">Christmas Lights</option>
+            </select> |
+            <a href="#" class="fgc" id="update_speed_setting" onclick="change_update()">Update Slow</a> |
+            <a href="#" class="fgc" id="update_notation" onclick="change_notation()">Scientific Notation</a> |
+            <a href="#" class="fgc" id="update_cath_setting" onclick="cath_notifications()">Cat Notifications Off</a><br />
+            <br />
+            <b>Donate</b><br />
+            <a href="https://www.patreon.com/fuzzything44" target="_blank" class="fgc">Patreon</a><br />
+            <br />
+            <b>Reset Button</b><br />
+            Resets ALL progress. There is NO bonus for this!<br />
+            <span id="reset" style="background-color: #f22" onclick="if(confirm('Are you sure? This resets EVERYTHING!') && prompt('If you\'re absolutely sure, enter \'reset\'.') == 'reset') { localStorage.clear(); location.reload();}"><span>Reset</span></span><br />
         </div>
     </div>
 </body>

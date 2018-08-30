@@ -390,3 +390,42 @@ hr {
 .skill_box.buyable {
     border-color: green;
 }
+
+#settings {
+    position: fixed;
+    top: 8%;
+    left: 25%;
+
+    height: 80%;
+    width: 66%;
+    min-height: 35em;
+    min-width: 45em;
+    z-index: 1;
+
+    border: 1px solid;
+    border-radius: 3px;
+
+    align-content: center;
+    text-align: center;
+}
+
+#settings_content {
+    height: 90%;
+    overflow-y: scroll;
+}
+
+a {
+    text-decoration: none;
+}
+
+#close_settings {
+    position: absolute;
+    z-index: 100;
+    top: 0.3em;
+    right: 0.3em;
+    background-color: red;
+    border: 1px solid orange;
+    padding-left: .5em;
+    padding-right: .5em;
+    border-radius: 3px;
+}

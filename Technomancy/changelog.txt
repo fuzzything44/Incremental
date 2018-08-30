@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.4.1: (8/30/18) Settings
+When fueling your ship, it should show higher precision numbers for how much fuel you have. There's also now a settings menu for a bunch of stuff at top that was getting crowded. And a couple new things in there: You can (maybe) get notified when Cath resources are off cooldown, and you can use scientific notation instead of normal suffixes. Also there's a donate link that hopefully works.
+
 v5.4.0: (8/22/18) Even more tower
 Cath purchase timer should now reset on prestige. Also 5 new tower floors (and 4 new functional tower rewards. Next one coming soon!)
 
