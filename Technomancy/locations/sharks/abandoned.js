@@ -14,6 +14,9 @@
                 $("#events_content").html("The tar here is choking out all life.<br />");
                 $("#events_content").append("Only machines will remain. All will be lost.<br/><br/>");
                 $("#events_content").append("There is nothing you can do. Only watch.<br/>");
+                if (resources_per_sec["mana"] < 50 && adventure_data["auto_events"] == undefined) {
+                    $("#events_content").append("Maybe if you had more free mana you could learn something.<br/>");
+                }
                 if (resources_per_sec["mana"] >= 50 && adventure_data["rules_unlocked"] == undefined) {
                     $("#events_content").append("<span class='clickable'>Watch</span> the machines. <i>This will destroy some of your mana stones and your engines. Click with care. </i><br/>");
                     $("#events_content span").last().click(function () {

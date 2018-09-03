@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.5.0: (9/2/18) BUGS!
+Absolutely no testing in this version! It'll hopefully not break stuff too bad. Anyways, there's a few more hints for what to do in adventure (one at Piscine, one at Abandoned World, one at Cath when getting starchart). The settings menu is now not in the exact same place adventuring is because that annoyed me. Hopefully the game should now alert you when there's an update and you're still playing, but it might not. Workshop and enchanting table now tell you how they work (hopefully well enough) and enchanting table has some things changed to be more mechanically different than workshop. Workshop tells you to check your ship stock instead of warehouse. The warrior in the tower now (theoretically) can help fight for you. Don't let them die! Also, added 4 more floors to the tower. You can now beat up some random British dude and his brother!
+
 v5.4.1: (8/30/18) Settings
 When fueling your ship, it should show higher precision numbers for how much fuel you have. There's also now a settings menu for a bunch of stuff at top that was getting crowded. And a couple new things in there: You can (maybe) get notified when Cath resources are off cooldown, and you can use scientific notation instead of normal suffixes. Also there's a donate link that hopefully works.
 

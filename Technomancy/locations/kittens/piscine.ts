@@ -12,7 +12,7 @@
             "title": "Something Seems Fishy",
             "run_encounter": function () {
                 $("#events_content").html("Oh no! This planet is covered with dangerous methane! Your engines can't function in this atmosphere.<br/>");
-                $("#events_content").append("Get better engines and come back...<br />");
+                $("#events_content").append("Get better engines and come back...<br />Maybe you could build a different engine somehow.<br/>");
                 $("#events_content").append(exit_button("Okay"));
 
                 adventure_data.inventory_fuel += 1; /* They spent a fuel to get in, so it gets refunded. */

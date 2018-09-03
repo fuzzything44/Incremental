@@ -197,7 +197,16 @@
             </div>
             <div style="position: relative" class="">
                 <div id="building_s_workshop_2" class="building" style="color: lightslategrey; height: 2.5em;" onclick="$('#workshop_option_bar').toggleClass('hidden');">
-                    <span class="building_name"><span class="building_prefix"></span>Workshop</span>
+                    <span class="building_name">
+                        <span class="building_prefix"></span>
+                        Workshop
+                        <span class="tooltip">
+                            (?)
+                            <span class="tooltiptext fgc bgc_second">
+                                You can build various things here. As you progress in the game, more items will become available, but you'll have to turn this spell on to see them.
+                            </span>
+                        </span>
+                    </span>
                     <span class="building_amount">200</span>
                     <span id="workshop_progress_bar" class="clickable" style="position: absolute; left: 0; top: 1.7em; width: 17.5em; height: .5em; background-color: green;"></span>
                     <div id="workshop_option_bar" class="hidden fgc" onclick="event.stopPropagation()" style="position: absolute; top: 2.5em; left: 0; z-index: 1;">
@@ -267,6 +276,12 @@
             <div style="position: relative" class="">
                 <div id="building_s_enchantment" class="building" style="color: turquoise; height: 2.5em;" onclick="$('#enchantment_option_bar').toggleClass('hidden');">
                     <span class="building_name"><span class="building_prefix"></span>Enchanting Table</span>
+                    <span class="tooltip">
+                        (?)
+                        <span class="tooltiptext fgc bgc_second">
+                            It's pretty much the workshop, but with different stuff. Also, the rewards scale depending on something you have, so you need to click the green finished option to claim it.
+                        </span>
+                    </span>
                     <span class="building_amount">500</span>
                     <span id="enchantment_progress_bar" class="clickable" style="position: absolute; left: 0; top: 1.7em; width: 17.5em; height: .5em; background-color: green;"></span>
                     <div id="enchantment_option_bar" class="hidden fgc" onclick="event.stopPropagation()" style="position: absolute; top: 2.5em; left: 0; z-index: 1;">
@@ -275,28 +290,33 @@
                                 <tbody>
                                     <tr id="enchant_money">
                                         <td class="clickable" onclick="s_enchant_set('money')">Pot of Greed</td>
-                                        <td>+50 money/s, +1 gold/s</td>
+                                        <td>Money, Gold</td>
                                         <td>1h</td>
+                                        <td>(Mana)</td>
                                     </tr>
                                     <tr id="enchant_energy">
                                         <td class="clickable" onclick="s_enchant_set('energy')">Battery</td>
-                                        <td>+1 energy</td>
+                                        <td>Energy</td>
                                         <td>3h</td>
+                                        <td>(Research)</td>
                                     </tr>
                                     <tr id="enchant_research">
                                         <td class="clickable" onclick="s_enchant_set('research')">Omniscience</td>
-                                        <td>+3 research</td>
+                                        <td>Research</td>
                                         <td>24h</td>
+                                        <td>(Mana)</td>
                                     </tr>
                                     <tr id="enchant_mana">
                                         <td class="clickable" onclick="s_enchant_set('mana')">Spellmastery</td>
                                         <td>+1 mana stone</td>
                                         <td>24h</td>
+                                        <td>(+1 always)</td>
                                     </tr>
                                     <tr id="enchant_tokens">
                                         <td class="clickable" onclick="s_enchant_set('tokens')">Gambling</td>
                                         <td>Casino tokens!</td>
                                         <td>12h</td>
+                                        <td>(Money)</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -307,7 +327,16 @@
             </div>
 
             <div style="position: relative;" class="">
-                <span id="building_s_ai" class="building tooltip" style="color: fuchsia;"><span class="building_name"><span class="building_prefix"></span>AI Unit</span><span class="building_amount">100</span><span class="tooltiptext fgc bgc_second">It can manage stuff for you!</span></span>
+                <span id="building_s_ai" class="building" style="color: fuchsia;">
+                    <span class="building_name"><span class="building_prefix"></span>AI Unit</span>
+                    <span class="tooltip">
+                        (?)
+                        <span class="tooltiptext fgc bgc_second">
+                            It can manage stuff for you.
+                        </span>
+                    </span>
+                    <span class="building_amount">100</span>
+                </span>
                 <span id="toggle_s_ai" class="building_state_off" onclick="toggle_building_state('s_ai')">Off</span>
             </div>
 

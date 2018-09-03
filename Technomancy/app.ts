@@ -1244,7 +1244,7 @@ function set_initial_state() {
                 "stone": 500,
                 "iron": 150,
             },
-            "tooltip": "Mines produce double stone and 5x iron.",
+            "tooltip": "Mines produce double stone and 5x iron ore.",
             "name": "Improve Mines",
             "image": "pickaxe.png",
             "repeats": false,
@@ -3970,13 +3970,13 @@ window.onload = () => {
             challenge_hydrogen_cap = 50;
         }
         if (adventure_data["challenge"] && buildings["hydrogen_mine"].amount > challenge_hydrogen_cap) { /* If they're in a challenge, cap at 5 */
-            buildings["hydrogen_mine"].amount = challenge_hydrogen_cap; /* TODO: Maybe a challenge reward raises this cap? */
+            buildings["hydrogen_mine"].amount = challenge_hydrogen_cap;
         }
 
         if (comp_state) { /* Only turn on if it already was on */
             toggle_building_state("hydrogen_mine");
         }
-        $("#building_hydrogen_mine  > .building_amount").html(format_num(buildings["hydrogen_mine"].amount, false));
+        update_building_amount("hydrogen_mine");
     }
     if (adventure_data["mana_purifier"]) {
         let comp_state = buildings["mana_purifier"].on;
@@ -3994,27 +3994,32 @@ window.onload = () => {
     setup_rules();
 
     /* Display a welcome back message in case of update */
-    $.get("changelog.txt", function (log: string) {
-        /* Find the version number */
-        let changelog = log.split("\n");
-        for (let i = 0; i < changelog.length; i++) {
-            /* Find first line with a version number */
-            if (changelog[i].match(/v[0-9]+\.[0-9]+\.[0-9]+/)) {
-                /* We need to set version number. So just version line without the : */
-                $("#version").html(changelog[i].replace(/\:.*/, ""));
-                /* Not a new version :( */
-                if (changelog[i] == localStorage["last_version"]) { return; }
+    function check_updates() {
+        $.get("changelog.txt", function (log: string) {
+            /* Find the version number */
+            let changelog = log.split("\n");
+            for (let i = 0; i < changelog.length; i++) {
+                /* Find first line with a version number */
+                if (changelog[i].match(/v[0-9]+\.[0-9]+\.[0-9]+/)) {
+                    /* We need to set version number. So just version line without the : */
+                    $("#version").html(changelog[i].replace(/\:.*/, ""));
+                    /* Not a new version :( */
+                    if (changelog[i] == localStorage["last_version"]) { return; }
 
-                $("#events").removeClass("hidden");
-                $("#events_topbar").html(changelog[i]);
-                $("#events_content").html("Hey, there's a new version! What's new in this version: <br />" + changelog[i + 1]);
-                /* Remember they were at this version */
-                localStorage["last_version"] = changelog[i];
-                /* We don't care about other lines. */
-                return;
+                    $("#events").removeClass("hidden");
+                    $("#events_topbar").html(changelog[i]);
+                    $("#events_content").html("Hey, there's a new version! What's new in this version: <br />" + changelog[i + 1]);
+                    /* Remember they were at this version */
+                    localStorage["last_version"] = changelog[i];
+                    /* We don't care about other lines. */
+                    return;
+                }
             }
-        }
-    });
+        });
+    }
+    check_updates();
+    setInterval(check_updates(), 1000 * 60 * 5); /* Check for updates every 5 minutes or so. */
+
     /* Setup hotkeys */
     let hotkey_mode = 0;
     $(document).keyup(function (e) {

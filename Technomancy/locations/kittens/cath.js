@@ -50,8 +50,11 @@
                             if (resources["book"].amount >= 5000) {
                                 resources["book"].amount -= 5000;
                                 adventure_data["piscine_unlocked"] = true;
+                                $("#events_content").html("You purchase the chart. Apparently there's a new planet somewhere near Terminus.");
                             }
-                            cat_market();
+                            else {
+                                cat_market();
+                            }
                         });
                     }
                     $("#events_content").append("<span class='clickable' onclick='$(\"#character\").removeClass(\"hidden\");start_adventure()'>Leave</span>");

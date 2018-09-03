@@ -123,10 +123,36 @@
     { /* Boss 15 */
         "boss": "mr. skeltal",
         "text": "oh, no. he came to doot doot you because you didn't drink your milk. prepare your weak bones.",
-        "reward_text": "another party member (currently useless, because fuzzything44 is bad at stuff)",
+        "reward_text": "another party member",
         reward: function () {
             adventure_data["tower_warrior"] = { "power": 20, "health": 100, "action": "defend" };
         }
+    },
+    { /* Boss 16 "Britain or somewhere" */
+        "boss": "some random British dude",
+        "text": "How nice, he's offering you some tea. And he just put in the milk before the tea. There's now only one reasonable course of action. KILL HIM!",
+        "reward_text": "spikey kneepads",
+        reward: function () { }
+    },
+    { /* Boss 17 */
+        "boss": "the same dude, but angrier",
+        "text": "Huh, turns out that if you attack someone, the get angry at you. He's really pissed off. And you're in a tower. That seems somehow <a href='https://www.kongregate.com/games/somethingggg/ngu-idle' target='_blank' class='fgc'>familiar</a>. Whatever, time to mercilessly kill him.",
+        "reward_text": "an upgrade for your warrior",
+        reward: function () {
+            adventure_data["tower_warrior"].health *= 1.5;
+        }
+    },
+    { /* Boss 18 */
+        "boss": "a guy in a kilt",
+        "text": "This is the british guy's brother. He has a kilt and a sweet sword. Good luck.",
+        "reward_text": "his sweet sword",
+        reward: function () { }
+    },
+    { /* Boss 19 */
+        "boss": "King Arfur",
+        "text": "It's an adorable puppy with a sword in it's mouth. Ow! Bad dog!",
+        "reward_text": "nothing. Reflect on what you just did.",
+        reward: function () { }
     },
 ]
 
@@ -254,6 +280,9 @@ function climb_tower(health = undefined, ehealth = undefined, grinding = false) 
             buildings["s_manastone"].amount--;
             update_building_amount("s_manastone");
             health = adventure_data["tower_toughness"];
+            if (adventure_data["tower_warrior"] != undefined) { /* Give warrior health */
+                adventure_data["tower_warrior"].current_health = adventure_data["tower_warrior"].health;
+            }
             if (grinding) {
                 grinding_level = 1;
                 ehealth = Math.pow(grinding_level, 2);
@@ -323,17 +352,30 @@ function climb_tower(health = undefined, ehealth = undefined, grinding = false) 
                 enemy_damage = Math.pow(grinding_level, 2);
             }
 
+            function damage_player(amt) {
+                /* Warrior exists and is defending. And is alive. */
+                if (adventure_data["tower_warrior"] != undefined && $("input:radio[name='warrior_action']:checked").val() == "defend" && adventure_data["tower_warrior"].current_health > 0) {
+                    adventure_data["tower_warrior"].health -= amt;
+                } else {
+                    health -= amt;
+                }
+            }
             if (winstate == "won") {
                 /* Deal damage*/
                 ehealth -= adventure_data["tower_power"];
                 fight_results_message += "You hit it!"
+
+                if (adventure_data["tower_floor"] > 18) {
+                    fight_results_message += " And your sweet sword is really good at damaging this guy!";
+                    ehealth -= Math.floor(adventure_data["tower_power"] / 3);
+                }
             } else if (winstate == "tie") {
                 /* Both take damage */
-                health -= enemy_damage
+                damage_player(enemy_damage);
                 ehealth -= adventure_data["tower_power"];
                 fight_results_message += "You hit it! But it also hit you..."
             } else {
-                health -= enemy_damage
+                damage_player(enemy_damage);
                 fight_results_message += "It hit you. That hurts."
             }
             fight_results_message += "<br/>";
@@ -350,6 +392,17 @@ function climb_tower(health = undefined, ehealth = undefined, grinding = false) 
                     fight_results_message += "Your healer attacks for " + format_num(heal_damage, false) + " damage.";
                 }
                 adventure_data["tower_healer"].action = heal_action;
+                fight_results_message += "<br/>";
+            }
+
+            if (adventure_data["tower_warrior"] != undefined) {
+                let warrior_action = $("input:radio[name='warrior_action']:checked").val();
+                if (warrior_action == "attack" && adventure_data["tower_warrior"].current_health > 0) {
+                    let warr_damage = Math.round(adventure_data["tower_warrior"].power);
+                    ehealth -= warr_damage;
+                    fight_results_message += "Your warrior attacks for " + format_num(warr_damage, false) + " damage.";
+                } 
+                adventure_data["tower_warrior"].action = warrior_action;
                 fight_results_message += "<br/>";
             }
 
@@ -387,6 +440,15 @@ function climb_tower(health = undefined, ehealth = undefined, grinding = false) 
                 "<input type='radio' name='healer_action' id='healer_attack' value='attack'><label for='healer_attack'>Attack</label>" +
                 "</div>");
             $("#healer_" + adventure_data["tower_healer"].action).click();
+
+        }
+
+        if (adventure_data["tower_warrior"] != undefined) {
+            $("#events_content").append("Warrior Action (" + format_num(adventure_data["tower_warrior"].current_health) + " health): <div class='radio-group'>" +
+                "<input type='radio' name='warrior_action' id='warrior_defend' value='defend'><label for='warrior_defend'>Defend</label>" +
+                "<input type='radio' name='warrior_action' id='warrior_attack' value='attack'><label for='warrior_attack'>Attack</label>" +
+                "</div>");
+            $("#warrior_" + adventure_data["tower_warrior"].action).click();
 
         }
     }

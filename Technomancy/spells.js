@@ -304,7 +304,7 @@ function s_workshop_set(item) {
             craftable_items[item]["warehouse_spend"]();
         }
         else {
-            add_log_elem("You don't have the parts for that. Check your warehouse.");
+            add_log_elem("You don't have the parts for that. Check your ship stock.");
             return;
         }
     }
@@ -372,14 +372,16 @@ var enchantments = {
             if (buildings["s_enchantment"]["generation"]["money"] == undefined) {
                 buildings["s_enchantment"]["generation"]["money"] = 0;
             }
-            buildings["s_enchantment"]["generation"]["money"] += 50 / 500;
             if (buildings["s_enchantment"]["generation"]["gold"] == undefined) {
                 buildings["s_enchantment"]["generation"]["gold"] = 0;
             }
-            buildings["s_enchantment"]["generation"]["gold"] += 1 / 500;
+            var amt = Math.floor(Math.log(buildings["s_manastone"].amount / 50) / Math.LOG2E); /* Just log base 2 of mana / 50 */
+            buildings["s_enchantment"]["generation"]["gold"] += amt / 500;
+            buildings["s_enchantment"]["generation"]["money"] += 50 * amt / 500;
             if (build_state) { /* Only turn on if it already was on */
                 toggle_building_state("s_enchantment");
             }
+            add_log_elem("You got " + format_num(amt) + " more gold/s and " + format_num(amt * 50) + " more money/s.");
         },
     },
     "energy": {
@@ -393,10 +395,12 @@ var enchantments = {
             if (buildings["s_enchantment"]["generation"]["energy"] == undefined) {
                 buildings["s_enchantment"]["generation"]["energy"] = 0;
             }
-            buildings["s_enchantment"]["generation"]["energy"] += 1 / 500;
+            var amt = Math.floor(Math.log(resources["research"].amount / 25) / Math.LOG2E); /* Just log base 2 of mana / 50 */
+            buildings["s_enchantment"]["generation"]["energy"] += amt / 500;
             if (build_state) { /* Only turn on if it already was on */
                 toggle_building_state("s_enchantment");
             }
+            add_log_elem("You got " + format_num(amt) + " more energy.");
         },
     },
     "research": {
@@ -410,10 +414,12 @@ var enchantments = {
             if (buildings["s_enchantment"]["generation"]["research"] == undefined) {
                 buildings["s_enchantment"]["generation"]["research"] = 0;
             }
-            buildings["s_enchantment"]["generation"]["research"] += 3 / 500;
+            var amt = Math.floor(Math.log(buildings["s_manastone"].amount / 50) / Math.LOG2E); /* Just log base 2 of mana / 50 */
+            buildings["s_enchantment"]["generation"]["research"] += amt / 500;
             if (build_state) { /* Only turn on if it already was on */
                 toggle_building_state("s_enchantment");
             }
+            add_log_elem("You got " + format_num(amt) + " more research.");
         },
     },
     "mana": {
@@ -422,7 +428,8 @@ var enchantments = {
             /* Give 1 mana */
             resources_per_sec["mana"]++;
             buildings["s_manastone"].amount++;
-            $("#building_s_manastone > .building_amount").html(format_num(buildings["s_manastone"].amount, false)); /* Update amount shown. */
+            update_building_amount("s_manastone");
+            add_log_elem("You got 1 mana stone!");
         },
     },
     "tokens": {
@@ -435,7 +442,7 @@ var enchantments = {
             var amt = Math.floor(Math.log(resources["money"].amount / 1000000) / Math.LOG2E); /* Just log base 2 of money / 1m */
             adventure_data["casino_tokens"] += amt;
             resources["money"].amount = 0;
-            add_log_elem("You got " + amt.toString() + " casino tokens in exchange for your money.");
+            add_log_elem("You got " + format_num(amt) + " casino tokens in exchange for your money.");
         },
     },
 };
