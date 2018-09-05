@@ -133,7 +133,6 @@ function set_initial_state() {
         "purified_mana": { "amount": 0, "value": -2500, "mult": 1, "changes": {}, "ps_change": "" },
         "fuel": { "amount": 0, "value": -1000, "mult": 1, "changes": {}, "ps_change": "" },
         "magic_bag": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
-        "antibag": { "amount": 0, "value": -1, "mult": 1, "changes": {}, "ps_change": "" },
 
         "mana": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
         "essence": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
@@ -2457,9 +2456,10 @@ let prestige = {
             if (isNaN(resources[res].amount)) {
                 resources[res].amount = 0;
             }
-            prestige_points += resources[res].amount * Math.abs(resources[res].value);
-            if (res != "sandcastle" && resources[res].amount > 0 && resources[res].value > 0) {
-                prestige_vals.push(resources[res].amount * Math.abs(resources[res].value));
+            let res_amt = resources[res].amount - calculate_bag_amount(res);
+            prestige_points += res_amt * Math.abs(resources[res].value);
+            if (res != "sandcastle" && res_amt > 0 && resources[res].value > 0) {
+                prestige_vals.push(res_amt * Math.abs(resources[res].value));
                 prestige_names.push(res);
             }
         });
@@ -2516,8 +2516,6 @@ let prestige = {
             }
         }
 
-        /* Add sandcastle prestige */
-        prestige_points += resources["sandcastle"].amount * Math.abs(resources["sandcastle"].value);
         return prestige_points;
     },
     /* Calculate mana gain */
@@ -3338,6 +3336,24 @@ function purchase_upgrade(name: string) {
     }
 }
 
+function calculate_bag_amount(res) {
+    if (adventure_data["perm_resources"] == undefined || adventure_data["perm_resources"][res] == undefined) return 0;
+
+    let res_gain = adventure_data["perm_resources"][res];
+    if (resources[res].value > 0) {
+        res_gain = Math.pow(adventure_data["perm_resources"][res], 2 / 3);
+    }
+    if (adventure_data["challenge"]) {
+        if (adventure_data["challenges_completed"].length >= CHALLENGES.METEORS && adventure_data["challenges_completed"][CHALLENGES.METEORS]) {
+            res_gain = Math.max(Math.min(res_gain, 10000 / resources[res].value), Math.pow(res_gain, 4 / 5)); /* If they have meteors, reduce it again, unless it would reduce to lower than what they would get normally. */
+        } else {
+            res_gain = Math.min(res_gain, 10000 / resources[res].value); /* Otherwise, cap it. */
+        }
+    }
+
+    return res_gain;
+}
+
 function random_title() {
     const TITLES = [
         "CrappyIdle v.π²",
@@ -3724,12 +3740,12 @@ function perm_bag() {
         if (resources[res].value > 0 && (resources[res].amount > 0 || adventure_data["perm_resources"][res])) { /* We only can store resources with > 0 value. Also only show resources the player knows about. */
             let rname = (res.charAt(0).toUpperCase() + res.slice(1)).replace("_", " ");
             if (adventure_data["perm_resources"][res] != undefined) { /* This is unlocked for storage*/
-                let res_on_p = Math.pow(adventure_data["perm_resources"][res], 2/3);
+                let res_on_p = calculate_bag_amount(res);
                 $("#events_content table").append("<tr><td>" + rname + "</td><td>Current Stored: " + format_num(adventure_data["perm_resources"][res], true) + "</td><td>Gained on Prestige: " + format_num(res_on_p, true) + "</td><td><span class='clickable'>Deposit</span> all into bag. </td></tr>");
                 $("#events_content span").last().click(function () {
                     adventure_data["perm_resources"][res] += resources[res].amount;
                     resources[res].amount = 0;
-                    perm_bag()
+                    perm_bag();
                 });
 
             } else { /* Still need to unlock it. */
@@ -3847,19 +3863,7 @@ window.onload = () => {
         /* Give on prestige resources. */
         if (adventure_data["perm_resources"]) {
             Object.keys(adventure_data["perm_resources"]).forEach(function (res) {
-                let res_gain = adventure_data["perm_resources"][res];
-                if (resources[res].value > 0) {
-                    res_gain = Math.pow(adventure_data["perm_resources"][res], 2 / 3);
-                }
-                if (adventure_data["challenge"]) {
-                    if (adventure_data["challenges_completed"].length >= CHALLENGES.METEORS && adventure_data["challenges_completed"][CHALLENGES.METEORS]) {
-                        res_gain = Math.max(Math.min(res_gain, 10000 / resources[res].value), Math.pow(res_gain, 4 / 5)); /* If they have meteors, reduce it again, unless it would reduce to lower than what they would get normally. */
-                    } else {
-                        res_gain = Math.min(res_gain, 10000 / resources[res].value); /* Otherwise, cap it. */
-                    }
-                }
-                resources[res].amount += res_gain;
-                resources["antibag"].amount -= res_gain * resources[res].value;
+                resources[res].amount += calculate_bag_amount(res);
             });
         }
 

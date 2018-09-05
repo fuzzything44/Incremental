@@ -83,7 +83,7 @@ var TOWER_DATA = [
     },
     {
         "boss": "a trimp",
-        "text": "Wait, isn't this from a completely different game?",
+        "text": "Wait, isn't this from a completely different <a href='https://trimps.github.io/' target='_blank' class='fgc'>game</a>?",
         "reward_text": "a new party member",
         reward: function () {
             adventure_data["tower_healer"] = { "power": 10, "health": 5, "action": "heal" };
@@ -153,6 +153,22 @@ var TOWER_DATA = [
         "reward_text": "nothing. Reflect on what you just did.",
         reward: function () { }
     },
+    {
+        "boss": "??? (1)",
+        "text": "Sorry, this boss isn't really ready yet. At least you'll get to read stuff through the tower of grinding.",
+        "reward_text": "yet another party upgrade",
+        reward: function () {
+            adventure_data["tower_warrior"].health = 500;
+            adventure_data["tower_healer"].power *= 5;
+            adventure_data["tower_healer"].health = 100;
+        }
+    },
+    {
+        "boss": "??? (2)",
+        "text": "Sorry, this boss isn't really ready yet. At least you'll get to read stuff through the tower of grinding.",
+        "reward_text": "a better rate on toughness",
+        reward: function () { }
+    },
 ];
 var grinding_level = 1;
 function tower() {
@@ -187,35 +203,42 @@ function tower() {
             $("#events_content").prepend("You need a more mana stones. Or free up some mana. <br/>");
         }
     });
-    $("#events_content").append("You currently have " + format_num(adventure_data["tower_power"], false) + " power. <span class='clickable'>Increase</span> by <input id='tower_power_increase' class='fgc bgc_second' type='number' min='0' value='1'> at a cost of 1 essence per power.<br/>");
+    $("#events_content").append("You currently have " + format_num(adventure_data["tower_power"], false) + " power. <span class='clickable'>Spend</span> <input id='tower_power_increase' class='fgc bgc_second' type='number' min='0' value='1'> essence at a rate of 1 essence per power.<br/>");
     $("#events_content span").last().click(function () {
         /* Save both values to set inputs to previous values. */
         var pow_increase = Math.round(parseFloat($("#tower_power_increase").val()));
         var tough_increase = Math.round(parseFloat($("#tower_tough_increase").val()));
         if (buildings["s_essence"].amount > pow_increase) {
-            toggle_building_state("s_essence", true);
-            buildings["s_essence"].amount -= pow_increase;
+            spend_essence(pow_increase);
             adventure_data["tower_power"] += pow_increase;
-            adventure_data["current_essence"] -= pow_increase;
-            update_building_amount("s_essence");
-            toggle_building_state("s_essence", true);
         }
         tower();
         $("#tower_power_increase").val(pow_increase);
         $("#tower_tough_increase").val(tough_increase);
     });
-    $("#events_content").append("You currently have " + format_num(adventure_data["tower_toughness"], false) + " toughness. <span class='clickable'>Increase</span> by <input id='tower_tough_increase' class='fgc bgc_second' type='number' min='0' value='1'> at a cost of 1 essence per toughness.<br/>");
+    var toughness_per_essence = "";
+    if (adventure_data["tower_floor"] > 21) {
+        toughness_per_essence = "5 ";
+    }
+    $("#events_content").append("You currently have " + format_num(adventure_data["tower_toughness"], false) + " toughness. <span class='clickable'>Spend</span> <input id='tower_tough_increase' class='fgc bgc_second' type='number' min='0' value='1'> essence at a rate of 1 essence per " + toughness_per_essence + "toughness.<br/>");
     $("#events_content span").last().click(function () {
         /* Save both values to set inputs to previous values. */
         var pow_increase = Math.round(parseFloat($("#tower_power_increase").val()));
+        if (isNaN(pow_increase) || pow_increase < 0) {
+            pow_increase = 0;
+        }
         var tough_increase = Math.round(parseFloat($("#tower_tough_increase").val()));
+        if (isNaN(tough_increase) || tough_increase < 0) {
+            tough_increase = 0;
+        }
         if (buildings["s_essence"].amount > tough_increase) {
-            toggle_building_state("s_essence", true);
-            buildings["s_essence"].amount -= tough_increase;
-            adventure_data["tower_toughness"] += tough_increase;
-            adventure_data["current_essence"] -= tough_increase;
-            update_building_amount("s_essence");
-            toggle_building_state("s_essence", true);
+            spend_essence(tough_increase);
+            if (adventure_data["tower_floor"] > 21) {
+                adventure_data["tower_toughness"] += 5 * tough_increase;
+            }
+            else {
+                adventure_data["tower_toughness"] += tough_increase;
+            }
         }
         tower();
         $("#tower_power_increase").val(pow_increase);
@@ -262,6 +285,9 @@ function climb_tower(health, ehealth, grinding) {
             buildings["s_manastone"].amount--;
             update_building_amount("s_manastone");
             health = adventure_data["tower_toughness"];
+            if (adventure_data["tower_healer"] != undefined) { /* Give healer health */
+                adventure_data["tower_healer"].current_health = adventure_data["tower_healer"].health;
+            }
             if (adventure_data["tower_warrior"] != undefined) { /* Give warrior health */
                 adventure_data["tower_warrior"].current_health = adventure_data["tower_warrior"].health;
             }
@@ -274,12 +300,16 @@ function climb_tower(health, ehealth, grinding) {
             }
         }
         else {
-            $("#events_content").html("It seems you don't have enough mana to attempt fighting this boss. Maybe come back later?");
+            $("#events_content").html("It seems you don't have enough mana to attempt fighting this boss. Maybe come back later?<br />");
+            $("#events_content").append("<span class='clickable'>Back</span> to tower base.<br/>");
+            $("#events_content span").last().click(function () { tower(); });
             return;
         }
     }
     if (adventure_data["tower_floor"] >= TOWER_DATA.length && !grinding) {
-        $("#events_content").html("You're at the current top of the tower!");
+        $("#events_content").html("You're at the current top of the tower!<br/>");
+        $("#events_content").append("<span class='clickable'>Back</span> to tower base.<br/>");
+        $("#events_content span").last().click(function () { tower(); });
     }
     else {
         var boss = "";
@@ -336,7 +366,7 @@ function climb_tower(health, ehealth, grinding) {
             function damage_player(amt) {
                 /* Warrior exists and is defending. And is alive. */
                 if (adventure_data["tower_warrior"] != undefined && $("input:radio[name='warrior_action']:checked").val() == "defend" && adventure_data["tower_warrior"].current_health > 0) {
-                    adventure_data["tower_warrior"].health -= amt;
+                    adventure_data["tower_warrior"].current_health -= amt;
                 }
                 else {
                     health -= amt;
@@ -394,9 +424,11 @@ function climb_tower(health, ehealth, grinding) {
                     $("#events_content").html("Ouch! You were defeated.<br /> Well, that's all the grinding you can do right now. Come back in 24 hours.<br/>");
                 }
                 else {
-                    $("#events_content").html("Ouch! You were defeated.<br /><span class='clickable'>Try</span> again? (Costs 1 mana stone)");
+                    $("#events_content").html("Ouch! You were defeated.<br /><span class='clickable'>Try</span> again? (Costs 1 mana stone)<br/>");
                     $("#events_content span").last().click(function () { climb_tower(); });
                 }
+                $("#events_content").append("<span class='clickable'>Back</span> to tower base.<br/>");
+                $("#events_content span").last().click(function () { tower(); });
             }
             else if (ehealth <= 0) {
                 if (grinding) {
@@ -417,18 +449,27 @@ function climb_tower(health, ehealth, grinding) {
         $("#events_content span").last().click(function () { fight_enemy("dodge"); });
         $("#events_content").append("<span class='clickable'>Spaz</span><br/>");
         $("#events_content span").last().click(function () { fight_enemy("spaz"); });
+        function class_stats(classname) {
+            var current = adventure_data["tower_" + classname].current_health;
+            var max = adventure_data["tower_" + classname].health;
+            var pow = adventure_data["tower_" + classname].power;
+            if (current <= 0) {
+                return "(DEAD)";
+            }
+            return "(" + format_num(current) + "/" + format_num(max) + " health, " + format_num(pow) + " power)";
+        }
         if (adventure_data["tower_healer"] != undefined) {
-            $("#events_content").append("Healer Action: <div class='radio-group'>" +
+            $("#events_content").append("Healer Action " + class_stats("healer") + ": <div class='radio-group'>" +
                 "<input type='radio' name='healer_action' id='healer_heal' value='heal'><label for='healer_heal'>Heal</label>" +
                 "<input type='radio' name='healer_action' id='healer_attack' value='attack'><label for='healer_attack'>Attack</label>" +
-                "</div>");
+                "</div><br/>");
             $("#healer_" + adventure_data["tower_healer"].action).click();
         }
         if (adventure_data["tower_warrior"] != undefined) {
-            $("#events_content").append("Warrior Action (" + format_num(adventure_data["tower_warrior"].current_health) + " health): <div class='radio-group'>" +
+            $("#events_content").append("Warrior Action " + class_stats("warrior") + ": <div class='radio-group'>" +
                 "<input type='radio' name='warrior_action' id='warrior_defend' value='defend'><label for='warrior_defend'>Defend</label>" +
                 "<input type='radio' name='warrior_action' id='warrior_attack' value='attack'><label for='warrior_attack'>Attack</label>" +
-                "</div>");
+                "</div><br/>");
             $("#warrior_" + adventure_data["tower_warrior"].action).click();
         }
     }
@@ -456,6 +497,15 @@ function defeat_floor(health) {
         grinding_level++;
         $("#events_content").append("<span class='clickable'>Continue</span> climbing the tower.<br/>");
         $("#events_content span").last().click(function () { climb_tower(health, Math.pow(grinding_level, 2), true); });
+        $("#events_content").append("<span class='clickable'>Back</span> to tower base (ends your run of grinding, so pretty pointless).<br/>");
+        $("#events_content span").last().click(function () { tower(); });
     }
+}
+function spend_essence(amount) {
+    toggle_building_state("s_essence", true);
+    buildings["s_essence"].amount -= amount;
+    adventure_data["current_essence"] -= amount;
+    update_building_amount("s_essence");
+    toggle_building_state("s_essence", true);
 }
 //# sourceMappingURL=tower.js.map

@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.6.0: (9/4/18) Not as terrible bugs
+Fixed some stuff with how the bag of folding works with prestige resources. Also, sandcastles are now worth 1/2 as much (they were incorrectly being counted twice previously, and now it's fixed). Added a couple new tower floors, but they're not really finished yet. The rewards work, but no boss names/descriptions. Added more links in the tower to help you get back to the base. Oh, and the tower warrior should now work properly, at least once you've killed the boss on floor 20.
+
 v5.5.0: (9/2/18) BUGS!
 Absolutely no testing in this version! It'll hopefully not break stuff too bad. Anyways, there's a few more hints for what to do in adventure (one at Piscine, one at Abandoned World, one at Cath when getting starchart). The settings menu is now not in the exact same place adventuring is because that annoyed me. Hopefully the game should now alert you when there's an update and you're still playing, but it might not. Workshop and enchanting table now tell you how they work (hopefully well enough) and enchanting table has some things changed to be more mechanically different than workshop. Workshop tells you to check your ship stock instead of warehouse. The warrior in the tower now (theoretically) can help fight for you. Don't let them die! Also, added 4 more floors to the tower. You can now beat up some random British dude and his brother!
 
