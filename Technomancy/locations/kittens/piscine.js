@@ -28,7 +28,8 @@
                     $("#events_content").append("Oh look, a shark. It wants to teach you science!<br/><span class='clickable'>Learn</span><br />");
                     $("#events_content > span").last().click(function () {
                         adventure_data["science_level"] = 1;
-                        start_adventure();
+                        $("#events_content").html("Yay, you got scienced! In this case, science turns out to be some cryptic riddle about sandcastles, glass ceilings, and that the way forward is through sparkles alone. What could that mean?<br/>");
+                        $("#events_content").append(exit_button("Done"));
                     });
                 }
                 $("#events_content").append(exit_button("Done"));
@@ -40,7 +41,7 @@
             "weight": 4,
             "title": "Nothing else here.",
             "run_encounter": function () {
-                $("#events_content").html("The sharks have nothing else to teach you right now.<br/>");
+                $("#events_content").html("The sharks have nothing else to teach you right now. They just kind of say nonsense like \"dhbs\" at you.<br/>");
                 $("#events_content").append(exit_button("Done"));
             }
         }),

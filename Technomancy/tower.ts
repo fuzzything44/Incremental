@@ -154,9 +154,9 @@
         "reward_text": "nothing. Reflect on what you just did.",
         reward: function () { }
     },
-    { /* Boss 20 "Famous Incremental Characters" */
-        "boss": "??? (1)",
-        "text": "Sorry, this boss isn't really ready yet. At least you'll get to read stuff through the tower of grinding.",
+    { /* Boss 20 "Money" */
+        "boss": "a pile of gold",
+        "text": "This is a medium sized pile of gold. Probably big enough to pay off your student loans. ",
         "reward_text": "yet another party upgrade",
         reward: function () {
             adventure_data["tower_warrior"].health = 500;
@@ -165,17 +165,17 @@
         }
     },
     { /* Boss 21 */
-        "boss": "??? (2)",
-        "text": "Sorry, this boss isn't really ready yet. At least you'll get to read stuff through the tower of grinding.",
+        "boss": "a lawyer",
+        "text": "It turns out that gold wasn't yours. You're now being sued. ",
         "reward_text": "a better rate on toughness",
         reward: function () { }
     }, 
-    //{ /* Boss 22 TODO: Add tavern to upgrade party, maybe hire new people (or maybe hiring at tavern is area boss). */
-    //    "boss": "??? (3)",
-    //    "text": "Sorry, this boss isn't really ready yet. At least you'll get to read stuff through the tower of grinding.",
-    //    "reward_text": "something special",
-    //    reward: function () { }
-    //}, 
+    { /* Boss 22 */
+        "boss": "a suitcase of gold",
+        "text": "You know all that gold you picked up? Well the lawyer put it in his suitcase. Also, the suitcase has legs and isn't happy. ",
+        "reward_text": "all the gold in the suitcase, which you use to buy a tavern nearby instead of paying off your loans. Maybe next time",
+        reward: function () { }
+    }, 
 ]
 
 let grinding_level = 1;
@@ -283,6 +283,13 @@ function tower() {
             let result = dates.split(":")
             $("#events_content").append("The small tower is still closed. Come back in " + parseInt(result[0]).toString() + "hours " + parseInt(result[1]).toString() + " minutes<br/>");
         }
+    }
+
+    if (adventure_data["tower_floor"] > 21) {
+        $("#events_content").append("<span class='clickable'>Enter</span> the tavern");
+        $("#events_content span").last().click(function () {
+            tower();
+        });
     }
 
     $("#events").removeClass("hidden");
@@ -524,6 +531,16 @@ function defeat_floor(health = undefined) {
         $("#events_content span").last().click(function () { tower(); });
 
     }
+
+}
+
+/* TODO: Add upgrade party, hire new people (when unlocked). */
+function tavern() {
+    $("#events_topbar").html("A tavern");
+    $("#events_content").html("Hmm... the tavern seems pretty empty right now. Maybe later something will be here?<br/>");
+
+    $("#events_content").html("<span class='clickable'>Back</span> to tower base.<br/>");
+    $("#events_content span").last().click(function () { tower(); });
 
 }
 

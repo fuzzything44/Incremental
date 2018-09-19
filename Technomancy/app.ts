@@ -4022,7 +4022,7 @@ window.onload = () => {
         });
     }
     check_updates();
-    setInterval(check_updates(), 1000 * 60 * 5); /* Check for updates every 5 minutes or so. */
+    setInterval(check_updates, 1000 * 60 * 5); /* Check for updates every 5 minutes or so. */
 
     /* Setup hotkeys */
     let hotkey_mode = 0;

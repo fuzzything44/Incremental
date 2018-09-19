@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.7.0: (9/18/18) 
+Added a couple clues for the clouds of dust at Piscine. Fix a bug with the game not automatically checking for updates. Added a new tower boss and name/description for the previous two that didn't have one. Also, this adds the tavern which isn't fully implemented yet, but will allow you to upgrade your party. 
+
 v5.6.0: (9/4/18) Not as terrible bugs
 Fixed some stuff with how the bag of folding works with prestige resources. Also, sandcastles are now worth 1/2 as much (they were incorrectly being counted twice previously, and now it's fixed). Added a couple new tower floors, but they're not really finished yet. The rewards work, but no boss names/descriptions. Added more links in the tower to help you get back to the base. Oh, and the tower warrior should now work properly, at least once you've killed the boss on floor 20.
 

@@ -3815,7 +3815,7 @@ window.onload = function () {
         });
     }
     check_updates();
-    setInterval(check_updates(), 1000 * 60 * 5); /* Check for updates every 5 minutes or so. */
+    setInterval(check_updates, 1000 * 60 * 5); /* Check for updates every 5 minutes or so. */
     /* Setup hotkeys */
     var hotkey_mode = 0;
     $(document).keyup(function (e) {
