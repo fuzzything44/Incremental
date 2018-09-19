@@ -2946,6 +2946,13 @@ function update() {
                 resources["time"].amount -= amt;
             }
         }
+        if (adventure_data["challenge"] == CHALLENGES.METEORS) {
+            time_to_meteor++;
+            if (time_to_meteor >= 6) {
+                time_to_meteor = 0;
+                meteor_hit();
+            }
+        }
     }
     /* Perform rules */
     rule_timer += delta_time;
@@ -3338,6 +3345,10 @@ function purchase_upgrade(name: string) {
 
 function calculate_bag_amount(res) {
     if (adventure_data["perm_resources"] == undefined || adventure_data["perm_resources"][res] == undefined) return 0;
+
+    if (res == "money" && adventure_data["challenge"] == CHALLENGES.POVERTY) {
+        return 0;
+    }
 
     let res_gain = adventure_data["perm_resources"][res];
     if (resources[res].value > 0) {

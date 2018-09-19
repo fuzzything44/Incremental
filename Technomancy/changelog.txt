@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.7.1: (9/19/18) Minor Bugfixes and balance
+Meteor challenge meteors fall at half the rate now, but speed time makes more fall (sorry, no more abusing offline progress to make it easier). You're no longer severly penalized for having a lot of money in your Magic Bag when doing a poverty challenge. You can no longer enter the main tower in a challenge. Unlocking tavern happens at the right boss now. 
+
 v5.7.0: (9/18/18) 
 Added a couple clues for the clouds of dust at Piscine. Fix a bug with the game not automatically checking for updates. Added a new tower boss and name/description for the previous two that didn't have one. Also, this adds the tavern which isn't fully implemented yet, but will allow you to upgrade your party. 
 

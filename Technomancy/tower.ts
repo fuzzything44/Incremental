@@ -259,8 +259,11 @@ function tower() {
         $("#tower_tough_increase").val(tough_increase);
     });
 
-    $("#events_content").append("<span class='clickable'>Enter</span> the tower. (Costs one mana stone). <br/>");
-    $("#events_content span").last().click(function () { climb_tower() });
+    /* They're in a challenge. Disable entering tower */
+    if (adventure_data["challenge"] == CHALLENGES.NONE) {
+        $("#events_content").append("<span class='clickable'>Enter</span> the tower. (Costs one mana stone). <br/>");
+        $("#events_content span").last().click(function () { climb_tower() });
+    }
 
     if (adventure_data["tower_floor"]) {
         $("#events_content").append("You're at tower floor: " + format_num(adventure_data["tower_floor"]) + "<br/>")
@@ -285,10 +288,10 @@ function tower() {
         }
     }
 
-    if (adventure_data["tower_floor"] > 21) {
+    if (adventure_data["tower_floor"] > 22) {
         $("#events_content").append("<span class='clickable'>Enter</span> the tavern");
         $("#events_content span").last().click(function () {
-            tower();
+            tavern();
         });
     }
 

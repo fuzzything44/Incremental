@@ -1035,7 +1035,7 @@ function setup_events() {
     }, 1000);
     /* Meteor challenge */
     if (adventure_data["challenge"] == CHALLENGES.METEORS) {
-        setInterval(meteor_hit, 30 * 1000);
+        setInterval(meteor_hit, 60 * 1000);
     }
 }
 /* Functions because putting all of this in an onclick is too much. */
@@ -1117,6 +1117,7 @@ function bribe_environment() {
     $("#events").addClass("hidden");
     add_log_elem("Removed all environmental regulations.");
 }
+var time_to_meteor = 0;
 function meteor_hit() {
     if (event_flags["meteor_amount"] == undefined) {
         event_flags["meteor_amount"] = 0; /* Seed starting at 0 */

@@ -1088,7 +1088,7 @@ function setup_events() {
 
     /* Meteor challenge */
     if (adventure_data["challenge"] == CHALLENGES.METEORS) {
-        setInterval(meteor_hit, 30 * 1000);
+        setInterval(meteor_hit, 60 * 1000);
     }
 }
 
@@ -1180,6 +1180,7 @@ function bribe_environment() {
     add_log_elem("Removed all environmental regulations.");
 }
 
+let time_to_meteor = 0;
 function meteor_hit() {
     if (event_flags["meteor_amount"] == undefined) {
         event_flags["meteor_amount"] = 0; /* Seed starting at 0 */
