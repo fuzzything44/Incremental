@@ -176,6 +176,22 @@
         "reward_text": "all the gold in the suitcase, which you use to buy a tavern nearby instead of paying off your loans. Maybe next time",
         reward: function () { }
     }, 
+    { /* Boss 23 */
+        "boss": "Kombast©™ Cable",
+        "text": "This is the greediest company of all and they're here for your money!",
+        "reward_text": "a whole lot of gold and money!",
+        reward: function () {
+            if (adventure_data["perm_resources"]["money"] == undefined) {
+                adventure_data["perm_resources"]["money"] = 0;
+            }
+            adventure_data["perm_resources"]["money"] += 1000000000; /* 1 bil? */
+
+            if (adventure_data["perm_resources"]["gold"] == undefined) {
+                adventure_data["perm_resources"]["gold"] = 0;
+            }
+            adventure_data["perm_resources"]["gold"] += 1000000; /* 1 mil */
+        }
+    }, 
 ]
 
 let grinding_level = 1;
@@ -361,7 +377,8 @@ function climb_tower(health = undefined, ehealth = undefined, grinding = false) 
             } else if (attack == "dodge") {
                 fight_results_message += "You dodge!";
             } else if (attack == "spaz") {
-                fight_results_message += "You flail around!";
+                let spaz_messages = ["You flail around!", "You do the TEACUP EXTERMINATION.", "You start tapdancing.", "You attack! Wait, no. You don't.", "You suddenly become happy."];
+                fight_results_message += spaz_messages[Math.floor(Math.random() * spaz_messages.length)];
             }
 
             let rval = Math.random(); /* Roll random enemy attack. */
@@ -374,7 +391,8 @@ function climb_tower(health = undefined, ehealth = undefined, grinding = false) 
                 fight_results_message += " Your enemy defends!";
             } else {
                 enemy_attack = "spaz";
-                fight_results_message += " Your enemy spins in circles for 20 minutes!";
+                let spaz_messages = ["Your enemy spins in circles for 20 minutes!", "Your enemy does something unspeakable.", "Your enemy pulls out a giant hammer and hits you with it! Oh good, it was foam.", "Your enemy throws a tomato at you.", "... maybe?"];
+                fight_results_message += " " + spaz_messages[Math.floor(Math.random() * spaz_messages.length)];
             }
 
             fight_results_message += "<br/>";
@@ -540,9 +558,45 @@ function defeat_floor(health = undefined) {
 /* TODO: Add upgrade party, hire new people (when unlocked). */
 function tavern() {
     $("#events_topbar").html("A tavern");
-    $("#events_content").html("Hmm... the tavern seems pretty empty right now. Maybe later something will be here?<br/>");
+    $("#events_content").html("The tavern is pretty empty right now. It's just you, your party, and the bartender. Still, you could buy a drink for a party member.<br/>");
 
-    $("#events_content").html("<span class='clickable'>Back</span> to tower base.<br/>");
+    function buydrink(name: string, pow_increase: number, health_increase: number, size: number = 1) {
+        if (buildings["s_essence"].amount >= size) {
+            spend_essence(size);
+            let pow_gain = pow_increase * size;
+            let health_gain = health_increase * size;
+
+            adventure_data["tower_" + name].power += pow_gain;
+            adventure_data["tower_" + name].health += health_gain;
+            $("#events_content").prepend("You buy your " + name + " a drink. They gain " + format_num(pow_gain) + " power and " + format_num(health_gain) + " health!<br/>");
+
+        } else {
+            $("#events_content").prepend("You don't have enough essence<br/>");
+        }
+    }
+    $("#events_content").append("<span class='clickable'>Buy</span> your Healer a drink (1 essence)");
+    $("#events_content span").last().click(function () {
+        buydrink("healer", 0.5, 1);
+    });
+    if (buildings["s_essence"].amount > 100) {
+        $("#events_content").append(" <span class='clickable'>Buy 10</span>");
+        $("#events_content span").last().click(function () {
+            buydrink("healer", 0.5, 1, 10);
+        });
+    }
+    $("#events_content").append("<br/>");
+    $("#events_content").append("<span class='clickable'>Buy</span> your Warrior a drink (1 essence)");
+    $("#events_content span").last().click(function () {
+        buydrink("warrior", 1, 7);
+    });
+    if (buildings["s_essence"].amount > 100) {
+        $("#events_content").append(" <span class='clickable'>Buy 10</span>");
+        $("#events_content span").last().click(function () {
+            buydrink("warrior", 1, 7, 10);
+        });
+    }
+    $("#events_content").append("<br/>");
+    $("#events_content").append("<span class='clickable'>Back</span> to tower base.<br/>");
     $("#events_content span").last().click(function () { tower(); });
 
 }

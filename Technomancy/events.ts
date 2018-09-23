@@ -1191,7 +1191,7 @@ function meteor_hit() {
 
     /* All buildings they have are available for hitting. Except the mana purifier. */
     Object.keys(buildings).forEach(function (build) {
-        if (buildings[build].amount >= 1 && SPELL_BUILDINGS.indexOf(build) == -1 && !$.isEmptyObject(buildings[build].base_cost)) {
+        if (buildings[build].amount > 1 && SPELL_BUILDINGS.indexOf(build) == -1 && !$.isEmptyObject(buildings[build].base_cost)) {
             available_buildings.push(build)
         }
     });
@@ -1199,7 +1199,7 @@ function meteor_hit() {
     /* We can actually destroy something. */
     if (available_buildings.length > 0) {
         let destroyed = available_buildings[prng(event_flags["meteor_amount"]) % available_buildings.length];
-        let amt = (prng(event_flags["meteor_amount"]) % buildings[destroyed].amount) + 1;
+        let amt = (prng(event_flags["meteor_amount"]) % buildings[destroyed].amount); /* This should leave us with at least one building */
 
         /* Now we know what we're destroying and how many. Time to kill!*/
         let build_state = buildings[destroyed].on;

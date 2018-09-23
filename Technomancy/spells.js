@@ -29,6 +29,10 @@ function s_trade(delta_time) {
         "repeats": true,
     };
     to_next_trade -= delta_time;
+    /* Don't show trades if in a challenge */
+    if (adventure_data["challenge"] == CHALLENGES.NO_UPGRADE) {
+        return;
+    }
     /* If locked and a trade is available... */
     if (to_next_trade < 0 && !remaining_upgrades["trade"].unlock()) {
         remaining_upgrades["trade"] = trade_upgrade;

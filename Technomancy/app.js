@@ -3212,6 +3212,10 @@ function random_title() {
         "Even the bugs have bugs.",
         "Are you reading this? I bet you're not reading this.",
         "Definitely not ripping off any other games. Not at all.",
+        "Now playing: NGU Idle",
+        "Now playing: Kittens Game",
+        "Now playing: Sandcastle Builder",
+        "Now playing: Sharks game",
     ];
     document.title = TITLES.filter(function (item) { return item !== document.title; })[Math.floor(Math.random() * (TITLES.length - 1))];
 }
@@ -3639,10 +3643,10 @@ window.onload = function () {
         $("#update_notation").html("Scientific Notation");
     }
     if (localStorage["cath_notify"] == "true") {
-        $("#update_cath_setting").html("Cath Notifications Off");
+        $("#update_cath_setting").html("Cath Notifications On");
     }
     else {
-        $("#update_cath_setting").html("Cath Notifications On");
+        $("#update_cath_setting").html("Cath Notifications Off");
     }
     /* Add upgrades to be unhidden*/
     /* Loop through all remaining upgrades */

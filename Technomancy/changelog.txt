@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.8.0: (9/23/18) Bugfixes and some more tower stuff
+Fixed a display bug with cath notification settings. Meteors will no longer hit the last copy of a building. Workshop tooltip no longer shows up in resource tracking tooltips. When in No Upgrade Challenge, trades no longer flicker (and simply don't appear). Added a new tower floor, with rewards that may change (so you might want to hold off on killing it). Added some new combat messages in the tower. Added content to the tavern.
+
 v5.7.1: (9/19/18) Minor Bugfixes and balance
 Meteor challenge meteors fall at half the rate now, but speed time makes more fall (sorry, no more abusing offline progress to make it easier). You're no longer severly penalized for having a lot of money in your Magic Bag when doing a poverty challenge. You can no longer enter the main tower in a challenge. Unlocking tavern happens at the right boss now. 
 

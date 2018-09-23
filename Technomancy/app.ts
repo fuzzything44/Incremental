@@ -3386,6 +3386,11 @@ function random_title() {
         "Even the bugs have bugs.",
         "Are you reading this? I bet you're not reading this.",
         "Definitely not ripping off any other games. Not at all.",
+        "Now playing: NGU Idle",
+        "Now playing: Kittens Game",
+        "Now playing: Sandcastle Builder",
+        "Now playing: Sharks game",
+
     ];
     document.title = TITLES.filter(item => item !== document.title)[Math.floor(Math.random() * (TITLES.length - 1))];
 
@@ -3828,9 +3833,9 @@ window.onload = () => {
     }
 
     if (localStorage["cath_notify"] == "true") {
-        $("#update_cath_setting").html("Cath Notifications Off");
-    } else {
         $("#update_cath_setting").html("Cath Notifications On");
+    } else {
+        $("#update_cath_setting").html("Cath Notifications Off");
     }
 
     /* Add upgrades to be unhidden*/
