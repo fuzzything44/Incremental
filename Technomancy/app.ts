@@ -2648,6 +2648,8 @@ function save() {
     localStorage["groupings"] = JSON.stringify(groupings);
     localStorage["rules"] = JSON.stringify(rules);
     localStorage["erules"] = JSON.stringify(erules);
+    localStorage["autobuild"] = JSON.stringify(build_queue);
+    localStorage["autobuild_amt"] = JSON.stringify(autobuild_amount);
 
     $('#save_text').css('opacity', '1'); setTimeout(() => $('#save_text').css({ 'opacity': '0', 'transition': 'opacity 1s' }), 1000);
     console.log("Saved");
@@ -2715,6 +2717,14 @@ function load() {
     if (localStorage.getItem("erules")) {
         erules = JSON.parse(localStorage.getItem("erules"));
     }
+    console.log("Loading autobuild");
+    if (localStorage.getItem("autobuild")) {
+        build_queue = JSON.parse(localStorage.getItem("autobuild"));
+    }
+    if (localStorage.getItem("autobuild_amt")) {
+        autobuild_amount = JSON.parse(localStorage.getItem("autobuild_amt"));
+    }
+
     console.log("Loading theme");
     if (!localStorage.getItem("theme")) {
         localStorage["theme"] = "dark"; /* Default dark theme. */
@@ -2958,6 +2968,7 @@ function update() {
     rule_timer += delta_time;
     if (rule_timer > 1000) {
         run_rules();
+        run_autobuild();
         rule_timer = 0;
     }
 
@@ -3187,10 +3198,11 @@ function update_building_amount(name: string) {
     $('#building_' + name + " > .building_amount").html(format_num(buildings[name].amount, false));
 }
 
-function purchase_building(name: string, amount = null) {
+function purchase_building(name: string, amt = null) {
     /* Sometimes we're calling this to update amount shown, so make sure we do so. */
     update_building_amount(name)
 
+    let amount = amt;
     if (amount == null) {
         amount = parseInt($("#buy_amount").val());
     }
@@ -3210,10 +3222,14 @@ function purchase_building(name: string, amount = null) {
             cost = Infinity;
         }
         if (cost > resources[key].amount) {
-            add_log_elem("You can't afford that. Missing: " + key.replace("_", " "));
+            if (amt == null) {
+                add_log_elem("You can't afford that. Missing: " + key.replace("_", " "));
+            }
             throw Error("Not enough resources!");
         } else if (isNaN(cost)) {
-            add_log_elem("Sorry, but " + key.replace("_", " ") + " is not fuzzy.");
+            if (amt == null) {
+                add_log_elem("Sorry, but " + key.replace("_", " ") + " is not fuzzy.");
+            }
             throw Error("fuzzy resources!");
         }
     });
@@ -3360,6 +3376,10 @@ function calculate_bag_amount(res) {
         } else {
             res_gain = Math.min(res_gain, 10000 / resources[res].value); /* Otherwise, cap it. */
         }
+    }
+
+    if ((res == "mone" || res == "gold") && adventure_data["tower_floor"] > 23) {
+        res_gain *= Math.log(res_gain / 1000);
     }
 
     return res_gain;
@@ -3744,6 +3764,21 @@ function run_rules() {
     });
 }
 
+let build_queue = [];
+let autobuild_amount = 0;
+function draw_autobuild() {
+    /* TODO */
+}
+
+function run_autobuild() {
+    /* We have a building queued and not built */
+    if (build_queue.length > autobuild_amount) {
+        purchase_building(build_queue[autobuild_amount], 1); /* Attempt to build it. */
+        add_log_elem("Autobuilt activated!");
+        autobuild_amount++; /* purchase_building() throws an error if it can't build, so this only runs on successful build. */
+    }
+}
+
 function prng(seed: number): number {
     if (seed <= 0) { seed = 1234567; }
     return seed * 16807 % 2147483647;
@@ -4015,26 +4050,31 @@ window.onload = () => {
 
     /* Display a welcome back message in case of update */
     function check_updates() {
-        $.get("changelog.txt", function (log: string) {
-            /* Find the version number */
-            let changelog = log.split("\n");
-            for (let i = 0; i < changelog.length; i++) {
-                /* Find first line with a version number */
-                if (changelog[i].match(/v[0-9]+\.[0-9]+\.[0-9]+/)) {
-                    /* We need to set version number. So just version line without the : */
-                    $("#version").html(changelog[i].replace(/\:.*/, ""));
-                    /* Not a new version :( */
-                    if (changelog[i] == localStorage["last_version"]) { return; }
+        $.ajax({
+            url: "changelog.txt",
+            async: true,
+            success: function (log: string) {
+                /* Find the version number */
+                let changelog = log.split("\n");
+                for (let i = 0; i < changelog.length; i++) {
+                    /* Find first line with a version number */
+                    if (changelog[i].match(/v[0-9]+\.[0-9]+\.[0-9]+/)) {
+                        /* We need to set version number. So just version line without the : */
+                        $("#version").html(changelog[i].replace(/\:.*/, ""));
+                        /* Not a new version :( */
+                        if (changelog[i] == localStorage["last_version"]) { return; }
 
-                    $("#events").removeClass("hidden");
-                    $("#events_topbar").html(changelog[i]);
-                    $("#events_content").html("Hey, there's a new version! What's new in this version: <br />" + changelog[i + 1]);
-                    /* Remember they were at this version */
-                    localStorage["last_version"] = changelog[i];
-                    /* We don't care about other lines. */
-                    return;
+                        $("#events").removeClass("hidden");
+                        $("#events_topbar").html(changelog[i]);
+                        $("#events_content").html("Hey, there's a new version! What's new in this version: <br />" + changelog[i + 1]);
+                        /* Remember they were at this version */
+                        localStorage["last_version"] = changelog[i];
+                        /* We don't care about other lines. */
+                        return;
+                    }
                 }
-            }
+            },
+
         });
     }
     check_updates();

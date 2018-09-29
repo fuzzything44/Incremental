@@ -179,16 +179,7 @@ var TOWER_DATA = [
         "boss": "Kombast©™ Cable",
         "text": "This is the greediest company of all and they're here for your money!",
         "reward_text": "a whole lot of gold and money!",
-        reward: function () {
-            if (adventure_data["perm_resources"]["money"] == undefined) {
-                adventure_data["perm_resources"]["money"] = 0;
-            }
-            adventure_data["perm_resources"]["money"] += 1000000000; /* 1 bil? */
-            if (adventure_data["perm_resources"]["gold"] == undefined) {
-                adventure_data["perm_resources"]["gold"] = 0;
-            }
-            adventure_data["perm_resources"]["gold"] += 1000000; /* 1 mil */
-        }
+        reward: function () { }
     },
 ];
 var grinding_level = 1;

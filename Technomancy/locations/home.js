@@ -225,7 +225,7 @@
                                         resources_per_sec["magic_bag"] = 1;
                                     }
                                     else {
-                                        $("#events_content").prepend("You're missing an orb. Check your warehouse.<br />");
+                                        $("#events_content").prepend("You don't have the resources to make that.<br />");
                                     }
                                 });
                             }

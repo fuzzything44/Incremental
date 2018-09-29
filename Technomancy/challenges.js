@@ -30,6 +30,9 @@ function challenge_menu() {
     if (CHALLENGE_INFO[number].test_completed()) {
         $("#events_content").append("You have completed the challenge. Finish the challenge to exit it (and prestige). <br/><span class='clickable'>Finish</span> the challenge!");
         $("#events_content > span").last().click(function () {
+            if (adventure_data["challenge"] == CHALLENGES.NO_UPGRADE) {
+                adventure_data["challenge_mana"] += 200;
+            }
             adventure_data["challenge"] = CHALLENGES.NONE; /* No longer in a challenge. */
             adventure_data["challenges_completed"][number] = true; /* Completed challenge!*/
             prestige.run(false, function () {
@@ -112,7 +115,7 @@ var CHALLENGE_INFO = [
         "description": "This will be tough. Upgrades make everything better. Sucks, because you don't get any.",
         "requirements": "Get 200 mana.",
         "restrictions": "Go back to 0 mana. You can't buy any upgrades.",
-        "reward": "You can gain essence.",
+        "reward": "You can gain essence. Also, 200 mana!",
         "test_completed": function () { return buildings["s_manastone"].amount >= 200; }
     },
 ];

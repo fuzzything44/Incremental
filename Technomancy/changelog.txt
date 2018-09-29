@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.8.1: (9/28/18) Bugfixes
+Trying to make mithril cloth without enough resources gives the proper error message now. Any building built by the game should no longer say you don't have enough resources (mostly relevant for Cascade challenge). Changed current final tower floor a bit. It's super OP now (maybe). The automatic update checker now theoretically won't hang your game if you lose internet connection. No upgrade challenge also gives you 200 mana. 
+
 v5.8.0: (9/23/18) Bugfixes and some more tower stuff
 Fixed a display bug with cath notification settings. Meteors will no longer hit the last copy of a building. Workshop tooltip no longer shows up in resource tracking tooltips. When in No Upgrade Challenge, trades no longer flicker (and simply don't appear). Added a new tower floor, with rewards that may change (so you might want to hold off on killing it). Added some new combat messages in the tower. Added content to the tavern.
 
