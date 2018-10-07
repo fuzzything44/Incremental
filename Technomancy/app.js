@@ -2634,7 +2634,11 @@ function save_to_clip() {
         }
     }
     catch (err) {
-        console.log('Oops, unable to copy');
+        $("#settings").addClass("hidden");
+        $("#events_topbar").html("Save Export - Secondary");
+        $("#events_content").html("<textarea class='fgc bgc' style='width: 90%; height: 90%;' readonly>" + text + "</textarea>");
+        $("#events_content textarea").select();
+        $("#events").removeClass("hidden");
     }
     document.body.removeChild(textArea);
 }
@@ -3204,7 +3208,7 @@ function calculate_bag_amount(res) {
             res_gain = Math.min(res_gain, 10000 / resources[res].value); /* Otherwise, cap it. */
         }
     }
-    if ((res == "mone" || res == "gold") && adventure_data["tower_floor"] > 23) {
+    if ((res == "money" || res == "gold") && adventure_data["tower_floor"] > 23) {
         res_gain *= Math.log(res_gain / 1000);
     }
     return res_gain;

@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.8.2: (10/7/18) Minor bugfixes
+Saving should theoretically now work for bluerobes. Tower floor 23 reward now works properly for money. Poverty challenge description fixed.
+
 v5.8.1: (9/28/18) Bugfixes
 Trying to make mithril cloth without enough resources gives the proper error message now. Any building built by the game should no longer say you don't have enough resources (mostly relevant for Cascade challenge). Changed current final tower floor a bit. It's super OP now (maybe). The automatic update checker now theoretically won't hang your game if you lose internet connection. No upgrade challenge also gives you 200 mana. 
 

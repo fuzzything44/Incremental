@@ -2796,7 +2796,12 @@ function save_to_clip() { /* Put save data in clipboard. Copied from Stack Overf
             console.log("Copying unsuccessful?");
         }
     } catch (err) {
-        console.log('Oops, unable to copy');
+        $("#settings").addClass("hidden");
+        $("#events_topbar").html("Save Export - Secondary");
+        $("#events_content").html("<textarea class='fgc bgc' style='width: 90%; height: 90%;' readonly>" + text + "</textarea>");
+        $("#events_content textarea").select();
+        $("#events").removeClass("hidden");
+        
     }
     document.body.removeChild(textArea);
 }
@@ -3378,7 +3383,7 @@ function calculate_bag_amount(res) {
         }
     }
 
-    if ((res == "mone" || res == "gold") && adventure_data["tower_floor"] > 23) {
+    if ((res == "money" || res == "gold") && adventure_data["tower_floor"] > 23) {
         res_gain *= Math.log(res_gain / 1000);
     }
 

@@ -83,7 +83,7 @@ let CHALLENGE_INFO = [
         "name": "Poverty",
         "description": "You have taken a vow of poverty and therefore have almost no money.",
         "requirements": "Get to 200 mana to complete this challenge",
-        "restrictions": "Go back to 0 mana, and you can't have more than 40 seconds of money production.",
+        "restrictions": "Go back to 0 mana, and you can't have more than 20 seconds of money production.",
         "reward": "Nothing yet. Probably a multiplier to money gains. Or maybe cost reduction on stuff that costs money. ",
         "test_completed": function () { return buildings["s_manastone"].amount >= 200; }
     },
