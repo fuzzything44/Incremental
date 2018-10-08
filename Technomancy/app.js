@@ -2630,7 +2630,7 @@ function save_to_clip() {
             alert("Save copied to clipboard.");
         }
         else {
-            console.log("Copying unsuccessful?");
+            throw "Save unsuccessful";
         }
     }
     catch (err) {

@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.8.3: Even more minor bugfix
+Now both ways export can fail should properly fall back.
+
 v5.8.2: (10/7/18) Minor bugfixes
 Saving should theoretically now work for bluerobes. Tower floor 23 reward now works properly for money. Poverty challenge description fixed.
 
