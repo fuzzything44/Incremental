@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.9.0: Halloween
+When adventuring, you'll now randomly encounter houses to trick or treat at. Don't ask why they're in space. The halloween theme now has fabulous music to go along with it. In the export save fallback, Ctrl+A and Ctrl+C should now work properly.
+
 v5.8.3: Even more minor bugfix
 Now both ways export can fail should properly fall back.
 

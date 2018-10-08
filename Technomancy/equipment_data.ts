@@ -847,6 +847,12 @@ let equipment = {
                             update_inventory();
                         } /* End use function */
                     } /* 2017 */
+                    case "2018": {
+                        self.name = "A Porcelain Tower (2018)";
+                        self.use = function (index, location) {
+                            $("#events_content").html("You look at the tower. There's no more light in the window.");
+                        }
+                    }
                 }
 
             } else {
@@ -855,6 +861,21 @@ let equipment = {
                     switch (data.year) {
                         case "2017": {
                             $("#events_content").html("You tear open the bright red present. Inside, there's a small figurine of your spaceship.");
+                            break;
+                        }
+                        case "2018": {
+                            if (adventure_data["current_essence"] == undefined) {
+                                $("#events_content").html("You get a feeling you wouldn't appreciate this present right now. Try again when you've seen the tower.");
+                            } else {
+                                $("#events_content").html("You tear open the bright red present. Inside, there's a small porcelain tower. Oh, huh. One of the windows has a light inside it. Woah, there was 10 essence hidden there!");
+
+                                toggle_building_state("s_essence", true);
+                                buildings["s_essence"].amount += 10;
+                                update_building_amount("s_essence");
+                                toggle_building_state("s_essence");
+
+                                adventure_data["current_essence"]++;
+                            }
                             break;
                         }
                     }
@@ -922,6 +943,56 @@ let equipment = {
                     }
                 });
                 return 1;
+            }
+        }, /* End modify */
+    },
+    "candy": {
+        type: "item",
+        name: "Halloween Candy", /* Functionally identical to turkey leg, except with how it works with duration */
+        modify: function (self, data) {
+            if (data["amount"]) {
+                self.name += " (" + format_num(data["amount"]) + ")";
+            }
+            self.use = function (index, location) {
+                if (adventure_data.current_potion.name == "Halloween Candy") {
+                    adventure_data.current_potion.time += 10;
+                } else {
+                    if (adventure_data.current_potion != undefined) {
+                        gen_equipment(adventure_data["current_potion"].data).stop();
+                    }
+                    adventure_data.current_potion = {
+                        name: self.name, /* We should probably actually be setting all of these (except data) depending on the potion type. */
+                        effect: "Too much sugar",
+                        time: 10,
+                        data: data,
+                        power: 1,
+                    };
+                }
+                /* Remove it from inventory after use */
+                if (data["amount"] > 1) {
+                    data["amount"]--;
+                } else {
+                    adventure_data[location].splice(index, 1);
+                }
+                update_inventory();
+            }; /* End use function */
+            /* When we stop nothing happens. */
+            self.stop = function () { };
+            /* Give +50% to any positive gains. Yay Halloween! */
+            self.effect = function (power, on_combat = false) {
+                /* Also gives a shield boost when starting combat. */
+                if (on_combat) {
+                    if (player_data["shields"] < 5) {
+                        player_data["shields"]++;
+                    }
+                    return;
+                }
+
+                Object.keys(resources_per_sec).forEach(function (res) {
+                    if (resources[res].value > 0) {
+                        resources[res].amount += Math.max(0, resources_per_sec[res] / 2);
+                    }
+                });
             }
         }, /* End modify */
     },

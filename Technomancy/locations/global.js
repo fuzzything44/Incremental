@@ -37,6 +37,27 @@
                 });
             },
         }),
+        ({
+            "condition": function () { return false && Math.random() > 0.9; },
+            "types": ["noncombat", "global"],
+            "weight": 0,
+            "title": "Trick or Treat!",
+            "run_encounter": function () {
+                $("#events_content").html("You arrive at a house with it's lights on. And you even remembered your plastic pumpkin bucket!<br/>");
+                $("#events_content").append("<span class='clickable'>Trick or Treat!</span>");
+                $("#events_content").children().last().click(function () {
+                    var candy = Math.floor(Math.random() * 10 + 2);
+                    $("#events_content").html("You got a nice handful of " + format_num(candy) + " pieces of candy!");
+                    var candy_loc = find_item("candy", adventure_data.warehouse);
+                    if (candy_loc == -1) {
+                        adventure_data["warehouse"].push({ "name": "candy", "amount": candy });
+                    }
+                    else {
+                        adventure_data["warehouse"][candy_loc].amount += candy;
+                    }
+                });
+            },
+        }),
     ],
     "connects_to": [],
     "enter_cost": 0,

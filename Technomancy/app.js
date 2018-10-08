@@ -3265,7 +3265,7 @@ function change_theme(new_theme) {
     var theme_music = {
         "light": "",
         "dark": "",
-        "halloween": "",
+        "halloween": "84jesbGuGzo",
         "christmas": "JXjQO0UixxM",
         "crazy": "MTrzTABzLfY",
     };
@@ -3879,7 +3879,7 @@ window.onload = function () {
             $("#settings").addClass("hidden");
         }
         /* Otherwise, we need to make sure we aren't actually trying to type something */
-        if (document.activeElement.tagName == "INPUT") {
+        if (document.activeElement.tagName == "INPUT" || document.activeElement.tagName == "TEXTAREA") {
             return;
         }
         if (hotkey_mode == 0) {
