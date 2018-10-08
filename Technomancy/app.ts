@@ -3462,7 +3462,9 @@ function change_theme(new_theme: string) {
         localStorage["theme"] = new_theme;
         /* Play music for it (or stop music if there is none) */
         if (theme_music[new_theme]) {
-            $("#music").html("<iframe width='0' height='0' src='https://www.youtube.com/embed/" + theme_music[new_theme] + "?autoplay=1&loop=1&playlist=" + theme_music[new_theme] + "&start=1' frameborder='0'></iframe>")
+            setTimeout(function () {
+                $("#music").html("<iframe width='0' height='0' src='https://www.youtube.com/embed/" + theme_music[new_theme] + "?autoplay=1&loop=1&playlist=" + theme_music[new_theme] + "&start=1' frameborder='0' allow='autoplay'></iframe>");
+            }, 100);
         } else {
             $("#music").html("");
         }
