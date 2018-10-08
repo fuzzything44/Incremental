@@ -3285,7 +3285,9 @@ function change_theme(new_theme) {
             }, 100);
         }
         else {
-            $("#music").html("");
+            setTimeout(function () {
+                $("#music").html("");
+            }, 100);
         }
         /* Set the select box. This is really just for loading, but best to make sure. */
         $("#theme_select").val(new_theme);

@@ -3466,7 +3466,9 @@ function change_theme(new_theme: string) {
                 $("#music").html("<iframe width='0' height='0' src='https://www.youtube.com/embed/" + theme_music[new_theme] + "?autoplay=1&loop=1&playlist=" + theme_music[new_theme] + "&start=1' frameborder='0' allow='autoplay'></iframe>");
             }, 100);
         } else {
-            $("#music").html("");
+            setTimeout(function () {
+                $("#music").html("");
+            }, 100);
         }
         /* Set the select box. This is really just for loading, but best to make sure. */
         $("#theme_select").val(new_theme);
