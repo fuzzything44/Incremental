@@ -3859,11 +3859,19 @@ window.onload = function () {
                         if (changelog[i] == localStorage["last_version"]) {
                             return;
                         }
-                        $("#events").removeClass("hidden");
-                        $("#events_topbar").html(changelog[i]);
-                        $("#events_content").html("Hey, there's a new version! What's new in this version: <br />" + changelog[i + 1]);
+                        /* Find the line number corresponding to last version they've seen.  */
+                        var last_version_line = changelog.findIndex(function (elem) { return elem == localStorage["last_version"]; });
                         /* Remember they were at this version */
                         localStorage["last_version"] = changelog[i];
+                        $("#events").removeClass("hidden");
+                        if (last_version_line == -1) {
+                            $("#events_topbar").html("Welcome to Technomancy");
+                            $("#events_content").html("Welcome to Technomancy! To begin, you should buy a bank by clicking on it. That will let you produce money and unlock further buildings. Press the X in the top right of this window to close it. ");
+                        }
+                        else {
+                            $("#events_topbar").html(changelog[i]);
+                            $("#events_content").html("Hey, there's a new version! What's new in this version: <br />" + changelog.splice(1, last_version_line - 2).join("<br/>"));
+                        }
                         /* We don't care about other lines. */
                         return;
                     }

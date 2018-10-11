@@ -796,12 +796,18 @@ function choose_event() {
                     /* Purified mana cost is proportional to the rejection rate. */
                     let cost = Math.ceil(event.rejection / 5) + 1;
                     /* So add a button letting them choose it. */
+                    
                     $("#events_content").append("<span class='clickable'>Choose</span> " + event.name + " (" + format_num(cost, false) + ") <br />");
                     /* Pretty normal event running, but we'll take a purified mana first. Only done here in case they change their mind. */
                     $("#events_content span").last().click(function () {
-                        resources["purified_mana"].amount -= cost;
-                        $("#events_topbar").html(event.name);
-                        event.run_event();
+                        if (resources["purified_mana"].amount >= cost) {
+                            resources["purified_mana"].amount -= cost;
+                            $("#events_topbar").html(event.name);
+                            event.run_event();
+                        } else {
+                            $("#events_content").prepend("You need more purified mana<br/>");
+                        }
+
                     });
                 }
             });
@@ -1049,6 +1055,10 @@ function setup_events() {
             /* Calc new division level */
             let s = event_flags["sludge_level"] / 100;
             let new_division = 1 + (s * (s + 1) / 2) / 10;
+
+            if (new_division < 1) {
+                new_division = 1;
+            }
 
             /* Set visible sludge. */
             resources_per_sec["sludge"] = event_flags["sludge_level"];

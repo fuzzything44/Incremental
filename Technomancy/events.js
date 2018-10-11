@@ -754,9 +754,14 @@ function choose_event() {
                     $("#events_content").append("<span class='clickable'>Choose</span> " + event.name + " (" + format_num(cost_1, false) + ") <br />");
                     /* Pretty normal event running, but we'll take a purified mana first. Only done here in case they change their mind. */
                     $("#events_content span").last().click(function () {
-                        resources["purified_mana"].amount -= cost_1;
-                        $("#events_topbar").html(event.name);
-                        event.run_event();
+                        if (resources["purified_mana"].amount >= cost_1) {
+                            resources["purified_mana"].amount -= cost_1;
+                            $("#events_topbar").html(event.name);
+                            event.run_event();
+                        }
+                        else {
+                            $("#events_content").prepend("You need more purified mana<br/>");
+                        }
                     });
                 }
             });
@@ -1000,6 +1005,9 @@ function setup_events() {
             /* Calc new division level */
             var s = event_flags["sludge_level"] / 100;
             var new_division_1 = 1 + (s * (s + 1) / 2) / 10;
+            if (new_division_1 < 1) {
+                new_division_1 = 1;
+            }
             /* Set visible sludge. */
             resources_per_sec["sludge"] = event_flags["sludge_level"];
             /* Implement division factors. */

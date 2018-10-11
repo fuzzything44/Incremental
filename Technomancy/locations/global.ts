@@ -40,7 +40,7 @@
 
         }),
         ({
-            "condition": function () { return false && Math.random() > 0.9; },
+            "condition": function () { return Math.random() > 0.9; },
             "types": ["noncombat", "global"],
             "weight": 0,
             "title": "Trick or Treat!",
