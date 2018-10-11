@@ -1,6 +1,6 @@
 ﻿Technomancy Changelog
 
-v6.9.1: (10/10/18) Minor bugfixes.
+v5.9.1: (10/10/18) Minor bugfixes.
 It is now actually possible to trick or treat. If there have been multiple updates since you last refreshed, it shows you all of them. When choosing events with purified mana, you can't choose an event you can't afford. Finishing the environmental crisis no longer gives a ~.5% boost to production (or whatever insignificantly small amount it was). Enchantments now scale by log base 2 instead of ~2.08.
 
 v5.9.0: (10/7/18) Halloween
