@@ -245,7 +245,11 @@ let events = [
 
                 if (buildings["s_manastone"].amount >= 250) {
                     let regs = buildings["s_manastone"].amount % 100 >= 50 ? "financial" : "environmental";
-                    content += "Removing " + regs + " regulations seems like it might be risky though...";
+                    if (buildings["s_manastone"].amount >= 350) {
+                        content += "Removing " + regs + " regulations seems like it might be risky, but it could be worth it...";
+                    } else {
+                        content += "Removing " + regs + " regulations seems like it might be risky though...";
+                    }
                 }
             } else {
                 content += "Sadly, you don't have the influence needed. <br /><em>(You need 180 banks.)</em>"

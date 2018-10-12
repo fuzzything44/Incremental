@@ -1943,6 +1943,9 @@ function set_initial_state() {
                 if (comp_state) { /* Only turn on if it already was on */
                     toggle_building_state("big_bank");
                 }
+                $("#events_topbar").html("Crisis Over!");
+                $("#events_content").html("You finally managed to get through the crisis! Your banks and investment banks will now produce much more. Also, if you haven't already, go buy all the banks you can get! (It's a bit over 10,000).<br/>You've also been hearing rumors about someone teaching powerful knowledge. Maybe building more libraries will get them to arrive.");
+                $("#events").removeClass("hidden");
             },
             "cost": {
                 "money": 1000000000,
@@ -2025,6 +2028,10 @@ function set_initial_state() {
                 buildings["solar_panel"].free = 15;
                 buildings["solar_panel"].multipliers = {"diamond": .05, "glass": .1};
                 buildings["solar_panel"].generation["fuel"] = 0.0002;
+
+                $("#events_topbar").html("Crisis Over!");
+                $("#events_content").html("You finally managed to get through the crisis! Your oil wells, engines, and ink refineries have had their abilities greatly reduces, but in exchange solar panels are much better.<br/>You've also been hearing rumors about someone teaching powerful knowledge. Maybe building more libraries will get them to arrive.");
+                $("#events").removeClass("hidden");
             },
             "cost": {
                 "money": 100000000, /* IDK let's just throw some costs up and say it's good. */
@@ -2444,6 +2451,7 @@ function set_initial_state() {
 
     };
     event_flags = {};
+    autobuild_amount = 0;
     $("#buy_amount").val(1);
 }
 
@@ -3776,17 +3784,51 @@ function run_rules() {
 let build_queue = [];
 let autobuild_amount = 0;
 function draw_autobuild() {
-    /* TODO */
+    let autobuild_slots = 10;
+    $("#autobuild_items").html("Autobuild slots: " + format_num(build_queue.length) + "/" + format_num(autobuild_slots) + "<br/>");
+    for (let i = 0; i < build_queue.length; i++) {
+        let b_name = $("#building_" + build_queue[i] + " .building_name").text();
+        let color = i >= autobuild_amount ? "" : "green";
+        $("#autobuild_items").append("<span style='color: " + color + "'>" + b_name + "</span><span class='clickable'>Remove</span><br>");
+        $("#autobuild_items span").last().click(function () {
+            build_queue.splice(i, 1); /* Remove the element in autobuild queue. */
+            if (i < autobuild_amount) { /* If it's already build, reduce autobuild amount to not skip a building. */
+                autobuild_amount--;
+            }
+            draw_autobuild(); /* Refresh view */
+        });
+    }
+    if (build_queue.length < autobuild_slots) {
+        $("#autobuild_items").append("Add a building to the queue: ");
+        Object.keys(buildings).forEach(function (build) {
+            /* For each building, if it's visible, not a mana building, and actually buildable (non empty build cost) let them add it. */
+            if (!$("#building_" + build).parent().hasClass("hidden") && SPELL_BUILDINGS.indexOf(build) == -1 && !$.isEmptyObject(buildings[build].base_cost)) {
+                let b_name = $("#building_" + build + " .building_name").text();
+                $("#autobuild_items").append("<span class='clickable'>" + b_name + "</span>");
+                $("#autobuild_items span").last().click(function () {
+                    build_queue.push(build);
+                    draw_autobuild();
+                });
+            }
+        });
+    }
 }
 
 function run_autobuild() {
     /* We have a building queued and not built */
     if (build_queue.length > autobuild_amount) {
-        purchase_building(build_queue[autobuild_amount], 1); /* Attempt to build it. */
-        add_log_elem("Autobuilt activated!");
-        autobuild_amount++; /* purchase_building() throws an error if it can't build, so this only runs on successful build. */
+        let to_build = build_queue[autobuild_amount];
+        if (!$("#building_" + to_build).parent().hasClass("hidden") && SPELL_BUILDINGS.indexOf(to_build) == -1) { /* Building must be visible to build it. */
+            purchase_building(to_build, 1); /* Attempt to build it. */
+            add_log_elem("Autobuilt activated!");
+            autobuild_amount++; /* purchase_building() throws an error if it can't build, so this only runs on successful build. */
+            if (!$("#autobuild_items").hasClass("hidden")) { /* If autobuild menu is open, refresh it.*/
+                draw_autobuild();
+            }
+        }
     }
 }
+
 
 function prng(seed: number): number {
     if (seed <= 0) { seed = 1234567; }
@@ -4100,6 +4142,9 @@ window.onload = () => {
     check_updates();
     setInterval(check_updates, 1000 * 60 * 5); /* Check for updates every 5 minutes or so. */
 
+    if (adventure_data["challenges_completed"] && adventure_data["challenges_completed"].length > CHALLENGES.CASCADE && adventure_data["challenges_completed"][CHALLENGES.CASCADE]) {
+        $("#autobuild_unlock").removeClass("hidden");
+    }
     /* Setup hotkeys */
     let hotkey_mode = 0;
     $(document).keyup(function (e) {

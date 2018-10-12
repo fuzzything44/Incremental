@@ -122,12 +122,17 @@
         </div>
         <div class="hidden">
             <span class="building bgc_second" onclick="$('#pc_box').toggleClass('hidden');$('#rule_data').html('');">Production Control</span>
-            <div id="pc_box" class="hidden" style="z-index: 1; position: absolute; left: -15.5em;">
+            <div id="pc_box" class="hidden" style="z-index: 2; position: absolute; left: -15.5em;">
                 <div class="clickable fgc bgc_second" style="width: 45em; position: relative; display: flex; z-index: 1">
                     <div id="rule_names" style="width: 15em; border-right: solid 1px;"></div>
                     <div id="rule_data" style="width: 30em; text-align: center;">
                     </div>
                 </div>
+            </div>
+
+            <span id="autobuild_unlock" class="building bgc_second hidden" onclick="$('#autobuild_box').toggleClass('hidden'); draw_autobuild();">AutoBuild</span>
+            <div id="autobuild_box" class="hidden" style="z-index: 1; position: absolute; left: -3em;">
+                <div id="autobuild_items" class="clickable fgc bgc_second" style="width: 25em; min-height: 20em; position: relative; z-index: 1"></div>
             </div>
             <hr />
         </div>

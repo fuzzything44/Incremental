@@ -954,7 +954,7 @@ let equipment = {
                 self.name += " (" + format_num(data["amount"]) + ")";
             }
             self.use = function (index, location) {
-                if (adventure_data.current_potion.name == "Halloween Candy") {
+                if (adventure_data.current_potion && adventure_data.current_potion.name == "Halloween Candy") {
                     adventure_data.current_potion.time += 10;
                 } else {
                     if (adventure_data.current_potion != undefined) {

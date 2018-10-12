@@ -236,7 +236,12 @@ var events = [
                 content += "<span onclick='bribe_environment();' class='clickable'>Remove Environmental Regulations</span><i style='text: small'>This provides a massive boost to mines and logging camps.</i><br />";
                 if (buildings["s_manastone"].amount >= 250) {
                     var regs = buildings["s_manastone"].amount % 100 >= 50 ? "financial" : "environmental";
-                    content += "Removing " + regs + " regulations seems like it might be risky though...";
+                    if (buildings["s_manastone"].amount >= 350) {
+                        content += "Removing " + regs + " regulations seems like it might be risky, but it could be worth it...";
+                    }
+                    else {
+                        content += "Removing " + regs + " regulations seems like it might be risky though...";
+                    }
                 }
             }
             else {

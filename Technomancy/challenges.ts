@@ -108,7 +108,7 @@ let CHALLENGE_INFO = [
         "description": "Buying a building buys more than just what you chose. Good luck managing your resources.",
         "requirements": "Get 100 mana.",
         "restrictions": "Go back to 0 mana. Whenever you buy a building, you also buy each building that it unlocks, if possible. Same for selling!",
-        "reward": "Nothing yet. Maybe auto-build if meteors doesn't give that.",
+        "reward": "Auto-Build (10 slots)",
         "test_completed": function () { return buildings["s_manastone"].amount >= 100; }
     },
     { /* Disco */
@@ -121,7 +121,7 @@ let CHALLENGE_INFO = [
     },
     { /* No Upgrade */
         "name": "No Upgrade",
-        "description": "This will be tough. Upgrades make everything better. Sucks, because you don't get any.",
+        "description": "This will be tough. Upgrades make everything better. Sucks, because you don't get any. It is HIGHLY suggested that you get the Magic Bag before attempting this. Don't know what that is? Maybe take bigger risks and talk to the wanderer.",
         "requirements": "Get 200 mana.",
         "restrictions": "Go back to 0 mana. You can't buy any upgrades.",
         "reward": "You can gain essence. Also, 200 mana!",

@@ -31,9 +31,11 @@
                     $("#events_content").append("<span class='clickable'>Start!</span>");
                     $("#events_content span").last().click(function () {
                         if (confirm("Are you sure you want to start this challenge?")) {
-                            adventure_data["challenge"] = number;
-                            adventure_data["challenge_mana"] = buildings["s_manastone"].amount;
-                            prestige.run(false, startfunc); /* No, they don't get mana from prestige. It's reset after mana gains. */
+                            prestige.run(false, function () {
+                                adventure_data["challenge"] = number; /* Set challenge number to whatever challenge ID they're doing. */
+                                adventure_data["challenge_mana"] = buildings["s_manastone"].amount; /* Save old amount of mana */
+                                startfunc(); /* Run the start-of-run function for their challenge, which will reset their mana. */
+                            });
                         }
                     });
                     $("#events_content").append("<span class='clickable'>Not Yet</span>");
