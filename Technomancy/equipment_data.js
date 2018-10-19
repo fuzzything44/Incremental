@@ -930,7 +930,7 @@ var equipment = {
                         gen_equipment(adventure_data["current_potion"].data).stop();
                     }
                     adventure_data.current_potion = {
-                        name: self.name,
+                        name: "Halloween Candy",
                         effect: "Too much sugar",
                         time: 10,
                         data: data,

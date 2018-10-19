@@ -2422,7 +2422,9 @@ var prestige = {
         if (callback === void 0) { callback = function () { }; }
         var mana_gain = prestige.mana();
         var mana = buildings["s_manastone"].amount;
-        if (mana_gain < 1 && ask) {
+        /* If they have this skill, don't warn them they're prestiging for 0.  */
+        var has_quickmana = event_flags["skills"] != undefined && event_flags["skills"][8];
+        if (mana_gain < 1 && ask && !has_quickmana) {
             if (adventure_data["challenge"] == CHALLENGES.LOAN) {
                 alert("You can't prestige in this challenge.");
                 return;
@@ -2461,7 +2463,12 @@ var prestige = {
             $("#prestige > span").first().html("Prestige&nbsp;(" + format_num(prestige.mana(), false) + ", " + format_num(prestige.percent_through(), false) + "%)");
         }
         else {
-            $("#prestige > span").first().html("Prestige&nbsp;(" + format_num(prestige.percent_through(), false) + "%)");
+            if (event_flags["mage_quickmana"]) { /* They have the quick mana skill */
+                $("#prestige > span").first().html("Prestige&nbsp;(" + format_num(prestige.percent_through(), false) + "%, @" + format_num(event_flags["mage_quickmana"]) + ")");
+            }
+            else {
+                $("#prestige > span").first().html("Prestige&nbsp;(" + format_num(prestige.percent_through(), false) + "%)");
+            }
         }
         var suggested_amounts = [2, 5, 10, 27, 52, 92, 150, 200]; /* What mana amounts are good to prestige at. */
         for (var i in suggested_amounts) {

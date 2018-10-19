@@ -2582,7 +2582,12 @@ let prestige = {
     run: function (ask = true, callback = function () { }) {
         let mana_gain = prestige.mana();
         let mana = buildings["s_manastone"].amount;
-        if (mana_gain < 1 && ask) {
+
+        /* If they have this skill, don't warn them they're prestiging for 0.  */
+        let has_quickmana = event_flags["skills"] != undefined && event_flags["skills"][8];
+
+        if (mana_gain < 1 && ask && !has_quickmana) {
+
             if (adventure_data["challenge"] == CHALLENGES.LOAN) { alert("You can't prestige in this challenge."); return; }
 
             if (!confirm("Prestige now wouldn't produce mana! As you get more mana, it gets harder to make your first mana stone in a run. You are currently " + prestige.percent_through().toString() + "% of the way to your first mana. Prestige anyway?")) {
@@ -2620,7 +2625,11 @@ let prestige = {
         if (prestige.mana()) {
             $("#prestige > span").first().html("Prestige&nbsp;(" + format_num(prestige.mana(), false) + ", " + format_num(prestige.percent_through(), false) + "%)")
         } else {
-            $("#prestige > span").first().html("Prestige&nbsp;(" + format_num(prestige.percent_through(), false) + "%)")
+            if (event_flags["mage_quickmana"]) { /* They have the quick mana skill */
+                $("#prestige > span").first().html("Prestige&nbsp;(" + format_num(prestige.percent_through(), false) + "%, @" + format_num(event_flags["mage_quickmana"]) + ")")
+            } else {
+                $("#prestige > span").first().html("Prestige&nbsp;(" + format_num(prestige.percent_through(), false) + "%)")
+            }
         }
 
         let suggested_amounts = [2, 5, 10, 27, 52, 92, 150, 200]; /* What mana amounts are good to prestige at. */

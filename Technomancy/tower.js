@@ -178,7 +178,7 @@ var TOWER_DATA = [
     {
         "boss": "Kombast©™ Cable",
         "text": "This is the greediest company of all and they're here for your money!",
-        "reward_text": "a whole lot of gold and money!",
+        "reward_text": "a whole lot of gold and money for your magic bag!",
         reward: function () { }
     },
 ];
@@ -194,7 +194,7 @@ function tower() {
         adventure_data["tower_toughness"] = 1;
     }
     $("#events_topbar").html("The Tower of Magic");
-    $("#events_content").html("Welcome to the Tower of Magic. Your essence allows you to enter. Oh, also if you're here please message fuzzything44 on the Discord channel. <br/>");
+    $("#events_content").html("Welcome to the Tower of Magic. Your essence allows you to enter.<br/>");
     var essence_cost = Math.round(Math.pow(adventure_data["total_essence"], 1.2));
     $("#events_content").append("<span class='clickable'>Compress</span> some magic into 1 essence (" + format_num(essence_cost, false) + " Mana Stones)<br/>");
     $("#events_content span").last().click(function () {
@@ -328,7 +328,7 @@ function climb_tower(health, ehealth, grinding) {
         }
     }
     if (adventure_data["tower_floor"] >= TOWER_DATA.length && !grinding) {
-        $("#events_content").html("You're at the current top of the tower!<br/>");
+        $("#events_content").html("You're at the current top of the tower! Oh, also if you're here please message fuzzything44 on the Discord channel.<br/>");
         $("#events_content").append("<span class='clickable'>Back</span> to tower base.<br/>");
         $("#events_content span").last().click(function () { tower(); });
     }
@@ -390,9 +390,15 @@ function climb_tower(health, ehealth, grinding) {
                 /* Warrior exists and is defending. And is alive. */
                 if (adventure_data["tower_warrior"] != undefined && $("input:radio[name='warrior_action']:checked").val() == "defend" && adventure_data["tower_warrior"].current_health > 0) {
                     adventure_data["tower_warrior"].current_health -= amt;
+                    fight_results_message += " Your warrior deflects the damage!";
                 }
                 else {
                     health -= amt;
+                    /* They have spikey kneepads */
+                    if (adventure_data["tower_floor"] > 16) {
+                        fight_results_message += " Your spikey kneepads poke your enemy for 5 damage!";
+                        ehealth -= 5;
+                    }
                 }
             }
             if (winstate == "won") {
@@ -406,13 +412,13 @@ function climb_tower(health, ehealth, grinding) {
             }
             else if (winstate == "tie") {
                 /* Both take damage */
-                damage_player(enemy_damage);
                 ehealth -= adventure_data["tower_power"];
                 fight_results_message += "You hit it! But it also hit you...";
+                damage_player(enemy_damage);
             }
             else {
-                damage_player(enemy_damage);
                 fight_results_message += "It hit you. That hurts.";
+                damage_player(enemy_damage);
             }
             fight_results_message += "<br/>";
             if (adventure_data["tower_healer"] != undefined) {

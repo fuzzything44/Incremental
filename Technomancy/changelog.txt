@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.10.1: (10/18/18) Minor changes
+Prestige and quickmana work a bit better now. Halloween candy now stacks properly when used. Perfect logikittens no longer give essence or magic bag. Spikey kneepads now do something.
+
 v5.10.0: (10/12/18) Autobuild, balance changes, and bugfixes
 Autobuild has been added! Get it from finishing the Cascade challenge!
 When entering a challenge, mana you would get on prestige is added to the total you get when you finish (instead of it disappearing). Buying an upgrade to finish a crisis gives a hint about the wanderer. No upgrade challenge suggests you have the magic bag before starting it. You can now use halloween candy without already having a potion going. If you have enough mana, it now says that the risky regulation might be worth it. 

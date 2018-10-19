@@ -953,6 +953,7 @@ let equipment = {
             if (data["amount"]) {
                 self.name += " (" + format_num(data["amount"]) + ")";
             }
+            
             self.use = function (index, location) {
                 if (adventure_data.current_potion && adventure_data.current_potion.name == "Halloween Candy") {
                     adventure_data.current_potion.time += 10;
@@ -961,7 +962,7 @@ let equipment = {
                         gen_equipment(adventure_data["current_potion"].data).stop();
                     }
                     adventure_data.current_potion = {
-                        name: self.name, /* We should probably actually be setting all of these (except data) depending on the potion type. */
+                        name: "Halloween Candy", /* We should probably actually be setting all of these (except data) depending on the potion type. */
                         effect: "Too much sugar",
                         time: 10,
                         data: data,
