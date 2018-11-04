@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.11.0: (11/3/18) Turkeys!
+Halloween has ended. No more candy for you. Also, there's some wild turkeys to kill. Fixed a bug with getting negative fuel from the magic bag. 
+
 v5.10.1: (10/18/18) Minor changes
 Prestige and quickmana work a bit better now. Halloween candy now stacks properly when used. Perfect logikittens no longer give essence or magic bag. Spikey kneepads now do something.
 
