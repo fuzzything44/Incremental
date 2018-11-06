@@ -1995,7 +1995,7 @@ function set_initial_state() {
             "cost": {
                 "refined_mana": 500000,
             },
-            "tooltip": "Constructs a mana purifier. Can only be purchased once.",
+            "tooltip": "Constructs a mana purifier. Can only be purchased once EVER (it lasts between prestiges, yay!)",
             "name": "Mana Mastery<br />",
             "image": "",
             "repeats": false,
@@ -2285,6 +2285,22 @@ function set_initial_state() {
             "image": "",
             "repeats": false,
         },
+        "grow_cost": {
+            "unlock": function () {
+                this.cost["refined_mana"] = Math.floor(total_time / 1000);
+                return (total_time > 1000 * 60 * 5) && purchased_upgrades.indexOf("essence_ai") != 0;
+            },
+            "purchase": function () {
+                buildings["s_ai"].generation["manager"] += this.cost["refined_mana"] / 100;
+            },
+            "cost": {
+                "refined_mana": 0,
+            },
+            "tooltip": "Gets more expensive over time, but the more it costs the better it is!",
+            "name": "AI Growth",
+            "image": "",
+            "repeats": false,
+        },
         "trade": {
             "unlock": function () { return false; },
             "purchase": function () { },
@@ -2360,6 +2376,9 @@ var prestige = {
                     console.error("Something went wrong. We got a negative multiplier for pp");
                 }
             }
+        }
+        if (adventure_data["tower_floor"] > 27) {
+            prestige_points *= 10;
         }
         return prestige_points;
     },
@@ -2501,6 +2520,7 @@ function save() {
     localStorage["erules"] = JSON.stringify(erules);
     localStorage["autobuild"] = JSON.stringify(build_queue);
     localStorage["autobuild_amt"] = JSON.stringify(autobuild_amount);
+    localStorage["autobuild_rpt"] = JSON.stringify(autobuild_repeat);
     $('#save_text').css('opacity', '1');
     setTimeout(function () { return $('#save_text').css({ 'opacity': '0', 'transition': 'opacity 1s' }); }, 1000);
     console.log("Saved");
@@ -2574,6 +2594,9 @@ function load() {
     }
     if (localStorage.getItem("autobuild_amt")) {
         autobuild_amount = JSON.parse(localStorage.getItem("autobuild_amt"));
+    }
+    if (localStorage.getItem("autobuild_rpt")) {
+        autobuild_repeat = JSON.parse(localStorage.getItem("autobuild_rpt"));
     }
     console.log("Loading theme");
     if (!localStorage.getItem("theme")) {
@@ -2765,6 +2788,7 @@ function toggle_time() {
 }
 var rule_timer = 0;
 var last_update = Date.now();
+var total_time = 0;
 function update() {
     /* Find time since last update. */
     var delta_time = Date.now() - last_update;
@@ -2814,10 +2838,11 @@ function update() {
     /* Perform rules */
     rule_timer += delta_time;
     if (rule_timer > 1000) {
+        rule_timer = 0;
         run_rules();
         run_autobuild();
-        rule_timer = 0;
     }
+    total_time += delta_time; /* Track total time since refresh */
     /* Check for negative resources or resources that will run out. */
     Object.keys(resources).forEach(function (res) {
         if (isNaN(resources[res].amount)) {
@@ -3597,12 +3622,29 @@ function run_rules() {
 }
 var build_queue = [];
 var autobuild_amount = 0;
+var autobuild_repeat = false;
 function draw_autobuild() {
     var autobuild_slots = 10;
+    if (adventure_data["tower_floor"] > 25) {
+        autobuild_slots += 10;
+    }
+    if (adventure_data["tower_floor"] > 26) {
+        autobuild_slots += adventure_data["tower_floor"];
+    }
     $("#autobuild_items").html("Autobuild slots: " + format_num(build_queue.length) + "/" + format_num(autobuild_slots) + "<br/>");
+    if (adventure_data["tower_floor"] > 24) {
+        $("#autobuild_items").append("Repeat last building: <input type='checkbox' " + (autobuild_repeat ? "checked" : "") + "><br/>");
+        $("#autobuild_items input").last().click(function () {
+            autobuild_repeat = !autobuild_repeat;
+            draw_autobuild();
+        });
+    }
     var _loop_4 = function (i) {
         var b_name = $("#building_" + build_queue[i] + " .building_name").text();
         var color = i >= autobuild_amount ? "" : "green";
+        if (i == build_queue.length - 1 && autobuild_repeat) {
+            color = "yellow";
+        }
         $("#autobuild_items").append("<span style='color: " + color + "'>" + b_name + "</span><span class='clickable'>Remove</span><br>");
         $("#autobuild_items span").last().click(function () {
             build_queue.splice(i, 1); /* Remove the element in autobuild queue. */
@@ -3642,6 +3684,9 @@ function run_autobuild() {
                 draw_autobuild();
             }
         }
+    }
+    else if (autobuild_repeat) {
+        autobuild_amount = build_queue.length - 1;
     }
 }
 function prng(seed) {

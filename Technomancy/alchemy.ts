@@ -357,6 +357,26 @@ let ingredients: ingredient[] = [
         "Lactose Intolerant",
         "Tasty,"
     ),
+    new ingredient("Etherium",
+        function (power: number, on_combat: boolean = false) {
+            if (on_combat) {
+
+            } else {
+                buildings["s_manastone"].amount += 1 + Math.floor(power / 5);
+                resources_per_sec["mana"] += 1 + Math.floor(power / 5);
+                adventure_data["current_potion"].time -= 10;
+            }
+        },
+        function () {
+        },
+        "Mmm, tastes like strawberry",
+        600,
+        20,
+        [],
+        "Mana",
+        "Twinkling",
+        "Specially"
+    ),
 ];
 
 /*

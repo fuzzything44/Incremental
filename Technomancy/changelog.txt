@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.12.0: (11/6/18) Alchemy
+Started some work on alchemist! There's now 2 ingredients to collect. When getting mana purifier, it says it lasts through prestige now. Also added 4 new tower floors, 3 of which improve autobuild (if you have it) and the last gives you more mana! Also an AI Unit upgrade that's probably broken!
+
 v5.11.0: (11/3/18) Turkeys!
 Halloween has ended. No more candy for you. Also, there's some wild turkeys to kill. Fixed a bug with getting negative fuel from the magic bag. 
 

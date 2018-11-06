@@ -257,6 +257,17 @@ var ingredients = [
         buildings["logging"].generation["money"] = adventure_data["current_potion"].logging_upkeep;
         buildings["mine"].generation["money"] = adventure_data["current_potion"].mine_upkeep;
     }, "Mmm... cheese...", 90, 6, [], "Happiness", "Lactose Intolerant", "Tasty,"),
+    new ingredient("Etherium", function (power, on_combat) {
+        if (on_combat === void 0) { on_combat = false; }
+        if (on_combat) {
+        }
+        else {
+            buildings["s_manastone"].amount += 1 + Math.floor(power / 5);
+            resources_per_sec["mana"] += 1 + Math.floor(power / 5);
+            adventure_data["current_potion"].time -= 10;
+        }
+    }, function () {
+    }, "Mmm, tastes like strawberry", 600, 20, [], "Mana", "Twinkling", "Specially"),
 ];
 /*
  * Sets up alchemy ingredient making.

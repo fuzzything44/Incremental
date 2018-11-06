@@ -99,7 +99,7 @@ var CHALLENGE_INFO = [
         "description": "Buying a building buys more than just what you chose. Good luck managing your resources.",
         "requirements": "Get 100 mana.",
         "restrictions": "Go back to 0 mana. Whenever you buy a building, you also buy each building that it unlocks, if possible. Same for selling!",
-        "reward": "Auto-Build (10 slots)",
+        "reward": "Auto-Build (starts with 10 slots)",
         "test_completed": function () { return buildings["s_manastone"].amount >= 100; }
     },
     {

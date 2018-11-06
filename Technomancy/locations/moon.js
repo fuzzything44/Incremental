@@ -79,7 +79,7 @@
             },
         }),
         ({
-            "condition": function () { return event_flags["wanderer_knowledge"] == "alchemy" && adventure_data["alchemy_ingredients"]["Cheese"] != undefined; },
+            "condition": function () { return event_flags["alchemist_ingredients"] != undefined && adventure_data["alchemy_ingredients"]["Cheese"] != undefined && event_flags["alchemist_ingredients"]["cheese"]; },
             "types": ["noncombat"],
             "weight": 1,
             "title": "This isn't right...",

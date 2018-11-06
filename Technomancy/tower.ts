@@ -182,6 +182,30 @@
         "reward_text": "a whole lot of gold and money for your magic bag!",
         reward: function () { }
     }, 
+    { /* Boss 24 */
+        "boss": "The Entire Continent of America",
+        "text": "No, not the people living there. You're fighting the continent itself. How did it fit in the tower? Don't ask.",
+        "reward_text": "an option for autobuild to repeat the last building",
+        reward: function () { }
+    }, 
+    { /* Boss 25 */
+        "boss": "Kristoffer Kolumbus",
+        "text": "The Legendary Explorer himself! He's rumored to be the original person to find the mystical land of Canadia!",
+        "reward_text": "10 more autobuild spaces",
+        reward: function () { }
+    }, 
+    { /* Boss 26 */
+        "boss": "A Very Large Telescope",
+        "text": "It's used for finding exoplanets. Also, you're fighting it now. ",
+        "reward_text": "an extra autobuild slot for every tower boss you kill",
+        reward: function () { }
+    }, 
+    { /* Boss 27 */
+        "boss": "A globe",
+        "text": "What's so tough about just a regular globe? Well, maybe the fact that this one is to scale. 1:1 scale that is. ",
+        "reward_text": "a lot more mana on every prestige",
+        reward: function () { }
+    }, 
 ]
 
 let grinding_level = 1;

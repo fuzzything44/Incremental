@@ -107,6 +107,22 @@
                 $("#events_content").append(exit_button("Continue onwards."));
             },
         }), /* Continue/end quest for Cath. No clue why it's 2 different encounters but whatever. */
+
+        ({
+            "condition": function () { return event_flags["alchemist_ingredients"] != undefined && adventure_data["alchemy_ingredients"]["Etherium"] != undefined && event_flags["alchemist_ingredients"]["etherium"] && Math.random() > 0.95; },
+            "types": ["noncombat"],
+            "weight": 1,
+            "title": "Huh, that's weird",
+            "run_encounter": function () {
+                $("#events_content").html("Hmm, that ice crystal doesn't look normal. <br /><span class='clickable'>Investigate</span>");
+                $("#events_content > span").last().click(() => {
+                    $("#events_content").html("Oh huh, looks like it's not ice. It's actually the incredibly rare ETHERIUM! <br /><span class='clickable' onclick='start_adventure()'>Yay!</span>");
+                    adventure_data["alchemy_ingredients"]["Etherium"]++;
+                });
+
+            },
+        }), /* End etherium */
+
     ],
     "connects_to": ["moon", "kittens/cath", "kittens/piscine"],
     "enter_cost": 3,
