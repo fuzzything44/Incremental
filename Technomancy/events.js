@@ -894,6 +894,9 @@ function setup_events() {
                     toggle_building_state("bank");
                 }
                 buildings["bank"]["generation"]["money"] *= 0.7;
+                if (adventure_data["tower_floor"] > 29) {
+                    buildings["bank"]["generation"]["money"] *= 0.3;
+                }
                 /* Yes, this happens. It gets small enough that rounding errors make it weird. */
                 if (buildings["bank"].base_cost["money"] * 0.7 >= buildings["bank"].base_cost["money"]) {
                     buildings["bank"].base_cost["money"] = 0;
@@ -902,6 +905,9 @@ function setup_events() {
                     toggle_building_state("bank");
                 }
                 buildings["bank"].base_cost["money"] *= 0.7;
+                if (adventure_data["tower_floor"] > 29) {
+                    buildings["bank"].base_cost["money"] *= 0.3;
+                }
                 /* Decrease investment companies. */
                 comp_state = buildings["big_bank"].on;
                 if (comp_state) {
@@ -932,6 +938,9 @@ function setup_events() {
                 else {
                     event_flags["to_money_decrease"] = 1; /* Every second! */
                 }
+                if (adventure_data["tower_floor"] > 29) {
+                    event_flags["to_money_decrease"] /= 2;
+                }
             }
         }
     }, 1000);
@@ -940,6 +949,9 @@ function setup_events() {
     setInterval(function () {
         if (event_flags["to_oil_decrease"] == undefined) {
             event_flags["to_oil_decrease"] = 60 * 15; /* 15 min to first loss. */
+            if (adventure_data["tower_floor"] > 28) {
+                event_flags["to_oil_decrease"] = 60 * 5;
+            }
             event_flags["sludge_level"] = 0;
         }
         if (event_flags["crisis_averted"] == undefined) {
@@ -967,6 +979,9 @@ function setup_events() {
                 else if (event_flags["sludge_level"] < 20) {
                     event_flags["sludge_level"] += 1;
                     event_flags["to_oil_decrease"] = 60 * 3; /* 3 minutes to next loss. */
+                }
+                if (adventure_data["tower_floor"] > 28) {
+                    event_flags["to_oil_decrease"] /= 2;
                 }
                 /* Increase/decrease sludge level based on oil stuff, then increase/decrease production modifiers based off of that.
                         This means we'll need some arbitrary formulas.
@@ -996,6 +1011,9 @@ function setup_events() {
                 }
                 if (buildings["ink_refinery"].on) {
                     sludge_increase += buildings["ink_refinery"].amount * 7 + Math.floor(event_flags["sludge_level"] * 0.01);
+                }
+                if (adventure_data["tower_floor"] > 28) {
+                    sludge_increase *= 2;
                 }
                 if (!event_flags["crisis_averted"] && event_flags["to_oil_decrease"] < 0) { /* Stop increase if crisis averted or still starting. */
                     event_flags["sludge_level"] += sludge_increase + 1;

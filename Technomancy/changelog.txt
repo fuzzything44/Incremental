@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.12.0: (11/13/18) IDK, some random stuff
+Fixed the AI Growth Upgrade. Man, that was messed up. Also there's a couple new tower floors that help you get through crisises faster. And one for even more mana. Oh, also added some limits to mana refinery and trades that'll only appear if you're at ridiculous amounts of mana (10k and 1m).
+
 v5.12.0: (11/6/18) Alchemy
 Started some work on alchemist! There's now 2 ingredients to collect. When getting mana purifier, it says it lasts through prestige now. Also added 4 new tower floors, 3 of which improve autobuild (if you have it) and the last gives you more mana! Also an AI Unit upgrade that's probably broken!
 

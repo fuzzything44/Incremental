@@ -2441,10 +2441,19 @@ function set_initial_state() {
         "grow_cost": {
             "unlock": function () {
                 this.cost["refined_mana"] = Math.floor(total_time / 1000);
-                return (total_time > 1000 * 60 * 5) && purchased_upgrades.indexOf("essence_ai") != 0;
+                return (total_time > 1000 * 60 * 5) && purchased_upgrades.indexOf("essence_ai") != -1;
             },
             "purchase": function () {
-                buildings["s_ai"].generation["manager"] += this.cost["refined_mana"] / 100;
+                let build_state = buildings["s_ai"].on;
+                if (build_state) {
+                    toggle_building_state("s_ai");
+                }
+                buildings["s_ai"].generation["manager"] += this.cost["refined_mana"] / 10000; /* It's multiplied by 100, so every 100 refined mana gives +1 manager */
+
+                if (build_state) { /* Only turn on if it already was on */
+                    toggle_building_state("s_ai");
+                }
+
             },
             "cost": {
                 "refined_mana": 0,
@@ -2541,8 +2550,15 @@ let prestige = {
             }
         }
 
+        if (prestige_points < 0) {
+            prestige_points = 0;
+        }
+
         if (adventure_data["tower_floor"] > 27) {
             prestige_points *= 10;
+        }
+        if (adventure_data["tower_floor"] > 30) {
+            prestige_points *= Math.max(10, Math.log(prestige_points / 1000000));
         }
         return prestige_points;
     },

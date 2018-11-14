@@ -205,6 +205,24 @@ var TOWER_DATA = [
         "reward_text": "a lot more mana on every prestige",
         reward: function () { }
     },
+    {
+        "boss": "a little swimmy fishy",
+        "text": "It's just swimming around. ",
+        "reward_text": "being able to kill the environment faster",
+        reward: function () { }
+    },
+    {
+        "boss": "a little golden swimmy fishy",
+        "text": "It's just swimming around. It's also very shiny. ",
+        "reward_text": "being able to kill the economy faster",
+        reward: function () { }
+    },
+    {
+        "boss": "a little sparkly swimmy fishy",
+        "text": "It's just swimming around. It's also very extremely shiny. ",
+        "reward_text": "even more mana per prestige",
+        reward: function () { }
+    },
 ];
 var grinding_level = 1;
 function tower() {
