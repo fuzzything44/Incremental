@@ -1,6 +1,6 @@
 ﻿Technomancy Changelog
 
-v5.12.0: (11/13/18) IDK, some random stuff
+v5.13.0: (11/13/18) IDK, some random stuff
 Fixed the AI Growth Upgrade. Man, that was messed up. Also there's a couple new tower floors that help you get through crisises faster. And one for even more mana. Oh, also added some limits to mana refinery and trades that'll only appear if you're at ridiculous amounts of mana (10k and 1m).
 
 v5.12.0: (11/6/18) Alchemy
