@@ -370,7 +370,13 @@ function climb_tower(health, ehealth, grinding) {
         }
     }
     if (adventure_data["tower_floor"] >= TOWER_DATA.length && !grinding) {
-        $("#events_content").html("You're at the current top of the tower! Oh, also if you're here please message fuzzything44 on the Discord channel.<br/>");
+        if (grinding) {
+            $("#events_content").html("Congratulations on grinding to the very top of the tower! As a reward, the essence cost has been reduced!<br/>");
+            adventure_data["total_essence"] = 0;
+        }
+        else {
+            $("#events_content").html("You're at the current top of the tower! Oh, also if you're here please message fuzzything44 on the Discord channel.<br/>");
+        }
         $("#events_content").append("<span class='clickable'>Back</span> to tower base.<br/>");
         $("#events_content span").last().click(function () { tower(); });
     }

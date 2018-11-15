@@ -32,7 +32,7 @@ function challenge_menu() {
     if (CHALLENGE_INFO[number].test_completed()) {
         $("#events_content").append("You have completed the challenge. Finish the challenge to exit it (and prestige). <br/><span class='clickable'>Finish</span> the challenge!");
         $("#events_content > span").last().click(function () {
-            if (adventure_data["challenge"] == CHALLENGES.NO_UPGRADE) {
+            if (adventure_data["challenge"] == CHALLENGES.NO_UPGRADE && adventure_data["challenge_mana"] < 500) {
                 adventure_data["challenge_mana"] += 200;
             }
 
@@ -84,7 +84,7 @@ let CHALLENGE_INFO = [
         "description": "You have taken a vow of poverty and therefore have almost no money.",
         "requirements": "Get to 200 mana to complete this challenge",
         "restrictions": "Go back to 0 mana, and you can't have more than 20 seconds of money production.",
-        "reward": "Nothing yet. Probably a multiplier to money gains. Or maybe cost reduction on stuff that costs money. ",
+        "reward": "Financial crisis will progress quicker.",
         "test_completed": function () { return buildings["s_manastone"].amount >= 200; }
     },
     { /* Meteors */
@@ -124,7 +124,9 @@ let CHALLENGE_INFO = [
         "description": "This will be tough. Upgrades make everything better. Sucks, because you don't get any. It is HIGHLY suggested that you get the Magic Bag before attempting this. Don't know what that is? Maybe take bigger risks and talk to the wanderer.",
         "requirements": "Get 200 mana.",
         "restrictions": "Go back to 0 mana. You can't buy any upgrades.",
-        "reward": "You can gain essence. Also, 200 mana!",
+        get reward() {
+            return "You can gain essence." + (buildings["s_manastone"].amount < 500 ? " Also, 200 mana!" : "");
+        },
         "test_completed": function () { return buildings["s_manastone"].amount >= 200; }
     },
 ]

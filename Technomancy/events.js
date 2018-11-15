@@ -908,6 +908,9 @@ function setup_events() {
                 if (adventure_data["tower_floor"] > 29) {
                     buildings["bank"].base_cost["money"] *= 0.3;
                 }
+                if (adventure_data["challenges_completed"] && adventure_data["challenges_completed"].length > CHALLENGES.POVERTY && adventure_data["challenges_completed"][CHALLENGES.POVERTY]) {
+                    buildings["bank"].base_cost["money"] *= 0.3;
+                }
                 /* Decrease investment companies. */
                 comp_state = buildings["big_bank"].on;
                 if (comp_state) {

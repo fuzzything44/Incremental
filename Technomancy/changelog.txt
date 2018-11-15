@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.13.1: (11/15/18) Lots of small stuff
+Added a button to put everything in your bag of folding. Added an option to turn off all confirmation boxes. No upgrade challenge mana requires you to start it with less than 500. Added a reward for the poverty challenge. Added a reward for getting to the top of the tower of grinding (also, if you get there wow).
+
 v5.13.0: (11/13/18) IDK, some random stuff
 Fixed the AI Growth Upgrade. Man, that was messed up. Also there's a couple new tower floors that help you get through crisises faster. And one for even more mana. Oh, also added some limits to mana refinery and trades that'll only appear if you're at ridiculous amounts of mana (10k and 1m).
 

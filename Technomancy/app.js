@@ -2287,7 +2287,6 @@ function set_initial_state() {
         },
         "grow_cost": {
             "unlock": function () {
-                this.cost["refined_mana"] = Math.floor(total_time / 1000);
                 return (total_time > 1000 * 60 * 5) && purchased_upgrades.indexOf("essence_ai") != -1;
             },
             "purchase": function () {
@@ -2300,8 +2299,8 @@ function set_initial_state() {
                     toggle_building_state("s_ai");
                 }
             },
-            "cost": {
-                "refined_mana": 0,
+            get cost() {
+                return { "refined_mana": Math.floor(total_time / 1000) };
             },
             "tooltip": "Gets more expensive over time, but the more it costs the better it is!",
             "name": "AI Growth",
@@ -3710,7 +3709,18 @@ function prng(seed) {
 }
 function perm_bag() {
     $("#events_topbar").html("Magic Bag of Folding");
-    $("#events_content").html("This is your bag of folding. You put resources in, and then get a fraction of them out every prestige. You currently have " + adventure_data["perm_bag_bits"].toString() + " pieces of mithril cloth. Unlocking space for a new resource takes one piece of cloth. <br/><table></table>");
+    $("#events_content").html("This is your bag of folding. You put resources in, and then get a fraction of them out every prestige. You currently have " + adventure_data["perm_bag_bits"].toString() + " pieces of mithril cloth. Unlocking space for a new resource takes one piece of cloth. <br/>");
+    $("#events_content").append("<span class='clickable>Fill</span> bag with all possible resources<br/>");
+    $("#events_content span").last().click(function () {
+        Object.keys(adventure_data["perm_resources"]).forEach(function (res) {
+            if (resources[res].value > 0 && resources[res].amount > 0) {
+                adventure_data["perm_resources"][res] += resources[res].amount;
+                resources[res].amount = 0;
+            }
+        });
+        perm_bag();
+    });
+    $("#events_content").append("<table></table>");
     Object.keys(resources).forEach(function (res) {
         if (resources[res].value > 0 && (resources[res].amount > 0 || adventure_data["perm_resources"][res])) { /* We only can store resources with > 0 value. Also only show resources the player knows about. */
             var rname = (res.charAt(0).toUpperCase() + res.slice(1)).replace("_", " ");
@@ -3770,6 +3780,20 @@ function cath_notifications() {
         $("#update_cath_setting").html("Cath Notifications On");
     }
 }
+function toggle_confirms() {
+    if (this._confirm == undefined) {
+        this._confirm = window.confirm;
+        window.confirm = function () { return true; };
+        localStorage["confirm_off"] = true;
+        $("#update_confirms").html("Confirms Disabled");
+    }
+    else {
+        window.confirm = this._confirm;
+        delete this._confirm;
+        localStorage["confirm_off"] = false;
+        $("#update_confirms").html("Confirms Enabled");
+    }
+}
 window.onload = function () {
     set_initial_state();
     load();
@@ -3794,6 +3818,13 @@ window.onload = function () {
     }
     else {
         $("#update_cath_setting").html("Cath Notifications Off");
+    }
+    if (localStorage["confirm_off"] == "true") {
+        $("#update_confirms").html("Confirms Disabled");
+        toggle_confirms();
+    }
+    else {
+        $("#update_confirms").html("Confirms Enabled");
     }
     /* Add upgrades to be unhidden*/
     /* Loop through all remaining upgrades */
