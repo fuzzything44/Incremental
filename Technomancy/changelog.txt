@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.13.2: (11/21/18) Bugfixes, start work on new tower stuff
+Bag of folding fill all button now works. Poverty challenge doesn't give the placeholder 1 money/s. Tower of grinding now lets you actually get to the top. Start working on content for when you reach the top of the tower. 
+
 v5.13.1: (11/15/18) Lots of small stuff
 Added a button to put everything in your bag of folding. Added an option to turn off all confirmation boxes. No upgrade challenge mana requires you to start it with less than 500. Added a reward for the poverty challenge. Added a reward for getting to the top of the tower of grinding (also, if you get there wow).
 

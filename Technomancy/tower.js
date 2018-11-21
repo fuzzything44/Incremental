@@ -17,9 +17,23 @@ var TOWER_DATA = [
     {
         "boss": "some linguini",
         "text": "These are evil noodles, I tell you. Eviiiil!",
-        "reward_text": "a whole lot of time",
+        get reward_text() {
+            if (adventure_data["tower_ascension"] == undefined) {
+                return "a whole lot of time";
+            }
+            else if (adventure_data["tower_ascension"] < 5) {
+                return "a decent amount of time";
+            }
+            else {
+                return "a bit of time";
+            }
+        },
         reward: function () {
-            resources["time"].amount += 1000000; /* That's 1 mil, I think. */
+            var div_amount = 1;
+            if (adventure_data["tower_ascension"] != undefined) {
+                div_amount = Math.min(adventure_data["tower_ascension"] + 1, 10);
+            }
+            resources["time"].amount += 1000000 / div_amount; /* That's 1 mil, I think. */
         }
     },
     {
@@ -369,7 +383,7 @@ function climb_tower(health, ehealth, grinding) {
             return;
         }
     }
-    if (adventure_data["tower_floor"] >= TOWER_DATA.length && !grinding) {
+    if (adventure_data["tower_floor"] >= TOWER_DATA.length) {
         if (grinding) {
             $("#events_content").html("Congratulations on grinding to the very top of the tower! As a reward, the essence cost has been reduced!<br/>");
             adventure_data["total_essence"] = 0;

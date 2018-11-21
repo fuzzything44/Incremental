@@ -3710,7 +3710,7 @@ function prng(seed) {
 function perm_bag() {
     $("#events_topbar").html("Magic Bag of Folding");
     $("#events_content").html("This is your bag of folding. You put resources in, and then get a fraction of them out every prestige. You currently have " + adventure_data["perm_bag_bits"].toString() + " pieces of mithril cloth. Unlocking space for a new resource takes one piece of cloth. <br/>");
-    $("#events_content").append("<span class='clickable>Fill</span> bag with all possible resources<br/>");
+    $("#events_content").append("<span class='clickable'>Fill</span> bag with all possible resources<br/>");
     $("#events_content span").last().click(function () {
         Object.keys(adventure_data["perm_resources"]).forEach(function (res) {
             if (resources[res].value > 0 && resources[res].amount > 0) {
@@ -3900,16 +3900,6 @@ window.onload = function () {
             $("#building_" + bname + "  > .building_amount").html(format_num(buildings[bname].amount, false));
         }
         if (adventure_data["challenges_completed"]) { /* This has been defined */
-            /* They have a poverty challenge completion.  */
-            if (adventure_data["challenges_completed"].length >= CHALLENGES.POVERTY && adventure_data["challenges_completed"][CHALLENGES.POVERTY]) {
-                /* Make sure it's defined to not get fuzzy production. */
-                if (buildings["s_challenge"].generation["money"] == undefined) {
-                    buildings["s_challenge"].generation["money"] = 0;
-                }
-                buildings["s_challenge"].generation["money"] += 1; /* +1 money/s */
-                resources_per_sec["money"] += 1; /* Previous stuff is for when they reload it. This sets it up until then. */
-                resources["money"].changes["Challenge"] = buildings["s_challenge"].generation["money"]; /* Add it to the resource tooltip. */
-            }
             /* They have a loan challenge completion.  */
             if (adventure_data["challenges_completed"].length >= CHALLENGES.LOAN && adventure_data["challenges_completed"][CHALLENGES.LOAN]) {
                 /* Make sure it's defined to not get fuzzy production. */
