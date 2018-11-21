@@ -3637,14 +3637,18 @@ var autobuild_amount = 0;
 var autobuild_repeat = false;
 function draw_autobuild() {
     var autobuild_slots = 10;
-    if (adventure_data["tower_floor"] > 25) {
+    if ((adventure_data["tower_floor"] > 25) || adventure_data["tower_ascension"]) {
         autobuild_slots += 10;
     }
-    if (adventure_data["tower_floor"] > 26) {
-        autobuild_slots += adventure_data["tower_floor"];
+    if ((adventure_data["tower_floor"] > 26) || adventure_data["tower_ascension"]) {
+	if (adventure_data["tower_ascension"]) {
+	    autobuild_slots += 30;
+	} else {
+            autobuild_slots += adventure_data["tower_floor"];
+	}
     }
     $("#autobuild_items").html("Autobuild slots: " + format_num(build_queue.length) + "/" + format_num(autobuild_slots) + "<br/>");
-    if (adventure_data["tower_floor"] > 24) {
+    if ((adventure_data["tower_floor"] > 24) || adventure_data["tower_ascension"]) {
         $("#autobuild_items").append("Repeat last building: <input type='checkbox' " + (autobuild_repeat ? "checked" : "") + "><br/>");
         $("#autobuild_items input").last().click(function () {
             autobuild_repeat = !autobuild_repeat;
