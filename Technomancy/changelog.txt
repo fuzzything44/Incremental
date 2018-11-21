@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.13.3: (11/21/18) Emergency bugfix
+If you're at the top of the tower, entering tower of grinding should no longer let you get the final reward without resetting grinding entry time.
+
 v5.13.2: (11/21/18) Bugfixes, start work on new tower stuff
 Bag of folding fill all button now works. Poverty challenge doesn't give the placeholder 1 money/s. Tower of grinding now lets you actually get to the top. Start working on content for when you reach the top of the tower. 
 
