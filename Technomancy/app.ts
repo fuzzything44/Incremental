@@ -3839,8 +3839,8 @@ function draw_autobuild() {
         autobuild_slots += 10;
     }
     if ((adventure_data["tower_floor"] > 26) || adventure_data["tower_ascension"]) {
-        if ((adventure_data["tower_ascension"]) && (adventure_data["tower_floor"] < 25 + adventure_data["tower_ascension"] * 5)) {
-            autobuild_slots += 25 + adventure_data["tower_ascension"] * 5;
+        if ((adventure_data["tower_ascension"]) && (adventure_data["tower_floor"] < TOWER_DATA.length - 2 + (adventure_data["tower_ascension"] - 1) * tower_ascension_growth)) {
+            autobuild_slots += TOWER_DATA.length - 2 + (adventure_data["tower_ascension"] - 1) * tower_ascension_growth;
         } else {
             autobuild_slots += adventure_data["tower_floor"];
         }
