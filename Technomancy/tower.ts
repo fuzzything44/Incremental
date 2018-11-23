@@ -593,9 +593,9 @@ function climb_tower(health = undefined, ehealth = undefined, grinding = false) 
             }
             if (grinding) {
                 grinding_level = 1;
-                ehealth = Math.pow(grinding_level, 2);
+                ehealth = Math.pow(grinding_level, 2) * (1 + adventure_data["tower_ascension"]);
             } else {
-                ehealth = Math.pow(adventure_data["tower_floor"], 2);
+                ehealth = Math.pow(adventure_data["tower_floor"], 2) * (1 + adventure_data["tower_ascension"]);
             }
         } else {
             $("#events_content").html("It seems you don't have enough mana to attempt fighting this boss. Maybe come back later?<br />");
@@ -691,9 +691,9 @@ function climb_tower(health = undefined, ehealth = undefined, grinding = false) 
             } else if ((attack == "attack" && enemy_attack == "dodge") || (attack == "dodge" && enemy_attack == "spaz") || (attack == "spaz" && enemy_attack == "attack")) {
                 winstate = "lost";
             }
-            let enemy_damage = Math.pow(adventure_data["tower_floor"], 2);
+            let enemy_damage = Math.pow(adventure_data["tower_floor"], 2) * (1 + adventure_data["tower_ascension"]);
             if (grinding) {
-                enemy_damage = Math.pow(grinding_level, 2);
+                enemy_damage = Math.pow(grinding_level, 2) * (1 + adventure_data["tower_ascension"]);
             }
 
             function damage_player(amt) {
