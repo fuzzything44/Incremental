@@ -456,6 +456,17 @@ function tower_height() {
     return 30 + (adventure_data["tower_ascension"] * tower_ascension_growth);
 }
 
+function tower_boss_ascension_scale () {
+    var asc=adventure_data["tower_ascension"];
+    if (asc < 2) {
+        return 1;
+    }
+    var a=(1 + Math.sqrt(5))/2;
+    var b=(1 - Math.sqrt(5))/2;
+    return Math.round((Math.pow(a,adventure_data["tower_ascension"])
+		      - Math.pow(b,adventure_data["tower_ascension"])) / Math.sqrt(5));
+}
+
 function tower() {
     if (adventure_data["tower_floor"] == undefined) {
         adventure_data["tower_floor"] = 0;
@@ -598,9 +609,9 @@ function climb_tower(health = undefined, ehealth = undefined, grinding = false) 
             }
             if (grinding) {
                 grinding_level = 1;
-                ehealth = Math.pow(grinding_level, 2) * (1 + adventure_data["tower_ascension"]);
+                ehealth = Math.pow(grinding_level, 2) * tower_boss_ascension_scale();
             } else {
-                ehealth = Math.pow(adventure_data["tower_floor"], 2) * (1 + adventure_data["tower_ascension"]);
+                ehealth = Math.pow(adventure_data["tower_floor"], 2) * tower_boss_ascension_scale();
             }
         } else {
             $("#events_content").html("It seems you don't have enough mana to attempt fighting this boss. Maybe come back later?<br />");
@@ -704,9 +715,9 @@ function climb_tower(health = undefined, ehealth = undefined, grinding = false) 
             } else if ((attack == "attack" && enemy_attack == "dodge") || (attack == "dodge" && enemy_attack == "spaz") || (attack == "spaz" && enemy_attack == "attack")) {
                 winstate = "lost";
             }
-            let enemy_damage = Math.pow(adventure_data["tower_floor"], 2) * (1 + adventure_data["tower_ascension"]);
+            let enemy_damage = Math.pow(adventure_data["tower_floor"], 2) * tower_boss_ascension_scale();
             if (grinding) {
-                enemy_damage = Math.pow(grinding_level, 2) * (1 + adventure_data["tower_ascension"]);
+                enemy_damage = Math.pow(grinding_level, 2) * tower_boss_ascension_scale();
             }
 
             function damage_player(amt) {
