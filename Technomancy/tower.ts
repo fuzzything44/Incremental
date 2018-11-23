@@ -845,7 +845,7 @@ function defeat_floor(health = undefined) {
     if (health == undefined) {
         var floor=adventure_data["tower_floor"];
         if (floor > TOWER_DATA.length - 2) {
-           if (floor == TOWER_DATA.length - 2 + (tower_ascension_growth * adventure_data["tower_ascension"])) {
+           if (floor >= tower_height())) {
               floor=TOWER_DATA.length - 1;
            } else {
               floor=TOWER_DATA.length - 2;
