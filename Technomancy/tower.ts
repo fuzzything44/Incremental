@@ -625,7 +625,7 @@ function climb_tower(health = undefined, ehealth = undefined, grinding = false) 
     if (adventure_data["tower_floor"] > tower_height()) && !grinding) {
         $("#events_content").html("You're at the current top of the tower! Oh, also if you're here please message fuzzything44 on the Discord channel.<br/>");
         /* Reset the tower information, increment ascension count and reset cost of essence. */
-	if (adventure_data["tower_floor"] < 1) {
+	if (adventure_data["tower_floor"] < 0) {
             $("#events_content").html("There is a shimmering portal before you.  You sense that stepping through it will replace this tower with a bigger, better and harder one.  It will also make essence much cheaper.<br/>");
 	    /* Need to modify the message above and the function below for Ascension specific extra upgrades. */
             $("#events_content").append("<span class='clickable'>Step</span> through the portal.<br/>");
