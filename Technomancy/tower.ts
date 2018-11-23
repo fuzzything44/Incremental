@@ -451,7 +451,7 @@ function tower_ascension_scale( initial, min, round ) {
     }
 }
 
-/* Number of floors before final boss.
+/* Number of floors before final boss. */
 function tower_height() {
     return 30 + (adventure_data["tower_ascension"] * tower_ascension_growth);
 }
