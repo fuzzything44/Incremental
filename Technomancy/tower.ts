@@ -451,6 +451,11 @@ function tower_ascension_scale( initial, min, round ) {
     }
 }
 
+/* Number of floors before final boss.
+function tower_height() {
+    return 30 + (adventure_data["tower_ascension"] * tower_ascension_growth);
+}
+
 function tower() {
     if (adventure_data["tower_floor"] == undefined) {
         adventure_data["tower_floor"] = 0;
@@ -606,7 +611,7 @@ function climb_tower(health = undefined, ehealth = undefined, grinding = false) 
 
     }
 
-    if (adventure_data["tower_floor"] >= TOWER_DATA.length - 2 + (tower_ascension_growth * adventure_data["tower_ascension"]) && !grinding) {
+    if (adventure_data["tower_floor"] > tower_height) && !grinding) {
         $("#events_content").html("You're at the current top of the tower! Oh, also if you're here please message fuzzything44 on the Discord channel.<br/>");
         /* Reset the tower information, increment ascension count and reset cost of essence. */
         adventure_data["tower_floor"]=1;
@@ -615,7 +620,7 @@ function climb_tower(health = undefined, ehealth = undefined, grinding = false) 
 
         $("#events_content").append("<span class='clickable'>Back</span> to tower base.<br/>");
         $("#events_content span").last().click(function () { tower(); });
-    } else if (grinding && grinding_level >= TOWER_DATA.length - 2 + (tower_ascension_growth * adventure_data["tower_ascension"]) ) {
+    } else if (grinding && grinding_level > tower_height()) ) {
         $("#events_content").html("Congratulations on grinding to the very top of the tower! As a reward, the essence cost has been reduced!<br/>");
         adventure_data["total_essence"] = 0;
         $("#events_content").append("<span class='clickable'>Back</span> to tower base.<br/>");
@@ -626,32 +631,32 @@ function climb_tower(health = undefined, ehealth = undefined, grinding = false) 
         let description = ""; 
 
         if (grinding) {
-            if (grinding_level < TOWER_DATA.length - 2) {
-                boss = TOWER_DATA[grinding_level].boss;
-                description = TOWER_DATA[grinding_level].text;
-            } else {
-                if (grinding_level == TOWER_DATA.length - 1 + (tower_ascension_growth * adventure_data["tower_ascension"])) {
-                    boss = TOWER_DATA[TOWER_DATA.length - 1].boss;
-                    description = TOWER_DATA[TOWER_DATA.length - 1].description;
+	    if (grinding_level < tower_height()) {
+                if (grinding_level < TOWER_DATA.length - 2) {
+                    boss = TOWER_DATA[grinding_level].boss;
+                    description = TOWER_DATA[grinding_level].text;
                 } else {
                     boss = TOWER_DATA[TOWER_DATA.length - 2].boss;
                     description = TOWER_DATA[TOWER_DATA.length - 2].description;
                 }
-            }
+            } else {
+	        boss = TOWER_DATA[TOWER_DATA.length - 1].boss;
+                description = TOWER_DATA[TOWER_DATA.length - 1].description;
+	    }
             adventure_data["grind_tower_time"] = Date.now();
         } else {
-            if (adventure_data["tower_floor"] < TOWER_DATA.length - 2) {
-                boss = TOWER_DATA[adventure_data["tower_floor"]].boss;
-                description = TOWER_DATA[adventure_data["tower_floor"]].text;
-            } else {
-                if (adventure_data["tower_floor"] == TOWER_DATA.length - 2 + (tower_ascension_growth * adventure_data["tower_ascension"])) {
-                    boss = TOWER_DATA[TOWER_DATA.length - 1].boss;
-                    description = TOWER_DATA[TOWER_DATA.length - 1].description;
+	    if (adventure_data["tower_floor"] < tower_height()) {
+                if (adventure_data["tower_floor"] < TOWER_DATA.length - 2) {
+                    boss = TOWER_DATA[adventure_data["tower_floor"]].boss;
+                    description = TOWER_DATA[adventure_data["tower_floor"]].text;
                 } else {
                     boss = TOWER_DATA[TOWER_DATA.length - 2].boss;
                     description = TOWER_DATA[TOWER_DATA.length - 2].description;
                 }
-            }
+            } else {
+	        boss = TOWER_DATA[TOWER_DATA.length - 1].boss;
+                description = TOWER_DATA[TOWER_DATA.length - 1].description;
+	    }
         }
 
         $("#events_content").html("This floor contains " + boss + ". " + description + "<br/>");
