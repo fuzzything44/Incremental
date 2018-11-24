@@ -12,7 +12,7 @@
         "text": "That's a lot of noodles!",
         "reward_text": "cheaper essence",
         reward: function () {
-            adventure_data["total_esssence"] -= 5;
+            adventure_data["total_essence"] -= 5;
         }
     },
     { /* Boss 2. */
@@ -630,7 +630,7 @@ function climb_tower(health = undefined, ehealth = undefined, grinding = false) 
 	    /* Need to modify the message above and the function below for Ascension specific extra upgrades. */
             $("#events_content").append("<span class='clickable'>Step</span> through the portal.<br/>");
             $("#events_content span").last().click(function () {
-                adventure_data["tower_floor"]=1;
+                adventure_data["tower_floor"]=0;
                 adventure_data["tower_ascension"] += 1;
                 adventure_data["total_essence"] = 1;
 	        tower();
