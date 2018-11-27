@@ -15,8 +15,8 @@
             adventure_data["total_essence"] -= 5;
             if (adventure_data["total_essence"] <= 0) {
                 for (var i=adventure_data["total_essence"] ; i<=0 ; i++) {
-                    adventure_data["total_essence"]=0;
                     buy_essence(1);
+                    adventure_data["total_essence"] = 0;
                 }
             }
         }
