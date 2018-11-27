@@ -13,6 +13,12 @@
         "reward_text": "cheaper essence",
         reward: function () {
             adventure_data["total_essence"] -= 5;
+            if (adventure_data["total_essence"] <= 0) {
+                for (var i=adventure_data["total_essence"] ; i<=0 ; i++) {
+                    adventure_data["total_essence"]=0;
+                    buy_essence(1);
+                }
+            }
         }
     },
     { /* Boss 2. */
@@ -444,7 +450,7 @@
     },
     { /* Boss Repeat, for extra levels */
         get boss() {
-            return "A " + tower_adj_a[adventure_data["tower_floor"] % tower_adj_a.length]
+            return "a " + tower_adj_a[adventure_data["tower_floor"] % tower_adj_a.length]
                    + tower_adj_b[adventure_data["tower_floor"] % tower_adj_b.length]
                    + tower_adj_c[adventure_data["tower_floor"] % tower_adj_c.length]
                    + tower_noun[adventure_data["tower_floor"] % tower_noun.length];
@@ -456,7 +462,7 @@
         reward: function () { }
     },
     { /* Boss Final, for each tower. */
-        "boss": "The final tower guardian",
+        "boss": "the final tower guardian",
         "text": "It bounces around the room like a demented ferret, hissing and snarling as it goes. ",
         "reward_text": "a new bigger shinier tower; oh and cheaper essence",
         reward: function () { }
@@ -691,7 +697,7 @@ function climb_tower(health = undefined, ehealth = undefined, grinding = false) 
         $("#events_content").html("You're at the current top of the tower! Oh, also if you're here please message fuzzything44 on the Discord channel.<br/>");
         /* Reset the tower information, increment ascension count and reset cost of essence. */
         if (adventure_data["tower_ascension"] < 1) {
-            $("#events_content").html("There is a shimmering portal before you.  You sense that stepping through it will replace this tower with a bigger, better and harder one.  It will also make essence much cheaper.<br/>(This is Tower Ascension - you'll start again at floor 0, keeping all your essence and essence spent. 4 new floors will be added to the tower and it'll become more difficult. It also lowers the essence cost back to the base. Some floor rewards will be locked until you reach that floor again. Also, the small tower will become harder and gain floors at the same rate.)");
+            $("#events_content").html("There is a shimmering portal before you.  You sense that stepping through it will replace this tower with a bigger, better and harder one.  It will also make essence much cheaper.<br/>(This is Tower Ascension - you'll start again at floor 0, keeping all your essence and essence spent. 4 new floors will be added to the tower and it'll become more difficult. It also lowers the essence cost back to the base. Some floor rewards will be locked until you reach that floor again. Also, the small tower will become harder and gain floors at the same rate.)<br/>");
             /* Need to modify the message above and the function below for Ascension specific extra upgrades. */
             $("#events_content").append("<span class='clickable'>Step</span> through the portal.<br/>");
             $("#events_content span").last().click(function () {
