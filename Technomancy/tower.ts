@@ -497,7 +497,7 @@ function tower_height() {
 }
 
 function tower_boss_ascension_scale () {
-    let asc = adventure_data["tower_ascension"] + 1; /* + 2 to shift it properly. This gives Ascension 0 and I at 1x, then 2x on Ascension II... instead of 1 on Ascensions 0, I, AND II. */
+    let asc = adventure_data["tower_ascension"] + 1; /* + 1 to shift it properly. This gives Ascension 0 and I at 1x, then 2x on Ascension II... instead of 1 on Ascensions 0, I, AND II. */
     if (asc < 1) {
         return -5;
     }
