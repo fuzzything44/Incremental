@@ -995,7 +995,7 @@ function tavern() {
             buydrink("healer", 0.5, 3, 3);
         });
     }
-    if (adventure_data["tower_floor"] > 32) {
+    if (adventure_data["tower_floor"] > 33) {
         $("#events_content").append("<br/>");
         $("#events_content").append("<span class='clickable'>Buy</span> your Healer some Face Punch (3 essence)");
         $("#events_content span").last().click(function () {
