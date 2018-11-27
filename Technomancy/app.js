@@ -54,6 +54,7 @@ var UNLOCK_TREE = {
     "s_workshop_2": [],
     "s_enchantment": [],
     "s_ai": [],
+    "s_autoessence": [],
     "s_final": [],
     "s_challenge": [],
     "challenge_basic": [],
@@ -106,6 +107,7 @@ var SPELL_BUILDINGS = [
     "s_workshop_2",
     "s_enchantment",
     "s_ai",
+    "s_autoessence",
     "s_final",
     "s_challenge",
 ];
@@ -381,6 +383,19 @@ function set_initial_state() {
             "update": "nop",
             "free": 0,
             "flavor": "Managed",
+        },
+        "s_autoessence": {
+            "on": false,
+            "amount": Infinity,
+            "base_cost": {},
+            "price_ratio": {},
+            "generation": {
+                "mana": -1,
+            },
+            "multipliers": {},
+            "update": "autoessence",
+            "free": 0,
+            "flavor": "No one reads this.",
         },
         "s_challenge": {
             "on": true,
@@ -3637,14 +3652,19 @@ var autobuild_amount = 0;
 var autobuild_repeat = false;
 function draw_autobuild() {
     var autobuild_slots = 10;
-    if (adventure_data["tower_floor"] > 25) {
+    if ((adventure_data["tower_floor"] > 25) || adventure_data["tower_ascension"]) {
         autobuild_slots += 10;
     }
-    if (adventure_data["tower_floor"] > 26) {
-        autobuild_slots += adventure_data["tower_floor"];
+    if ((adventure_data["tower_floor"] > 26) || adventure_data["tower_ascension"]) {
+        if ((adventure_data["tower_ascension"]) && (adventure_data["tower_floor"] < tower_height() - TOWER_ASCENSION_GROWTH)) {
+            autobuild_slots += tower_height() - TOWER_ASCENSION_GROWTH;
+        }
+        else {
+            autobuild_slots += adventure_data["tower_floor"];
+        }
     }
     $("#autobuild_items").html("Autobuild slots: " + format_num(build_queue.length) + "/" + format_num(autobuild_slots) + "<br/>");
-    if (adventure_data["tower_floor"] > 24) {
+    if ((adventure_data["tower_floor"] > 24) || adventure_data["tower_ascension"]) {
         $("#autobuild_items").append("Repeat last building: <input type='checkbox' " + (autobuild_repeat ? "checked" : "") + "><br/>");
         $("#autobuild_items input").last().click(function () {
             autobuild_repeat = !autobuild_repeat;
@@ -3758,7 +3778,7 @@ function change_update() {
         localStorage["update_interval"] = 1000;
         $("#update_speed_setting").html("Update Fast");
     }
-    update_handler = setInterval(update, localStorage["update_interval"]);
+    update_handler = setInterval(update, parseInt(localStorage["update_interval"]));
 }
 function change_notation() {
     if (localStorage["notation_sci"] == "true") {

@@ -5,6 +5,7 @@ var spell_funcs = {
     "refinery": s_refinery_buff,
     "workshop": s_workshop_update,
     "enchantment": s_enchant_update,
+    "autoessence": s_autoessence,
     "final": s_final,
 };
 function nop(delta_time) { }
@@ -154,6 +155,7 @@ function s_refinery(amount, override) {
     }
     if (amount > 10000 && !override) {
         alert("Warning: Magic limits require mana to be refined in batches of 10K or less. You will be refining 10K instead");
+        amount = 10000;
     }
     if (override || !confirm("Are you sure you want to refine " + amount.toString() + " mana? It will be lost until next prestige!")) {
         return;
@@ -546,5 +548,14 @@ function s_final(delta_time) {
             resources_per_sec[res] = neg_gain;
         }
     });
+}
+var autoessence_tick = 0;
+function s_autoessence(delta_time) {
+    autoessence_tick += delta_time;
+    if (autoessence_tick > 1000) {
+        /* Buy essence */
+        buy_essence(1);
+        autoessence_tick = autoessence_tick % 1000;
+    }
 }
 //# sourceMappingURL=spells.js.map

@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.14.0: (11/27/18) Tower Ascension!
+Added Tower ascension. When you get to the top of the tower (30 floors and a boss at the top), you can reset it to gain 4 new floors (and get a harder tower, after the first ascension). Get to the top of the tower for more information. Oh, also this adds the Essence Compressor to easily turn all your mana into essence, available at the top of the tower Ascension I. Also, bugfixes: when getting warned you can't refine that much mana at once, it now also caps how much you get. Probably also more that I'm not thinking of. 
+
 v5.13.3: (11/21/18) Emergency bugfix
 If you're at the top of the tower, entering tower of grinding should no longer let you get the final reward without resetting grinding entry time.
 

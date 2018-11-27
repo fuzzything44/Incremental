@@ -54,6 +54,7 @@ const UNLOCK_TREE = { /* What buildings unlock */
     "s_workshop_2": [],
     "s_enchantment": [],
     "s_ai": [],
+    "s_autoessence": [],
     "s_final": [],
 
     "s_challenge": [],
@@ -114,6 +115,7 @@ const SPELL_BUILDINGS = [
     "s_workshop_2",
     "s_enchantment",
     "s_ai",
+    "s_autoessence",
     "s_final",
 
     "s_challenge",
@@ -421,6 +423,21 @@ function set_initial_state() {
             "update": "nop",
             "free": 0,
             "flavor": "Managed",
+        },
+        "s_autoessence": {
+            "on": false,
+            "amount": Infinity,
+            "base_cost": {},
+            "price_ratio": {},
+            "generation": {
+                "mana": -1,
+            },
+            "multipliers": {
+
+            },
+            "update": "autoessence",
+            "free": 0,
+            "flavor": "No one reads this.",
         },
 
         "s_challenge": {
@@ -3839,8 +3856,8 @@ function draw_autobuild() {
         autobuild_slots += 10;
     }
     if ((adventure_data["tower_floor"] > 26) || adventure_data["tower_ascension"]) {
-        if ((adventure_data["tower_ascension"]) && (adventure_data["tower_floor"] < tower_height() - tower_ascension_growth)) {
-            autobuild_slots += tower_height() - tower_ascension_growth;
+        if ((adventure_data["tower_ascension"]) && (adventure_data["tower_floor"] < tower_height() - TOWER_ASCENSION_GROWTH)) {
+            autobuild_slots += tower_height() - TOWER_ASCENSION_GROWTH;
         } else {
             autobuild_slots += adventure_data["tower_floor"];
         }
@@ -3965,7 +3982,7 @@ function change_update() {
         localStorage["update_interval"] = 1000;
         $("#update_speed_setting").html("Update Fast");
     }
-    update_handler = setInterval(update, localStorage["update_interval"])
+    update_handler = setInterval(update, parseInt(localStorage["update_interval"]));
 }
 
 function change_notation() {
@@ -4088,7 +4105,7 @@ window.onload = () => {
                 let extra_basics = Math.min(25, Math.floor(Math.pow(extra_mana / 10, 0.5))); /* How many they're getting. Cap at 25 to not make the start list way too long. */
                 start_buildings = start_buildings.concat(Array(extra_basics).fill("challenge_basic")); /* Add that many to the list. These all get added because each takes much more than 1 mana to get, so we'll definitely loop through it. */
             }
-
+            
             if (Math.pow(extra_mana / 50, 0.5) >= 1) { /* Quadratic again, but * 50 instead of 10 */
                 let extra_basics = Math.min(25, Math.floor(Math.pow(extra_mana / 50, 0.5))); /* How many they're getting. Cap at 25 to not make the start list way too long. */
                 start_buildings = start_buildings.concat(Array(extra_basics).fill("challenge_medium")); /* Add that many to the list. These all get added because each takes much more than 1 mana to get, so we'll definitely loop through it. */

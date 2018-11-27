@@ -11,14 +11,14 @@ var TOWER_DATA = [
         "text": "That's a lot of noodles!",
         "reward_text": "cheaper essence",
         reward: function () {
-            adventure_data["total_esssence"] -= 5;
+            adventure_data["total_essence"] -= 5;
         }
     },
     {
         "boss": "some linguini",
         "text": "These are evil noodles, I tell you. Eviiiil!",
         get reward_text() {
-            if (adventure_data["tower_ascension"] == undefined) {
+            if (!adventure_data["tower_ascension"]) {
                 return "a whole lot of time";
             }
             else if (adventure_data["tower_ascension"] < 5) {
@@ -30,19 +30,27 @@ var TOWER_DATA = [
         },
         reward: function () {
             var div_amount = 1;
-            if (adventure_data["tower_ascension"] != undefined) {
+            if (!adventure_data["tower_ascension"]) {
                 div_amount = Math.min(adventure_data["tower_ascension"] + 1, 10);
             }
-            resources["time"].amount += 1000000 / div_amount; /* That's 1 mil, I think. */
+            resources["time"].amount += tower_ascension_scale(1000000, 100000, false); /* That's 1 mil, I think. */
         }
     },
     {
         "boss": "ramen noodles",
         "text": "Seriously, what's with all these noodles?",
-        "reward_text": "extra mana",
+        get reward_text() {
+            if (adventure_data["tower_ascension"] < 5) {
+                return "extra mana";
+            }
+            else {
+                return "a bit of extra mana";
+            }
+        },
         reward: function () {
-            resources_per_sec["mana"] += 250;
-            buildings["s_manastone"].amount += 250;
+            var amt = tower_ascension_scale(250, 25, true);
+            resources_per_sec["mana"] += amt;
+            buildings["s_manastone"].amount += amt;
             update_building_amount("s_manastone");
         }
     },
@@ -65,24 +73,48 @@ var TOWER_DATA = [
     {
         "boss": "a shrimp",
         "text": "This is literally just a normal shrimp. How is it more powerful than the god you just killed?",
-        "reward_text": "600 starting time each prestige",
+        get reward_text() {
+            if (!adventure_data["tower_ascension"]) {
+                return "600 starting time each prestige";
+            }
+            else {
+                return "some extra starting time each prestige";
+            }
+        },
         reward: function () {
             if (adventure_data["perm_resources"] == undefined) {
                 adventure_data["perm_resources"] = {};
             }
-            adventure_data["perm_resources"]["time"] = 600;
+            if (adventure_data["perm_resources"]["time"] == undefined) {
+                adventure_data["perm_resources"]["time"] = 0;
+            }
+            adventure_data["perm_resources"]["time"] += tower_ascension_scale(600, 10, true);
         }
     },
     {
         "boss": "a chimp",
         "text": "Oh, now you're fighting a monkey. Of course. This is totally normal.",
-        "reward_text": "MORE UPGRADES",
+        get reward_text() {
+            if (!adventure_data["tower_ascension"]) {
+                return "MORE UPGRADES";
+            }
+            else {
+                return "more upgrades, again";
+            }
+        },
         reward: function () { }
     },
     {
         "boss": "a blimp",
         "text": "Zeppelin, blimp, airship, dirigible, whatever you want to call it. Okay, I know that those mean slightly different things, but does it really matter if you're about to destroy it?",
-        "reward_text": "another tower",
+        get reward_text() {
+            if (!adventure_data["tower_ascension"]) {
+                return "another tower";
+            }
+            else {
+                return "the small tower, again";
+            }
+        },
         reward: function () {
             adventure_data["grind_tower_time"] = 0;
         }
@@ -90,17 +122,40 @@ var TOWER_DATA = [
     {
         "boss": "a pimp",
         "text": "He's about to mess up your face with his dope bling. Better fight back.",
-        "reward_text": "a few (20) purified mana to start each prestige with",
+        get reward_text() {
+            if (!adventure_data["tower_ascension"]) {
+                return "a few (20) purified mana to start each prestige with";
+            }
+            else {
+                return "a little more purified mana to start each prestige with";
+            }
+        },
         reward: function () {
-            adventure_data["perm_resources"]["purified_mana"] = 20;
+            if (adventure_data["perm_resources"]["purified_mana"] == undefined) {
+                adventure_data["perm_resources"]["purified_mana"] = 0;
+            }
+            adventure_data["perm_resources"]["purified_mana"] += tower_ascension_scale(20, 1, true);
         }
     },
     {
         "boss": "a trimp",
         "text": "Wait, isn't this from a completely different <a href='https://trimps.github.io/' target='_blank' class='fgc'>game</a>?",
-        "reward_text": "a new party member",
+        get reward_text() {
+            if (!adventure_data["tower_ascension"]) {
+                return "a new party member";
+            }
+            else {
+                return "a small upgrade to your healer";
+            }
+        },
         reward: function () {
-            adventure_data["tower_healer"] = { "power": 10, "health": 5, "action": "heal" };
+            if (!adventure_data["tower_ascension"]) {
+                adventure_data["tower_healer"] = { "power": 10, "health": 5, "action": "heal" };
+            }
+            else {
+                adventure_data["tower_healer"]["power"] += tower_ascension_scale(10, 2, true);
+                adventure_data["tower_healer"]["health"] += tower_ascension_scale(5, 1, true);
+            }
         }
     },
     {
@@ -108,7 +163,12 @@ var TOWER_DATA = [
         "text": "It's a completely different species than the monster in your closet.",
         "reward_text": "an upgrade for your healer",
         reward: function () {
-            adventure_data["tower_healer"].power *= 2;
+            if (!adventure_data["tower_ascension"]) {
+                adventure_data["tower_healer"].power *= 2;
+            }
+            else {
+                adventure_data["tower_healer"]["power"] += tower_ascension_scale(20, 5, true);
+            }
         }
     },
     {
@@ -116,35 +176,77 @@ var TOWER_DATA = [
         "text": "It's a completely different species than the monster under your bed.",
         "reward_text": "an upgrade for your healer",
         reward: function () {
-            adventure_data["tower_healer"].power *= 1.5;
+            if (!adventure_data["tower_ascension"]) {
+                adventure_data["tower_healer"].power *= 1.5;
+            }
+            else {
+                adventure_data["tower_healer"]["power"] += tower_ascension_scale(10, 3, true);
+            }
         }
     },
     {
         "boss": "a vampyre",
         "text": "The y makes it spookier than your regular vampire. It also makes it much more flammable.",
-        "reward_text": "100 fuel every prestige",
+        get reward_text() {
+            if (!adventure_data["tower_ascension"]) {
+                return "100 fuel every prestige";
+            }
+            else {
+                return "some more fuel each prestige";
+            }
+        },
         reward: function () {
-            adventure_data["perm_resources"]["fuel"] = 100;
+            if (adventure_data["perm_resources"]["fuel"] == undefined) {
+                adventure_data["perm_resources"]["fuel"] = 0;
+            }
+            adventure_data["perm_resources"]["fuel"] += tower_ascension_scale(100, 10, true);
         }
     },
     {
         "boss": "a glass of milk",
         "text": "Wait, what's so scary about this?",
-        "reward_text": "a lowered cooldown on the tower of grinding",
+        get reward_text() {
+            if (!adventure_data["tower_ascension"]) {
+                return "a lowered cooldown on the tower of grinding";
+            }
+            else {
+                return "the return of a lowered cooldown on the tower of grinding";
+            }
+        },
         reward: function () { }
     },
     {
         "boss": "mr. skeltal",
         "text": "oh, no. he came to doot doot you because you didn't drink your milk. prepare your weak bones.",
-        "reward_text": "another party member",
+        get reward_text() {
+            if (!adventure_data["tower_ascension"]) {
+                return "another party member";
+            }
+            else {
+                return "a small upgrade to your warrior";
+            }
+        },
         reward: function () {
-            adventure_data["tower_warrior"] = { "power": 20, "health": 100, "action": "defend" };
+            if (!adventure_data["tower_ascension"]) {
+                adventure_data["tower_warrior"] = { "power": 20, "health": 100, "action": "defend" };
+            }
+            else {
+                adventure_data["tower_warrior"]["power"] += tower_ascension_scale(20, 4, true);
+                adventure_data["tower_warrior"]["health"] += tower_ascension_scale(100, 10, true);
+            }
         }
     },
     {
         "boss": "some random British dude",
         "text": "How nice, he's offering you some tea. And he just put in the milk before the tea. There's now only one reasonable course of action. KILL HIM!",
-        "reward_text": "spikey kneepads",
+        get reward_text() {
+            if (!adventure_data["tower_ascension"]) {
+                return "spikey kneepads";
+            }
+            else {
+                return "spikey kneepads again";
+            }
+        },
         reward: function () { }
     },
     {
@@ -152,13 +254,25 @@ var TOWER_DATA = [
         "text": "Huh, turns out that if you attack someone, the get angry at you. He's really pissed off. And you're in a tower. That seems somehow <a href='https://www.kongregate.com/games/somethingggg/ngu-idle' target='_blank' class='fgc'>familiar</a>. Whatever, time to mercilessly kill him.",
         "reward_text": "an upgrade for your warrior",
         reward: function () {
-            adventure_data["tower_warrior"].health *= 1.5;
+            if (!adventure_data["tower_ascension"]) {
+                adventure_data["tower_warrior"].health *= 1.5;
+            }
+            else {
+                adventure_data["tower_warrior"].health += tower_ascension_scale(10, 2, true);
+            }
         }
     },
     {
         "boss": "a guy in a kilt",
         "text": "This is the british guy's brother. He has a kilt and a sweet sword. Good luck.",
-        "reward_text": "his sweet sword",
+        get reward_text() {
+            if (!adventure_data["tower_ascension"]) {
+                return "his sweet sword";
+            }
+            else {
+                return "his sweet sword, again";
+            }
+        },
         reward: function () { }
     },
     {
@@ -172,9 +286,16 @@ var TOWER_DATA = [
         "text": "This is a medium sized pile of gold. Probably big enough to pay off your student loans. ",
         "reward_text": "yet another party upgrade",
         reward: function () {
-            adventure_data["tower_warrior"].health = 500;
-            adventure_data["tower_healer"].power *= 5;
-            adventure_data["tower_healer"].health = 100;
+            if (!adventure_data["tower_ascension"]) {
+                adventure_data["tower_warrior"].health = 500;
+                adventure_data["tower_healer"].power *= 5;
+                adventure_data["tower_healer"].health = 100;
+            }
+            else {
+                adventure_data["tower_warrior"].health += tower_ascension_scale(500, 10, true);
+                adventure_data["tower_healer"].power += tower_ascension_scale(150, 10, true);
+                adventure_data["tower_healer"].health += tower_ascension_scale(100, 5, true);
+            }
         }
     },
     {
@@ -198,47 +319,193 @@ var TOWER_DATA = [
     {
         "boss": "The Entire Continent of America",
         "text": "No, not the people living there. You're fighting the continent itself. How did it fit in the tower? Don't ask.",
-        "reward_text": "an option for autobuild to repeat the last building",
+        get reward_text() {
+            if (!adventure_data["tower_ascension"]) {
+                return "an option for autobuild to repeat the last building";
+            }
+            else {
+                return "nothing";
+            }
+        },
         reward: function () { }
     },
     {
         "boss": "Kristoffer Kolumbus",
         "text": "The Legendary Explorer himself! He's rumored to be the original person to find the mystical land of Canadia!",
-        "reward_text": "10 more autobuild spaces",
+        get reward_text() {
+            if (!adventure_data["tower_ascension"]) {
+                return "10 more autobuild spaces";
+            }
+            else {
+                return "nothing";
+            }
+        },
         reward: function () { }
     },
     {
         "boss": "A Very Large Telescope",
         "text": "It's used for finding exoplanets. Also, you're fighting it now. ",
-        "reward_text": "an extra autobuild slot for every tower boss you kill",
+        get reward_text() {
+            if (!adventure_data["tower_ascension"]) {
+                return "an extra autobuild slot for every tower boss you kill";
+            }
+            else {
+                return "nothing";
+            }
+        },
         reward: function () { }
     },
     {
         "boss": "A globe",
         "text": "What's so tough about just a regular globe? Well, maybe the fact that this one is to scale. 1:1 scale that is. ",
-        "reward_text": "a lot more mana on every prestige",
+        get reward_text() {
+            if (!adventure_data["tower_ascension"]) {
+                return "a lot more mana on every prestige";
+            }
+            else {
+                return "a lot more mana on every prestige, again";
+            }
+        },
         reward: function () { }
     },
     {
         "boss": "a little swimmy fishy",
         "text": "It's just swimming around. ",
-        "reward_text": "being able to kill the environment faster",
+        get reward_text() {
+            if (!adventure_data["tower_ascension"]) {
+                return "being able to kill the environment faster";
+            }
+            else {
+                return "being able to kill the environment faster, again";
+            }
+        },
         reward: function () { }
     },
     {
         "boss": "a little golden swimmy fishy",
         "text": "It's just swimming around. It's also very shiny. ",
-        "reward_text": "being able to kill the economy faster",
+        get reward_text() {
+            if (!adventure_data["tower_ascension"]) {
+                return "being able to kill the economy faster";
+            }
+            else {
+                return "being able to kill the economy faster, again";
+            }
+        },
         reward: function () { }
     },
     {
         "boss": "a little sparkly swimmy fishy",
         "text": "It's just swimming around. It's also very extremely shiny. ",
-        "reward_text": "even more mana per prestige",
+        get reward_text() {
+            if (!adventure_data["tower_ascension"]) {
+                return "even more mana per prestige";
+            }
+            else {
+                return "even more mana per prestige, again";
+            }
+        },
+        reward: function () { }
+    },
+    {
+        "boss": "A very sparkly mystical bowl of spaghetti",
+        "text": "Mmm, magic spaghetti. You get hungry just thinking about it.",
+        "reward_text": "a halved cooldown on the tower of grinding!",
+        reward: function () { }
+    },
+    {
+        "boss": "A very sparkly mystical trimp",
+        "text": "This isn't as tasty as magic spaghetti. Ugh, more fighting.",
+        "reward_text": "Joe's Premium Iron Juice",
+        reward: function () { }
+    },
+    {
+        "boss": "A very sparkly mystical skelton",
+        "text": "DOOT DOOT!",
+        "reward_text": "A nice fruit punch. Wait, that label doesn't say fruit, it says face!",
+        reward: function () { }
+    },
+    {
+        "boss": "that one guy",
+        "text": "Yeah, you know. THAT guy.",
+        get reward_text() {
+            if (adventure_data["tower_ascension"] == 1) {
+                return "the Essence Compressor";
+            }
+            else {
+                return "nothing";
+            }
+        },
+        reward: function () {
+            if (adventure_data["tower_ascension"] == 1) {
+                if (buildings["s_autoessence"].on) {
+                    toggle_building_state("s_autoessence");
+                }
+                buildings["s_autoessence"].amount = 100;
+                $("#building_s_autoessence").parent().removeClass("hidden");
+                update_building_amount("s_autoessence"); /* Previously, there were infinite of these to keep it hidden. Let's update to proper amount. */
+            }
+        }
+    },
+    {
+        get boss() {
+            return "A " + tower_adj_a[adventure_data["tower_floor"] % tower_adj_a.length]
+                + tower_adj_b[adventure_data["tower_floor"] % tower_adj_b.length]
+                + tower_adj_c[adventure_data["tower_floor"] % tower_adj_c.length]
+                + tower_noun[adventure_data["tower_floor"] % tower_noun.length];
+        },
+        get text() {
+            return tower_rooms[adventure_data["tower_floor"] % tower_rooms.length];
+        },
+        "reward_text": "nothing but boasting rights",
+        reward: function () { }
+    },
+    {
+        "boss": "The final tower guardian",
+        "text": "It bounces around the room like a demented ferret, hissing and snarling as it goes. ",
+        "reward_text": "a new bigger shinier tower; oh and cheaper essence",
         reward: function () { }
     },
 ];
+var TOWER_ASCENSION_GROWTH = 4;
 var grinding_level = 1;
+/* Adjectives and nouns to describe the boss.  Please ensure that the lengths of each set are mutually coprime with all the others. */
+/* Also, adjectives must end with a space or be totally empty. */
+var tower_adj_a = ["beautiful ", "ugly ", "", "strange ", "corrupt ", "quaint ", "cute ", ""];
+var tower_adj_b = ["big ", "small ", "baby ", "huge ", ""];
+var tower_adj_c = ["green ", "", "blue ", "purple ", "red ", "striped ", "spotty "];
+var tower_noun = ["fish", "frog", "triffid", "dog", "cat", "dove", "eagle", "goat", "golem"];
+/* Room descriptions.  Want to be a multiple of noun length so that the rooms match the noun. */
+var tower_rooms = ["It's just swimming around, looking angry. ",
+    "It's hopping mad at you. ",
+    "It's nearly filling the whole room, waiting to strike. ",
+    "It looks like it might just sit if you told it to firmly.  Maybe not. ",
+    "It gives you that look that says it knows that you're just a peasant in its eyes. ",
+    "It flutters around looking innocent.  Maybe it is, maybe it isn't. ",
+    "It soars round and round your head just waiting for you to take another step. ",
+    "It nibbles the vegetation while watching you carefully. ",
+    "It stands guard so still.  Will it move if you try and walk past? "];
+function tower_ascension_scale(initial, min, round) {
+    if (round) {
+        return Math.round(Math.max(initial / (1 + adventure_data["tower_ascension"]), min));
+    }
+    else {
+        return Math.max(initial / (1 + adventure_data["tower_ascension"]), min);
+    }
+}
+/* Number of floors before final boss. */
+function tower_height() {
+    return 31 + (adventure_data["tower_ascension"] * TOWER_ASCENSION_GROWTH);
+}
+function tower_boss_ascension_scale() {
+    var asc = adventure_data["tower_ascension"] + 1; /* + 2 to shift it properly. This gives Ascension 0 and I at 1x, then 2x on Ascension II... instead of 1 on Ascensions 0, I, AND II. */
+    if (asc < 1) {
+        return -5;
+    }
+    var a = (1 + Math.sqrt(5)) / 2;
+    var b = (1 - Math.sqrt(5)) / 2;
+    return Math.round((Math.pow(a, asc) - Math.pow(b, asc)) / Math.sqrt(5));
+}
 function tower() {
     if (adventure_data["tower_floor"] == undefined) {
         adventure_data["tower_floor"] = 0;
@@ -249,21 +516,15 @@ function tower() {
     if (adventure_data["tower_toughness"] == undefined) {
         adventure_data["tower_toughness"] = 1;
     }
+    if (adventure_data["tower_ascension"] == undefined) {
+        adventure_data["tower_ascension"] = 0;
+    }
     $("#events_topbar").html("The Tower of Magic");
     $("#events_content").html("Welcome to the Tower of Magic. Your essence allows you to enter.<br/>");
     var essence_cost = Math.round(Math.pow(adventure_data["total_essence"], 1.2));
     $("#events_content").append("<span class='clickable'>Compress</span> some magic into 1 essence (" + format_num(essence_cost, false) + " Mana Stones)<br/>");
     $("#events_content span").last().click(function () {
-        if (buildings["s_manastone"].amount > essence_cost && resources["mana"].amount >= essence_cost) {
-            buildings["s_manastone"].amount -= essence_cost;
-            resources_per_sec["mana"] -= essence_cost;
-            update_building_amount("s_manastone");
-            toggle_building_state("s_essence", true);
-            buildings["s_essence"].amount++;
-            update_building_amount("s_essence");
-            toggle_building_state("s_essence");
-            adventure_data["current_essence"]++;
-            adventure_data["total_essence"]++;
+        if (buy_essence(1)) {
             tower();
             $("#events_content").prepend("You compress some magic into essence.<br/>");
         }
@@ -320,13 +581,16 @@ function tower() {
     if (adventure_data["tower_floor"]) {
         $("#events_content").append("You're at tower floor: " + format_num(adventure_data["tower_floor"]) + "<br/>");
     }
-    if (adventure_data["grind_tower_time"] != undefined) {
+    if (adventure_data["grind_tower_time"] != undefined && adventure_data["tower_floor"] > 8) {
         var grind_tower_time = 24 * 60 * 60;
+        if (adventure_data["tower_floor"] > 31 && adventure_data["tower_ascension"] /* Don't have the tower guardian also give this */) {
+            grind_tower_time /= 2;
+        }
         if (adventure_data["tower_floor"] > 14) {
             grind_tower_time -= 60 * 60; /* 1 hour quicker! */
         }
         if (Date.now() - adventure_data["grind_tower_time"] > grind_tower_time * 1000 || document.URL == "http://localhost:8000/") {
-            $("#events_content").append("<span class='clickable'>Enter</span> the small tower nearby. (Costs one mana stone, enterable once every 24 hours). <br/>");
+            $("#events_content").append("<span class='clickable'>Enter</span> the small tower nearby. (Costs one mana stone, enterable once every 24 hours before upgrades). <br/>");
             $("#events_content span").last().click(function () { climb_tower(undefined, undefined, true); });
         }
         else {
@@ -354,7 +618,43 @@ function climb_tower(health, ehealth, grinding) {
         $("#events_topbar").html("Small tower floor " + format_num(grinding_level));
     }
     else {
-        $("#events_topbar").html("Tower floor " + format_num(adventure_data["tower_floor"]));
+        if (adventure_data["tower_floor"] >= tower_height()) {
+            $("#events_topbar").html("Top of the Tower!");
+        }
+        else if (!adventure_data["tower_ascension"]) {
+            $("#events_topbar").html("Tower floor " + format_num(adventure_data["tower_floor"]));
+        }
+        else {
+            function convertToRoman(num) {
+                var roman = {
+                    M: 1000,
+                    CM: 900,
+                    D: 500,
+                    CD: 400,
+                    C: 100,
+                    XC: 90,
+                    L: 50,
+                    XL: 40,
+                    X: 10,
+                    IX: 9,
+                    V: 5,
+                    IV: 4,
+                    I: 1
+                };
+                var result = '';
+                for (var key in roman) {
+                    if (num == roman[key]) {
+                        return result += key;
+                    }
+                    if (num > roman[key]) {
+                        result = result + key.repeat(Math.floor(num / roman[key]));
+                        num = num % roman[key];
+                    }
+                }
+                return result;
+            }
+            $("#events_topbar").html("Tower ascension " + convertToRoman(adventure_data["tower_ascension"]) + ", floor " + format_num(adventure_data["tower_floor"]));
+        }
     }
     if (health == undefined) {
         if (resources_per_sec["mana"] >= 1) {
@@ -370,10 +670,10 @@ function climb_tower(health, ehealth, grinding) {
             }
             if (grinding) {
                 grinding_level = 1;
-                ehealth = Math.pow(grinding_level, 2);
+                ehealth = Math.pow(grinding_level, 2) * tower_boss_ascension_scale();
             }
             else {
-                ehealth = Math.pow(adventure_data["tower_floor"], 2);
+                ehealth = Math.pow(adventure_data["tower_floor"], 2) * tower_boss_ascension_scale();
             }
         }
         else {
@@ -383,12 +683,24 @@ function climb_tower(health, ehealth, grinding) {
             return;
         }
     }
-    if (adventure_data["tower_floor"] >= TOWER_DATA.length && !grinding) {
+    if (adventure_data["tower_floor"] > tower_height() && !grinding) {
         $("#events_content").html("You're at the current top of the tower! Oh, also if you're here please message fuzzything44 on the Discord channel.<br/>");
+        /* Reset the tower information, increment ascension count and reset cost of essence. */
+        if (adventure_data["tower_ascension"] < 1) {
+            $("#events_content").html("There is a shimmering portal before you.  You sense that stepping through it will replace this tower with a bigger, better and harder one.  It will also make essence much cheaper.<br/>(This is Tower Ascension - you'll start again at floor 0, keeping all your essence and essence spent. 4 new floors will be added to the tower and it'll become more difficult. It also lowers the essence cost back to the base. Some floor rewards will be locked until you reach that floor again. Also, the small tower will become harder and gain floors at the same rate.)");
+            /* Need to modify the message above and the function below for Ascension specific extra upgrades. */
+            $("#events_content").append("<span class='clickable'>Step</span> through the portal.<br/>");
+            $("#events_content span").last().click(function () {
+                adventure_data["tower_floor"] = 0;
+                adventure_data["tower_ascension"]++;
+                adventure_data["total_essence"] = 1;
+                tower();
+            });
+        }
         $("#events_content").append("<span class='clickable'>Back</span> to tower base.<br/>");
         $("#events_content span").last().click(function () { tower(); });
     }
-    else if (grinding && grinding_level >= TOWER_DATA.length) {
+    else if (grinding && grinding_level > tower_height()) {
         $("#events_content").html("Congratulations on grinding to the very top of the tower! As a reward, the essence cost has been reduced!<br/>");
         adventure_data["total_essence"] = 0;
         $("#events_content").append("<span class='clickable'>Back</span> to tower base.<br/>");
@@ -398,13 +710,37 @@ function climb_tower(health, ehealth, grinding) {
         var boss = "";
         var description = "";
         if (grinding) {
-            boss = TOWER_DATA[grinding_level].boss;
-            description = TOWER_DATA[grinding_level].text;
+            if (grinding_level < tower_height()) {
+                if (grinding_level < TOWER_DATA.length - 2) {
+                    boss = TOWER_DATA[grinding_level].boss;
+                    description = TOWER_DATA[grinding_level].text;
+                }
+                else {
+                    boss = TOWER_DATA[TOWER_DATA.length - 2].boss;
+                    description = TOWER_DATA[TOWER_DATA.length - 2].text;
+                }
+            }
+            else {
+                boss = TOWER_DATA[TOWER_DATA.length - 1].boss;
+                description = TOWER_DATA[TOWER_DATA.length - 1].text;
+            }
             adventure_data["grind_tower_time"] = Date.now();
         }
         else {
-            boss = TOWER_DATA[adventure_data["tower_floor"]].boss;
-            description = TOWER_DATA[adventure_data["tower_floor"]].text;
+            if (adventure_data["tower_floor"] < tower_height()) {
+                if (adventure_data["tower_floor"] < TOWER_DATA.length - 2) {
+                    boss = TOWER_DATA[adventure_data["tower_floor"]].boss;
+                    description = TOWER_DATA[adventure_data["tower_floor"]].text;
+                }
+                else {
+                    boss = TOWER_DATA[TOWER_DATA.length - 2].boss;
+                    description = TOWER_DATA[TOWER_DATA.length - 2].text;
+                }
+            }
+            else {
+                boss = TOWER_DATA[TOWER_DATA.length - 1].boss;
+                description = TOWER_DATA[TOWER_DATA.length - 1].text;
+            }
         }
         $("#events_content").html("This floor contains " + boss + ". " + description + "<br/>");
         $("#events_content").append("Your health: " + format_num(health, true) + "<br/>");
@@ -444,9 +780,9 @@ function climb_tower(health, ehealth, grinding) {
             else if ((attack == "attack" && enemy_attack == "dodge") || (attack == "dodge" && enemy_attack == "spaz") || (attack == "spaz" && enemy_attack == "attack")) {
                 winstate = "lost";
             }
-            var enemy_damage = Math.pow(adventure_data["tower_floor"], 2);
+            var enemy_damage = Math.pow(adventure_data["tower_floor"], 2) * tower_boss_ascension_scale();
             if (grinding) {
-                enemy_damage = Math.pow(grinding_level, 2);
+                enemy_damage = Math.pow(grinding_level, 2) * tower_boss_ascension_scale();
             }
             function damage_player(amt) {
                 /* Warrior exists and is defending. And is alive. */
@@ -569,8 +905,22 @@ function defeat_floor(health) {
     if (health === void 0) { health = undefined; }
     $("#events_content").html("Yay, you won! That was a hard battle.<br/>");
     if (health == undefined) {
-        $("#events_content").append("For defeating the boss on floor " + format_num(adventure_data["tower_floor"]) + ", you are awarded with " + TOWER_DATA[adventure_data["tower_floor"]].reward_text + ". You're also a floor higher now. <br/>");
-        TOWER_DATA[adventure_data["tower_floor"]].reward();
+        var floor = adventure_data["tower_floor"];
+        if (floor > TOWER_DATA.length - 2) {
+            if (floor >= tower_height()) {
+                floor = TOWER_DATA.length - 1;
+            }
+            else {
+                floor = TOWER_DATA.length - 2;
+            }
+        }
+        if (adventure_data["tower_floor"] == tower_height()) {
+            $("#events_content").append("You defeated the final boss of the tower! A mystical portal opens in front of you.<br/>");
+        }
+        else {
+            $("#events_content").append("For defeating the boss on floor " + format_num(adventure_data["tower_floor"]) + ", you are awarded with " + TOWER_DATA[floor].reward_text + ". You're also a floor higher now. <br/>");
+        }
+        TOWER_DATA[floor].reward();
         adventure_data["tower_floor"]++;
         $("#events_content").append("<span class='clickable'>Continue</span> climbing the tower.<br/>");
         $("#events_content span").last().click(function () { climb_tower(); });
@@ -578,13 +928,14 @@ function defeat_floor(health) {
         $("#events_content span").last().click(function () { tower(); });
     }
     else {
-        $("#events_content").append("For defeating the boss on floor " + format_num(grinding_level) + ", you are awarded with 1 essence<br/>");
+        var essence_reward = Math.max(1, adventure_data["tower_ascension"]);
+        $("#events_content").append("For defeating the boss on floor " + format_num(grinding_level) + ", you are awarded with " + format_num(essence_reward) + " essence<br/>");
         /* Give one essence */
         toggle_building_state("s_essence", true);
-        buildings["s_essence"].amount++;
+        buildings["s_essence"].amount += essence_reward;
         update_building_amount("s_essence");
         toggle_building_state("s_essence");
-        adventure_data["current_essence"]++;
+        adventure_data["current_essence"] += essence_reward;
         grinding_level++;
         $("#events_content").append("<span class='clickable'>Continue</span> climbing the tower.<br/>");
         $("#events_content span").last().click(function () { climb_tower(health, Math.pow(grinding_level, 2), true); });
@@ -620,6 +971,20 @@ function tavern() {
             buydrink("healer", 0.5, 1, 10);
         });
     }
+    if (adventure_data["tower_floor"] > 32) {
+        $("#events_content").append("<br/>");
+        $("#events_content").append("<span class='clickable'>Buy</span> your Healer some Iron Juice (3 essence)");
+        $("#events_content span").last().click(function () {
+            buydrink("healer", 0.5, 3, 3);
+        });
+    }
+    if (adventure_data["tower_floor"] > 32) {
+        $("#events_content").append("<br/>");
+        $("#events_content").append("<span class='clickable'>Buy</span> your Healer some Face Punch (3 essence)");
+        $("#events_content span").last().click(function () {
+            buydrink("healer", 5, 1, 3);
+        });
+    }
     $("#events_content").append("<br/>");
     $("#events_content").append("<span class='clickable'>Buy</span> your Warrior a drink (1 essence)");
     $("#events_content span").last().click(function () {
@@ -629,6 +994,20 @@ function tavern() {
         $("#events_content").append(" <span class='clickable'>Buy 10</span>");
         $("#events_content span").last().click(function () {
             buydrink("warrior", 1, 7, 10);
+        });
+    }
+    if (adventure_data["tower_floor"] > 32) {
+        $("#events_content").append("<br/>");
+        $("#events_content").append("<span class='clickable'>Buy</span> your Warrior some Iron Juice (3 essence)");
+        $("#events_content span").last().click(function () {
+            buydrink("warrior", 1, 20, 3);
+        });
+    }
+    if (adventure_data["tower_floor"] > 33) {
+        $("#events_content").append("<br/>");
+        $("#events_content").append("<span class='clickable'>Buy</span> your Warrior some Face Punch (3 essence)");
+        $("#events_content span").last().click(function () {
+            buydrink("warrior", 5, 5, 3);
         });
     }
     $("#events_content").append("<br/>");
@@ -641,5 +1020,26 @@ function spend_essence(amount) {
     adventure_data["current_essence"] -= amount;
     update_building_amount("s_essence");
     toggle_building_state("s_essence", true);
+}
+function buy_essence(amount) {
+    var essence_cost = Math.round(Math.pow(adventure_data["total_essence"], 1.2));
+    if (buildings["s_manastone"].amount > essence_cost && resources["mana"].amount >= essence_cost) {
+        buildings["s_manastone"].amount -= essence_cost;
+        resources_per_sec["mana"] -= essence_cost;
+        update_building_amount("s_manastone");
+        toggle_building_state("s_essence", true);
+        buildings["s_essence"].amount++;
+        update_building_amount("s_essence");
+        toggle_building_state("s_essence");
+        adventure_data["current_essence"]++;
+        adventure_data["total_essence"]++;
+        if (amount > 1) {
+            return buy_essence(amount - 1); /* TODO: Switch from recursion sometime later. There's a clean formula for this, but eh. */
+        }
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 //# sourceMappingURL=tower.js.map

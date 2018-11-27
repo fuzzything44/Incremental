@@ -5,6 +5,7 @@
     "refinery": s_refinery_buff,
     "workshop": s_workshop_update,
     "enchantment": s_enchant_update,
+    "autoessence": s_autoessence,
     "final": s_final,
 }
 
@@ -567,4 +568,15 @@ function s_final(delta_time: number) {
 
     });
 
+}
+
+let autoessence_tick = 0;
+function s_autoessence(delta_time: number) {
+    autoessence_tick += delta_time;
+
+    if (autoessence_tick > 1000) {
+        /* Buy essence */
+        buy_essence(1);
+        autoessence_tick = autoessence_tick % 1000;
+    }
 }
