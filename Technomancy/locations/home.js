@@ -219,6 +219,8 @@
                                         resources["void"].amount -= 5;
                                         if (adventure_data["perm_resources"] == undefined) {
                                             adventure_data["perm_resources"] = {};
+                                        }
+                                        if (adventure_data["perm_bag_bits"] == undefined) {
                                             adventure_data["perm_bag_bits"] = 0;
                                         }
                                         adventure_data["perm_bag_bits"]++;

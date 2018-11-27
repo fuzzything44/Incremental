@@ -222,8 +222,11 @@
 
                                     if (adventure_data["perm_resources"] == undefined) {
                                         adventure_data["perm_resources"] = {}
+                                    }
+                                    if (adventure_data["perm_bag_bits"] == undefined) {
                                         adventure_data["perm_bag_bits"] = 0
                                     }
+
                                     adventure_data["perm_bag_bits"]++;
                                     resources_per_sec["magic_bag"] = 1;
                                 } else {
