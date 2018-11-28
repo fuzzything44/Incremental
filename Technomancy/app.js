@@ -3327,6 +3327,7 @@ function change_theme(new_theme) {
               0%  { background: purple; color: green; }         \
           }                                                     \
          ",
+        "darkpurple": ".bgc {background-color: #130013;}.fgc {color: #937e89;}.bgc_second {background-color: #332533;}",
     };
     var theme_music = {
         "light": "",
@@ -3942,6 +3943,14 @@ window.onload = function () {
             buildings["s_essence"].amount = adventure_data["current_essence"];
             toggle_building_state("s_essence");
             update_building_amount("s_essence"); /* Update amount shown. */
+        }
+        if (adventure_data["tower_floor"] > 34 || adventure_data["tower_ascension"] > 1) {
+            if (buildings["s_autoessence"].on) {
+                toggle_building_state("s_autoessence");
+            }
+            buildings["s_autoessence"].amount = 100;
+            $("#building_s_autoessence").parent().removeClass("hidden");
+            update_building_amount("s_autoessence"); /* Previously, there were infinite of these to keep it hidden. Let's update to proper amount. */
         }
     } /* END start of prestige additions */
     if (adventure_data["perm_resources"] != undefined) {

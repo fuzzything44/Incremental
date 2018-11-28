@@ -37,8 +37,8 @@ function s_trade(delta_time) {
     /* If locked and a trade is available... */
     if (to_next_trade < 0 && !remaining_upgrades["trade"].unlock()) {
         remaining_upgrades["trade"] = trade_upgrade;
-        /* Roll money amount. Horrible arbitrary formula, takes your money and remaining mana (up to 1m) into account for upper bound. */
-        var money_value = Math.round(Math.max(1, Math.random() * Math.min(Math.pow(Math.min(resources["mana"].amount, 1000000), 3) * 10, resources["money"].amount) * 2 + 10));
+        /* Roll money amount. Horrible arbitrary formula, takes your money and remaining mana (up to 10k) into account for upper bound. */
+        var money_value = Math.round(Math.max(1, Math.random() * Math.min(Math.pow(Math.min(resources["mana"].amount, 10000), 3) * 10, resources["money"].amount) * 2 + 10));
         /* Choose resources to be about the same money worth. */
         var resource_value = Math.round((money_value * 5 / 6) + (Math.random() * money_value * 1 / 3));
         /* Choose a resource */

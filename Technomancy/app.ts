@@ -3515,6 +3515,8 @@ function change_theme(new_theme: string) {
               0%  { background: purple; color: green; }         \
           }                                                     \
          ",
+        "darkpurple": ".bgc {background-color: #130013;}.fgc {color: #937e89;}.bgc_second {background-color: #332533;}",
+
     };
     let theme_music = {
         "light": "",
@@ -4159,6 +4161,17 @@ window.onload = () => {
             toggle_building_state("s_essence");
             update_building_amount("s_essence");/* Update amount shown. */
         }
+
+        if (adventure_data["tower_floor"] > 34 || adventure_data["tower_ascension"] > 1) {
+            if (buildings["s_autoessence"].on) {
+                toggle_building_state("s_autoessence");
+            }
+            buildings["s_autoessence"].amount = 100;
+            $("#building_s_autoessence").parent().removeClass("hidden");
+
+            update_building_amount("s_autoessence"); /* Previously, there were infinite of these to keep it hidden. Let's update to proper amount. */
+        }
+
     } /* END start of prestige additions */
 
 
@@ -4261,6 +4274,7 @@ window.onload = () => {
     if (adventure_data["challenges_completed"] && adventure_data["challenges_completed"].length > CHALLENGES.CASCADE && adventure_data["challenges_completed"][CHALLENGES.CASCADE]) {
         $("#autobuild_unlock").removeClass("hidden");
     }
+
     /* Setup hotkeys */
     let hotkey_mode = 0;
     $(document).keyup(function (e) {

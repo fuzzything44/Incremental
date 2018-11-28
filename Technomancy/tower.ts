@@ -973,11 +973,12 @@ function tavern() {
             adventure_data["tower_" + name].power += pow_gain;
             adventure_data["tower_" + name].health += health_gain;
             $("#events_content").prepend("You buy your " + name + " a drink. They gain " + format_num(pow_gain) + " power and " + format_num(health_gain) + " health!<br/>");
-
+            tavern();
         } else {
             $("#events_content").prepend("You don't have enough essence<br/>");
         }
     }
+    $("#events_content").append("You have a healer with you. They have " + format_num(adventure_data["tower_healer"].power) + " power and " + format_num(adventure_data["tower_healer"].health) + " health.");
     $("#events_content").append("<span class='clickable'>Buy</span> your Healer a drink (1 essence)");
     $("#events_content span").last().click(function () {
         buydrink("healer", 0.5, 1);
@@ -999,10 +1000,11 @@ function tavern() {
         $("#events_content").append("<br/>");
         $("#events_content").append("<span class='clickable'>Buy</span> your Healer some Face Punch (3 essence)");
         $("#events_content span").last().click(function () {
-            buydrink("healer", 5, 1, 3);
+            buydrink("healer", 2, 1, 3);
         });
     }
 
+    $("#events_content").append("You have a warrior with you. They have " + format_num(adventure_data["tower_warrior"].power) + " power and " + format_num(adventure_data["tower_warrior"].health) + " health.");
     $("#events_content").append("<br/>");
     $("#events_content").append("<span class='clickable'>Buy</span> your Warrior a drink (1 essence)");
     $("#events_content span").last().click(function () {
@@ -1018,14 +1020,14 @@ function tavern() {
         $("#events_content").append("<br/>");
         $("#events_content").append("<span class='clickable'>Buy</span> your Warrior some Iron Juice (3 essence)");
         $("#events_content span").last().click(function () {
-            buydrink("warrior", 1, 20, 3);
+            buydrink("warrior", 1, 12, 3);
         });
     }
     if (adventure_data["tower_floor"] > 33) {
         $("#events_content").append("<br/>");
         $("#events_content").append("<span class='clickable'>Buy</span> your Warrior some Face Punch (3 essence)");
         $("#events_content span").last().click(function () {
-            buydrink("warrior", 5, 5, 3);
+            buydrink("warrior", 3, 2, 3);
         });
     }
     $("#events_content").append("<br/>");
