@@ -978,7 +978,7 @@ function tavern() {
             $("#events_content").prepend("You don't have enough essence<br/>");
         }
     }
-    $("#events_content").append("You have a healer with you. They have " + format_num(adventure_data["tower_healer"].power) + " power and " + format_num(adventure_data["tower_healer"].health) + " health.");
+    $("#events_content").append("You have a healer with you. They have " + format_num(adventure_data["tower_healer"].power) + " power and " + format_num(adventure_data["tower_healer"].health) + " health.<br/>");
     $("#events_content").append("<span class='clickable'>Buy</span> your Healer a drink (1 essence)");
     $("#events_content span").last().click(function () {
         buydrink("healer", 0.5, 1);
@@ -1004,7 +1004,7 @@ function tavern() {
         });
     }
 
-    $("#events_content").append("You have a warrior with you. They have " + format_num(adventure_data["tower_warrior"].power) + " power and " + format_num(adventure_data["tower_warrior"].health) + " health.");
+    $("#events_content").append("<br/>You have a warrior with you. They have " + format_num(adventure_data["tower_warrior"].power) + " power and " + format_num(adventure_data["tower_warrior"].health) + " health.");
     $("#events_content").append("<br/>");
     $("#events_content").append("<span class='clickable'>Buy</span> your Warrior a drink (1 essence)");
     $("#events_content span").last().click(function () {
