@@ -864,6 +864,9 @@ let equipment = {
                             break;
                         }
                         case "2018": {
+                            $("#events_content").html("Hey, it's not Christmas yet! No peeking!");
+                            return 1;
+
                             if (adventure_data["current_essence"] == undefined) {
                                 $("#events_content").html("You get a feeling you wouldn't appreciate this present right now. Try again when you've seen the tower.");
                             } else {

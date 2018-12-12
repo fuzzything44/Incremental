@@ -2621,7 +2621,7 @@ let prestige = {
         if (adventure_data["tower_floor"] > 36) {
             mana_gain *= 2;
         }
-
+        
         if (isNaN(mana_gain)) { mana_gain = 0; } /* Can't get NaN mana. */
         if (round) {
             return Math.floor(mana_gain);

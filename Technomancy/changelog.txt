@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.15.0: (12/11/2018)
+Added tower ascension II. Fixed an issue with a building showing up in the groupings list that shouldn't have. Buying a garden event closes if garden is successfully purchased. Fixed display of party stats in the tower. Turkeys no longer show up. Also, enter adventure mode to get your 2018 present!
+
 v5.14.2: (11/28/18) Minor bugfixes + QOL + Balance
 Added a new theme. If you have the essence compressor unlocked, it should stay unlocked through prestige. Balance: Reduced trade max value (caps at 10k free mana instead of 1m now). Reduced strength of some of the new drinks. Also, it tells you your party strength in the Tavern now.
 

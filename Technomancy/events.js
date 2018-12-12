@@ -663,6 +663,7 @@ var events = [
                                 "quality": 1,
                                 "harvest": "carrot",
                             }];
+                        $("#events").addClass("hidden");
                     }
                 });
             }
