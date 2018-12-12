@@ -698,8 +698,8 @@ let events = [
                             "quality": 1, /* How much we get on harvest/other stuff. While growing, this can be increased with special items. */
                             "harvest": "carrot", /* What do they get when harvesting? Returns the message they get on harvest. */
                         }];
+                        $("#events").addClass("hidden");
                     }
-
                 });
             } else if (event_flags["garden"] != undefined) {
                 /* They have a garden, so give them some seeds! */
