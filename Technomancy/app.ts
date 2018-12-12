@@ -2617,6 +2617,11 @@ let prestige = {
             }
         }
         mana_gain = Math.max(0, mana_gain) /* Can't get negative mana. */
+
+        if (adventure_data["tower_floor"] > 36) {
+            mana_gain *= 2;
+        }
+
         if (isNaN(mana_gain)) { mana_gain = 0; } /* Can't get NaN mana. */
         if (round) {
             return Math.floor(mana_gain);
@@ -3635,7 +3640,7 @@ function draw_group(name: string) {
         We're also specifically excluding two buildings because they should never be able to be turned off.
     */
     Object.keys(buildings).forEach(function (build) {
-        if (build != "s_manastone" && build != "s_mana_refinery" && build != "s_essence" && !$("#building_" + build).parent().hasClass("hidden")) {
+        if (["s_manastone", "s_mana_refinery", "s_essence", "s_final"].indexOf(build) == -1 && !$("#building_" + build).parent().hasClass("hidden")) {
             /* Get the name */
             let b_name = $("#building_" + build + " .building_name").text();
             /* Get the color. Red if not in the grouping, green if it is. */

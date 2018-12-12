@@ -448,6 +448,48 @@
             }
         }
     },
+    { /* Boss 35 (Ascension II - 1) */
+        "boss": "test boss",
+        "text": "test text.",
+        get reward_text() {
+            return "test_reward=\"essence_multiplier *= ascensionCount*0.01\"";
+        },
+        reward: function () {
+            toggle_building_state("s_essence", true);
+            Object.keys(buildings["s_essence"].multipliers).forEach(function (res) {
+                buildings["s_essence"].multipliers[res] *= 1 + (0.01 * adventure_data["tower_ascension"]);
+            });
+
+            toggle_building_state("s_essence");
+        }
+    },
+    { /* Boss 36 (Ascension II - 2) */
+        "boss": "A really annoyed QA guy",
+        "text": "He mutters something about not testing in production. It sounds really lame.",
+        get reward_text() {
+            return "Double Mana Mode";
+        },
+        reward: function () {
+        }
+    },
+    { /* Boss 37 (Ascension II - 3) */
+        "boss": "Hackerman",
+        "text": "Oh no, you've been hacked!",
+        get reward_text() {
+            return "ERROR in tower.ts line ���: undefined is not a function. Enabling grind_tower_bank_mode.";
+        },
+        reward: function () {
+        }
+    },
+    { /* Boss 38 (Ascension II - 4) */
+        "boss": "The Client",
+        "text": "Hey, what if you added balloons? No, get rid of those, they're terrible. Hey, what if you had it make my coffee? No, not black coffee, 3 sugars and 2 creams. Why won't it make me a latte? It keeps making my coffee with 3 sugars and 2 creams which is wrong. I found a bug: if I press this button, it makes me a latte when I actually want some tea. Hey, there's no lemon in my tea. Why won't it make me coffee with 2 sugars and 3 creams? Fix that NOW. Okay, new top highest priority item: ...",
+        get reward_text() {
+            return "a decreased essence price";
+        },
+        reward: function () {
+        }
+    },
     { /* Boss Repeat, for extra levels */
         get boss() {
             return "a " + tower_adj_a[adventure_data["tower_floor"] % tower_adj_a.length]
@@ -512,6 +554,13 @@ function tower_boss_ascension_scale () {
     return Math.round((Math.pow(a, asc) - Math.pow(b, asc)) / Math.sqrt(5));
 }
 
+function essence_cost_multiplier() {
+    if (adventure_data["tower_floor"] > 38) {
+        return 1.15;
+    } else {
+        return 1.2;
+    }
+}
 function tower() {
     if (adventure_data["tower_floor"] == undefined) {
         adventure_data["tower_floor"] = 0;
@@ -529,7 +578,8 @@ function tower() {
     $("#events_topbar").html("The Tower of Magic");
     $("#events_content").html("Welcome to the Tower of Magic. Your essence allows you to enter.<br/>");
 
-    let essence_cost = Math.round(Math.pow(adventure_data["total_essence"], 1.2));
+
+    let essence_cost = Math.round(Math.pow(adventure_data["total_essence"], essence_cost_multiplier()));
     $("#events_content").append("<span class='clickable'>Compress</span> some magic into 1 essence (" + format_num(essence_cost, false) + " Mana Stones)<br/>");
     $("#events_content span").last().click(function () {
         if (buy_essence(1)) {
@@ -602,9 +652,29 @@ function tower() {
             grind_tower_time -= 60 * 60; /* 1 hour quicker! */
         }
 
+        if (adventure_data["grind_tower_bank"]) {
+            $("#events_content").append("You have " + format_num(adventure_data["grind_tower_bank"]) + " entries to the small tower banked.<br/>");
+        }
         if (Date.now() - adventure_data["grind_tower_time"] > grind_tower_time * 1000 || document.URL == "http://localhost:8000/") {
             $("#events_content").append("<span class='clickable'>Enter</span> the small tower nearby. (Costs one mana stone, enterable once every 24 hours before upgrades). <br/>");
             $("#events_content span").last().click(function () { climb_tower(undefined, undefined, true) });
+
+            if (adventure_data["tower_floor"] > 37) {
+                $("#events_content").append("<span class='clickable'>Bank</span> your entry instead (and then you can enter quicker sometime later)<br/>");
+                $("#events_content span").last().click(function () {
+                    if (adventure_data["grind_tower_bank"] == undefined) {
+                        adventure_data["grind_tower_bank"] = 0;
+                    }
+                    adventure_data["grind_tower_bank"]++;
+                });
+            }
+
+        } else if (adventure_data["grind_tower_bank"]) {
+            $("#events_content").append("<span class='clickable'>Enter</span> the small tower nearby. (Using up a bank) <br/>");
+            $("#events_content span").last().click(function () {
+                adventure_data["grind_tower_bank"]--;
+                climb_tower(undefined, undefined, true);
+            });
         } else {
             let date = new Date(null)
             let elapsed_time = (Date.now() - adventure_data["grind_tower_time"]) / 1000
@@ -1049,7 +1119,7 @@ function spend_essence(amount) {
 }
 
 function buy_essence(amount) {
-    let essence_cost = Math.round(Math.pow(adventure_data["total_essence"], 1.2));
+    let essence_cost = Math.round(Math.pow(adventure_data["total_essence"], essence_cost_multiplier()));
     if (buildings["s_manastone"].amount > essence_cost && resources["mana"].amount >= essence_cost) {
         buildings["s_manastone"].amount -= essence_cost;
         resources_per_sec["mana"] -= essence_cost;

@@ -537,10 +537,16 @@ function s_final(delta_time) {
             _this["res-" + res] = Math.max(0, normal_gain * buildings["s_final"].strength);
             /* If they normally generate none, then don't give them NaN per sec. */
             resources_per_sec[res] = _this["res-" + res] + neg_gain;
+            /* Update tooltip to show changes */
+            resources[res].changes["???"] = _this["res-" + res] - normal_gain;
+            resource_tooltip();
             /* Checks if building was turned off */
             setTimeout(function () {
                 if (!buildings["s_final"].on) {
                     resources_per_sec[res] = normal_gain + neg_gain;
+                    /* Update tooltip */
+                    delete resources[res].changes["???"];
+                    resource_tooltip();
                 }
             }, 50);
         }
