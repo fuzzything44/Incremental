@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.15.1: (12/12/18)
+Fixed a couple issues with ascension II tower of grinding - you can't bank infinite entries now, using a banked entry shouldn't reset your timer, and cleaned up a bit of the code there. Also when grinding, enemy health should be properly multiplied. 
+
 v5.15.0: (12/11/2018)
 Added tower ascension II. Fixed an issue with a building showing up in the groupings list that shouldn't have. Buying a garden event closes if garden is successfully purchased. Fixed display of party stats in the tower. Turkeys no longer show up. Also, enter adventure mode to get your 2018 present!
 
