@@ -33,7 +33,7 @@
                         update_inventory();
                     });
                 }
-                if (resources_per_sec["mana"] > 50 && adventure_data["rules_unlocked"] != undefined && adventure_data["auto_events"] == undefined) {
+                if (resources_per_sec["mana"] >= 50 && adventure_data["rules_unlocked"] != undefined && adventure_data["auto_events"] == undefined) {
                     $("#events_content").append("<span class='clickable'>Watch</span> the machines. <i>This will destroy more of your mana stones and your shields. Click with care. </i><br/>");
                     $("#events_content span").last().click(function () {
                         /* Remove mana. */

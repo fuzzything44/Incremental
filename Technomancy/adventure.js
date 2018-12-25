@@ -237,8 +237,8 @@ function run_adventure(location, can_reroll) {
         if (loc.condition()) { /* If the encounter can happen... */
             if (loc.weight > 0) { /* If not forced encounter... */
                 if (event_flags["skills"] && event_flags["c_nc_strong"] && /* Strong encounter selection on.*/
-                    ((event_flags["skills"][5] && event_flags["skills"][10]) || /* They have normal and strong +combat*/
-                        (event_flags["skills"][6] && event_flags["skills"][11]))) { /* Or they have normal and strong -combat */
+                    ((event_flags["skills"][5] && event_flags["skills"][9]) || /* They have normal and strong +combat*/
+                        (event_flags["skills"][6] && event_flags["skills"][10]))) { /* Or they have normal and strong -combat */
                     if ( /* If it's a combat encounter and selection is set to combat, or it's noncombat and selection is set to noncombat...*/(event_flags["skills"][5] && loc.types.indexOf("combat") != -1) ||
                         (event_flags["skills"][6] && loc.types.indexOf("noncombat") != -1)) {
                         available_encounters.push(loc);

@@ -90,7 +90,7 @@ var CHALLENGE_INFO = [
         "name": "A Small Loan",
         "description": "Be a tycoon of business and grow your empire!",
         "requirements": "Get 10 million money to complete this challenge",
-        "restrictions": "Go back to 0 mana. You can't prestige. You start with 1 million money, but lose 30/second. Can you get enough to pay off your loan?",
+        "restrictions": "Go back to 100 mana. You can't prestige. You start with 1 million money, but lose 30/second. Can you get enough to pay off your loan?",
         "reward": "30 money/s boost.",
         "test_completed": function () { return resources["money"].amount >= 10000000; }
     },

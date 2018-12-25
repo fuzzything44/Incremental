@@ -243,7 +243,7 @@ let events = [
                 /* No environmental regulations. Mines and logging camps much stronger. */
                 content += "<span onclick='bribe_environment();' class='clickable'>Remove Environmental Regulations</span><i style='text: small'>This provides a massive boost to mines and logging camps.</i><br />";
 
-                if (buildings["s_manastone"].amount >= 250) {
+                if (buildings["s_manastone"].amount >= 250 && buildings["s_manastone"].amount < 10000) {
                     let regs = buildings["s_manastone"].amount % 100 >= 50 ? "financial" : "environmental";
                     if (buildings["s_manastone"].amount >= 350) {
                         content += "Removing " + regs + " regulations seems like it might be risky, but it could be worth it...";
@@ -727,7 +727,7 @@ let events = [
                 $("#events_content").append("<i>This destroys 50 libraries (cost DOES NOT RESET) and is available once per prestige. Choose wisely.</i><br /><br />");
 
                 /* Magic! */
-                if (buildings["s_manastone"].amount % 3 != 0) {
+                if (buildings["s_manastone"].amount % 3 != 0 || buildings["s_manastone"].amount >= 10000) {
                     $("#events_content").append("<span class='clickable'>Become a Sorceror</span><i style='text: small'>Learn about the Arcane Secrets of the Universe.</i><br>");
                     $("#events_content span").last().click(function () {
                         destroy_building("library", 50);
@@ -738,7 +738,7 @@ let events = [
                 }
 
                 /* Alchemy! */
-                if (buildings["s_manastone"].amount % 3 != 1) {
+                if (buildings["s_manastone"].amount % 3 != 1 || buildings["s_manastone"].amount >= 10000) {
                     $("#events_content").append("<span class='clickable'>Become an Alchemist</span><i style='text: small'>Turning lead into gold is only a small part of the potential of alchemists.</i><br>");
                     $("#events_content span").last().click(function () {
                         destroy_building("library", 50);
@@ -749,7 +749,7 @@ let events = [
                 }
 
                 /* Machines! */
-                if (buildings["s_manastone"].amount % 3 != 2) {
+                if (buildings["s_manastone"].amount % 3 != 2 || buildings["s_manastone"].amount >= 10000) {
                     $("#events_content").append("<span class='clickable'>Become an Inventor</span><i style='text: small'>Your machines will be the wonders of humanity.</i><br>");
                     $("#events_content span").last().click(function () {
                         destroy_building("library", 50);
@@ -920,7 +920,7 @@ function setup_events() {
             event_flags["crisis_averted"] = false;
         }
         /* Appear at X50-X00 range */
-        if (buildings["s_manastone"].amount >= 250 && buildings["s_manastone"].amount % 100 >= 50 && event_flags["bribed_politician"] == "money" && !event_flags["crisis_averted"]) {
+        if (((buildings["s_manastone"].amount >= 250 && buildings["s_manastone"].amount % 100 >= 50) || buildings["s_manastone"].amount >= 10000) && event_flags["bribed_politician"] == "money" && !event_flags["crisis_averted"]) {
             event_flags["to_money_decrease"]--;
             if (purchased_upgrades.indexOf("time_use_boost") != -1 && time_on) {
                 event_flags["to_money_decrease"] -= 9; /* Decrease faster! */
@@ -1010,7 +1010,7 @@ function setup_events() {
             event_flags["crisis_averted"] = false;
         }
         /* Appear in X00-X50 range. */
-        if (buildings["s_manastone"].amount >= 300 && buildings["s_manastone"].amount % 100 < 50 && event_flags["bribed_politician"] == "environment") {
+        if (((buildings["s_manastone"].amount >= 300 && buildings["s_manastone"].amount % 100 < 50) || buildings["s_manastone"].amount >= 10000) && event_flags["bribed_politician"] == "environment") {
             event_flags["to_oil_decrease"]--;
             if (purchased_upgrades.indexOf("time_use_boost") != -1 && time_on) {
                 event_flags["to_oil_decrease"] -= 9; /* Decrease faster! */

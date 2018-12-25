@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.15.2: (12/24/18) Merry Christmas (It's Christmas somewhere!)
+Fixed a weird bug with mage combat/noncombat forcing. Small loan now correctly says you go to 100 mana, not 0. You can now use the 2018 Christmas present! Also, if you have a ton of mana either bribe should get you a crisis.
+
 v5.15.1: (12/12/18)
 Fixed a couple issues with ascension II tower of grinding - you can't bank infinite entries now, using a banked entry shouldn't reset your timer, and cleaned up a bit of the code there. Also when grinding, enemy health should be properly multiplied. 
 
