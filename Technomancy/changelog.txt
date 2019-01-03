@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.15.3: (1/2/18) First update since last year
+Fixed a bug where fortifying a building wouldn't update anything until reload. You can no longer get the 2018 Christmas present, if you didn't already. Fixed a bug where one tower reward (floor 35) would disappear on prestige. Also, it's a bit late but in celebration of international nerf day, mana is capped at 100k when you start a prestige. If you'd be above that, you're now at 100k. Sorry. Also, some high value resources can no longer be placed in the bag of folding. 
+
 v5.15.2: (12/24/18) Merry Christmas (It's Christmas somewhere!)
 Fixed a weird bug with mage combat/noncombat forcing. Small loan now correctly says you go to 100 mana, not 0. You can now use the 2018 Christmas present! Also, if you have a ton of mana either bribe should get you a crisis.
 

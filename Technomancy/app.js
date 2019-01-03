@@ -181,33 +181,46 @@ function set_initial_state() {
             "generation": {
                 "essence": 1,
             },
-            "multipliers": {
-                "energy": 0.1,
-                "research": 0.1,
-                "manager": 0.1,
-                "money": 0.1,
-                "stone": 0.1,
-                "wood": 0.1,
-                "iron_ore": 0.1,
-                "coal": 0.1,
-                "iron": 0.1,
-                "gold": 0.1,
-                "diamond": 0.1,
-                "jewelry": 0.1,
-                "oil": 0.1,
-                "paper": 0.1,
-                "ink": 0.1,
-                "book": 0.1,
-                "sand": 0.1,
-                "glass": 0.1,
-                "water": 0.1,
-                "hydrogen": 0.1,
-                "steel_beam": 0.1,
-                "uranium": 0.1,
-                "sandcastle": 0.1,
-                "glass_bottle": 0.1,
-                "mithril": 0.1,
-                "void": 0.1,
+            get multipliers() {
+                var mults = {
+                    "energy": 0.1,
+                    "research": 0.1,
+                    "manager": 0.1,
+                    "money": 0.1,
+                    "stone": 0.1,
+                    "wood": 0.1,
+                    "iron_ore": 0.1,
+                    "coal": 0.1,
+                    "iron": 0.1,
+                    "gold": 0.1,
+                    "diamond": 0.1,
+                    "jewelry": 0.1,
+                    "oil": 0.1,
+                    "paper": 0.1,
+                    "ink": 0.1,
+                    "book": 0.1,
+                    "sand": 0.1,
+                    "glass": 0.1,
+                    "water": 0.1,
+                    "hydrogen": 0.1,
+                    "steel_beam": 0.1,
+                    "uranium": 0.1,
+                    "sandcastle": 0.1,
+                    "glass_bottle": 0.1,
+                    "mithril": 0.1,
+                    "void": 0.1,
+                };
+                if (purchased_upgrades.indexOf("better_essence") != -1) {
+                    Object.keys(mults).forEach(function (res) {
+                        mults[res] *= 1 + (0.01 * adventure_data["tower_ascension"]);
+                    });
+                }
+                if (adventure_data["tower_floor"] > 35 && adventure_data["tower_ascension"] >= 2) {
+                    Object.keys(mults).forEach(function (res) {
+                        mults[res] *= 1 + (0.01 * adventure_data["tower_ascension"]);
+                    });
+                }
+                return mults;
             },
             "update": "nop",
             "free": 0,
@@ -2196,11 +2209,6 @@ function set_initial_state() {
         "better_essence": {
             "unlock": function () { return adventure_data["tower_floor"] > 7; },
             "purchase": function () {
-                toggle_building_state("s_essence", true);
-                Object.keys(buildings["s_essence"].multipliers).forEach(function (res) {
-                    buildings["s_essence"].multipliers[res] *= 2;
-                });
-                toggle_building_state("s_essence");
             },
             "cost": {
                 "refined_mana": 5000,
@@ -2484,6 +2492,10 @@ var prestige = {
         }
         if (!ask || confirm("You will lose all resources and all buildings but gain " + mana_gain.toString() + " mana after reset. Proceed?")) {
             var total_mana = buildings["s_manastone"].amount + mana_gain;
+            if (total_mana > adventure_data["max_mana"]) {
+                total_mana = adventure_data["max_mana"];
+                alert("Warning: Mana flux levels too high. Capping mana stones. ");
+            }
             set_initial_state();
             buildings["s_manastone"].amount = total_mana;
             adventure_data.current_location = "home"; /* You have to prestige at home. */
@@ -3260,7 +3272,7 @@ function purchase_upgrade(name) {
     }
 }
 function calculate_bag_amount(res) {
-    if (adventure_data["perm_resources"] == undefined || adventure_data["perm_resources"][res] == undefined)
+    if (adventure_data["perm_resources"] == undefined || adventure_data["perm_resources"][res] == undefined || resources[res].value >= adventure_data["max_bag_value"])
         return 0;
     if (res == "money" && adventure_data["challenge"] == CHALLENGES.POVERTY) {
         return 0;
@@ -3734,10 +3746,13 @@ function prng(seed) {
 function perm_bag() {
     $("#events_topbar").html("Magic Bag of Folding");
     $("#events_content").html("This is your bag of folding. You put resources in, and then get a fraction of them out every prestige. You currently have " + adventure_data["perm_bag_bits"].toString() + " pieces of mithril cloth. Unlocking space for a new resource takes one piece of cloth. <br/>");
+    if (adventure_data["max_bag_value"] == undefined) {
+        adventure_data["max_bag_value"] = 50000;
+    }
     $("#events_content").append("<span class='clickable'>Fill</span> bag with all possible resources<br/>");
     $("#events_content span").last().click(function () {
         Object.keys(adventure_data["perm_resources"]).forEach(function (res) {
-            if (resources[res].value > 0 && resources[res].amount > 0) {
+            if (resources[res].value > 0 && resources[res].amount > 0 && resources[res].value <= adventure_data["max_bag_value"]) {
                 adventure_data["perm_resources"][res] += resources[res].amount;
                 resources[res].amount = 0;
             }
@@ -3746,7 +3761,7 @@ function perm_bag() {
     });
     $("#events_content").append("<table></table>");
     Object.keys(resources).forEach(function (res) {
-        if (resources[res].value > 0 && (resources[res].amount > 0 || adventure_data["perm_resources"][res])) { /* We only can store resources with > 0 value. Also only show resources the player knows about. */
+        if (resources[res].value > 0 && resources[res].value <= adventure_data["max_bag_value"] && (resources[res].amount > 0 || adventure_data["perm_resources"][res])) { /* We only can store resources with > 0 value. Also only show resources the player knows about. */
             var rname = (res.charAt(0).toUpperCase() + res.slice(1)).replace("_", " ");
             if (adventure_data["perm_resources"][res] != undefined) { /* This is unlocked for storage*/
                 var res_on_p = calculate_bag_amount(res);
@@ -3958,6 +3973,9 @@ window.onload = function () {
     } /* END start of prestige additions */
     if (adventure_data["perm_resources"] != undefined) {
         resources_per_sec["magic_bag"] = 1;
+    }
+    if (adventure_data["max_mana"] == undefined) {
+        adventure_data["max_mana"] = 100000;
     }
     /* Start our event system */
     var to_next_event = 2 * 60000 + Math.random() * 60000 * 2;

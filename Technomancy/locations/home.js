@@ -561,10 +561,17 @@
                                                 event_flags["buildings_fortified"]++; /* Next fortify costs more. */
                                                 buildings[build]["prefix"] = "Fortified"; /* Give it the prefix */
                                                 $("#building_" + build + " .building_prefix").html("Fortified ");
+                                                var build_state = buildings[build].on;
+                                                if (build_state) {
+                                                    toggle_building_state(build);
+                                                }
                                                 /* Double all production of it. */
                                                 Object.keys(buildings[build].generation).forEach(function (res) {
                                                     buildings[build].generation[res] *= 2;
                                                 });
+                                                if (build_state) { /* Only turn on if it already was on */
+                                                    toggle_building_state(build);
+                                                }
                                                 study(); /* Refresh display. */
                                             }
                                         });

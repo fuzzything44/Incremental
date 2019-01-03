@@ -455,12 +455,6 @@
             return "test_reward=\"essence_multiplier *= ascensionCount*0.01\"";
         },
         reward: function () {
-            toggle_building_state("s_essence", true);
-            Object.keys(buildings["s_essence"].multipliers).forEach(function (res) {
-                buildings["s_essence"].multipliers[res] *= 1 + (0.01 * adventure_data["tower_ascension"]);
-            });
-
-            toggle_building_state("s_essence");
         }
     },
     { /* Boss 36 (Ascension II - 2) */
@@ -488,6 +482,46 @@
             return "a decreased essence price";
         },
         reward: function () {
+        }
+    },
+    { /* Boss 39 (Ascension III - 1) */
+        "boss": "",
+        "text": "",
+        get reward_text() {
+            return "";
+        },
+        reward: function () {
+            /* Omega machine? */
+        }
+    },
+    { /* Boss 40 (Ascension III - 2) */
+        "boss": "",
+        "text": "",
+        get reward_text() {
+            return "";
+        },
+        reward: function () {
+            /* Omega bank (well, map available at Cath)? */
+        }
+    },
+    { /* Boss 41 (Ascension III - 3) */
+        "boss": "",
+        "text": "",
+        get reward_text() {
+            return "";
+        },
+        reward: function () {
+            /* Some omega upgrades? Like +essence power? */
+        }
+    },
+    { /* Boss 42 (Ascension III - 4) */
+        "boss": "",
+        "text": "",
+        get reward_text() {
+            return "";
+        },
+        reward: function () {
+            /* Omega specialization? (Let them get deltas or whatever to increase various limits (mana, refine amounts, etc...)) */
         }
     },
     { /* Boss Repeat, for extra levels */
