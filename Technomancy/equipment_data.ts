@@ -851,6 +851,14 @@ let equipment = {
                         self.name = "A Porcelain Tower (2018)";
                         self.use = function (index, location) {
                             $("#events_content").html("You look at the tower. There's no more light in the window.");
+                            if (adventure_data["current_essence"] < 0) {
+                                toggle_building_state("s_essence", true);
+                                buildings["s_essence"].amount += 10;
+                                update_building_amount("s_essence");
+                                toggle_building_state("s_essence");
+
+                                adventure_data["current_essence"] += 10;
+                            }
                         }
                     }
                 }
@@ -874,7 +882,7 @@ let equipment = {
                                 update_building_amount("s_essence");
                                 toggle_building_state("s_essence");
 
-                                adventure_data["current_essence"]++;
+                                adventure_data["current_essence"] += 10;
                             }
                             break;
                         }

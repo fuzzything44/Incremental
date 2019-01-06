@@ -35,6 +35,7 @@
     <TypeScriptCompile Include="challenges.ts" />
     <TypeScriptCompile Include="equipment_data.ts" />
     <TypeScriptCompile Include="events.ts" />
+    <TypeScriptCompile Include="locations\demons\ulgathor.ts" />
     <TypeScriptCompile Include="locations\demons\mars.ts" />
     <TypeScriptCompile Include="locations\global.ts" />
     <TypeScriptCompile Include="locations\home.ts" />

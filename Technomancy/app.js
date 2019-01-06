@@ -1,5 +1,9 @@
 /// <reference path ="events.ts" />
 /// <reference path ="spells.ts" />
+var OMEGA = "Ω";
+var DELTA = "Δ";
+var EPSILON = "ε";
+var PHI = "φ";
 function format_num(num, show_decimals) {
     if (show_decimals === void 0) { show_decimals = true; }
     /* If our numberformatting library broke, we fallback to a terrible option instead. This should really only happen in development when it's being worked on online, so it doesn't matter too much.*/
@@ -92,6 +96,7 @@ var UNLOCK_TREE = {
     "big_mine": [],
     "hydrogen_mine": [],
     "mana_purifier": [],
+    "omega_machine": [],
 };
 var SPELL_BUILDINGS = [
     "s_manastone",
@@ -112,6 +117,7 @@ var SPELL_BUILDINGS = [
     "s_challenge",
 ];
 function set_initial_state() {
+    var _a, _b;
     /*
         Each resource has a few different fields:
             amount: How many they have. This is the ONLY field stored on save/load
@@ -119,42 +125,44 @@ function set_initial_state() {
             mult: The per-second multiplier. (Amount per second is stored elsewhere because bad design decisions). If you have +10/s and a mult of 2, you actually get +20/s. Only is applied for positive net changes.
             changes: List of [string, value] elements. Tracks what's modifying the /s gain to be displayed later. TODO: Actually do stuff with this.
     */
-    resources = {
-        "time": { "amount": 0, "value": -2, "mult": 1, "changes": {}, "ps_change": "" },
-        "refined_mana": { "amount": 0, "value": -1, "mult": 1, "changes": {}, "ps_change": "" },
-        "purified_mana": { "amount": 0, "value": -2500, "mult": 1, "changes": {}, "ps_change": "" },
-        "fuel": { "amount": 0, "value": -1000, "mult": 1, "changes": {}, "ps_change": "" },
-        "magic_bag": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
-        "mana": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
-        "essence": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
-        "energy": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
-        "research": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
-        "manager": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
-        "sludge": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
-        "money": { "amount": 10, "value": 1, "mult": 1, "changes": {}, "ps_change": "" },
-        "stone": { "amount": 0, "value": 0.5, "mult": 1, "changes": {}, "ps_change": "" },
-        "wood": { "amount": 0, "value": 0.5, "mult": 1, "changes": {}, "ps_change": "" },
-        "iron_ore": { "amount": 0, "value": 1, "mult": 1, "changes": {}, "ps_change": "" },
-        "coal": { "amount": 0, "value": 1, "mult": 1, "changes": {}, "ps_change": "" },
-        "iron": { "amount": 0, "value": 4, "mult": 1, "changes": {}, "ps_change": "" },
-        "gold": { "amount": 0, "value": 50, "mult": 1, "changes": {}, "ps_change": "" },
-        "diamond": { "amount": 0, "value": 75, "mult": 1, "changes": {}, "ps_change": "" },
-        "jewelry": { "amount": 0, "value": 300, "mult": 1, "changes": {}, "ps_change": "" },
-        "oil": { "amount": 0, "value": 2, "mult": 1, "changes": {}, "ps_change": "" },
-        "paper": { "amount": 0, "value": 4, "mult": 1, "changes": {}, "ps_change": "" },
-        "ink": { "amount": 0, "value": 10, "mult": 1, "changes": {}, "ps_change": "" },
-        "book": { "amount": 0, "value": 400, "mult": 1, "changes": {}, "ps_change": "" },
-        "sand": { "amount": 0, "value": 2, "mult": 1, "changes": {}, "ps_change": "" },
-        "glass": { "amount": 0, "value": 20, "mult": 1, "changes": {}, "ps_change": "" },
-        "water": { "amount": 0, "value": 2, "mult": 1, "changes": {}, "ps_change": "" },
-        "hydrogen": { "amount": 0, "value": 5, "mult": 1, "changes": {}, "ps_change": "" },
-        "steel_beam": { "amount": 0, "value": 200, "mult": 1, "changes": {}, "ps_change": "" },
-        "uranium": { "amount": 0, "value": 500, "mult": 1, "changes": {}, "ps_change": "" },
-        "sandcastle": { "amount": 0, "value": 10000000, "mult": 1, "changes": {}, "ps_change": "" },
-        "glass_bottle": { "amount": 0, "value": 25000, "mult": 1, "changes": {}, "ps_change": "" },
-        "mithril": { "amount": 0, "value": 3500, "mult": 1, "changes": {}, "ps_change": "" },
-        "void": { "amount": 0, "value": 100000, "mult": 1, "changes": {}, "ps_change": "" },
-    };
+    resources = (_a = {
+            "time": { "amount": 0, "value": -2, "mult": 1, "changes": {}, "ps_change": "" },
+            "refined_mana": { "amount": 0, "value": -1, "mult": 1, "changes": {}, "ps_change": "" },
+            "purified_mana": { "amount": 0, "value": -2500, "mult": 1, "changes": {}, "ps_change": "" },
+            "fuel": { "amount": 0, "value": -1000, "mult": 1, "changes": {}, "ps_change": "" },
+            "magic_bag": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" }
+        },
+        _a[OMEGA] = { "amount": 0, "value": -15000000, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["mana"] = { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["essence"] = { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["energy"] = { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["research"] = { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["manager"] = { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["sludge"] = { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["money"] = { "amount": 10, "value": 1, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["stone"] = { "amount": 0, "value": 0.5, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["wood"] = { "amount": 0, "value": 0.5, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["iron_ore"] = { "amount": 0, "value": 1, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["coal"] = { "amount": 0, "value": 1, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["iron"] = { "amount": 0, "value": 4, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["gold"] = { "amount": 0, "value": 50, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["diamond"] = { "amount": 0, "value": 75, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["jewelry"] = { "amount": 0, "value": 300, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["oil"] = { "amount": 0, "value": 2, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["paper"] = { "amount": 0, "value": 4, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["ink"] = { "amount": 0, "value": 10, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["book"] = { "amount": 0, "value": 400, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["sand"] = { "amount": 0, "value": 2, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["glass"] = { "amount": 0, "value": 20, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["water"] = { "amount": 0, "value": 2, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["hydrogen"] = { "amount": 0, "value": 5, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["steel_beam"] = { "amount": 0, "value": 200, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["uranium"] = { "amount": 0, "value": 500, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["sandcastle"] = { "amount": 0, "value": 10000000, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["glass_bottle"] = { "amount": 0, "value": 25000, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["mithril"] = { "amount": 0, "value": 3500, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["void"] = { "amount": 0, "value": 100000, "mult": 1, "changes": {}, "ps_change": "" },
+        _a);
     /* Set resources_per_sec */
     Object.keys(resources).forEach(function (res) {
         resources_per_sec[res] = 0;
@@ -182,6 +190,7 @@ function set_initial_state() {
                 "essence": 1,
             },
             get multipliers() {
+                var multiplier = 1;
                 var mults = {
                     "energy": 0.1,
                     "research": 0.1,
@@ -210,16 +219,18 @@ function set_initial_state() {
                     "mithril": 0.1,
                     "void": 0.1,
                 };
+                if (adventure_data["omega_upgrades"]) {
+                    multiplier += adventure_data["omega_upgrades"][0][2] / 4;
+                }
                 if (purchased_upgrades.indexOf("better_essence") != -1) {
-                    Object.keys(mults).forEach(function (res) {
-                        mults[res] *= 1 + (0.01 * adventure_data["tower_ascension"]);
-                    });
+                    multiplier *= 1 + (0.01 * adventure_data["tower_ascension"]);
                 }
                 if (adventure_data["tower_floor"] > 35 && adventure_data["tower_ascension"] >= 2) {
-                    Object.keys(mults).forEach(function (res) {
-                        mults[res] *= 1 + (0.01 * adventure_data["tower_ascension"]);
-                    });
+                    multiplier *= 1 + (0.01 * adventure_data["tower_ascension"]);
                 }
+                Object.keys(mults).forEach(function (res) {
+                    mults[res] *= multiplier;
+                });
                 return mults;
             },
             "update": "nop",
@@ -1131,6 +1142,42 @@ function set_initial_state() {
                 "purified_mana": 0.001,
             },
             "multipliers": {},
+            "free": 0,
+            "flavor": "Makes purified mana.",
+        },
+        "omega_machine": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {},
+            "price_ratio": {},
+            "generation": (_b = {
+                    "time": -10,
+                    "refined_mana": -100,
+                    "purified_mana": -0.1,
+                    "fuel": -25,
+                    "mana": -500,
+                    "energy": -250,
+                    "research": -50,
+                    "manager": -75,
+                    "money": -5000,
+                    "gold": -750,
+                    "diamond": -1000,
+                    "book": -250,
+                    "water": -1000,
+                    "uranium": -100,
+                    "sandcastle": -1,
+                    "mithril": -1,
+                    "void": -1
+                },
+                _b[OMEGA] = 1,
+                _b),
+            "multipliers": {
+                "stone": -0.5,
+                "wood": -0.5,
+                "iron": -0.5,
+                "oil": -0.5,
+                "sand": -0.5,
+            },
             "free": 0,
             "flavor": "Makes purified mana.",
         },
@@ -3977,6 +4024,9 @@ window.onload = function () {
     if (adventure_data["max_mana"] == undefined) {
         adventure_data["max_mana"] = 100000;
     }
+    if (adventure_data["max_refine"] == undefined) {
+        adventure_data["max_refine"] = 10000;
+    }
     /* Start our event system */
     var to_next_event = 2 * 60000 + Math.random() * 60000 * 2;
     if (purchased_upgrades.indexOf("more_events") != -1) {
@@ -4008,17 +4058,19 @@ window.onload = function () {
         }
         update_building_amount("hydrogen_mine");
     }
-    if (adventure_data["mana_purifier"]) {
-        var comp_state = buildings["mana_purifier"].on;
-        if (comp_state) {
-            toggle_building_state("mana_purifier");
+    ["mana_purifier", "omega_machine"].forEach(function (build) {
+        if (adventure_data[build]) {
+            var comp_state = buildings[build].on;
+            if (comp_state) {
+                toggle_building_state(build);
+            }
+            buildings[build].amount = adventure_data[build];
+            if (comp_state) { /* Only turn on if it already was on */
+                toggle_building_state(build);
+            }
+            $("#building_" + build + "  > .building_amount").html(format_num(buildings[build].amount, false));
         }
-        buildings["mana_purifier"].amount = adventure_data["mana_purifier"];
-        if (comp_state) { /* Only turn on if it already was on */
-            toggle_building_state("mana_purifier");
-        }
-        $("#building_mana_purifier  > .building_amount").html(format_num(buildings["mana_purifier"].amount, false));
-    }
+    });
     setup_groups();
     setup_rules();
     /* Display a welcome back message in case of update */

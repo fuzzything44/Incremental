@@ -101,7 +101,7 @@
         }), /* End cheese */
 
     ], /* End encounters */
-    "connects_to": ["kittens/terminus"],
+    "connects_to": ["kittens/terminus", "demons/mars"],
     "enter_cost": 1,
     "leave_cost": 1,
     "name": "The Moon",

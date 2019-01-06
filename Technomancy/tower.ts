@@ -14,7 +14,7 @@
         reward: function () {
             adventure_data["total_essence"] -= 5;
             if (adventure_data["total_essence"] <= 0) {
-                for (var i=adventure_data["total_essence"] ; i<=0 ; i++) {
+                for (var i=adventure_data["total_essence"]; i <= 0 ; i++) {
                     buy_essence(1);
                     adventure_data["total_essence"] = 0;
                 }
@@ -36,10 +36,6 @@
             }
         },
         reward: function () {
-            let div_amount = 1;
-            if (!adventure_data["tower_ascension"]) {
-                div_amount = Math.min(adventure_data["tower_ascension"] + 1, 10);
-            }
             resources["time"].amount += tower_ascension_scale(1000000, 100000, false); /* That's 1 mil, I think. */
         }
     },
@@ -485,43 +481,59 @@
         }
     },
     { /* Boss 39 (Ascension III - 1) */
-        "boss": "",
-        "text": "",
+        "boss": "a Ninja",
+        "text": "...",
         get reward_text() {
-            return "";
+            return "the OMEGA MACHINE";
         },
         reward: function () {
-            /* Omega machine? */
+            if (adventure_data["omega_machine"] == undefined) {
+                adventure_data["omega_machine"] = 0;
+            }
+            adventure_data["omega_machine"]++;
+            let build_state = buildings["omega_machine"].on;
+            if (build_state) {
+                toggle_building_state("omega_machine");
+            }
+            buildings["omega_machine"].amount++;
+            if (build_state) { /* Only turn on if it already was on */
+                toggle_building_state("omega_machine");
+            }
+            $("#building_omega_machine  > .building_amount").html(format_num(buildings["omega_machine"].amount, false));
         }
     },
     { /* Boss 40 (Ascension III - 2) */
-        "boss": "",
-        "text": "",
+        "boss": "1,000 ninjas",
+        "text": "Fun fact: the more enemies you fight at once, the weaker each one is. Watch any Kung Fu movie for proof.",
         get reward_text() {
-            return "";
+            return "a new star chart available at the Cath market";
         },
         reward: function () {
-            /* Omega bank (well, map available at Cath)? */
         }
     },
     { /* Boss 41 (Ascension III - 3) */
-        "boss": "",
-        "text": "",
+        "boss": "Jackie Chan",
+        "text": "Prepare to get rekt.",
         get reward_text() {
-            return "";
+            return "some fuel for your ship";
         },
         reward: function () {
-            /* Some omega upgrades? Like +essence power? */
+            adventure_data["inventory_fuel"] += 50;
         }
     },
     { /* Boss 42 (Ascension III - 4) */
-        "boss": "",
-        "text": "",
+        "boss": "that dang sneaky fox",
+        "text": "Oh no! It's going to sneak into your house! And email your mom or something.",
         get reward_text() {
-            return "";
+            if (adventure_data["tower_ascension"] == 3) {
+                return "something new at the omega bank";
+            }
+            return "nothing";
         },
         reward: function () {
-            /* Omega specialization? (Let them get deltas or whatever to increase various limits (mana, refine amounts, etc...)) */
+            if (adventure_data["omega_upgrades"] == undefined) {
+                adventure_data["omega_upgrades"] = [[0, 0, 0]];
+            }
         }
     },
     { /* Boss Repeat, for extra levels */
@@ -620,6 +632,7 @@ function tower() {
             tower();
             $("#events_content").prepend("You compress some magic into essence.<br/>")
         } else {
+            tower();
             $("#events_content").prepend("You need a more mana stones. Or free up some mana. <br/>")
         }
     });
@@ -628,7 +641,9 @@ function tower() {
     $("#events_content span").last().click(function () {
         /* Save both values to set inputs to previous values. */
         let pow_increase = Math.round(parseFloat($("#tower_power_increase").val()));
+        if (isNaN(pow_increase) || pow_increase < 0) { pow_increase = 0; }
         let tough_increase = Math.round(parseFloat($("#tower_tough_increase").val()));
+        if (isNaN(tough_increase) || tough_increase < 0) { tough_increase = 0; }
 
         if (buildings["s_essence"].amount > pow_increase) {
             spend_essence(pow_increase);
@@ -812,7 +827,8 @@ function climb_tower(health = undefined, ehealth = undefined, grinding = false) 
     if (adventure_data["tower_floor"] > tower_height() && !grinding) {
         $("#events_content").html("You're at the current top of the tower! Oh, also if you're here please message fuzzything44 on the Discord channel.<br/>");
         /* Reset the tower information, increment ascension count and reset cost of essence. */
-        if (adventure_data["tower_ascension"] < 2) {
+        /* CURRENT: MAX ASCENSION COUNT IS 3 */
+        if (adventure_data["tower_ascension"] < 3) {
             $("#events_content").html("There is a shimmering portal before you.  You sense that stepping through it will replace this tower with a bigger, better and harder one.  It will also make essence much cheaper.<br/>(This is Tower Ascension - you'll start again at floor 0, keeping all your essence and essence spent. 4 new floors will be added to the tower and it'll become more difficult. It also lowers the essence cost back to the base. Some floor rewards will be locked until you reach that floor again. Also, the small tower will become harder and gain floors at the same rate.)<br/>");
             /* Need to modify the message above and the function below for Ascension specific extra upgrades. */
             $("#events_content").append("<span class='clickable'>Step</span> through the portal.<br/>");
@@ -1040,10 +1056,11 @@ function defeat_floor(health = undefined) {
         /* Give one essence */
         toggle_building_state("s_essence", true);
         buildings["s_essence"].amount += essence_reward;
+        adventure_data["current_essence"] += essence_reward;
+
         update_building_amount("s_essence");
         toggle_building_state("s_essence");
 
-        adventure_data["current_essence"] += essence_reward;
 
         grinding_level++;
 
@@ -1138,8 +1155,8 @@ function spend_essence(amount) {
     toggle_building_state("s_essence", true);
     
     buildings["s_essence"].amount -= amount;
-
     adventure_data["current_essence"] -= amount;
+
     update_building_amount("s_essence");
 
     toggle_building_state("s_essence", true);

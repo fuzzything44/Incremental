@@ -58,6 +58,19 @@
                             }
                         });
                     }
+                    if (adventure_data["tower_level"] > 40 && adventure_data["omega_planet_unlocked"] == undefined) {
+                        $("#events_content").append("<span class='clickable'>Purchase</span> a starchart (25,000 book)<br />");
+                        $("#events_content > span").last().click(function () {
+                            /* Make sure they still have enough money */
+                            if (resources["book"].amount >= 25000) {
+                                resources["book"].amount -= 25000;
+                                adventure_data["omega_planet_unlocked"] = true;
+                                $("#events_content").html("You purchase the chart. Apparently there's a new planet somewhere near Mars (check out the Moon when you have a ton of mana).")
+                            } else {
+                                cat_market();
+                            }
+                        });
+                    }
 
                     $("#events_content").append("<span class='clickable' onclick='$(\"#character\").removeClass(\"hidden\");start_adventure()'>Leave</span>");
                 });

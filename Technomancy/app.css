@@ -429,3 +429,28 @@ a {
     padding-right: .5em;
     border-radius: 3px;
 }
+
+#omega_upgrades {
+    border-collapse: collapse;
+    border-color: #777777;
+}
+
+#omega_upgrades td {
+    width: 7em;
+    height: 7em;
+}
+
+.level_1 {
+    background-color: red;
+}
+
+.level_2 {
+    background-color: green;
+}
+
+.level_3 {
+    background-color: blue;
+}
+.level_4 {
+    background: linear-gradient(red, green, blue, red);
+}

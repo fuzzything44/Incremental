@@ -159,11 +159,11 @@ function s_workshop(newopt: string) {
 
 function s_refinery(amount: number, override: boolean = false) {
     if (isNaN(amount)) { amount = 1; }
-    if (amount > 10000 && !override) {
-        alert("Warning: Magic limits require mana to be refined in batches of 10K or less. You will be refining 10K instead");
-	amount=10000;
+    if (amount > adventure_data["max_refine"] && !override) {
+        alert("Warning: Magic limits require mana to be refined in batches of " + format_num(adventure_data["max_refine"]) + " or less. You will be refining " + format_num(adventure_data["max_refine"]) + " instead");
+        amount = adventure_data["max_refine"];
     }
-    if (override || !confirm("Are you sure you want to refine " + amount.toString() + " mana? It will be lost until next prestige!")) {
+    if (!confirm("Are you sure you want to refine " + amount.toString() + " mana? It will be lost until next prestige!")) {
         return;
     }
     /* Check to make sure we have enough mana before refining. */

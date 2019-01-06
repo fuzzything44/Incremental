@@ -4,6 +4,11 @@
 declare var $: any;
 declare var numberformat: any;
 
+const OMEGA = "Ω";
+const DELTA = "Δ";
+const EPSILON = "ε";
+const PHI = "φ";
+
 function format_num(num: number, show_decimals: boolean = true): string {
     /* If our numberformatting library broke, we fallback to a terrible option instead. This should really only happen in development when it's being worked on online, so it doesn't matter too much.*/
     if (typeof numberformat == "undefined") {
@@ -100,6 +105,7 @@ const UNLOCK_TREE = { /* What buildings unlock */
 
     "hydrogen_mine": [],
     "mana_purifier": [],
+    "omega_machine": [],
 };
 const SPELL_BUILDINGS = [
     "s_manastone",
@@ -135,6 +141,7 @@ function set_initial_state() {
         "purified_mana": { "amount": 0, "value": -2500, "mult": 1, "changes": {}, "ps_change": "" },
         "fuel": { "amount": 0, "value": -1000, "mult": 1, "changes": {}, "ps_change": "" },
         "magic_bag": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
+        [OMEGA]: { "amount": 0, "value": -15000000, "mult": 1, "changes": {}, "ps_change": ""},
 
         "mana": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
         "essence": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
@@ -166,7 +173,6 @@ function set_initial_state() {
         "glass_bottle": { "amount": 0, "value": 25000, "mult": 1, "changes": {}, "ps_change": "" }, /* Not much above glass value, but they're useful! */
         "mithril": { "amount": 0, "value": 3500, "mult": 1, "changes": {}, "ps_change": "" },
         "void": { "amount": 0, "value": 100000, "mult": 1, "changes": {}, "ps_change": "" }, /* Actually less than the fuel that goes into it. */
-
     };
     /* Set resources_per_sec */
     Object.keys(resources).forEach(function (res) {
@@ -197,6 +203,7 @@ function set_initial_state() {
                 "essence": 1,
             },
             get multipliers() {
+                let multiplier = 1;
                 let mults = {
                     "energy":   0.1,
                     "research": 0.1,
@@ -227,16 +234,20 @@ function set_initial_state() {
                     "void":     0.1,
                 };
 
+                if (adventure_data["omega_upgrades"]) {
+                    multiplier += adventure_data["omega_upgrades"][0][2] / 4;
+                }
+
                 if (purchased_upgrades.indexOf("better_essence") != -1) {
-                    Object.keys(mults).forEach(function (res) {
-                        mults[res] *= 1 + (0.01 * adventure_data["tower_ascension"]);
-                    });
+                    multiplier *= 1 + (0.01 * adventure_data["tower_ascension"]);
                 }
                 if (adventure_data["tower_floor"] > 35 && adventure_data["tower_ascension"] >= 2) {
-                    Object.keys(mults).forEach(function (res) {
-                        mults[res] *= 1 + (0.01 * adventure_data["tower_ascension"]);
-                    });
+                    multiplier *= 1 + (0.01 * adventure_data["tower_ascension"]);
                 }
+
+                Object.keys(mults).forEach(function (res) {
+                    mults[res] *= multiplier;
+                });
                 return mults;
             },
             "update": "nop",
@@ -1247,6 +1258,41 @@ function set_initial_state() {
             },
             "multipliers": {
 
+            },
+            "free": 0,
+            "flavor": "Makes purified mana.",
+        },
+        "omega_machine": {
+            "on": true,
+            "amount": 0,
+            "base_cost": {}, /* Free, but you can't buy it. */
+            "price_ratio": {},
+            "generation": {
+                "time": -10,
+                "refined_mana": -100,
+                "purified_mana": -0.1,
+                "fuel": -25,
+                "mana": -500,
+                "energy": -250,
+                "research": -50,
+                "manager": -75,
+                "money": -5000,
+                "gold": -750,
+                "diamond": -1000,
+                "book": -250,
+                "water": -1000,
+                "uranium": -100,
+                "sandcastle": -1,
+                "mithril": -1,
+                "void": -1,
+                [OMEGA]: 1
+            },
+            "multipliers": {
+                "stone": -0.5,
+                "wood": -0.5,
+                "iron": -0.5,
+                "oil": -0.5,
+                "sand": -0.5,
             },
             "free": 0,
             "flavor": "Makes purified mana.",
@@ -4078,7 +4124,7 @@ window.onload = () => {
     /* Add upgrades to be unhidden*/
     /* Loop through all remaining upgrades */
     Object.keys(remaining_upgrades).forEach(function (upg_name) {
-        let upg_elem: string = "<li id='upgrade_" + upg_name + "' class='upgrade tooltip fgc bgc_second' onclick=\"purchase_upgrade('" + upg_name +"')\" style='text-align: center;'><span>" + remaining_upgrades[upg_name].name + "<br />";
+        let upg_elem: string = "<li id='upgrade_" + upg_name + "' class='upgrade tooltip fgc bgc_second' onclick=\"purchase_upgrade('" + upg_name + "')\" style='text-align: center;'><span>" + remaining_upgrades[upg_name].name + "<br />";
         /* Stops error message spamming in the console if an unlocked upgrade has no image. */
         if (remaining_upgrades[upg_name].image) {
             upg_elem += "<img src='images/" + remaining_upgrades[upg_name].image + "' alt='' style='width: 3em; height: 3em; float: bottom;' />";
@@ -4130,7 +4176,7 @@ window.onload = () => {
                 let extra_basics = Math.min(25, Math.floor(Math.pow(extra_mana / 10, 0.5))); /* How many they're getting. Cap at 25 to not make the start list way too long. */
                 start_buildings = start_buildings.concat(Array(extra_basics).fill("challenge_basic")); /* Add that many to the list. These all get added because each takes much more than 1 mana to get, so we'll definitely loop through it. */
             }
-            
+
             if (Math.pow(extra_mana / 50, 0.5) >= 1) { /* Quadratic again, but * 50 instead of 10 */
                 let extra_basics = Math.min(25, Math.floor(Math.pow(extra_mana / 50, 0.5))); /* How many they're getting. Cap at 25 to not make the start list way too long. */
                 start_buildings = start_buildings.concat(Array(extra_basics).fill("challenge_medium")); /* Add that many to the list. These all get added because each takes much more than 1 mana to get, so we'll definitely loop through it. */
@@ -4205,6 +4251,10 @@ window.onload = () => {
     if (adventure_data["max_mana"] == undefined) {
         adventure_data["max_mana"] = 100000;
     }
+    if (adventure_data["max_refine"] == undefined) {
+        adventure_data["max_refine"] = 10000;
+    }
+
     /* Start our event system */
     let to_next_event = 2 * 60000 + Math.random() * 60000 * 2;
     if (purchased_upgrades.indexOf("more_events") != -1) {
@@ -4239,17 +4289,20 @@ window.onload = () => {
         }
         update_building_amount("hydrogen_mine");
     }
-    if (adventure_data["mana_purifier"]) {
-        let comp_state = buildings["mana_purifier"].on;
-        if (comp_state) {
-            toggle_building_state("mana_purifier");
+    ["mana_purifier", "omega_machine"].forEach(function (build) {
+        if (adventure_data[build]) {
+            let comp_state = buildings[build].on;
+            if (comp_state) {
+                toggle_building_state(build);
+            }
+            buildings[build].amount = adventure_data[build];
+            if (comp_state) { /* Only turn on if it already was on */
+                toggle_building_state(build);
+            }
+            $("#building_" + build + "  > .building_amount").html(format_num(buildings[build].amount, false));
         }
-        buildings["mana_purifier"].amount = adventure_data["mana_purifier"];
-        if (comp_state) { /* Only turn on if it already was on */
-            toggle_building_state("mana_purifier");
-        }
-        $("#building_mana_purifier  > .building_amount").html(format_num(buildings["mana_purifier"].amount, false));
-    }
+    });
+
     setup_groups();
 
     setup_rules();

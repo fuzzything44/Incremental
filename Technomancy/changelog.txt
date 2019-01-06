@@ -1,6 +1,9 @@
 ﻿Technomancy Changelog
 
-v5.15.3: (1/2/18) First update since last year
+v5.16.0: (1/6/19) Omegas
+Fixed changelog from last time to say 2019 instead of 18. Added 2 new locations in adventure mode! Buy the new map in Cath after defeating enough bosses in tower ascension III. Also added a new building: the Omega machine. For those of you with negative essence, you can now re-examine your christmas present to get some again. Also fixed a bug that let you buy negative amounts of adventure power (and get an essence refund!)
+
+v5.15.3: (1/2/19) First update since last year
 Fixed a bug where fortifying a building wouldn't update anything until reload. You can no longer get the 2018 Christmas present, if you didn't already. Fixed a bug where one tower reward (floor 35) would disappear on prestige. Also, it's a bit late but in celebration of international nerf day, mana is capped at 100k when you start a prestige. If you'd be above that, you're now at 100k. Sorry. Also, some high value resources can no longer be placed in the bag of folding. 
 
 v5.15.2: (12/24/18) Merry Christmas (It's Christmas somewhere!)
