@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.16.1: (1/6/19) Bugfix
+The new starchart should now actually show up at Cath.
+
 v5.16.0: (1/6/19) Omegas
 Fixed changelog from last time to say 2019 instead of 18. Added 2 new locations in adventure mode! Buy the new map in Cath after defeating enough bosses in tower ascension III. Also added a new building: the Omega machine. For those of you with negative essence, you can now re-examine your christmas present to get some again. Also fixed a bug that let you buy negative amounts of adventure power (and get an essence refund!)
 

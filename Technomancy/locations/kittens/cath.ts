@@ -58,7 +58,7 @@
                             }
                         });
                     }
-                    if (adventure_data["tower_level"] > 40 && adventure_data["omega_planet_unlocked"] == undefined) {
+                    if (adventure_data["tower_floor"] > 40 && adventure_data["omega_planet_unlocked"] == undefined) {
                         $("#events_content").append("<span class='clickable'>Purchase</span> a starchart (25,000 book)<br />");
                         $("#events_content > span").last().click(function () {
                             /* Make sure they still have enough money */
