@@ -147,12 +147,15 @@ let ingredients: ingredient[] = [
     new ingredient("Powder",
         function (power: number, on_combat: boolean = false) {
             if (on_combat) {
-                let castle_cost = 3000000 * Math.pow(0.9, 1 + 0.75 * power);
-                if (resources["sand"].amount > castle_cost) {
-                    resources["sand"].amount -= castle_cost;
-                    resources["sandcastle"].amount++;
-                }
+
             } else {
+                if (adventure_data["current_potion"].time % 5) {
+                    let castle_cost = 3000000 * Math.pow(0.9, 1 + 0.75 * power);
+                    if (resources["sand"].amount > castle_cost) {
+                        resources["sand"].amount -= castle_cost;
+                        resources["sandcastle"].amount++;
+                    }
+                }
                 resources["sand"].amount += resources_per_sec["sand"] * Math.pow(2 + 0.05 * adventure_data["current_potion"].time, 1 + 0.05 * power);
             }
         },

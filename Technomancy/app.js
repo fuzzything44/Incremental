@@ -1179,7 +1179,7 @@ function set_initial_state() {
                 "sand": -0.5,
             },
             "free": 0,
-            "flavor": "Makes purified mana.",
+            "flavor": "Condenses the fabric of the universe itself into " + OMEGA,
         },
     };
     purchased_upgrades = [];
@@ -3772,11 +3772,16 @@ function run_autobuild() {
     if (build_queue.length > autobuild_amount) {
         var to_build = build_queue[autobuild_amount];
         if (!$("#building_" + to_build).parent().hasClass("hidden") && SPELL_BUILDINGS.indexOf(to_build) == -1) { /* Building must be visible to build it. */
-            purchase_building(to_build, 1); /* Attempt to build it. */
-            add_log_elem("Autobuilt activated!");
-            autobuild_amount++; /* purchase_building() throws an error if it can't build, so this only runs on successful build. */
-            if (!$("#autobuild_items").hasClass("hidden")) { /* If autobuild menu is open, refresh it.*/
-                draw_autobuild();
+            try {
+                purchase_building(to_build, 1); /* Attempt to build it. */
+                add_log_elem("Autobuilt activated!");
+                autobuild_amount++; /* purchase_building() throws an error if it can't build, so this only runs on successful build. */
+                if (!$("#autobuild_items").hasClass("hidden")) { /* If autobuild menu is open, refresh it.*/
+                    draw_autobuild();
+                }
+            }
+            catch (e) {
+                /* do nothing, this is just required if we have a try statement. */
             }
         }
     }

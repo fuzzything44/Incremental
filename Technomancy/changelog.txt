@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.16.2: (1/7/19) QoL stuff, bugfixes
+Powder-based potions should provide sandcastles based on time rather than entered combats. Fixed Omega Machine flavor text. Fixed autobuild breaking the game if you had speed time on. Added a list of hotkeys to the settings menu.
+
 v5.16.1: (1/6/19) Bugfix
 The new starchart should now actually show up at Cath.
 
