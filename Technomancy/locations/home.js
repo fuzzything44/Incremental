@@ -107,7 +107,7 @@
                     $("#events_content").html("<span>Remove Fuel: <input id='remove_fuel' type='number' min='1'/><span class='clickable'>Remove</span></span><br />");
                     $("#events_content > span > span").last().click(function () {
                         var fuel_to_remove = parseInt($("#remove_fuel").val());
-                        if (isNaN(fuel_to_remove)) {
+                        if (isNaN(fuel_to_remove) || fuel_to_remove < 0) {
                             fuel_to_remove = 0;
                         }
                         /* Check to make sure they can remove that much */

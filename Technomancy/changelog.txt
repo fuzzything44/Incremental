@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.16.4: (1/12/19) This one too
+Yeah, you can now no longer remove negative fuel from your ship also. What a surprise.
+
 v5.16.3: (1/12/19) Bugfixes
 You can no longer add negative fuel to your ship. Tooltips show up in a slightly different place now (so they shouldn't go off the screen).
 
