@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.16.3: (1/12/19) Bugfixes
+You can no longer add negative fuel to your ship. Tooltips show up in a slightly different place now (so they shouldn't go off the screen).
+
 v5.16.2: (1/7/19) QoL stuff, bugfixes
 Powder-based potions should provide sandcastles based on time rather than entered combats. Fixed Omega Machine flavor text. Fixed autobuild breaking the game if you had speed time on. Added a list of hotkeys to the settings menu.
 

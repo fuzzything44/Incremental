@@ -301,7 +301,7 @@ hr {
     position: absolute;
     z-index: 1;
     top: 100%;
-    left: 10%;
+    right: 10%;
 
     opacity: 0;
     transition: opacity .3s;
