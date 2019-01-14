@@ -189,49 +189,33 @@ function set_initial_state() {
             "generation": {
                 "essence": 1,
             },
-            get multipliers() {
-                var multiplier = 1;
-                var mults = {
-                    "energy": 0.1,
-                    "research": 0.1,
-                    "manager": 0.1,
-                    "money": 0.1,
-                    "stone": 0.1,
-                    "wood": 0.1,
-                    "iron_ore": 0.1,
-                    "coal": 0.1,
-                    "iron": 0.1,
-                    "gold": 0.1,
-                    "diamond": 0.1,
-                    "jewelry": 0.1,
-                    "oil": 0.1,
-                    "paper": 0.1,
-                    "ink": 0.1,
-                    "book": 0.1,
-                    "sand": 0.1,
-                    "glass": 0.1,
-                    "water": 0.1,
-                    "hydrogen": 0.1,
-                    "steel_beam": 0.1,
-                    "uranium": 0.1,
-                    "sandcastle": 0.1,
-                    "glass_bottle": 0.1,
-                    "mithril": 0.1,
-                    "void": 0.1,
-                };
-                if (adventure_data["omega_upgrades"]) {
-                    multiplier += adventure_data["omega_upgrades"][0][2] / 4;
-                }
-                if (purchased_upgrades.indexOf("better_essence") != -1) {
-                    multiplier *= 1 + (0.01 * adventure_data["tower_ascension"]);
-                }
-                if (adventure_data["tower_floor"] > 35 && adventure_data["tower_ascension"] >= 2) {
-                    multiplier *= 1 + (0.01 * adventure_data["tower_ascension"]);
-                }
-                Object.keys(mults).forEach(function (res) {
-                    mults[res] *= multiplier;
-                });
-                return mults;
+            "multipliers": {
+                "energy": 0.1,
+                "research": 0.1,
+                "manager": 0.1,
+                "money": 0.1,
+                "stone": 0.1,
+                "wood": 0.1,
+                "iron_ore": 0.1,
+                "coal": 0.1,
+                "iron": 0.1,
+                "gold": 0.1,
+                "diamond": 0.1,
+                "jewelry": 0.1,
+                "oil": 0.1,
+                "paper": 0.1,
+                "ink": 0.1,
+                "book": 0.1,
+                "sand": 0.1,
+                "glass": 0.1,
+                "water": 0.1,
+                "hydrogen": 0.1,
+                "steel_beam": 0.1,
+                "uranium": 0.1,
+                "sandcastle": 0.1,
+                "glass_bottle": 0.1,
+                "mithril": 0.1,
+                "void": 0.1,
             },
             "update": "nop",
             "free": 0,
@@ -2004,7 +1988,7 @@ function set_initial_state() {
             "image": "",
             "repeats": false,
         },
-        "fake_all_1": {
+        "fake_csop": {
             "unlock": function () { return buildings["s_manastone"].amount < 500 && adventure_data["logicat_chairs"]; },
             "purchase": function () {
                 alert("Uhh... how did you buy this?");
@@ -2017,17 +2001,16 @@ function set_initial_state() {
             "image": "",
             "repeats": false,
         },
-        "all_1": {
+        "csop": {
             "unlock": function () { return buildings["s_manastone"].amount >= 500 && adventure_data["logicat_chairs"]; },
             "purchase": function () {
                 Object.keys(resources).forEach(function (res) {
-                    setInterval(function () {
-                        if (resources[res].value > 0 && resources[res].amount > 0 && resources_per_sec[res] != 0) {
-                            resources[res].mult = 1;
-                            resources_per_sec[res] = 1;
-                        }
-                    }, 50);
+                    if (resources[res].value > 0 && resources[res].amount > 0) {
+                        resources_per_sec[res] += 0.0001;
+                        resources[res].changes["Chairs Sit On People"] = 0.0001;
+                    }
                 });
+                resource_tooltip();
             },
             "onload": function () {
                 this.purchase();
@@ -2035,23 +2018,10 @@ function set_initial_state() {
             "cost": {
                 "refined_mana": 100000,
             },
-            "tooltip": "Multiplies ALL rates by 0 and then adds 1.",
+            "tooltip": "Multiplies and adds ALL rates.",
             "name": "Chairs sit on people<br />",
             "image": "",
             "repeats": false,
-        },
-        "fix_1": {
-            "unlock": function () { return purchased_upgrades.indexOf("all_1") != -1; },
-            "purchase": function () {
-                purchased_upgrades.splice(purchased_upgrades.indexOf("all_1"), 1);
-                save();
-                location.reload();
-            },
-            "cost": {},
-            "tooltip": "Undo Chairs sit on People.",
-            "name": "Broken Chair<br />",
-            "image": "",
-            "repeats": true,
         },
         "make_purifier": {
             "unlock": function () { return adventure_data["mana_purifier"] == undefined && event_flags["know_pts"] >= 10; },
@@ -2256,6 +2226,11 @@ function set_initial_state() {
         "better_essence": {
             "unlock": function () { return adventure_data["tower_floor"] > 7; },
             "purchase": function () {
+                toggle_building_state("s_essence", true);
+                Object.keys(buildings["s_essence"].multipliers).forEach(function (res) {
+                    buildings["s_essence"].multipliers[res] *= 2;
+                });
+                toggle_building_state("s_essence");
             },
             "cost": {
                 "refined_mana": 5000,
@@ -2374,6 +2349,78 @@ function set_initial_state() {
             },
             "tooltip": "Gets more expensive over time, but the more it costs the better it is!",
             "name": "AI Growth",
+            "image": "",
+            "repeats": false,
+        },
+        "ai_castle": {
+            "unlock": function () {
+                return (resources[OMEGA].amount > 0) && purchased_upgrades.indexOf("grow_cost") != -1;
+            },
+            "purchase": function () {
+                var build_state = buildings["s_ai"].on;
+                if (build_state) {
+                    toggle_building_state("s_ai");
+                }
+                buildings["s_ai"].amount = 1000;
+                buildings["s_ai"].generation["sand"] = -5000000 / 1000;
+                buildings["s_ai"].generation["sandcastle"] = 0.1 / 1000;
+                if (build_state) { /* Only turn on if it already was on */
+                    toggle_building_state("s_ai");
+                }
+            },
+            "cost": {
+                "purified_mana": 30,
+                "mithril": 5000,
+                "sand": 100000000,
+                "sandcastle": 200,
+            },
+            "tooltip": "Teaches your AI how to build things. Oh, also it'll take up a lot more mana to run.",
+            "name": "AI Construction",
+            "image": "",
+            "repeats": false,
+        },
+        "ai_void": {
+            "unlock": function () {
+                return adventure_data["tower_floor"] > 45 && purchased_upgrades.indexOf("ai_castle") != -1;
+            },
+            "purchase": function () {
+                var build_state = buildings["s_ai"].on;
+                if (build_state) {
+                    toggle_building_state("s_ai");
+                }
+                buildings["s_ai"].amount = 10000;
+                Object.keys(buildings["s_ai"].generation).forEach(function (res) {
+                    buildings["s_ai"].generation[res] /= 10;
+                });
+                buildings["s_ai"].generation["void"] = 0.1 / 10000;
+                buildings["s_ai"].generation["mithril"] = -1 / 10000;
+                buildings["s_ai"].generation["oil"] = -100000 / 10000;
+                if (build_state) { /* Only turn on if it already was on */
+                    toggle_building_state("s_ai");
+                }
+            },
+            "cost": {
+                "purified_mana": 30,
+                "mithril": 5000,
+                "sand": 100000000,
+                "sandcastle": 200,
+            },
+            "tooltip": "Teaches your AI the secrets of void, at the cost of much more mana to run.",
+            "name": "AI Negation",
+            "image": "",
+            "repeats": false,
+        },
+        "beachball": {
+            "unlock": function () { return adventure_data["logicat_beachball"]; },
+            "purchase": function () {
+            },
+            "cost": {
+                "mana": 2500,
+                "refined_mana": 10000,
+                "money": 1000000000,
+            },
+            "tooltip": "Solves logikittens.",
+            "name": "Beachball",
             "image": "",
             "repeats": false,
         },
@@ -4021,6 +4068,20 @@ window.onload = function () {
             buildings["s_autoessence"].amount = 100;
             $("#building_s_autoessence").parent().removeClass("hidden");
             update_building_amount("s_autoessence"); /* Previously, there were infinite of these to keep it hidden. Let's update to proper amount. */
+        }
+        if (adventure_data["omega_upgrades"]) {
+            toggle_building_state("s_essence", true);
+            Object.keys(buildings["s_essence"].multipliers).forEach(function (res) {
+                buildings["s_essence"].multipliers[res] *= 1 + adventure_data["omega_upgrades"][0][2] / 4;
+            });
+            toggle_building_state("s_essence");
+        }
+        if (adventure_data["tower_floor"] > 35 && adventure_data["tower_ascension"] >= 2) {
+            toggle_building_state("s_essence", true);
+            Object.keys(buildings["s_essence"].multipliers).forEach(function (res) {
+                buildings["s_essence"].multipliers[res] *= 1 + (0.01 * adventure_data["tower_ascension"]);
+            });
+            toggle_building_state("s_essence");
         }
     } /* END start of prestige additions */
     if (adventure_data["perm_resources"] != undefined) {

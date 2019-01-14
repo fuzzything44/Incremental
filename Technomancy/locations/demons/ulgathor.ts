@@ -74,8 +74,13 @@
                             new omega_upgrade("Batch Refining", "Increases maximum refinement batch size", [5000, 10000, 25000, 250000], function (n) {
                                 adventure_data["max_refine"] += 10000;
                             }),
-                            new omega_upgrade("Essence Hyperlooping", "Increases essence effectiveness", [100000, 250000, 500000, 3333333], function (n) {
+                            new omega_upgrade("Essence Hyperlooping", "Increases essence effectiveness", [5000, 10000, 25000, 50000], function (n) {
+                                toggle_building_state("s_essence", true);
+                                Object.keys(buildings["s_essence"].multipliers).forEach(function (res) {
+                                    buildings["s_essence"].multipliers[res] *= 1.1;
+                                });
 
+                                toggle_building_state("s_essence");
                             }),
                         ],
                     ];

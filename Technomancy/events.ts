@@ -73,27 +73,29 @@ let events = [
     ({
         "condition": function () { return adventure_data["challenge"] != CHALLENGES.METEORS; },
         "run_event": function () {
-            let content = "<span>Woah, a meteor just hit in your backyard!</span><br>";
-            content += "<span onclick='resources.stone.amount += 50000; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 50000 stone\");' class='clickable'>Gather stone</span><br>";
+            $("#events_content").html("<span>Woah, a meteor just hit in your backyard!</span><br>");
+            $("#events_content").append("<span onclick='resources.stone.amount += 50000; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 50000 stone\");' class='clickable'>Gather stone</span><br>");
             if (resources["iron"].amount > 0) {
-                content += "<span onclick='resources.iron.amount += 500; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 500 iron\");' class='clickable'>Recover iron</span><br>";
+                $("#events_content").append("<span onclick='resources.iron.amount += 500; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 500 iron\");' class='clickable'>Recover iron</span><br>");
             }
             if (resources["gold"].amount > 0) {
-                content += "<span onclick='resources.gold.amount += 150; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 150 gold\");' class='clickable'>Look for gold</span><br>";
+                $("#events_content").append("<span onclick='resources.gold.amount += 150; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 150 gold\");' class='clickable'>Look for gold</span><br>");
             }
             if (resources["energy"].amount > 0) {
-                content += "<span onclick='resources_per_sec.energy += 10; setTimeout(() => resources_per_sec[\"energy\"] -= 10, 5 *60000); $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 10 energy for 5 minutes\");' class='clickable'>Capture the heat</span><br>";
+                $("#events_content").append("<span onclick='resources_per_sec.energy += 10; setTimeout(() => resources_per_sec[\"energy\"] -= 10, 5 *60000); $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 10 energy for 5 minutes\");' class='clickable'>Capture the heat</span><br>");
             }
             if (buildings["big_mine"].amount >= 3 && buildings["big_mine"].on && Math.random() > .7 && buildings["library"].amount >= 5) {
                 if (resources["uranium"].amount > 0) {
-                    content += "<span onclick='resources.uranium.amount += 3; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 3 uranium\");' class='clickable'>Wait, what's that?</span><br>";
+                    $("#events_content").append("<span onclick='resources.uranium.amount += 3; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 3 uranium\");' class='clickable'>Wait, what's that?</span><br>");
                 } else {
-                    content += "<span onclick='resources.diamond.amount += 10; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 10 diamond\");' class='clickable'>Wait, what's that?</span><br>";
+                    $("#events_content").append("<span onclick='resources.diamond.amount += 10; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 10 diamond\");' class='clickable'>Wait, what's that?</span><br>");
                 }
             }
-            add_log_elem("A meteor fell!");
-            $("#events_content").html(content);
 
+            if (adventure_data["tower_floor"] > 44) {
+                $("#events_content").append("<span onclick='resources.void.amount += 5; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 5 void\");' class='clickable'>Examine</span> the darkness.<br>");
+            }
+            add_log_elem("A meteor fell!");
         },
         "name": "Meteor!",
         "rejection": 30,
@@ -127,7 +129,7 @@ let events = [
             $("#events_content").html('<iframe id="ytplayer" type="text/ html" width="640" height="360" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0" frameborder="0"> </iframe>');
         },
         "name": "Tree Fiddy",
-        "rejection": 90,
+        "rejection": 98,
     }), /* End rickroll */
     ({
         "condition": function () { return buildings["big_mine"].amount >= 1 && buildings["big_mine"].on; },
@@ -452,7 +454,7 @@ let events = [
                 }
                 return solutions;
             }
-            let all_statements = [];
+            let all_statements: logic_statement[] = [];
 
             /* Make a core of 3 statements, retrying until we get at least 1 solution */
             do {
@@ -482,6 +484,14 @@ let events = [
                     "<input type='radio' name='" + i.toString() + "' id='cat_" + i.toString() + "_t' value='true'><label for='cat_" + i.toString() + "_t'>True</label>" +
                     "<input type='radio' name='" + i.toString() + "' id='cat_" + i.toString() + "_f' value='false'><label for='cat_" + i.toString() + "_f'>False</label>" +
                     "</div></td></tr>";
+                if (purchased_upgrades.indexOf("beachball") != -1) {
+                    if (sols[i]) {
+                        $("#cat_" + i.toString() + "_t").prop("checked", true);
+                    } else {
+                        $("#cat_" + i.toString() + "_f").prop("checked", true);
+                    }
+                }
+
             }
             content += "</table></form>";
             $("#events_content").html(content);
@@ -618,6 +628,13 @@ let events = [
                                 "name": "People Sit on Chairs",
                                 "effect": function () {
                                     adventure_data["logicat_chairs"] = true;
+                                }
+                            }];
+                        }  else if (adventure_data["logicat_level"] >= 69 && adventure_data["logicat_beachball"] == undefined) {
+                            reward_list = [{
+                                "name": "Beachball",
+                                "effect": function () {
+                                    adventure_data["logicat_beachball"] = true;
                                 }
                             }];
                         } else if (adventure_data["logicat_level"] >= 100 && !count_item("conv_cube", adventure_data.warehouse)) {
@@ -782,6 +799,19 @@ let events = [
         "name": "Meteor!",
         "rejection": 30,
     }), /* End meteor (challenge version) */
+    ({
+        "condition": function () {
+            return adventure_data["tower_floor"] > 46 && adventure_data["grind_tower_bank"] != undefined;
+        },
+        "run_event": function () {
+            adventure_data["grind_tower_bank"]++;
+            add_log_elem("Tower warped.");
+            $("#events_content").html("Time warps around you, giving an additional entry to the small tower.");
+        },
+        "name": "Time Dilation",
+        "rejection": 99,
+        "force_cost": 1000,
+    }), /* End time warping */
 
 ];
 
@@ -799,6 +829,10 @@ function choose_event() {
                 if (event.condition() && event.name != "") {
                     /* Purified mana cost is proportional to the rejection rate. */
                     let cost = Math.ceil(event.rejection / 5) + 1;
+
+                    if (event["force_cost"] != undefined) {
+                        cost = event["force_cost"];
+                    } 
                     /* So add a button letting them choose it. */
                     
                     $("#events_content").append("<span class='clickable'>Choose</span> " + event.name + " (" + format_num(cost, false) + ") <br />");

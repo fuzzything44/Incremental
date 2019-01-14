@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.17.5: (1/14/19) Ascension IV
+Reduced essence hyperlooping cost (and hopefully fixed some issues with upgrades to increase essence power). Completely changed Chairs Sit on People to not be a pain anymore. Added a new AI upgrade (well, 2 actually). Made the "Tree Fiddy" event much less common. Added a new logicat reward that should start puzzles with the correct answer already put in. Added a new event. Lightened the color of Time. Added tower Ascension IV (sorry, for those of you that like pineapple on pizza. I personally have nothing against it but it's a good joke). 
+
 v5.16.4: (1/12/19) This one too
 Yeah, you can now no longer remove negative fuel from your ship also. What a surprise.
 

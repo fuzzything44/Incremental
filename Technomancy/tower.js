@@ -542,6 +542,46 @@ var TOWER_DATA = [
         }
     },
     {
+        "boss": "a cheese pizza",
+        "text": "Yum!",
+        get reward_text() {
+            if (adventure_data["tower_nuke"] == undefined) {
+                return "the NUKE button";
+            }
+            return "nothing";
+        },
+        reward: function () {
+            adventure_data["tower_nuke"] = true;
+        }
+    },
+    {
+        "boss": "a pepperoni pizza",
+        "text": "Ooh, I love pepperoni!",
+        get reward_text() {
+            return "void meteors";
+        },
+        reward: function () {
+        }
+    },
+    {
+        "boss": "a limburger and sardine pizza",
+        "text": "It smells kind of bad, but if you like it, hey, you do you.",
+        get reward_text() {
+            return "another AI upgrade";
+        },
+        reward: function () {
+        }
+    },
+    {
+        "boss": "a pineapple pizza",
+        "text": "KILL THE ABOMINATION! BURN BURN BURN!",
+        get reward_text() {
+            return "a new event that can happen.";
+        },
+        reward: function () {
+        }
+    },
+    {
         get boss() {
             return "a " + tower_adj_a[adventure_data["tower_floor"] % tower_adj_a.length]
                 + tower_adj_b[adventure_data["tower_floor"] % tower_adj_b.length]
@@ -827,7 +867,7 @@ function climb_tower(health, ehealth, grinding) {
         $("#events_content").html("You're at the current top of the tower! Oh, also if you're here please message fuzzything44 on the Discord channel.<br/>");
         /* Reset the tower information, increment ascension count and reset cost of essence. */
         /* CURRENT: MAX ASCENSION COUNT IS 3 */
-        if (adventure_data["tower_ascension"] < 3) {
+        if (adventure_data["tower_ascension"] < 4) {
             $("#events_content").html("There is a shimmering portal before you.  You sense that stepping through it will replace this tower with a bigger, better and harder one.  It will also make essence much cheaper.<br/>(This is Tower Ascension - you'll start again at floor 0, keeping all your essence and essence spent. 4 new floors will be added to the tower and it'll become more difficult. It also lowers the essence cost back to the base. Some floor rewards will be locked until you reach that floor again. Also, the small tower will become harder and gain floors at the same rate.)<br/>");
             /* Need to modify the message above and the function below for Ascension specific extra upgrades. */
             $("#events_content").append("<span class='clickable'>Step</span> through the portal.<br/>");
@@ -989,12 +1029,26 @@ function climb_tower(health, ehealth, grinding) {
             }
             $("#events_content").prepend(fight_results_message + "<br/>");
         }
-        $("#events_content").append("<span class='clickable'>Attack</span>");
+        if (tower_level < tower_height() - 8) {
+            $("#events_content").append("<span class='clickable' id='tower_nuke'>Attack</span>");
+        }
+        else {
+            $("#events_content").append("<span class='clickable'>Attack</span>");
+        }
         $("#events_content span").last().click(function () { fight_enemy("attack"); });
         $("#events_content").append("<span class='clickable'>Dodge</span>");
         $("#events_content span").last().click(function () { fight_enemy("dodge"); });
         $("#events_content").append("<span class='clickable'>Spaz</span><br/>");
         $("#events_content span").last().click(function () { fight_enemy("spaz"); });
+        if (adventure_data["tower_nuke"]) {
+            $("#events_content").append("<span class='clickable'>NUKE</span><br/>");
+            $("#events_content span").last().click(function nuke() {
+                if ($("#tower_nuke").length) {
+                    $("#tower_nuke").click();
+                    setTimeout(function () { nuke(); }, 1);
+                }
+            });
+        }
         function class_stats(classname) {
             var current = adventure_data["tower_" + classname].current_health;
             var max = adventure_data["tower_" + classname].health;
@@ -1041,7 +1095,7 @@ function defeat_floor(health) {
         }
         TOWER_DATA[floor].reward();
         adventure_data["tower_floor"]++;
-        $("#events_content").append("<span class='clickable'>Continue</span> climbing the tower.<br/>");
+        $("#events_content").append("<span class='clickable' id='tower_nuke'>Continue</span> climbing the tower.<br/>");
         $("#events_content span").last().click(function () { climb_tower(); });
         $("#events_content").append("<span class='clickable'>Back</span> to tower base.<br/>");
         $("#events_content span").last().click(function () { tower(); });
