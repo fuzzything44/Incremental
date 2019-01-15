@@ -2521,6 +2521,7 @@ function set_initial_state() {
                     toggle_building_state("s_ai");
                 }
 
+                update_building_amount("s_ai");
             },
             "cost": {
                 "purified_mana": 30,
@@ -2546,6 +2547,7 @@ function set_initial_state() {
                 Object.keys(buildings["s_ai"].generation).forEach(function (res) {
                     buildings["s_ai"].generation[res] /= 10;
                 });
+                buildings["s_ai"].generation["mana"] = -1;
                 buildings["s_ai"].generation["void"] = 0.1 / 10000;
                 buildings["s_ai"].generation["mithril"] = -1 / 10000;
                 buildings["s_ai"].generation["oil"] = -100000 / 10000;
@@ -2554,6 +2556,7 @@ function set_initial_state() {
                     toggle_building_state("s_ai");
                 }
 
+                update_building_amount("s_ai");
             },
             "cost": {
                 "purified_mana": 30,
@@ -2566,15 +2569,13 @@ function set_initial_state() {
             "image": "",
             "repeats": false,
         },
-
-
         "beachball": {
             "unlock": function () { return adventure_data["logicat_beachball"]; },
             "purchase": function () {
             },
             "cost": {
                 "mana": 2500,
-                "refined_mana": 10000,
+                "refined_mana": 50000,
                 "money": 1000000000,
             },
             "tooltip": "Solves logikittens.",

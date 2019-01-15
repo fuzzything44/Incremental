@@ -1029,7 +1029,7 @@ function climb_tower(health, ehealth, grinding) {
             }
             $("#events_content").prepend(fight_results_message + "<br/>");
         }
-        if (tower_level < tower_height() - 8) {
+        if (tower_level < tower_height() - TOWER_ASCENSION_GROWTH) {
             $("#events_content").append("<span class='clickable' id='tower_nuke'>Attack</span>");
         }
         else {
@@ -1040,7 +1040,7 @@ function climb_tower(health, ehealth, grinding) {
         $("#events_content span").last().click(function () { fight_enemy("dodge"); });
         $("#events_content").append("<span class='clickable'>Spaz</span><br/>");
         $("#events_content span").last().click(function () { fight_enemy("spaz"); });
-        if (adventure_data["tower_nuke"]) {
+        if (adventure_data["tower_nuke"] && tower_level < tower_height() - TOWER_ASCENSION_GROWTH) {
             $("#events_content").append("<span class='clickable'>NUKE</span><br/>");
             $("#events_content span").last().click(function nuke() {
                 if ($("#tower_nuke").length) {
@@ -1079,13 +1079,11 @@ function defeat_floor(health) {
     $("#events_content").html("Yay, you won! That was a hard battle.<br/>");
     if (health == undefined) {
         var floor = adventure_data["tower_floor"];
-        if (floor > TOWER_DATA.length - 2) {
-            if (floor >= tower_height()) {
-                floor = TOWER_DATA.length - 1;
-            }
-            else {
-                floor = TOWER_DATA.length - 2;
-            }
+        if (floor >= tower_height()) {
+            floor = TOWER_DATA.length - 1;
+        }
+        else if (floor > TOWER_DATA.length - 2) {
+            floor = TOWER_DATA.length - 2;
         }
         if (adventure_data["tower_floor"] == tower_height()) {
             $("#events_content").append("You defeated the final boss of the tower! A mystical portal opens in front of you.<br/>");
@@ -1110,7 +1108,7 @@ function defeat_floor(health) {
         update_building_amount("s_essence");
         toggle_building_state("s_essence");
         grinding_level++;
-        $("#events_content").append("<span class='clickable'>Continue</span> climbing the tower.<br/>");
+        $("#events_content").append("<span class='clickable' id='tower_nuke'>Continue</span> climbing the tower.<br/>");
         $("#events_content span").last().click(function () { climb_tower(health, Math.pow(grinding_level, 2) * tower_boss_ascension_scale(), true); });
         $("#events_content").append("<span class='clickable'>Back</span> to tower base (ends your run of grinding, so pretty pointless).<br/>");
         $("#events_content span").last().click(function () { tower(); });

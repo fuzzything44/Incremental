@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.18.1: (1/15/19) The obligatory bugfixes
+Purchasing the new upgrades should actually update the cost of mana to run your AI (also, the second one actually increases the mana cost now too). Beachball functions correctly now. Sandcastle tooltip is correctly placed. The NUKE button works better, and brings you slightly higher. Also, you can no longer get a reward from the next ascension from defeating the last boss of the current one. And since last version should have been 5.18.0 instead of 5.17.5, I updated the version number to be correct.
+
 v5.17.5: (1/14/19) Ascension IV
 Reduced essence hyperlooping cost (and hopefully fixed some issues with upgrades to increase essence power). Completely changed Chairs Sit on People to not be a pain anymore. Added a new AI upgrade (well, 2 actually). Made the "Tree Fiddy" event much less common. Added a new logicat reward that should start puzzles with the correct answer already put in. Added a new event. Lightened the color of Time. Added tower Ascension IV (sorry, for those of you that like pineapple on pizza. I personally have nothing against it but it's a good joke). 
 

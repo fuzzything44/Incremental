@@ -456,15 +456,15 @@ var events = [
             var sols = find_solutions(all_statements)[0];
             /* Now to actually add it. */
             add_log_elem("A weird kitten showed up.");
-            var content = "You found a cute kitty... wait, what's it saying?<br /><form id='logicat'><table>";
+            $("#events_content").html("You found a cute kitty... wait, what's it saying?<br /><form id='logicat'><table></table></form>");
             for (var i = 0; i < all_statements.length; i++) {
-                content += "<tr><td></td><th align='right'>" + num_to_name(i) + ":&nbsp;</td><td align='left'>" + all_statements[i].toString() + "</td></tr>";
-                content += "<tr><td></td><td></td><td>" +
+                $("#events_content table").append("<tr><td></td><th align='right'>" + num_to_name(i) + ":&nbsp;</td><td align='left'>" + all_statements[i].toString() + "</td></tr>");
+                $("#events_content table").append("<tr><td></td><td></td><td>" +
                     "<div class='radio-group'>" +
                     "<input type='radio' name='" + i.toString() + "' id='cat_" + i.toString() + "_u' value='unknown' checked><label for='cat_" + i.toString() + "_u'>Unknown</label>" +
                     "<input type='radio' name='" + i.toString() + "' id='cat_" + i.toString() + "_t' value='true'><label for='cat_" + i.toString() + "_t'>True</label>" +
                     "<input type='radio' name='" + i.toString() + "' id='cat_" + i.toString() + "_f' value='false'><label for='cat_" + i.toString() + "_f'>False</label>" +
-                    "</div></td></tr>";
+                    "</div></td></tr>");
                 if (purchased_upgrades.indexOf("beachball") != -1) {
                     if (sols[i]) {
                         $("#cat_" + i.toString() + "_t").prop("checked", true);
@@ -474,8 +474,6 @@ var events = [
                     }
                 }
             }
-            content += "</table></form>";
-            $("#events_content").html(content);
             $("#events_content").append("<span class='clickable'>Reset Answers</span><br/>");
             $("#events_content > span").last().click(function () {
                 for (var i = 0; i < all_statements.length; i++) {
