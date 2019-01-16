@@ -179,7 +179,7 @@ function set_initial_state() {
             "multipliers": {},
             "update": "nop",
             "free": 0,
-            "flavor": "A stone made out of pure crystallized mana. Use it to power spells!",
+            "flavor": "",
         },
         "s_essence": {
             "on": true,
@@ -219,7 +219,7 @@ function set_initial_state() {
             },
             "update": "nop",
             "free": 0,
-            "flavor": "Hmm...",
+            "flavor": "",
         },
         "s_mana_refinery": {
             "on": true,
@@ -232,7 +232,7 @@ function set_initial_state() {
             "multipliers": {},
             "update": "refinery",
             "free": 0,
-            "flavor": "That's some fine mana.",
+            "flavor": "",
         },
         "s_goldboost": {
             "on": false,
@@ -248,7 +248,7 @@ function set_initial_state() {
             },
             "update": "nop",
             "free": 0,
-            "flavor": "A magic spell made for tax fraud.",
+            "flavor": "",
         },
         "s_energyboost": {
             "on": false,
@@ -262,7 +262,7 @@ function set_initial_state() {
             "multipliers": {},
             "update": "nop",
             "free": 0,
-            "flavor": "This is actually a much simpler spell than the name implies.",
+            "flavor": "",
         },
         "s_trade": {
             "on": false,
@@ -275,7 +275,7 @@ function set_initial_state() {
             "multipliers": {},
             "update": "trade",
             "free": 0,
-            "flavor": "With an infinite variety of things, you would think you could find some apples for sale. But you can't.",
+            "flavor": "",
         },
         "s_startboost": {
             "on": false,
@@ -293,7 +293,7 @@ function set_initial_state() {
             "multipliers": {},
             "update": "nop",
             "free": 0,
-            "flavor": "I HAVE THE POWER!",
+            "flavor": "",
         },
         "s_time_magic": {
             "on": false,
@@ -306,7 +306,7 @@ function set_initial_state() {
             "multipliers": {},
             "update": "time",
             "free": 0,
-            "flavor": "I HAVE THE POWER!",
+            "flavor": "",
         },
         "s_workshop": {
             "on": false,
@@ -320,7 +320,7 @@ function set_initial_state() {
             "update": "nop",
             "mode": "iron",
             "free": 0,
-            "flavor": "Yay, you can read my code.",
+            "flavor": "",
         },
         "s_time_maker": {
             "on": false,
@@ -334,7 +334,7 @@ function set_initial_state() {
             "multipliers": {},
             "update": "nop",
             "free": 0,
-            "flavor": "Yay herbs! Thyme is good!",
+            "flavor": "",
         },
         "s_workshop_2": {
             "on": false,
@@ -347,7 +347,7 @@ function set_initial_state() {
             "multipliers": {},
             "update": "workshop",
             "free": 0,
-            "flavor": "Work. Work. Work. Work. Shop.",
+            "flavor": "",
         },
         "s_enchantment": {
             "on": false,
@@ -362,7 +362,7 @@ function set_initial_state() {
             "item": "",
             "time_left": 0,
             "free": 0,
-            "flavor": "Ooh, sparkly.",
+            "flavor": "",
         },
         "s_final": {
             "on": false,
@@ -376,7 +376,7 @@ function set_initial_state() {
             "update": "final",
             "strength": 2,
             "free": 0,
-            "flavor": "MORE MANA!",
+            "flavor": "",
         },
         "s_ai": {
             "on": false,
@@ -390,7 +390,7 @@ function set_initial_state() {
             "multipliers": {},
             "update": "nop",
             "free": 0,
-            "flavor": "Managed",
+            "flavor": "",
         },
         "s_autoessence": {
             "on": false,
@@ -403,7 +403,7 @@ function set_initial_state() {
             "multipliers": {},
             "update": "autoessence",
             "free": 0,
-            "flavor": "No one reads this.",
+            "flavor": "",
         },
         "s_challenge": {
             "on": true,
@@ -414,7 +414,7 @@ function set_initial_state() {
             "multipliers": {},
             "update": "nop",
             "free": 0,
-            "flavor": "Good luck with challenges!",
+            "flavor": "",
         },
         "challenge_basic": {
             "on": true,
@@ -1819,7 +1819,7 @@ function set_initial_state() {
                 "money": 1,
             },
             "tooltip": "Banks produce 10x money.",
-            "name": "Lower Taxes",
+            "name": "Lower Taxes<br/>",
             "image": "money.png",
             "repeats": true,
         },
@@ -1890,7 +1890,7 @@ function set_initial_state() {
         },
         "enviro_crisis_avert": {
             "unlock": function () {
-                return resources["sludge"].amount > 10000;
+                return resources["sludge"].amount > 10;
             },
             "purchase": function () {
                 event_flags["crisis_averted"] = true;
@@ -1946,6 +1946,7 @@ function set_initial_state() {
                 "money": 100000000,
                 "water": 1000000,
                 "wood": 10000000,
+                "sludge": 10000,
             },
             "tooltip": "Clean up the environment. You won't be able to use oil near the amount you were though.",
             "name": "Cleanup",
@@ -2362,7 +2363,7 @@ function set_initial_state() {
                     toggle_building_state("s_ai");
                 }
                 buildings["s_ai"].amount = 1000;
-                buildings["s_ai"].generation["sand"] = -5000000 / 1000;
+                buildings["s_ai"].generation["sand"] = -1000000 / 1000;
                 buildings["s_ai"].generation["sandcastle"] = 0.1 / 1000;
                 if (build_state) { /* Only turn on if it already was on */
                     toggle_building_state("s_ai");
@@ -4116,7 +4117,7 @@ window.onload = function () {
         }
         buildings["hydrogen_mine"].amount = adventure_data["hydrogen_mines"];
         var challenge_hydrogen_cap = 5;
-        if (adventure_data["challenges_completed"].length >= CHALLENGES.METEORS && adventure_data["challenges_completed"][CHALLENGES.METEORS]) {
+        if (adventure_data["challenges_completed"] && adventure_data["challenges_completed"].length >= CHALLENGES.METEORS && adventure_data["challenges_completed"][CHALLENGES.METEORS]) {
             challenge_hydrogen_cap = 50;
         }
         if (adventure_data["challenge"] && buildings["hydrogen_mine"].amount > challenge_hydrogen_cap) { /* If they're in a challenge, cap at 5 */

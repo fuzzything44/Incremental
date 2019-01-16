@@ -402,6 +402,8 @@ let enchantments = {
 
             let amt = Math.floor(Math.log(buildings["s_manastone"].amount / 50) / Math.log(2)); /* Just log base 2 of mana / 50 */
 
+            amt = Math.max(0, amt); 
+
             buildings["s_enchantment"]["generation"]["gold"] += amt / 500;
             buildings["s_enchantment"]["generation"]["money"] += 50 * amt / 500;
 
@@ -424,6 +426,9 @@ let enchantments = {
                 buildings["s_enchantment"]["generation"]["energy"] = 0;
             }
             let amt = Math.floor(Math.log(resources["research"].amount / 25) / Math.log(2)); /* Just log base 2 of mana / 50 */
+
+            amt = Math.max(0, amt); 
+
             buildings["s_enchantment"]["generation"]["energy"] += amt / 500;
 
             if (build_state) { /* Only turn on if it already was on */
@@ -446,6 +451,9 @@ let enchantments = {
                 buildings["s_enchantment"]["generation"]["research"] = 0;
             }
             let amt = Math.floor(Math.log(buildings["s_manastone"].amount / 50) / Math.log(2)); /* Just log base 2 of mana / 50 */
+
+            amt = Math.max(0, amt); 
+
             buildings["s_enchantment"]["generation"]["research"] += amt / 500;
 
             if (build_state) { /* Only turn on if it already was on */
@@ -475,6 +483,8 @@ let enchantments = {
                 adventure_data["casino_tokens"] = 0;
             }
             let amt = Math.floor(Math.log(resources["money"].amount / 1000000) / Math.log(2)); /* Just log base 2 of money / 1m */
+            amt = Math.max(0, amt); 
+
             adventure_data["casino_tokens"] += amt;
             resources["money"].amount = 0;
             add_log_elem("You got " + format_num(amt) + " casino tokens in exchange for your money.");

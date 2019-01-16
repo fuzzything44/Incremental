@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.18.2: (1/16/19) More bugfixes
+Removed a bunch of flavor text that's impossible to see. This should reduce save sizes a bit. Environmental cleanup appears much sooner, but can't be bought until you reach the sludge requirement. AI takes less sand per sandcastle (10m instead of 50m). Having a hydrogen machine should no longer break the game on prestige. Enchanting table no longer gives negative bonuses if you don't have much of the required resource. You should no longer be able to get 2 omega machines from the tower.
+
 v5.18.1: (1/15/19) The obligatory bugfixes
 Purchasing the new upgrades should actually update the cost of mana to run your AI (also, the second one actually increases the mana cost now too). Beachball functions correctly now. Sandcastle tooltip is correctly placed. The NUKE button works better, and brings you slightly higher. Also, you can no longer get a reward from the next ascension from defeating the last boss of the current one. And since last version should have been 5.18.0 instead of 5.17.5, I updated the version number to be correct.
 

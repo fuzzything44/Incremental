@@ -489,18 +489,18 @@ var TOWER_DATA = [
         "boss": "a Ninja",
         "text": "...",
         get reward_text() {
+            if (adventure_data["omega_machine"]) {
+                return "nothing";
+            }
             return "the OMEGA MACHINE";
         },
         reward: function () {
-            if (adventure_data["omega_machine"] == undefined) {
-                adventure_data["omega_machine"] = 0;
-            }
-            adventure_data["omega_machine"]++;
+            adventure_data["omega_machine"] = 1;
             var build_state = buildings["omega_machine"].on;
             if (build_state) {
                 toggle_building_state("omega_machine");
             }
-            buildings["omega_machine"].amount++;
+            buildings["omega_machine"].amount = 1;
             if (build_state) { /* Only turn on if it already was on */
                 toggle_building_state("omega_machine");
             }
