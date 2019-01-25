@@ -441,7 +441,8 @@
 
                             }
                         }
-                    } else if (event_flags["wanderer_knowledge"] == "alchemy") {
+                    }
+                    else if (event_flags["wanderer_knowledge"] == "alchemy") {
                         if (event_flags["alchemist_ingredients"] == undefined) {
                             $("#events_content").append("There's not much here... try becoming an inventor or mage. Or check back in a few weeks. Maybe months. <br />");
                             $("#events_content").append("<span class='clickable'>Reset</span> class choice<br />");
@@ -459,7 +460,8 @@
                             });
                         } else {
                             let UNLOCKS = [
-                                { name: "etherium", cost: 30},
+                                /* Cheese given for free just by being an alchemist. Found at the Moon. */
+                                { name: "etherium", cost: 30}, /* Found at Terminus */
                             ];
 
                             UNLOCKS.forEach(function (ingredient) {
@@ -477,7 +479,8 @@
                             });
                         }
 
-                    } else if (event_flags["wanderer_knowledge"] == "inventor") {
+                    }
+                    else if (event_flags["wanderer_knowledge"] == "inventor") {
                         $("#events_content").append("<span class='clickable'>Make</span> a Giant Magnet (Costs 1 Machine Part and 1 KP)<br />");
                         $("#events_content > span").last().click(function () {
                             if (count_item("machine_part", adventure_data.warehouse)) {
@@ -610,6 +613,7 @@
                                                 toggle_building_state(build);
                                             }
 
+                                            gen_building_tooltip(build);
                                             study(); /* Refresh display. */
                                         }
                                     });

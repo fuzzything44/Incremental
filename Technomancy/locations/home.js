@@ -437,6 +437,7 @@
                             }
                             else {
                                 var UNLOCKS = [
+                                    /* Cheese given for free just by being an alchemist. Found at the Moon. */
                                     { name: "etherium", cost: 30 },
                                 ];
                                 UNLOCKS.forEach(function (ingredient) {
@@ -575,6 +576,7 @@
                                                 if (build_state) { /* Only turn on if it already was on */
                                                     toggle_building_state(build);
                                                 }
+                                                gen_building_tooltip(build);
                                                 study(); /* Refresh display. */
                                             }
                                         });

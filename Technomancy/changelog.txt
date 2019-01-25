@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.18.2: (1/24/18) QoL changes and bugfixes
+Fortifying a building should properly update the tooltip. Potions should now appear in the resource tooltip. In fact, everything *should*, so if you notice something that doesn't, it's a bug. Nerfed CSOP a bit more again (and fixed the <500 mana text). Removed gardening (it was bad and buggy). The traveler now says where you can do stuff with your chosen class. Fixed a bug where you couldn't get steel beams as a trade item. The tower of grinding no longer takes a mana per floor.
+
 v5.18.2: (1/16/19) More bugfixes
 Removed a bunch of flavor text that's impossible to see. This should reduce save sizes a bit. Environmental cleanup appears much sooner, but can't be bought until you reach the sludge requirement. AI takes less sand per sandcastle (10m instead of 50m). Having a hydrogen machine should no longer break the game on prestige. Enchanting table no longer gives negative bonuses if you don't have much of the required resource. You should no longer be able to get 2 omega machines from the tower.
 

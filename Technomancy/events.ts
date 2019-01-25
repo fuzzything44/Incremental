@@ -456,7 +456,6 @@ let events = [
             }
             let all_statements: logic_statement[] = [];
 
-            /* Make a core of 3 statements, retrying until we get at least 1 solution */
             do {
                 all_statements = []; /* Clear statement list from last try, if there was one. */
                 /* Somewhere from 3 to 8 statements. */
@@ -698,39 +697,6 @@ let events = [
             add_log_elem("You got a CARROT!");
             $("#events_content").html("Oh look! In your garden! You grew a carrot! Yay, you're such a good farmer!<br />");
             adventure_data.alchemy_ingredients["Carrot"]++;
-            if (adventure_data.alchemy_ingredients["Carrot"] > 100 && event_flags["garden"] == undefined) {
-                $("#events_content").append("Hmm... you have a whole lot of carrots now. Maybe you could start a garden!<br />");
-                $("#events_content").append("<span class='clickable'>Buy</span> a nearby greenhouse to garden in (costs 1M diamond)<br />");
-                $("#events_content span").last().click(function () {
-                    if (resources["diamond"].amount >= 1000000) {
-                        resources["diamond"].amount -= 1000000;
-                        event_flags["garden"] = [[null, null, null], [null, null, null], [null, null, null]]; /* 3x3 array of plots. Who knows what'll go in them.  */
-                        event_flags["seeds"] = [{
-                            "name": "Carrot", 
-                            "desc": "A large, tasty carrot. Just what the doctor ordered!",
-
-                            "regrows": false, /* Is it instantly planted again for free when harvested? */
-                            "grow_time": 60, /* How long it takes to grow. */
-                            "grow_difficulty": 1, /* How difficult it is to grow this. Increases resources required. */
-                            "quality": 1, /* How much we get on harvest/other stuff. While growing, this can be increased with special items. */
-                            "harvest": "carrot", /* What do they get when harvesting? Returns the message they get on harvest. */
-                        }];
-                        $("#events").addClass("hidden");
-                    }
-                });
-            } else if (event_flags["garden"] != undefined) {
-                /* They have a garden, so give them some seeds! */
-                event_flags["seeds"].push({
-                    "name": "Carrot",
-                    "desc": "A large, tasty carrot. Just what the doctor ordered!",
-
-                    "regrows": false, /* Is it instantly planted again for free when harvested? */
-                    "grow_time": 60, /* How long it takes to grow. */
-                    "grow_difficulty": 1, /* How difficult it is to grow this. Increases resources required. */
-                    "quality": 1, /* How much we get on harvest/other stuff. While growing, this can be increased with special items. */
-                    "harvest": "carrot", /* What do they get when harvesting? Returns the message they get on harvest. */
-                });
-            }
         },
         "name": "Farming",
         "rejection": 75,
@@ -741,7 +707,7 @@ let events = [
             $("#events_content").html("<span>A mysterious traveler has arrived.</span><br>");
             if (buildings["library"].amount > 50) {
                 $("#events_content").append("<span>" + (Math.random() > 0.5 ? "She" : "He") + " is willing to teach you secrets. </span><br />");
-                $("#events_content").append("<i>This destroys 50 libraries (cost DOES NOT RESET) and is available once per prestige. Choose wisely.</i><br /><br />");
+                $("#events_content").append("<i>This destroys 50 libraries (cost DOES NOT RESET) and is available once per prestige. Choose wisely. Do things with your chosen class at your home planet.</i><br /><br />");
 
                 /* Magic! */
                 if (buildings["s_manastone"].amount % 3 != 0 || buildings["s_manastone"].amount >= 10000) {
@@ -786,14 +752,13 @@ let events = [
     ({
         "condition": function () { return adventure_data["challenge"] == CHALLENGES.METEORS; },
         "run_event": function () {
-            let content = "<span>Woah, a meteor just hit in your everything!</span><br>";
-
-            meteor_hit();
-            meteor_hit();
-            meteor_hit();
-
+            $("#events_content").html("<span>Woah, a meteor just hit in your everything!</span><br>");
             add_log_elem("A meteor fell!");
-            $("#events_content").html(content);
+
+            meteor_hit();
+            meteor_hit();
+            meteor_hit();
+
 
         },
         "name": "Meteor!",

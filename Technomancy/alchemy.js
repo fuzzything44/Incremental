@@ -152,13 +152,19 @@ var ingredients = [
         else {
             if (adventure_data["current_potion"].applied_effect == undefined) {
                 resources_per_sec["research"] += 25;
+                resources["research"].changes["Potion"] = 25; /* Add it to the change list. */
                 resources_per_sec["book"] += 1;
+                resources["book"].changes["Potion"] = 1; /* Add it to the change list. */
+                resource_tooltip();
                 adventure_data["current_potion"].applied_effect = true;
             }
         }
     }, function () {
         resources_per_sec["research"] -= 25; /* Take away the production we gave. */
+        delete resources["research"].changes["Potion"];
         resources_per_sec["book"] -= 1;
+        delete resources["book"].changes["Potion"];
+        resource_tooltip();
     }, "Increases thought power and speed of action.", 120, 8, [
         { type: "resource", amount: 5000, name: "book" },
         { type: "resource", amount: 50, name: "research" },
@@ -182,11 +188,18 @@ var ingredients = [
         else {
             if (adventure_data["current_potion"].applied_effect == undefined && can_run()) {
                 resources_per_sec["glass"] += 25 * power;
+                resources["glass"].changes["Potion"] = 25; /* Add it to the change list. */
                 resources_per_sec["wood"] += -50 * power;
+                resources["wood"].changes["Potion"] = -50 * power; /* Add it to the change list. */
                 resources_per_sec["oil"] += -10 * power;
+                resources["oil"].changes["Potion"] = -10 * power; /* Add it to the change list. */
                 resources_per_sec["sand"] += -50 * power;
+                resources["sand"].changes["Potion"] = -50 * power; /* Add it to the change list. */
                 resources_per_sec["iron_ore"] += -30 * power;
+                resources["iron_ore"].changes["Potion"] = -30 * power; /* Add it to the change list. */
                 resources_per_sec["iron"] += 10 * power;
+                resources["iron"].changes["Potion"] = 10 * power; /* Add it to the change list. */
+                resource_tooltip();
                 adventure_data["current_potion"].applied_effect = true;
             }
             if (adventure_data["current_potion"].applied_effect && !can_run()) {
@@ -197,11 +210,18 @@ var ingredients = [
     }, function () {
         var power = adventure_data["current_potion"].power;
         resources_per_sec["glass"] -= 25 * power;
+        delete resources["glass"].changes["Potion"];
         resources_per_sec["wood"] -= -50 * power;
+        delete resources["wood"].changes["Potion"];
         resources_per_sec["oil"] -= -10 * power;
+        delete resources["oil"].changes["Potion"];
         resources_per_sec["sand"] -= -50 * power;
+        delete resources["sand"].changes["Potion"];
         resources_per_sec["iron_ore"] -= -30 * power;
+        delete resources["iron_ore"].changes["Potion"];
         resources_per_sec["iron"] -= 10 * power;
+        delete resources["iron"].changes["Potion"];
+        resource_tooltip();
     }, "Melts and burns.", 50, 4, [
         { type: "resource", amount: 50, name: "book" },
         { type: "resource", amount: 10000, name: "wood" },
@@ -214,8 +234,11 @@ var ingredients = [
         else {
             if (adventure_data["current_potion"].applied_effect == undefined) {
                 resources_per_sec["gold"] += 25 * power;
+                resources["gold"].changes["Potion"] = 25 * power; /* Add it to the change list. */
                 resources_per_sec["diamond"] += 5 * power;
+                resources["diamond"].changes["Potion"] = 5 * power; /* Add it to the change list. */
                 adventure_data["current_potion"].applied_effect = true;
+                resource_tooltip();
             }
         }
     }, function () {
@@ -223,7 +246,10 @@ var ingredients = [
         if (adventure_data["current_potion"].applied_effect != undefined) {
             var power = adventure_data["current_potion"].power;
             resources_per_sec["gold"] -= 25 * power;
+            delete resources["gold"].changes["Potion"];
             resources_per_sec["diamond"] -= 5 * power;
+            delete resources["diamond"].changes["Potion"];
+            resource_tooltip();
         }
     }, "You have good vision.", 150, 9, [], "Sight", "Still", "Fine"),
     new ingredient("Space Carrot", function (power, on_combat) {
@@ -234,12 +260,16 @@ var ingredients = [
             resources["fuel"].amount += 0.1 * power; /* This is not a /s increase because that gets to be incredibly broken with speed time. */
             if (adventure_data["current_potion"].applied_effect == undefined) {
                 resources_per_sec["uranium"] += power;
+                resources["uranium"].changes["Potion"] = power; /* Add it to the change list. */
                 adventure_data["current_potion"].applied_effect = true;
+                resource_tooltip();
             }
         }
     }, function () {
         var power = adventure_data["current_potion"].power;
         resources_per_sec["uranium"] -= power;
+        delete resources["uranium"].changes["Potion"];
+        resource_tooltip();
     }, "You have good space vision.", 180, 10, [], "Space Sight", "Super Still", "Very Fine"),
     new ingredient("Cheese", function (power, on_combat) {
         if (on_combat === void 0) { on_combat = false; }
@@ -266,7 +296,9 @@ var ingredients = [
         else {
             buildings["s_manastone"].amount += 1 + Math.floor(power / 5);
             resources_per_sec["mana"] += 1 + Math.floor(power / 5);
+            resources["mana"].changes["Mana Stone"] += 1 + Math.floor(power / 5);
             adventure_data["current_potion"].time -= 10;
+            resource_tooltip();
         }
     }, function () {
     }, "Mmm, tastes like strawberry", 600, 20, [], "Mana", "Twinkling", "Specially"),

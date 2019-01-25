@@ -830,10 +830,12 @@ function climb_tower(health, ehealth, grinding) {
         }
     }
     if (health == undefined) {
-        if (resources_per_sec["mana"] >= 1) {
-            resources_per_sec["mana"]--;
-            buildings["s_manastone"].amount--;
-            update_building_amount("s_manastone");
+        if (resources_per_sec["mana"] >= 1 || grinding) {
+            if (!grinding) {
+                resources_per_sec["mana"]--;
+                buildings["s_manastone"].amount--;
+                update_building_amount("s_manastone");
+            }
             health = adventure_data["tower_toughness"];
             if (adventure_data["tower_healer"] != undefined) { /* Give healer health */
                 adventure_data["tower_healer"].current_health = adventure_data["tower_healer"].health;
