@@ -1759,7 +1759,7 @@ function set_initial_state() {
                 if (comp_state) { /* Only turn on if it already was on */
                     toggle_building_state("s_time_magic");
                 }
-                $("#building_s_time_magic > .building_amount").text("30");
+                update_building_amount("s_time_magic");
             },
             "cost": {
                 "time": 30000,
@@ -2015,7 +2015,7 @@ function set_initial_state() {
         },
         "time_use_boost": {
             "unlock": function () {
-                return resources["time"].amount > 100000 && buildings["bank"].free != undefined;
+                return resources["time"].amount > 25000 && buildings["bank"].free != undefined;
             },
             "purchase": function () { }, /* Do nothing directly, effects are implemented elsewhere. */
             "cost": {
@@ -2139,7 +2139,7 @@ function set_initial_state() {
             "repeats": false,
         },
         "csop": {
-            "unlock": function () { adventure_data["logicat_chairs"]; },
+            "unlock": function () { return adventure_data["logicat_chairs"]; },
             "purchase": function () {
                 Object.keys(resources).forEach(function (res) {
                     if (resources[res].value > 0 && resources[res].amount > 0) {
@@ -2518,7 +2518,13 @@ let prestige = {
         }
 
         let mana = buildings["s_manastone"].amount - mana_this_prestige; /* Don't count mana gained this prestige in here. */
-        let mana_gain = prestige_points / 15000 - Math.pow(mana, 1.3) * .5; /* One for every 15k pp, and apply reduction based off of current mana */
+
+        let first_wall = Math.pow(mana, 1.3) * 0.5;
+        if (isNaN(first_wall)) {
+            first_wall = 0;
+        }
+
+        let mana_gain = prestige_points / 15000 - first_wall; /* One for every 15k pp, and apply reduction based off of current mana */
         mana_gain = Math.pow(Math.max(0, mana_gain), .36); /* Then raise to .36 power and apply some rounding/checking */
         mana_gain = mana_gain / (1 + Math.floor(mana / 50) * .5); /* Then divide gain by a number increasing every 50 mana. */
         if (mana_gain > 50) { /* If they're getting a ton, they get less*/

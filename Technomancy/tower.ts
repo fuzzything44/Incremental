@@ -576,6 +576,42 @@
         reward: function () {
         }
     },
+    { /* Boss 47 (Ascension V - 1) */
+        "boss": "",
+        "text": "",
+        get reward_text() {
+            return ""; /* Bosses after this have special attacks? */
+        },
+        reward: function () {
+        }
+    },
+    { /* Boss 48 (Ascension V - 2) */
+        "boss": "",
+        "text": "",
+        get reward_text() {
+            return ""; /* Spikey kneepad upgrade? */
+        },
+        reward: function () {
+        }
+    },
+    { /* Boss 49 (Ascension V - 3) */
+        "boss": "",
+        "text": "",
+        get reward_text() {
+            return ""; /* Healer can heal party members? */
+        },
+        reward: function () {
+        }
+    },
+    { /* Boss 50 (Ascension V - 5) */
+        "boss": "",
+        "text": "",
+        get reward_text() {
+            return ""; /* ??? */
+        },
+        reward: function () {
+        }
+    },
     { /* Boss Repeat, for extra levels */
         get boss() {
             return "a " + tower_adj_a[adventure_data["tower_floor"] % tower_adj_a.length]
@@ -752,11 +788,11 @@ function tower() {
             });
 
             if (adventure_data["tower_floor"] > 37) {
+                if (adventure_data["grind_tower_bank"] == undefined) {
+                    adventure_data["grind_tower_bank"] = 0;
+                }
                 $("#events_content").append("<span class='clickable'>Bank</span> your entry instead (and then you can enter quicker sometime later)<br/>");
                 $("#events_content span").last().click(function () {
-                    if (adventure_data["grind_tower_bank"] == undefined) {
-                        adventure_data["grind_tower_bank"] = 0;
-                    }
                     adventure_data["grind_tower_bank"]++;
                     adventure_data["grind_tower_time"] = Date.now();
                     tower();

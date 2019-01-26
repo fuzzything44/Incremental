@@ -5,7 +5,7 @@
         ({
             "condition": function () { return true; },
             "types": [],
-            "weight": 0,
+            "weight": 1,
             "title": "Deep Sea Casino",
             "run_encounter": function () {
 
@@ -226,6 +226,22 @@
                 $("#events_content").append(exit_button("Leave") + " the casino.<br/>");
             } /* End run_encounter*/
         }),
+
+        ({
+            "condition": function () { return event_flags["alchemist_ingredients"] != undefined && adventure_data["alchemy_ingredients"]["Dimensional Core"] != undefined && event_flags["alchemist_ingredients"]["core"] && Math.random() > 0.9; },
+            "types": ["noncombat"],
+            "weight": 1,
+            "title": "Gate",
+            "run_encounter": function () {
+                $("#events_content").html("Gate.<br/>The gate is.<br/>The gate is the world. Between worlds. Beyond. The gate. The gate. The gate. Gate. Gate.gate.gategategategate.<br /><span class='clickable'>Gate</span>");
+                $("#events_content > span").last().click(() => {
+                    $("#events_content").html("You obtain it.<br /><span class='clickable' onclick='start_adventure()'>Yay!</span>");
+                    adventure_data["alchemy_ingredients"]["Dimensional Core"]++;
+                });
+
+            },
+        }), /* Dimensional Core */
+
     ],
     "connects_to": ["sharks/abandoned", "sharks/gate"],
     "enter_cost": 7,

@@ -444,40 +444,29 @@
                     }
                     else if (event_flags["wanderer_knowledge"] == "alchemy") {
                         if (event_flags["alchemist_ingredients"] == undefined) {
-                            $("#events_content").append("There's not much here... try becoming an inventor or mage. Or check back in a few weeks. Maybe months. <br />");
-                            $("#events_content").append("<span class='clickable'>Reset</span> class choice<br />");
-                            $("#events_content span").last().click(function () {
-                                buildings["library"].free += 50;
-                                delete event_flags["wanderer_knowledge"];
-                                $("#events").addClass("hidden");
-                                $("#character").addClass("hidden");
-                                force_event(12);
-                            });
-
-                            $("#events_content").append("<span class='clickable'>Unlock</span> the secrets of cheese! (Makes cheese available to get somewhere in adventure, but you won't be able to back out of alchemist using the above button)");
-                            $("#events_content span").last().click(function () {
-                                event_flags["alchemist_ingredients"] = { "cheese": true };
-                            });
-                        } else {
-                            let UNLOCKS = [
-                                /* Cheese given for free just by being an alchemist. Found at the Moon. */
-                                { name: "etherium", cost: 30}, /* Found at Terminus */
-                            ];
-
-                            UNLOCKS.forEach(function (ingredient) {
-                                if (event_flags["alchemist_ingredients"][ingredient.name] == undefined) {
-                                    $("#events_content").append("<span class='clickable'>Unlock</span> the secrets of " + ingredient.name + "! (Costs " + format_num(ingredient.cost) + " KP)");
-                                    $("#events_content span").last().click(function () {
-                                        if (event_flags["know_pts"] >= ingredient.cost) {
-                                            event_flags["alchemist_ingredients"][ingredient.name] = true;
-                                            study();
-                                        } else {
-                                            $("#events_content").prepend("Oops, you can't get that");
-                                        }
-                                    });
-                                }
-                            });
+                            event_flags["alchemist_ingredients"] = { "cheese": true };
                         }
+                        let UNLOCKS = [
+                            /* Cheese given for free just by being an alchemist. Found at the Moon. */
+                            { name: "potato", cost: 5 }, /* Found at Umbra */
+                            { name: "salamander", cost: 10 }, /* Found at kittens/castles (abandoned colony) */
+                            { name: "etherium", cost: 20 }, /* Found at Terminus */
+                            { name: "core", cost: 40 }, /* Found at Terminus */
+                        ];
+
+                        UNLOCKS.forEach(function (ingredient) {
+                            if (event_flags["alchemist_ingredients"][ingredient.name] == undefined) {
+                                $("#events_content").append("<span class='clickable'>Unlock</span> the secrets of " + ingredient.name + "!(Costs"+format_num(ingredient.cost) + " KP)");
+                                $("#events_content span").last().click(function () {
+                                    if (event_flags["know_pts"] >= ingredient.cost) {
+                                        event_flags["alchemist_ingredients"][ingredient.name] = true;
+                                        study();
+                                    } else {
+                                        $("#events_content").prepend("Oops, you can't get that");
+                                    }
+                                });
+                            }
+                        });
 
                     }
                     else if (event_flags["wanderer_knowledge"] == "inventor") {
