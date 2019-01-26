@@ -1,5 +1,11 @@
 ﻿Technomancy Changelog
 
+v5.20.0: (1/26/19) Scratch that
+Added the scratchpad, a persistent text field available at 200+ mana that persists across prestiges, useful for storing adventure notes! Also, fixed a slight issue with enemies reacting immediately instead of waiting 1 second.
+
+v5.19.0: (1/25/19) The Potioning
+Added a few new potions for the Alchemist. Also, since there's some real content there, you can no longer back out once you choose it. Reduced the required time amount for Chronomancy to show up. You can actually get Chairs Sit on People again. Fixed a bug with mage quickmana and purchasing essence. The new event granted by tower Ascension IV should actually show up now without jumping through weird hoops. 
+
 v5.18.2: (1/24/18) QoL changes and bugfixes
 Fortifying a building should properly update the tooltip. Potions should now appear in the resource tooltip. In fact, everything *should*, so if you notice something that doesn't, it's a bug. Nerfed CSOP a bit more again (and fixed the <500 mana text). Removed gardening (it was bad and buggy). The traveler now says where you can do stuff with your chosen class. Fixed a bug where you couldn't get steel beams as a trade item. The tower of grinding no longer takes a mana per floor.
 

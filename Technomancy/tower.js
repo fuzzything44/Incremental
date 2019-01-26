@@ -582,6 +582,42 @@ var TOWER_DATA = [
         }
     },
     {
+        "boss": "",
+        "text": "",
+        get reward_text() {
+            return ""; /* Bosses after this have special attacks? */
+        },
+        reward: function () {
+        }
+    },
+    {
+        "boss": "",
+        "text": "",
+        get reward_text() {
+            return ""; /* Spikey kneepad upgrade? */
+        },
+        reward: function () {
+        }
+    },
+    {
+        "boss": "",
+        "text": "",
+        get reward_text() {
+            return ""; /* Healer can heal party members? */
+        },
+        reward: function () {
+        }
+    },
+    {
+        "boss": "",
+        "text": "",
+        get reward_text() {
+            return ""; /* ??? */
+        },
+        reward: function () {
+        }
+    },
+    {
         get boss() {
             return "a " + tower_adj_a[adventure_data["tower_floor"] % tower_adj_a.length]
                 + tower_adj_b[adventure_data["tower_floor"] % tower_adj_b.length]
@@ -748,11 +784,11 @@ function tower() {
                 climb_tower(undefined, undefined, true);
             });
             if (adventure_data["tower_floor"] > 37) {
+                if (adventure_data["grind_tower_bank"] == undefined) {
+                    adventure_data["grind_tower_bank"] = 0;
+                }
                 $("#events_content").append("<span class='clickable'>Bank</span> your entry instead (and then you can enter quicker sometime later)<br/>");
                 $("#events_content span").last().click(function () {
-                    if (adventure_data["grind_tower_bank"] == undefined) {
-                        adventure_data["grind_tower_bank"] = 0;
-                    }
                     adventure_data["grind_tower_bank"]++;
                     adventure_data["grind_tower_time"] = Date.now();
                     tower();

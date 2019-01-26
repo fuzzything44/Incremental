@@ -302,6 +302,73 @@ var ingredients = [
         }
     }, function () {
     }, "Mmm, tastes like strawberry", 600, 20, [], "Mana", "Twinkling", "Specially"),
+    new ingredient("Potato", function (power, on_combat) {
+        if (on_combat === void 0) { on_combat = false; }
+        if (on_combat) {
+        }
+        else {
+            if (adventure_data["current_potion"].applied_effect == undefined) {
+                resources_per_sec["book"] += power * 5;
+                resources_per_sec["oil"] += power * 5;
+                resources["book"].changes["Potion"] = 5 * power; /* Add it to the change list. */
+                resources["oil"].changes["Potion"] = 5 * power; /* Add it to the change list. */
+                adventure_data["current_potion"].applied_effect = true;
+                resource_tooltip();
+            }
+        }
+    }, function () {
+        var power = adventure_data["current_potion"].power;
+        resources_per_sec["book"] -= power * 5;
+        resources_per_sec["oil"] -= power * 5;
+        delete resources["book"].changes["Potion"];
+        delete resources["oil"].changes["Potion"];
+        resource_tooltip();
+    }, "Boil 'em mash 'em stick 'em in a stew", 400, 15, [], "Starch", "Starchy", "Deliciously"),
+    new ingredient("Salamander", function (power, on_combat) {
+        if (on_combat === void 0) { on_combat = false; }
+        if (on_combat) {
+        }
+        else {
+            if (adventure_data["current_potion"].applied_effect == undefined) {
+                resources_per_sec["steel_beam"] += power;
+                resources["steel_beam"].changes["Potion"] = power; /* Add it to the change list. */
+                adventure_data["current_potion"].applied_effect = true;
+                resource_tooltip();
+            }
+        }
+    }, function () {
+        var power = adventure_data["current_potion"].power;
+        resources_per_sec["steel_beam"] -= power;
+        delete resources["steel_beam"].changes["Potion"];
+        resource_tooltip();
+    }, "They're quite good grilled in a sandwich.", 6000, 3, [], "...things", "Rubbery", "Weirdly"),
+    new ingredient("Dimensional Core", function (power, on_combat) {
+        if (on_combat === void 0) { on_combat = false; }
+        if (on_combat) {
+            enemy_data["actions_per_turn"] -= 1;
+            player_data["energy_left"] += 5;
+            enemy_data["shields"] -= 1;
+            update_combat(0);
+        }
+        else {
+            resources["time"].amount += 0.5;
+            if (adventure_data["current_potion"].applied_effect == undefined) {
+                resources_per_sec["steel_beam"] += 1000 * power;
+                resources_per_sec["money"] += 100000 * power;
+                resources["steel_beam"].changes["Potion"] = 1000 * power; /* Add it to the change list. */
+                resources["money"].changes["Potion"] = 100000 * power; /* Add it to the change list. */
+                adventure_data["current_potion"].applied_effect = true;
+                resource_tooltip();
+            }
+        }
+    }, function () {
+        var power = adventure_data["current_potion"].power;
+        resources_per_sec["steel_beam"] -= 1000 * power;
+        resources_per_sec["money"] -= 100000 * power;
+        delete resources["steel_beam"].changes["Potion"];
+        delete resources["steel_beam"].changes["Potion"];
+        resource_tooltip();
+    }, "Huh.", 18000, 50, [], "Domination", "Ultimate", "(Mythical)"),
 ];
 /*
  * Sets up alchemy ingredient making.

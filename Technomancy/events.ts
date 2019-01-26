@@ -776,7 +776,7 @@ let events = [
         "name": "Time Dilation",
         "rejection": 99,
         "force_cost": 1000,
-    }), /* End time warping */
+    }), /* End time dilation */
 
 ];
 

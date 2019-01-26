@@ -57,6 +57,19 @@
                 }
             }
         }),
+        ({
+            "condition": function () { return event_flags["alchemist_ingredients"] != undefined && adventure_data["alchemy_ingredients"]["Salamander"] != undefined && event_flags["alchemist_ingredients"]["salamander"] && Math.random() > 0.85; },
+            "types": ["noncombat"],
+            "weight": 1,
+            "title": "Why is this here?",
+            "run_encounter": function () {
+                $("#events_content").html("There's a goat here. A goat. Why?<br /><span class='clickable'>Investigate</span>");
+                $("#events_content > span").last().click(function () {
+                    $("#events_content").html("And that's a salamander riding the goat. Okay. Well, at least that salamander is good for alchemy.<br /><span class='clickable' onclick='start_adventure()'>Yay!</span>");
+                    adventure_data["alchemy_ingredients"]["Salamander"]++;
+                });
+            },
+        }),
     ],
     "connects_to": ["kittens/umbra"],
     "enter_cost": 5,

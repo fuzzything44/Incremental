@@ -454,3 +454,9 @@ a {
 .level_4 {
     background: linear-gradient(red, green, blue, red);
 }
+
+textarea {
+    width: 90%;
+    clear: both;
+    display: block;
+}
