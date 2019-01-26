@@ -499,7 +499,7 @@ function update_combat(actions_used: number) {
     if (actions_used > 0) {
         if (player_data["actions_left"] <= 0) {
             /* Give enemy control */
-            setTimeout(start_turn(enemy_data), 1000);
+            setTimeout(function () {start_turn(enemy_data) }, 1000);
         }
     }
     return 0;

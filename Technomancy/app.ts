@@ -2656,6 +2656,7 @@ function save() {
     Object.keys(buildings).forEach(function (type) {
         localStorage["build-" + type] = JSON.stringify(buildings[type]);
     });
+    localStorage["scratchpad"]= $("#scratchpad").val();
     localStorage["flags"]     = JSON.stringify(event_flags);
     localStorage["upgrades"]  = JSON.stringify(purchased_upgrades);
     localStorage["last_save"] = Date.now();
@@ -2689,6 +2690,10 @@ function load() {
             $('#building_' + type + " > .building_amount").html(format_num(buildings[type].amount, false));
         } 
     });
+    console.log("Loading scratchpad...");
+    if (localStorage.getItem("scratchpad")) {
+        $("#scratchpad").val(localStorage["scratchpad"]);
+    }
     console.log("Loading flags...");
     if (localStorage.getItem("flags")) {
         event_flags = JSON.parse(localStorage.getItem("flags"));
@@ -4209,6 +4214,10 @@ window.onload = () => {
             $("#building_" + build + "  > .building_amount").html(format_num(buildings[build].amount, false));
         }
     });
+
+    if ( buildings["s_manastone"].amount >= 200 ) {
+        $("#scratchpad").removeClass("hidden");
+    }
 
     setup_groups();
 
