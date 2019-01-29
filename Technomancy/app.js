@@ -1,10 +1,11 @@
 /// <reference path ="events.ts" />
 /// <reference path ="spells.ts" />
-const OMEGA = "Ω";
-const DELTA = "Δ";
-const EPSILON = "ε";
-const PHI = "φ";
-function format_num(num, show_decimals = true) {
+var OMEGA = "Ω";
+var DELTA = "Δ";
+var EPSILON = "ε";
+var PHI = "φ";
+function format_num(num, show_decimals) {
+    if (show_decimals === void 0) { show_decimals = true; }
     /* If our numberformatting library broke, we fallback to a terrible option instead. This should really only happen in development when it's being worked on online, so it doesn't matter too much.*/
     if (typeof numberformat == "undefined") {
         return Math.round(num).toString();
@@ -27,8 +28,8 @@ function format_num(num, show_decimals = true) {
         }
     }
     else {
-        let sf = 3;
-        let fm = "standard";
+        var sf = 3;
+        var fm = "standard";
         if (localStorage["notation_sci"] == "true") {
             fm = "scientific";
         }
@@ -43,7 +44,7 @@ var resources_per_sec = {};
 var buildings = {};
 var purchased_upgrades = []; /* Names of all purchased upgrades */
 var remaining_upgrades = {}; /* All remaining upgrades that need to be purchased */
-const UNLOCK_TREE = {
+var UNLOCK_TREE = {
     "s_manastone": [],
     "s_essence": [],
     "s_mana_refinery": [],
@@ -97,7 +98,7 @@ const UNLOCK_TREE = {
     "mana_purifier": [],
     "omega_machine": [],
 };
-const SPELL_BUILDINGS = [
+var SPELL_BUILDINGS = [
     "s_manastone",
     "s_essence",
     "s_goldboost",
@@ -116,6 +117,7 @@ const SPELL_BUILDINGS = [
     "s_challenge",
 ];
 function set_initial_state() {
+    var _a, _b;
     /*
         Each resource has a few different fields:
             amount: How many they have. This is the ONLY field stored on save/load
@@ -123,43 +125,44 @@ function set_initial_state() {
             mult: The per-second multiplier. (Amount per second is stored elsewhere because bad design decisions). If you have +10/s and a mult of 2, you actually get +20/s. Only is applied for positive net changes.
             changes: List of [string, value] elements. Tracks what's modifying the /s gain to be displayed later. TODO: Actually do stuff with this.
     */
-    resources = {
-        "time": { "amount": 0, "value": -2, "mult": 1, "changes": {}, "ps_change": "" },
-        "refined_mana": { "amount": 0, "value": -1, "mult": 1, "changes": {}, "ps_change": "" },
-        "purified_mana": { "amount": 0, "value": -2500, "mult": 1, "changes": {}, "ps_change": "" },
-        "fuel": { "amount": 0, "value": -1000, "mult": 1, "changes": {}, "ps_change": "" },
-        "magic_bag": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
-        [OMEGA]: { "amount": 0, "value": -15000000, "mult": 1, "changes": {}, "ps_change": "" },
-        "mana": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
-        "essence": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
-        "energy": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
-        "research": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
-        "manager": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
-        "sludge": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
-        "money": { "amount": 10, "value": 1, "mult": 1, "changes": {}, "ps_change": "" },
-        "stone": { "amount": 0, "value": 0.5, "mult": 1, "changes": {}, "ps_change": "" },
-        "wood": { "amount": 0, "value": 0.5, "mult": 1, "changes": {}, "ps_change": "" },
-        "iron_ore": { "amount": 0, "value": 1, "mult": 1, "changes": {}, "ps_change": "" },
-        "coal": { "amount": 0, "value": 1, "mult": 1, "changes": {}, "ps_change": "" },
-        "iron": { "amount": 0, "value": 4, "mult": 1, "changes": {}, "ps_change": "" },
-        "gold": { "amount": 0, "value": 50, "mult": 1, "changes": {}, "ps_change": "" },
-        "diamond": { "amount": 0, "value": 75, "mult": 1, "changes": {}, "ps_change": "" },
-        "jewelry": { "amount": 0, "value": 300, "mult": 1, "changes": {}, "ps_change": "" },
-        "oil": { "amount": 0, "value": 2, "mult": 1, "changes": {}, "ps_change": "" },
-        "paper": { "amount": 0, "value": 4, "mult": 1, "changes": {}, "ps_change": "" },
-        "ink": { "amount": 0, "value": 10, "mult": 1, "changes": {}, "ps_change": "" },
-        "book": { "amount": 0, "value": 400, "mult": 1, "changes": {}, "ps_change": "" },
-        "sand": { "amount": 0, "value": 2, "mult": 1, "changes": {}, "ps_change": "" },
-        "glass": { "amount": 0, "value": 20, "mult": 1, "changes": {}, "ps_change": "" },
-        "water": { "amount": 0, "value": 2, "mult": 1, "changes": {}, "ps_change": "" },
-        "hydrogen": { "amount": 0, "value": 5, "mult": 1, "changes": {}, "ps_change": "" },
-        "steel_beam": { "amount": 0, "value": 200, "mult": 1, "changes": {}, "ps_change": "" },
-        "uranium": { "amount": 0, "value": 500, "mult": 1, "changes": {}, "ps_change": "" },
-        "sandcastle": { "amount": 0, "value": 10000000, "mult": 1, "changes": {}, "ps_change": "" },
-        "glass_bottle": { "amount": 0, "value": 25000, "mult": 1, "changes": {}, "ps_change": "" },
-        "mithril": { "amount": 0, "value": 3500, "mult": 1, "changes": {}, "ps_change": "" },
-        "void": { "amount": 0, "value": 100000, "mult": 1, "changes": {}, "ps_change": "" },
-    };
+    resources = (_a = {
+            "time": { "amount": 0, "value": -2, "mult": 1, "changes": {}, "ps_change": "" },
+            "refined_mana": { "amount": 0, "value": -1, "mult": 1, "changes": {}, "ps_change": "" },
+            "purified_mana": { "amount": 0, "value": -2500, "mult": 1, "changes": {}, "ps_change": "" },
+            "fuel": { "amount": 0, "value": -10000, "mult": 1, "changes": {}, "ps_change": "" },
+            "magic_bag": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" }
+        },
+        _a[OMEGA] = { "amount": 0, "value": -15000000, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["mana"] = { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["essence"] = { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["energy"] = { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["research"] = { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["manager"] = { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["sludge"] = { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["money"] = { "amount": 10, "value": 1, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["stone"] = { "amount": 0, "value": 0.5, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["wood"] = { "amount": 0, "value": 0.5, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["iron_ore"] = { "amount": 0, "value": 1, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["coal"] = { "amount": 0, "value": 1, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["iron"] = { "amount": 0, "value": 4, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["gold"] = { "amount": 0, "value": 50, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["diamond"] = { "amount": 0, "value": 75, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["jewelry"] = { "amount": 0, "value": 300, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["oil"] = { "amount": 0, "value": 2, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["paper"] = { "amount": 0, "value": 4, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["ink"] = { "amount": 0, "value": 10, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["book"] = { "amount": 0, "value": 400, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["sand"] = { "amount": 0, "value": 2, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["glass"] = { "amount": 0, "value": 20, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["water"] = { "amount": 0, "value": 2, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["hydrogen"] = { "amount": 0, "value": 5, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["steel_beam"] = { "amount": 0, "value": 200, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["uranium"] = { "amount": 0, "value": 5000, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["sandcastle"] = { "amount": 0, "value": 10000000, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["glass_bottle"] = { "amount": 0, "value": 25000, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["mithril"] = { "amount": 0, "value": 3500, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["void"] = { "amount": 0, "value": 100000, "mult": 1, "changes": {}, "ps_change": "" },
+        _a);
     /* Set resources_per_sec */
     Object.keys(resources).forEach(function (res) {
         resources_per_sec[res] = 0;
@@ -967,8 +970,8 @@ function set_initial_state() {
             },
             "generation": {},
             "multipliers": {
-                "iron": 0.1,
-                "iron_ore": 0.1,
+                "iron": 0.25,
+                "iron_ore": 0.25,
             },
             "free": 0,
             "flavor": "It's just a big magnet.",
@@ -981,9 +984,10 @@ function set_initial_state() {
             "generation": {
                 "energy": -1,
                 "book": -0.1,
+                "wood": 250,
             },
             "multipliers": {
-                "book": 0.15
+                "book": 0.25,
             },
             "free": 0,
             "flavor": "",
@@ -1131,26 +1135,27 @@ function set_initial_state() {
             "amount": 0,
             "base_cost": {},
             "price_ratio": {},
-            "generation": {
-                "time": -10,
-                "refined_mana": -100,
-                "purified_mana": -0.1,
-                "fuel": -25,
-                "mana": -500,
-                "energy": -250,
-                "research": -50,
-                "manager": -75,
-                "money": -5000,
-                "gold": -750,
-                "diamond": -1000,
-                "book": -250,
-                "water": -1000,
-                "uranium": -100,
-                "sandcastle": -1,
-                "mithril": -1,
-                "void": -1,
-                [OMEGA]: 1
-            },
+            "generation": (_b = {
+                    "time": -10,
+                    "refined_mana": -100,
+                    "purified_mana": -0.1,
+                    "fuel": -25,
+                    "mana": -500,
+                    "energy": -250,
+                    "research": -50,
+                    "manager": -75,
+                    "money": -5000,
+                    "gold": -750,
+                    "diamond": -1000,
+                    "book": -250,
+                    "water": -1000,
+                    "uranium": -100,
+                    "sandcastle": -1,
+                    "mithril": -1,
+                    "void": -1
+                },
+                _b[OMEGA] = 1,
+                _b),
             "multipliers": {
                 "stone": -0.5,
                 "wood": -0.5,
@@ -1167,7 +1172,7 @@ function set_initial_state() {
         "better_mines": {
             "unlock": function () { return buildings["mine"].amount >= 3; },
             "purchase": function () {
-                let mines_state = buildings["mine"].on;
+                var mines_state = buildings["mine"].on;
                 if (mines_state) {
                     toggle_building_state("mine");
                 }
@@ -1190,7 +1195,7 @@ function set_initial_state() {
         "better_logging": {
             "unlock": function () { return buildings["logging"].amount >= 3 && buildings["s_manastone"].amount >= 5; },
             "purchase": function () {
-                let build_state = buildings["logging"].on;
+                var build_state = buildings["logging"].on;
                 if (build_state) {
                     toggle_building_state("logging");
                 }
@@ -1241,7 +1246,7 @@ function set_initial_state() {
         "coal_mines": {
             "unlock": function () { return buildings["mine"].amount >= 3 && buildings["compressor"].amount >= 1 && (resources["coal"].amount < 50 || resources["research"].amount > 5); },
             "purchase": function () {
-                let mines_state = buildings["mine"].on;
+                var mines_state = buildings["mine"].on;
                 if (mines_state) {
                     toggle_building_state("mine");
                 }
@@ -1268,7 +1273,7 @@ function set_initial_state() {
         "better_compressors": {
             "unlock": function () { return buildings["compressor"].amount >= 1; },
             "purchase": function () {
-                let comp_state = buildings["compressor"].on;
+                var comp_state = buildings["compressor"].on;
                 if (comp_state) {
                     toggle_building_state("compressor");
                 }
@@ -1289,7 +1294,7 @@ function set_initial_state() {
         "oiled_compressors": {
             "unlock": function () { return buildings["compressor"].amount >= 1 && resources["oil"].amount > 20; },
             "purchase": function () {
-                let comp_state = buildings["compressor"].on;
+                var comp_state = buildings["compressor"].on;
                 if (comp_state) {
                     toggle_building_state("compressor");
                 }
@@ -1309,7 +1314,7 @@ function set_initial_state() {
         "better_oil": {
             "unlock": function () { return buildings["oil_well"].amount >= 1; },
             "purchase": function () {
-                let comp_state = buildings["oil_well"].on;
+                var comp_state = buildings["oil_well"].on;
                 if (comp_state) {
                     toggle_building_state("oil_well");
                 }
@@ -1329,7 +1334,7 @@ function set_initial_state() {
         "even_better_oil": {
             "unlock": function () { return purchased_upgrades.indexOf("better_oil") != -1; },
             "purchase": function () {
-                let comp_state = buildings["oil_well"].on;
+                var comp_state = buildings["oil_well"].on;
                 if (comp_state) {
                     toggle_building_state("oil_well");
                 }
@@ -1364,7 +1369,7 @@ function set_initial_state() {
         "better_paper": {
             "unlock": function () { return buildings["paper_mill"].amount >= 3; },
             "purchase": function () {
-                let comp_state = buildings["paper_mill"].on;
+                var comp_state = buildings["paper_mill"].on;
                 if (comp_state) {
                     toggle_building_state("paper_mill");
                 }
@@ -1387,7 +1392,7 @@ function set_initial_state() {
         "better_furnace": {
             "unlock": function () { return buildings["furnace"].amount >= 3; },
             "purchase": function () {
-                let comp_state = buildings["furnace"].on;
+                var comp_state = buildings["furnace"].on;
                 if (comp_state) {
                     toggle_building_state("furnace");
                 }
@@ -1413,7 +1418,7 @@ function set_initial_state() {
         "better_gold": {
             "unlock": function () { return buildings["gold_finder"].amount >= 3; },
             "purchase": function () {
-                let comp_state = buildings["gold_finder"].on;
+                var comp_state = buildings["gold_finder"].on;
                 if (comp_state) {
                     toggle_building_state("gold_finder");
                 }
@@ -1436,7 +1441,7 @@ function set_initial_state() {
         "better_hydrogen_engine": {
             "unlock": function () { return buildings["hydrogen_burner"].amount >= 1; },
             "purchase": function () {
-                let comp_state = buildings["hydrogen_burner"].on;
+                var comp_state = buildings["hydrogen_burner"].on;
                 if (comp_state) {
                     toggle_building_state("hydrogen_burner");
                 }
@@ -1460,7 +1465,7 @@ function set_initial_state() {
         "gold_crusher": {
             "unlock": function () { return buildings["gold_finder"].amount >= 5 && buildings["s_manastone"].amount >= 10; },
             "purchase": function () {
-                let comp_state = buildings["gold_finder"].on;
+                var comp_state = buildings["gold_finder"].on;
                 if (comp_state) {
                     toggle_building_state("gold_finder");
                 }
@@ -1483,7 +1488,7 @@ function set_initial_state() {
         "glass_furnace": {
             "unlock": function () { return buildings["furnace"].amount >= 2 && resources["sand"].amount >= 10 && purchased_upgrades.indexOf("better_furnace") != -1; },
             "purchase": function () {
-                let comp_state = buildings["furnace"].on;
+                var comp_state = buildings["furnace"].on;
                 if (comp_state) {
                     toggle_building_state("furnace");
                 }
@@ -1548,7 +1553,7 @@ function set_initial_state() {
         "better_jeweler": {
             "unlock": function () { return resources["sand"].amount > 0 && resources["paper"].amount > 0; },
             "purchase": function () {
-                let comp_state = buildings["jeweler"].on;
+                var comp_state = buildings["jeweler"].on;
                 if (comp_state) {
                     toggle_building_state("jeweler");
                 }
@@ -1571,7 +1576,7 @@ function set_initial_state() {
         "better_jewelry_store": {
             "unlock": function () { return resources["jewelry"].amount > 100 && resources["manager"].amount > 0; },
             "purchase": function () {
-                let comp_state = buildings["jewelry_store"].on;
+                var comp_state = buildings["jewelry_store"].on;
                 if (comp_state) {
                     toggle_building_state("jewelry_store");
                 }
@@ -1617,7 +1622,7 @@ function set_initial_state() {
         "better_time": {
             "unlock": function () { return buildings["s_time_magic"].on; },
             "purchase": function () {
-                let comp_state = buildings["s_time_magic"].on;
+                var comp_state = buildings["s_time_magic"].on;
                 if (comp_state) {
                     toggle_building_state("s_time_magic");
                 }
@@ -1650,7 +1655,7 @@ function set_initial_state() {
         "uranium_environment": {
             "unlock": function () { return typeof event_flags["bribed_politician"] != "undefined" && event_flags["bribed_politician"] == "environment" && buildings["s_manastone"].amount >= 200; },
             "purchase": function () {
-                let comp_state = buildings["big_mine"].on;
+                var comp_state = buildings["big_mine"].on;
                 if (comp_state) {
                     toggle_building_state("big_mine");
                 }
@@ -1770,7 +1775,7 @@ function set_initial_state() {
         "glass_bottles": {
             "unlock": function () { return buildings["glass_jeweler"].amount > 0 && adventure_data["science_level"] > 0; },
             "purchase": function () {
-                let comp_state = buildings["glass_jeweler"].on;
+                var comp_state = buildings["glass_jeweler"].on;
                 if (comp_state) {
                     toggle_building_state("glass_jeweler");
                 }
@@ -1800,7 +1805,7 @@ function set_initial_state() {
                 return buildings["bank"].generation["money"] <= 5 && event_flags["bribed_politician"] == "money";
             },
             "purchase": function () {
-                let comp_state = buildings["bank"].on;
+                var comp_state = buildings["bank"].on;
                 if (comp_state) {
                     toggle_building_state("bank");
                 }
@@ -1841,7 +1846,7 @@ function set_initial_state() {
             "purchase": function () {
                 event_flags["crisis_averted"] = true;
                 /* Fix banks. */
-                let comp_state = buildings["bank"].on;
+                var comp_state = buildings["bank"].on;
                 if (comp_state) {
                     toggle_building_state("bank");
                 }
@@ -1892,7 +1897,7 @@ function set_initial_state() {
                 event_flags["crisis_averted"] = true;
                 event_flags["sludge_level"] = -1;
                 /* Fix oil wells. */
-                let comp_state = buildings["oil_well"].on;
+                var comp_state = buildings["oil_well"].on;
                 if (comp_state) {
                     toggle_building_state("oil_well");
                 }
@@ -2018,7 +2023,7 @@ function set_initial_state() {
             "unlock": function () { return adventure_data["mana_purifier"] == undefined && event_flags["know_pts"] >= 10; },
             "purchase": function () {
                 adventure_data["mana_purifier"] = 1;
-                let build_state = buildings["mana_purifier"].on;
+                var build_state = buildings["mana_purifier"].on;
                 if (build_state) {
                     toggle_building_state("mana_purifier");
                 }
@@ -2058,7 +2063,7 @@ function set_initial_state() {
             "unlock": function () { return adventure_data["tower_floor"] > 7; },
             "purchase": function () {
                 /* Upgrade basic boosters */
-                let build_state = buildings["challenge_basic"].on;
+                var build_state = buildings["challenge_basic"].on;
                 if (build_state) {
                     toggle_building_state("challenge_basic");
                 }
@@ -2104,7 +2109,7 @@ function set_initial_state() {
             "unlock": function () { return adventure_data["tower_floor"] > 7; },
             "purchase": function () {
                 /* Upgrade */
-                let build_state = buildings["jewelry_store"].on;
+                var build_state = buildings["jewelry_store"].on;
                 if (build_state) {
                     toggle_building_state("jewelry_store");
                 }
@@ -2148,7 +2153,7 @@ function set_initial_state() {
                 return (total_time > 1000 * 60 * 5) && purchased_upgrades.indexOf("essence_ai") != -1;
             },
             "purchase": function () {
-                let build_state = buildings["s_ai"].on;
+                var build_state = buildings["s_ai"].on;
                 if (build_state) {
                     toggle_building_state("s_ai");
                 }
@@ -2170,7 +2175,7 @@ function set_initial_state() {
                 return (resources[OMEGA].amount > 0) && purchased_upgrades.indexOf("grow_cost") != -1;
             },
             "purchase": function () {
-                let build_state = buildings["s_ai"].on;
+                var build_state = buildings["s_ai"].on;
                 if (build_state) {
                     toggle_building_state("s_ai");
                 }
@@ -2198,7 +2203,7 @@ function set_initial_state() {
                 return adventure_data["tower_floor"] > 45 && purchased_upgrades.indexOf("ai_castle") != -1;
             },
             "purchase": function () {
-                let build_state = buildings["s_ai"].on;
+                var build_state = buildings["s_ai"].on;
                 if (build_state) {
                     toggle_building_state("s_ai");
                 }
@@ -2252,18 +2257,20 @@ function set_initial_state() {
     };
     event_flags = {};
     autobuild_amount = 0;
+    total_time = 0;
     $("#buy_amount").val(1);
 }
-let prestige = {
-    points: function (DEBUG = false) {
-        let prestige_points = 0;
-        let prestige_vals = [];
-        let prestige_names = [];
-        Object.keys(resources).forEach((res) => {
+var prestige = {
+    points: function (DEBUG) {
+        if (DEBUG === void 0) { DEBUG = false; }
+        var prestige_points = 0;
+        var prestige_vals = [];
+        var prestige_names = [];
+        Object.keys(resources).forEach(function (res) {
             if (isNaN(resources[res].amount)) {
                 resources[res].amount = 0;
             }
-            let res_amt = resources[res].amount - calculate_bag_amount(res);
+            var res_amt = resources[res].amount - calculate_bag_amount(res);
             prestige_points += res_amt * Math.abs(resources[res].value);
             if (res != "sandcastle" && res_amt > 0 && resources[res].value > 0) {
                 prestige_vals.push(res_amt * Math.abs(resources[res].value));
@@ -2290,13 +2297,13 @@ let prestige = {
                 var avg = sum / data.length;
                 return avg;
             }
-            let st_dev = standardDeviation(prestige_vals);
-            let sq_diff_vals = prestige_vals.map(function (value) {
+            var st_dev = standardDeviation(prestige_vals);
+            var sq_diff_vals = prestige_vals.map(function (value) {
                 var diff = value - average(prestige_vals);
                 var sqrDiff = diff * diff;
                 return Math.sqrt(sqrDiff);
             });
-            let largest_off = Math.max(...sq_diff_vals);
+            var largest_off = Math.max.apply(Math, sq_diff_vals);
             if (DEBUG) {
                 console.log("Prestige info: ");
                 console.log("Values: ", prestige_vals);
@@ -2306,7 +2313,7 @@ let prestige = {
             /* If close enough, multiply pp. */
             if (st_dev < 0.05 * prestige_points) {
                 /* Go from 5x to 1x, higher st_dev in relation to pp gives a lower value. */
-                let multiplier = 5 - 4 * st_dev / (0.05 * prestige_points);
+                var multiplier = 5 - 4 * st_dev / (0.05 * prestige_points);
                 if (multiplier > 1) {
                     prestige_points *= multiplier;
                 }
@@ -2327,18 +2334,19 @@ let prestige = {
         return prestige_points;
     },
     /* Calculate mana gain */
-    mana: function (round = true) {
-        let prestige_points = prestige.points();
-        let mana_this_prestige = event_flags["mage_quickmana"]; /* How much instant mana has given them. */
+    mana: function (round) {
+        if (round === void 0) { round = true; }
+        var prestige_points = prestige.points();
+        var mana_this_prestige = event_flags["mage_quickmana"]; /* How much instant mana has given them. */
         if (mana_this_prestige == undefined) {
             mana_this_prestige = 0;
         }
-        let mana = buildings["s_manastone"].amount - mana_this_prestige; /* Don't count mana gained this prestige in here. */
-        let first_wall = Math.pow(mana, 1.3) * 0.5;
-        if (isNaN(first_wall)) {
-            first_wall = 0;
+        var mana = buildings["s_manastone"].amount - mana_this_prestige; /* Don't count mana gained this prestige in here. */
+        if (mana < 0) {
+            mana = 0;
         }
-        let mana_gain = prestige_points / 15000 - first_wall; /* One for every 15k pp, and apply reduction based off of current mana */
+        var first_wall = Math.pow(mana, 1.3) * 0.5;
+        var mana_gain = prestige_points / 15000 - first_wall; /* One for every 15k pp, and apply reduction based off of current mana */
         mana_gain = Math.pow(Math.max(0, mana_gain), .36); /* Then raise to .36 power and apply some rounding/checking */
         mana_gain = mana_gain / (1 + Math.floor(mana / 50) * .5); /* Then divide gain by a number increasing every 50 mana. */
         if (mana_gain > 50) { /* If they're getting a ton, they get less*/
@@ -2350,7 +2358,7 @@ let prestige = {
                 event_flags["mage_quickmana"] = 0;
             }
             if (mana_gain >= 1) { /* Give some mana. */
-                let gained = Math.floor(mana_gain);
+                var gained = Math.floor(mana_gain);
                 event_flags["mage_quickmana"] += gained;
                 buildings["s_manastone"].amount += gained;
                 update_building_amount("s_manastone");
@@ -2386,22 +2394,24 @@ let prestige = {
             return Math.round(100 * (prestige.mana(false) - prestige.mana(true)));
         }
     },
-    run: function (ask = true, callback = function () { }) {
-        let mana_gain = prestige.mana();
-        let mana = buildings["s_manastone"].amount;
+    run: function (ask, callback) {
+        if (ask === void 0) { ask = true; }
+        if (callback === void 0) { callback = function () { }; }
+        if (adventure_data["challenge"] == CHALLENGES.LOAN) {
+            alert("You can't prestige in this challenge.");
+            return;
+        }
+        var mana_gain = prestige.mana();
+        var mana = buildings["s_manastone"].amount;
         /* If they have this skill, don't warn them they're prestiging for 0.  */
-        let has_quickmana = event_flags["skills"] != undefined && event_flags["skills"][8];
+        var has_quickmana = event_flags["skills"] != undefined && event_flags["skills"][8];
         if (mana_gain < 1 && ask && !has_quickmana) {
-            if (adventure_data["challenge"] == CHALLENGES.LOAN) {
-                alert("You can't prestige in this challenge.");
-                return;
-            }
             if (!confirm("Prestige now wouldn't produce mana! As you get more mana, it gets harder to make your first mana stone in a run. You are currently " + prestige.percent_through().toString() + "% of the way to your first mana. Prestige anyway?")) {
                 return;
             }
         }
         if (!ask || confirm("You will lose all resources and all buildings but gain " + mana_gain.toString() + " mana after reset. Proceed?")) {
-            let total_mana = buildings["s_manastone"].amount + mana_gain;
+            var total_mana = buildings["s_manastone"].amount + mana_gain;
             if (total_mana > adventure_data["max_mana"]) {
                 total_mana = adventure_data["max_mana"];
                 alert("Warning: Mana flux levels too high. Capping mana stones. ");
@@ -2411,13 +2421,13 @@ let prestige = {
             adventure_data.current_location = "home"; /* You have to prestige at home. */
             /* Open bags of holding. Iterate backwards so we don't skip bags. Only do this if we're not in a challenge. */
             if (!adventure_data["challenge"]) {
-                for (let i = adventure_data.inventory.length - 1; i >= 0; i--) {
+                for (var i = adventure_data.inventory.length - 1; i >= 0; i--) {
                     if (adventure_data.inventory[i].name == "bag" && adventure_data.inventory[i].resource != undefined) {
                         resources[adventure_data.inventory[i].resource].amount += adventure_data.inventory[i].amount;
                         adventure_data.inventory.splice(i, 1);
                     }
                 }
-                for (let i = adventure_data.warehouse.length - 1; i >= 0; i--) {
+                for (var i = adventure_data.warehouse.length - 1; i >= 0; i--) {
                     if (adventure_data.warehouse[i].name == "bag" && adventure_data.warehouse[i].resource != undefined) {
                         resources[adventure_data.warehouse[i].resource].amount += adventure_data.warehouse[i].amount;
                         adventure_data.warehouse.splice(i, 1);
@@ -2441,8 +2451,8 @@ let prestige = {
                 $("#prestige > span").first().html("Prestige&nbsp;(" + format_num(prestige.percent_through(), false) + "%)");
             }
         }
-        let suggested_amounts = [2, 5, 10, 27, 52, 92, 150, 200]; /* What mana amounts are good to prestige at. */
-        for (let i in suggested_amounts) {
+        var suggested_amounts = [2, 5, 10, 27, 52, 92, 150, 200]; /* What mana amounts are good to prestige at. */
+        for (var i in suggested_amounts) {
             if (suggested_amounts[i] > buildings["s_manastone"].amount) {
                 $("#prestige_suggest").html("Your next prestige goal is at " + format_num(suggested_amounts[i] - buildings["s_manastone"].amount, false) + " more mana.");
                 break;
@@ -2450,6 +2460,9 @@ let prestige = {
         }
     }
 };
+function clamp(val, min, max) {
+    return Math.min(Math.max(val, min), max);
+}
 function add_log_elem(to_add) {
     while ($("#log > span").length >= 10) { /* We want to remove the last element(s) to bring length to 9.*/
         $("#log > span").last().remove(); /* Remove last child. Repeat until no more. */
@@ -2474,8 +2487,9 @@ function save() {
     localStorage["autobuild"] = JSON.stringify(build_queue);
     localStorage["autobuild_amt"] = JSON.stringify(autobuild_amount);
     localStorage["autobuild_rpt"] = JSON.stringify(autobuild_repeat);
+    localStorage["prestige_time"] = JSON.stringify(total_time);
     $('#save_text').css('opacity', '1');
-    setTimeout(() => $('#save_text').css({ 'opacity': '0', 'transition': 'opacity 1s' }), 1000);
+    setTimeout(function () { return $('#save_text').css({ 'opacity': '0', 'transition': 'opacity 1s' }); }, 1000);
     console.log("Saved");
     add_log_elem("Saved!");
 }
@@ -2555,13 +2569,16 @@ function load() {
     if (localStorage.getItem("autobuild_rpt")) {
         autobuild_repeat = JSON.parse(localStorage.getItem("autobuild_rpt"));
     }
+    if (localStorage.getItem("prestige_time")) {
+        total_time = JSON.parse(localStorage.getItem("prestige_time"));
+    }
     console.log("Loading theme");
     if (!localStorage.getItem("theme")) {
         localStorage["theme"] = "dark"; /* Default dark theme. */
     }
     change_theme(localStorage.getItem("theme"));
     purchased_upgrades.forEach(function (upg) {
-        let upg_name = remaining_upgrades[upg].name;
+        var upg_name = remaining_upgrades[upg].name;
         if (remaining_upgrades[upg]["onload"] != undefined) {
             remaining_upgrades[upg]["onload"]();
         }
@@ -2601,8 +2618,8 @@ function save_to_clip() {
         }));
     }
     save();
-    let text = b64EncodeUnicode(JSON.stringify(localStorage));
-    let textArea = document.createElement("textarea");
+    var text = b64EncodeUnicode(JSON.stringify(localStorage));
+    var textArea = document.createElement("textarea");
     /* Styling to make sure it doesn't do much if the element gets rendered */
     /* Place in top-left corner of screen regardless of scroll position. */
     textArea.style.position = 'fixed';
@@ -2619,7 +2636,7 @@ function save_to_clip() {
     document.body.appendChild(textArea);
     textArea.select();
     try {
-        let successful = document.execCommand('copy');
+        var successful = document.execCommand('copy');
         if (successful) {
             alert("Save copied to clipboard.");
         }
@@ -2642,7 +2659,7 @@ function load_from_clip() {
             return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
         }).join(''));
     }
-    let loaded_data = b64DecodeUnicode(prompt("Paste your save data here."));
+    var loaded_data = b64DecodeUnicode(prompt("Paste your save data here."));
     try {
         loaded_data = JSON.parse(loaded_data);
         Object.keys(loaded_data).forEach(function (key) {
@@ -2653,7 +2670,7 @@ function load_from_clip() {
         /* Using old save probably */
         loaded_data.split(';').forEach(function (data) {
             try {
-                let split_data = data.replace(' ', '').split("=");
+                var split_data = data.replace(' ', '').split("=");
                 localStorage[split_data[0]] = split_data[1];
             }
             catch (e) {
@@ -2666,18 +2683,19 @@ function load_from_clip() {
 function resource_tooltip() {
     Object.keys(resources).forEach(function (res) {
         if (!$.isEmptyObject(resources[res].changes)) {
-            let changes = "";
+            var changes_1 = "";
             /* Iterate through all things changing, sorted by amount they provide. */
             Object.keys(resources[res].changes).sort(function (a, b) { return resources[res].changes[b] - resources[res].changes[a]; }).forEach(function (changer) {
                 if (resources[res].changes[changer] != 0) {
-                    changes += "<tr><td>" + changer + "</td><td>" + format_num(resources[res].changes[changer], true) + "</td></tr>";
+                    changes_1 += "<tr><td>" + changer + "</td><td>" + format_num(resources[res].changes[changer], true) + "</td></tr>";
                 }
             });
-            resources[res].ps_change = "<table class='change_track'>" + changes + "</table>";
+            resources[res].ps_change = "<table class='change_track'>" + changes_1 + "</table>";
         }
     });
 }
-function toggle_building_state(name, sudo = false) {
+function toggle_building_state(name, sudo) {
+    if (sudo === void 0) { sudo = false; }
     if (buildings[name].on) { /* Turn it off */
         /* A couple buildings shouldn't be turned off unless forced off. */
         if (name == "s_mana_refinery" || name == "s_essence") {
@@ -2747,14 +2765,19 @@ var last_update = Date.now();
 var total_time = 0;
 function update() {
     /* Find time since last update. */
-    let delta_time = Date.now() - last_update;
+    var delta_time = Date.now() - last_update;
     last_update = Date.now();
+    total_time += delta_time; /* Track total time since prestige. */
+    /* They're forced to prestige. RIP. */
+    if (adventure_data["challenge"] == CHALLENGES.FORCED_PRESTIGE && total_time > 15 * 60000) {
+        prestige.run(false);
+    }
     if (delta_time > 15000) { /* More than 15 sec between tics and it's offline gen time. */
         resources["time"].amount += delta_time / 1000; /* 1 sec of production, rest goes to time. */
         /* This is where offline events go. We say we get 1 every 30 minutes. */
         if (event_flags["skills"] && event_flags["skills"][2]) {
             /* Cap at 20 events.*/
-            let num_events = Math.min(20, Math.round(delta_time / (60000 * 30)));
+            var num_events = Math.min(20, Math.round(delta_time / (60000 * 30)));
             /* while num_events goes to 0. */
             while (num_events-- > 0) {
                 $("#events").addClass("hidden"); /* Hide it for next event. */
@@ -2775,7 +2798,7 @@ function update() {
             resources["time"].amount -= 10;
             /* They bought a boost! Use time on a percent base.*/
             if (purchased_upgrades.indexOf("time_use_boost") != -1) {
-                let amt = resources["time"].amount * 0.01;
+                var amt = resources["time"].amount * 0.01;
                 if (amt > Math.pow(buildings["s_manastone"].amount, 2) * 0.01) {
                     amt = Math.pow(buildings["s_manastone"].amount, 2) * 0.01;
                 }
@@ -2783,7 +2806,7 @@ function update() {
                 resources["time"].amount -= amt;
             }
         }
-        if (adventure_data["challenge"] == CHALLENGES.METEORS) {
+        if (adventure_data["challenge"] == CHALLENGES.METEORS || adventure_data["challenge"] == CHALLENGES.UDM) {
             time_to_meteor++;
             if (time_to_meteor >= 6) {
                 time_to_meteor = 0;
@@ -2798,7 +2821,6 @@ function update() {
         run_rules();
         run_autobuild();
     }
-    total_time += delta_time; /* Track total time since refresh */
     /* Check for negative resources or resources that will run out. */
     Object.keys(resources).forEach(function (res) {
         if (isNaN(resources[res].amount)) {
@@ -2811,7 +2833,7 @@ function update() {
         else {
             $("#" + res).addClass("hidden");
         }
-        let time = delta_time;
+        var time = delta_time;
         /* These don't normally run out. */
         if (resources[res].value == 0) {
             time = 0;
@@ -2861,7 +2883,7 @@ function update() {
         $("#" + key + "_per_sec").text((resources_per_sec[key] > 0 ? "+" : "") + format_num(resources_per_sec[key]) + "/s");
         /* Display multiplier if positive RPS and mult not 1 (approx) */
         if (resources_per_sec[key] > 0 && Math.abs(resources[key].mult - 1) > 0.001) {
-            let color = resources[key].mult > 1 ? "green" : "red";
+            var color = resources[key].mult > 1 ? "green" : "red";
             $("#" + key + "_per_sec").append(" <span style='color:" + color + "'>(x" + format_num(resources[key].mult) + ")</span>");
         }
         /* Add tooltip */
@@ -2894,8 +2916,8 @@ function update() {
             $("#" + key + "_per_sec").text("");
         }
     });
-    if (adventure_data["challenge"] == CHALLENGES.POVERTY) {
-        const MULT = 20;
+    if (adventure_data["challenge"] == CHALLENGES.POVERTY || adventure_data["challenge"] == CHALLENGES.UDM) {
+        var MULT = 20;
         if (resources["money"].amount > 30 && resources["money"].amount > resources_per_sec["money"] * resources["money"].mult * MULT) {
             resources["money"].amount = Math.max(30, resources_per_sec["money"] * resources["money"].mult * MULT);
             $("#money span").first().html("Money: " + format_num(resources["money"].amount, false));
@@ -2908,26 +2930,26 @@ function update_upgrade_list() {
     /* Loop through all remaining upgrades */
     Object.keys(remaining_upgrades).forEach(function (upg_name) {
         /* No upgrades visible in no upgrade challenge. */
-        if (adventure_data["challenge"] == CHALLENGES.NO_UPGRADE) {
+        if (adventure_data["challenge"] == CHALLENGES.NO_UPGRADE || adventure_data["challenge"] == CHALLENGES.UDM) {
             $("#upgrade_" + upg_name).addClass("hidden");
             return;
         }
         if (remaining_upgrades[upg_name].unlock()) {
             $("#upgrade_" + upg_name).removeClass("hidden");
-            let color = ""; /* Set color to lightgray or red depending on if they can afford it */
+            var color_1 = ""; /* Set color to lightgray or red depending on if they can afford it */
             Object.keys(remaining_upgrades[upg_name].cost).forEach(function (res) {
                 if (resources[res].amount < remaining_upgrades[upg_name].cost[res]) {
-                    color = "red";
+                    color_1 = "red";
                 }
             });
-            $("#upgrade_" + upg_name).css("color", color);
+            $("#upgrade_" + upg_name).css("color", color_1);
             /* Refresh tooltip */
-            let tooltip = remaining_upgrades[upg_name].tooltip;
-            let reg_costs = [];
-            let req_costs = [];
+            var tooltip = remaining_upgrades[upg_name].tooltip;
+            var reg_costs_1 = [];
+            var req_costs_1 = [];
             Object.keys(remaining_upgrades[upg_name].cost).forEach(function (res) {
                 if (resources[res].value) {
-                    let cost = "";
+                    var cost = "";
                     if (resources[res].amount < remaining_upgrades[upg_name].cost[res]) {
                         cost += "<span style='color: red'>";
                     }
@@ -2935,10 +2957,10 @@ function update_upgrade_list() {
                         cost += "<span class='fgc'>";
                     }
                     cost += format_num(remaining_upgrades[upg_name].cost[res], true) + " " + res.replace("_", " ") + "</span>";
-                    reg_costs.push(cost);
+                    reg_costs_1.push(cost);
                 }
                 else {
-                    let cost = "";
+                    var cost = "";
                     if (resources[res].amount < remaining_upgrades[upg_name].cost[res]) {
                         cost += "<span style='color: red'>";
                     }
@@ -2946,14 +2968,14 @@ function update_upgrade_list() {
                         cost += "<span class='fgc'>";
                     }
                     cost += "Requires " + format_num(remaining_upgrades[upg_name].cost[res], true) + " " + res.replace("_", " ") + "</span>";
-                    req_costs.push(cost);
+                    req_costs_1.push(cost);
                 }
             });
-            if (reg_costs.length && upg_name != "trade") {
-                tooltip += "<br />Costs " + reg_costs.join(", ");
+            if (reg_costs_1.length && upg_name != "trade") {
+                tooltip += "<br />Costs " + reg_costs_1.join(", ");
             }
-            if (req_costs.length) {
-                tooltip += "<br />" + req_costs.join("<br />");
+            if (req_costs_1.length) {
+                tooltip += "<br />" + req_costs_1.join("<br />");
             }
             $("#upgrade_" + upg_name + " .tooltiptext").html(tooltip);
         }
@@ -2969,12 +2991,12 @@ function update_total_upgrades(name) {
     $("#purchased_upgrades").append("<br />" + name.replace("<br />", ""));
 }
 function gen_building_tooltip(name) {
-    let amount = parseInt($("#buy_amount").val());
+    var amount = parseInt($("#buy_amount").val());
     if (isNaN(amount)) {
         amount = 1;
     }
-    let tooltip = "";
-    let gen_text = "";
+    var tooltip = "";
+    var gen_text = "";
     /* Add resource gen, update how much each one generates. */
     Object.keys(buildings[name].generation).forEach(function (key) {
         if (resources[key].value) { /* Add X per second for regular resources */
@@ -2987,18 +3009,18 @@ function gen_building_tooltip(name) {
     if (gen_text) {
         tooltip += "Generates " + gen_text.trim().replace(/.$/, ".") + "<br />";
     }
-    let mults = [];
+    var mults = [];
     Object.keys(buildings[name].multipliers).forEach(function (key) {
         mults.push("" + format_num(buildings[name].multipliers[key] * 100) + "% bonus to " + key.replace(/\_/g, " "));
     });
-    let mult_str = "<span style='color: goldenrod'>Gives a " + mults.join(", a ") + ".</span>";
+    var mult_str = "<span style='color: goldenrod'>Gives a " + mults.join(", a ") + ".</span>";
     if (mults.length) {
         tooltip += mult_str + "<br />";
     }
-    let cost_text = "Costs ";
+    var cost_text = "Costs ";
     Object.keys(buildings[name].base_cost).forEach(function (key) {
         /* Total cost for a buy all. Uses a nice summation formula. */
-        let cost = buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount - buildings[name].free) * (1 - Math.pow(buildings[name].price_ratio[key], amount)) / (1 - buildings[name].price_ratio[key]);
+        var cost = buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount - buildings[name].free) * (1 - Math.pow(buildings[name].price_ratio[key], amount)) / (1 - buildings[name].price_ratio[key]);
         if (Math.pow(buildings[name].price_ratio[key], buildings[name].amount + amount - 1 - buildings[name].free) == Infinity && !isNaN(cost)) {
             cost = Infinity;
         }
@@ -3017,7 +3039,7 @@ function gen_building_tooltip(name) {
         cost_text = "Unbuyable,";
     } /* Free buildings don't have a cost. */
     tooltip += cost_text.trim().replace(/.$/, ".");
-    let flavor_text = "<hr><i style='font-size: small'>" + buildings[name].flavor + "</i>";
+    var flavor_text = "<hr><i style='font-size: small'>" + buildings[name].flavor + "</i>";
     if (buildings[name].flavor == undefined || buildings[name].flavor == "") {
         flavor_text = "";
     }
@@ -3027,10 +3049,11 @@ function gen_building_tooltip(name) {
 function update_building_amount(name) {
     $('#building_' + name + " > .building_amount").html(format_num(buildings[name].amount, false));
 }
-function purchase_building(name, amt = null) {
+function purchase_building(name, amt) {
+    if (amt === void 0) { amt = null; }
     /* Sometimes we're calling this to update amount shown, so make sure we do so. */
     update_building_amount(name);
-    let amount = amt;
+    var amount = amt;
     if (amount == null) {
         amount = parseInt($("#buy_amount").val());
     }
@@ -3047,7 +3070,7 @@ function purchase_building(name, amt = null) {
     /* Make sure they have enough to buy it */
     Object.keys(buildings[name].base_cost).forEach(function (key) {
         console.log("Checking money");
-        let cost = buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount - buildings[name].free) * (1 - Math.pow(buildings[name].price_ratio[key], amount)) / (1 - buildings[name].price_ratio[key]);
+        var cost = buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount - buildings[name].free) * (1 - Math.pow(buildings[name].price_ratio[key], amount)) / (1 - buildings[name].price_ratio[key]);
         /* Make it so they can't buy above what they should be able to get. */
         if (Math.pow(buildings[name].price_ratio[key], buildings[name].amount + amount - 1 - buildings[name].free) == Infinity && !isNaN(cost)) {
             cost = Infinity;
@@ -3068,11 +3091,11 @@ function purchase_building(name, amt = null) {
     /* Spend money to buy */
     Object.keys(buildings[name].base_cost).forEach(function (key) {
         console.log("Spending money");
-        let cost = buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount - buildings[name].free) * (1 - Math.pow(buildings[name].price_ratio[key], amount)) / (1 - buildings[name].price_ratio[key]);
+        var cost = buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount - buildings[name].free) * (1 - Math.pow(buildings[name].price_ratio[key], amount)) / (1 - buildings[name].price_ratio[key]);
         resources[key].amount -= cost;
     });
     /* Turn off, add building, turn back on. */
-    let build_state = buildings[name].on;
+    var build_state = buildings[name].on;
     if (build_state) {
         toggle_building_state(name);
     }
@@ -3083,13 +3106,13 @@ function purchase_building(name, amt = null) {
     update_building_amount(name);
     /* Update purchasable/not color */
     try {
-        let amount = parseInt($("#buy_amount").val());
-        if (isNaN(amount)) {
-            amount = 1;
+        var amount_1 = parseInt($("#buy_amount").val());
+        if (isNaN(amount_1)) {
+            amount_1 = 1;
         }
         Object.keys(buildings[name].base_cost).forEach(function (key) {
-            let cost = buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount - buildings[name].free) * (1 - Math.pow(buildings[name].price_ratio[key], amount)) / (1 - buildings[name].price_ratio[key]);
-            if (Math.pow(buildings[name].price_ratio[key], buildings[name].amount + amount - 1 - buildings[name].free) == Infinity) {
+            var cost = buildings[name].base_cost[key] * Math.pow(buildings[name].price_ratio[key], buildings[name].amount - buildings[name].free) * (1 - Math.pow(buildings[name].price_ratio[key], amount_1)) / (1 - buildings[name].price_ratio[key]);
+            if (Math.pow(buildings[name].price_ratio[key], buildings[name].amount + amount_1 - 1 - buildings[name].free) == Infinity) {
                 cost = Infinity;
             }
             if (cost > resources[key].amount) {
@@ -3112,14 +3135,15 @@ function purchase_building(name, amt = null) {
         });
     }
 }
-function destroy_building(name, amount = null) {
+function destroy_building(name, amount) {
+    if (amount === void 0) { amount = null; }
     if (amount == null) {
         amount = parseInt($("#buy_amount").val());
     }
     if (isNaN(amount)) {
         amount = 1;
     }
-    for (let i = 0; i < amount; i++) {
+    for (var i = 0; i < amount; i++) {
         if (buildings[name].amount <= 1) {
             add_log_elem("You can't destroy your last building.");
             return; /* Can't sell last building */
@@ -3129,7 +3153,7 @@ function destroy_building(name, amount = null) {
             return;
         }
         /* Remove resource gen */
-        let build_state = buildings[name].on;
+        var build_state = buildings[name].on;
         if (build_state) {
             toggle_building_state(name);
         }
@@ -3155,10 +3179,10 @@ function destroy_building(name, amount = null) {
 }
 function purchase_upgrade(name) {
     /* Can't buy upgrades in no upgrade challenge. */
-    if (adventure_data["challenge"] == CHALLENGES.NO_UPGRADE) {
+    if (adventure_data["challenge"] == CHALLENGES.NO_UPGRADE || adventure_data["challenge"] == CHALLENGES.UDM) {
         return;
     }
-    let upg = remaining_upgrades[name];
+    var upg = remaining_upgrades[name];
     /* Check that they have enough */
     Object.keys(upg.cost).forEach(function (resource) {
         if (resources[resource].amount < upg.cost[resource]) { /* Don't have enough to buy upgrade */
@@ -3174,7 +3198,7 @@ function purchase_upgrade(name) {
     upg.purchase();
     if (!upg.repeats) {
         purchased_upgrades.push(name);
-        let upg_name = remaining_upgrades[name].name;
+        var upg_name = remaining_upgrades[name].name;
         delete remaining_upgrades[name];
         update_total_upgrades(upg_name);
         $("#upgrade_" + name).remove();
@@ -3186,10 +3210,10 @@ function purchase_upgrade(name) {
 function calculate_bag_amount(res) {
     if (adventure_data["perm_resources"] == undefined || adventure_data["perm_resources"][res] == undefined || resources[res].value >= adventure_data["max_bag_value"])
         return 0;
-    if (res == "money" && adventure_data["challenge"] == CHALLENGES.POVERTY) {
+    if (res == "money" && (adventure_data["challenge"] == CHALLENGES.POVERTY || adventure_data["challenge"] == CHALLENGES.UDM)) {
         return 0;
     }
-    let res_gain = adventure_data["perm_resources"][res];
+    var res_gain = adventure_data["perm_resources"][res];
     if (resources[res].value > 0) {
         res_gain = Math.pow(adventure_data["perm_resources"][res], 2 / 3);
     }
@@ -3207,7 +3231,7 @@ function calculate_bag_amount(res) {
     return res_gain;
 }
 function random_title() {
-    const TITLES = [
+    var TITLES = [
         "CrappyIdle v.π²",
         "Drink Your Ovaltine!",
         "(!) Not Responding (I lied)",
@@ -3231,11 +3255,14 @@ function random_title() {
         "Now playing: Kittens Game",
         "Now playing: Sandcastle Builder",
         "Now playing: Sharks game",
+        "Have you tried eating it?",
+        "New Update: Additional Pain",
+        "Tower OP, getting removed next update.",
     ];
-    document.title = TITLES.filter(item => item !== document.title)[Math.floor(Math.random() * (TITLES.length - 1))];
+    document.title = TITLES.filter(function (item) { return item !== document.title; })[Math.floor(Math.random() * (TITLES.length - 1))];
 }
 function change_theme(new_theme) {
-    let themes = {
+    var themes = {
         "light": ".bgc {background-color: white;}.fgc {color: black;}.bgc_second {background-color: #CCC;}",
         "dark": ".bgc {background-color: black;}.fgc {color: lightgray;}.bgc_second {background-color: #333;}",
         "halloween": ".bgc {background-color: black;}.fgc {color: darkorange;}.bgc_second {background-color: purple;}",
@@ -3256,7 +3283,7 @@ function change_theme(new_theme) {
          ",
         "darkpurple": ".bgc {background-color: #130013;}.fgc {color: #937e89;}.bgc_second {background-color: #332533;}",
     };
-    let theme_music = {
+    var theme_music = {
         "light": "",
         "dark": "",
         "halloween": "84jesbGuGzo",
@@ -3290,7 +3317,7 @@ function change_theme(new_theme) {
 /**
  * Maps Grouping name => buildings affected.
  */
-let groupings = {};
+var groupings = {};
 function setup_groups() {
     /* Add all on/off */
     groupings["All"] = Object.keys(buildings);
@@ -3321,7 +3348,7 @@ function setup_groups() {
         }
         $("#group_names tr").last().append("<td><span class='clickable' style='background-color: green;'>On</span></td>");
         $("#group_names span").last().click(function () {
-            let failed = false;
+            var failed = false;
             groupings[grouping].forEach(function (build) {
                 /* Turn them all on. Note if we failed. */
                 if (!buildings[build].on && toggle_building_state(build)) {
@@ -3344,7 +3371,7 @@ function setup_groups() {
     });
     $("#group_names").append("<span class='clickable' style='position: relative; left: 6em;'>+</span>");
     $("#group_names > span").last().click(function () {
-        let group_name = prompt("What will you name your group?").trim();
+        var group_name = prompt("What will you name your group?").trim();
         /* New group and has a name */
         if (group_name && groupings[group_name] == undefined) {
             if (groupings[group_name] == undefined) {
@@ -3372,9 +3399,9 @@ function draw_group(name) {
     Object.keys(buildings).forEach(function (build) {
         if (["s_manastone", "s_mana_refinery", "s_essence", "s_final"].indexOf(build) == -1 && !$("#building_" + build).parent().hasClass("hidden")) {
             /* Get the name */
-            let b_name = $("#building_" + build + " .building_name").text();
+            var b_name = $("#building_" + build + " .building_name").text();
             /* Get the color. Red if not in the grouping, green if it is. */
-            let color = groupings[name].indexOf(build) == -1 ? "red" : "green";
+            var color = groupings[name].indexOf(build) == -1 ? "red" : "green";
             /* Add the element */
             $("#group_data").append("<span class='clickable' style='color:" + color + "'>" + b_name + "</span><br/>");
             /* Add the onclick handler to add/remove it from the group. */
@@ -3391,7 +3418,7 @@ function draw_group(name) {
         }
     });
 }
-let rules = {};
+var rules = {};
 function setup_rules() {
     /* Clear group name box*/
     $("#rule_names").html("<table></table>");
@@ -3430,7 +3457,7 @@ function setup_rules() {
     });
     $("#rule_names").append("<span class='clickable' style='position: relative; left: 6em;'>+</span>");
     $("#rule_names > span").last().click(function () {
-        let rule_name = prompt("What will you name your rule?").trim();
+        var rule_name = prompt("What will you name your rule?").trim();
         /* New rule and has a name */
         if (rule_name && rules[rule_name] == undefined) {
             if (rules[rule_name] == undefined) {
@@ -3484,7 +3511,7 @@ function draw_rule(name) {
         }
     });
     /* Show if pending edits exist */
-    $("#rule_data > select, input").change(() => $("#rule_data > span").last().css("background-color", "red"));
+    $("#rule_data > select, input").change(function () { return $("#rule_data > span").last().css("background-color", "red"); });
     /* Save it. */
     $("#rule_data > span").last().click(function () {
         rules[name] = {
@@ -3508,14 +3535,14 @@ function draw_rule(name) {
     $("#fail_group_select").val(rules[name]["fail_group"]);
     $("#fail_on_off").val(rules[name]["fail_on_off"]);
 }
-let erules = [];
+var erules = [];
 function draw_erule() {
     $("#rule_data").html("Note: Titles are matched using <a href='https://www.regular-expressions.info/tutorial.html' target='_blank' class='fgc'>regular expressions.</a><br />");
-    erules = erules.filter(rule => rule[0] != "" || rule[1] != "");
+    erules = erules.filter(function (rule) { return rule[0] != "" || rule[1] != ""; });
     erules.push(["", ""]);
-    let i = 0;
+    var i = 0;
     erules.forEach(function (rule) {
-        let index = i;
+        var index = i;
         $("#rule_data").append("<span id='rule_" + i.toString() + "'>Events with title <input type='text' class='fgc bgc_second'></input> will choose option number <input type='number' class='fgc bgc_second'></input></span><br />");
         $("#rule_data #rule_" + i.toString() + " input").first().change(function (e) {
             rule[0] = $(this).val();
@@ -3534,22 +3561,22 @@ function draw_erule() {
 }
 function run_rules() {
     Object.keys(rules).forEach(function (rname) {
-        let rule = rules[rname];
+        var rule = rules[rname];
         if (rule["active"]) { /* It's turned on, so we need to run it. */
             /* Check the condition. Set up a dict of funcs so we can easily compare. */
-            const compares = { "<": (a, b) => a < b, ">": (a, b) => a > b };
+            var compares = { "<": function (a, b) { return a < b; }, ">": function (a, b) { return a > b; } };
             /* Check if the rule turns out to match. So if the proper comparison with the actual resource (need to get _s back) succeeds...*/
             if (compares[rule["res_comp"]](resources[rule["resource"].replace(/\s/g, "_")].amount, rule["res_amt"])) {
                 /* Now we attempt to turn the grouping on/off */
                 if (rule["on_off"] == "on") {
-                    let failed = false;
+                    var failed_1 = false;
                     groupings[rule["main_group"]].forEach(function (build) {
                         /* Turn them all on. Note if we failed. */
                         if (!buildings[build].on && toggle_building_state(build)) {
-                            failed = true;
+                            failed_1 = true;
                         }
                     });
-                    if (failed) {
+                    if (failed_1) {
                         groupings[rule["fail_group"]].forEach(function (build) {
                             /* Turn them all on/off. */
                             if (buildings[build].on) {
@@ -3575,11 +3602,11 @@ function run_rules() {
         }
     });
 }
-let build_queue = [];
-let autobuild_amount = 0;
-let autobuild_repeat = false;
+var build_queue = [];
+var autobuild_amount = 0;
+var autobuild_repeat = false;
 function draw_autobuild() {
-    let autobuild_slots = 10;
+    var autobuild_slots = 10;
     if ((adventure_data["tower_floor"] > 25) || adventure_data["tower_ascension"]) {
         autobuild_slots += 10;
     }
@@ -3599,9 +3626,9 @@ function draw_autobuild() {
             draw_autobuild();
         });
     }
-    for (let i = 0; i < build_queue.length; i++) {
-        let b_name = $("#building_" + build_queue[i] + " .building_name").text();
-        let color = i >= autobuild_amount ? "" : "green";
+    var _loop_1 = function (i) {
+        var b_name = $("#building_" + build_queue[i] + " .building_name").text();
+        var color = i >= autobuild_amount ? "" : "green";
         if (i == build_queue.length - 1 && autobuild_repeat) {
             color = "yellow";
         }
@@ -3613,13 +3640,16 @@ function draw_autobuild() {
             }
             draw_autobuild(); /* Refresh view */
         });
+    };
+    for (var i = 0; i < build_queue.length; i++) {
+        _loop_1(i);
     }
     if (build_queue.length < autobuild_slots) {
         $("#autobuild_items").append("Add a building to the queue: ");
         Object.keys(buildings).forEach(function (build) {
             /* For each building, if it's visible, not a mana building, and actually buildable (non empty build cost) let them add it. */
             if (!$("#building_" + build).parent().hasClass("hidden") && SPELL_BUILDINGS.indexOf(build) == -1 && !$.isEmptyObject(buildings[build].base_cost)) {
-                let b_name = $("#building_" + build + " .building_name").text();
+                var b_name = $("#building_" + build + " .building_name").text();
                 $("#autobuild_items").append("<span class='clickable'>" + b_name + "</span>");
                 $("#autobuild_items span").last().click(function () {
                     build_queue.push(build);
@@ -3632,7 +3662,7 @@ function draw_autobuild() {
 function run_autobuild() {
     /* We have a building queued and not built */
     if (build_queue.length > autobuild_amount) {
-        let to_build = build_queue[autobuild_amount];
+        var to_build = build_queue[autobuild_amount];
         if (!$("#building_" + to_build).parent().hasClass("hidden") && SPELL_BUILDINGS.indexOf(to_build) == -1) { /* Building must be visible to build it. */
             try {
                 purchase_building(to_build, 1); /* Attempt to build it. */
@@ -3676,9 +3706,9 @@ function perm_bag() {
     $("#events_content").append("<table></table>");
     Object.keys(resources).forEach(function (res) {
         if (resources[res].value > 0 && resources[res].value <= adventure_data["max_bag_value"] && (resources[res].amount > 0 || adventure_data["perm_resources"][res])) { /* We only can store resources with > 0 value. Also only show resources the player knows about. */
-            let rname = (res.charAt(0).toUpperCase() + res.slice(1)).replace("_", " ");
+            var rname = (res.charAt(0).toUpperCase() + res.slice(1)).replace("_", " ");
             if (adventure_data["perm_resources"][res] != undefined) { /* This is unlocked for storage*/
-                let res_on_p = calculate_bag_amount(res);
+                var res_on_p = calculate_bag_amount(res);
                 $("#events_content table").append("<tr><td>" + rname + "</td><td>Current Stored: " + format_num(adventure_data["perm_resources"][res], true) + "</td><td>Gained on Prestige: " + format_num(res_on_p, true) + "</td><td><span class='clickable'>Deposit</span> all into bag. </td></tr>");
                 $("#events_content span").last().click(function () {
                     adventure_data["perm_resources"][res] += resources[res].amount;
@@ -3700,7 +3730,7 @@ function perm_bag() {
     });
     $("#events").removeClass("hidden");
 }
-let update_handler = 0;
+var update_handler = 0;
 function change_update() {
     clearInterval(update_handler);
     if (localStorage["update_interval"] != 100) {
@@ -3747,7 +3777,7 @@ function toggle_confirms() {
         $("#update_confirms").html("Confirms Enabled");
     }
 }
-window.onload = () => {
+window.onload = function () {
     set_initial_state();
     load();
     if (localStorage["update_interval"] == undefined)
@@ -3782,7 +3812,7 @@ window.onload = () => {
     /* Add upgrades to be unhidden*/
     /* Loop through all remaining upgrades */
     Object.keys(remaining_upgrades).forEach(function (upg_name) {
-        let upg_elem = "<li id='upgrade_" + upg_name + "' class='upgrade tooltip fgc bgc_second' onclick=\"purchase_upgrade('" + upg_name + "')\" style='text-align: center;'><span>" + remaining_upgrades[upg_name].name + "<br />";
+        var upg_elem = "<li id='upgrade_" + upg_name + "' class='upgrade tooltip fgc bgc_second' onclick=\"purchase_upgrade('" + upg_name + "')\" style='text-align: center;'><span>" + remaining_upgrades[upg_name].name + "<br />";
         /* Stops error message spamming in the console if an unlocked upgrade has no image. */
         if (remaining_upgrades[upg_name].image) {
             upg_elem += "<img src='images/" + remaining_upgrades[upg_name].image + "' alt='' style='width: 3em; height: 3em; float: bottom;' />";
@@ -3818,30 +3848,30 @@ window.onload = () => {
             });
         }
         /* What building each mana gives. */
-        let start_buildings = ["bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "furnace", "gold_finder", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "compressor", "", "", "", "", "oil_well", "bank", "bank", "bank", "bank", "oil_well", "", "", "", "", "library", "library", "library", "library", "library", "library", "bank", "bank", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "", "", "", "", "oil_engine", "solar_panel", "solar_panel", "solar_panel", "solar_panel", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "", "", "", "", "skyscraper", "bank", "skyscraper", "bank", "skyscraper", "bank", "skyscraper", "bank", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "furnace", "gold_finder", "compressor", "paper_mill", "ink_refinery", "paper_mill"];
+        var start_buildings = ["bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "furnace", "gold_finder", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "compressor", "", "", "", "", "oil_well", "bank", "bank", "bank", "bank", "oil_well", "", "", "", "", "library", "library", "library", "library", "library", "library", "bank", "bank", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "", "", "", "", "oil_engine", "solar_panel", "solar_panel", "solar_panel", "solar_panel", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "", "", "", "", "skyscraper", "bank", "skyscraper", "bank", "skyscraper", "bank", "skyscraper", "bank", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "bank", "mine", "bank", "logging", "furnace", "gold_finder", "compressor", "paper_mill", "ink_refinery", "paper_mill"];
         /* Add more start buildings if they completed basic challenge. */
         if (adventure_data["challenges_completed"] && adventure_data["challenges_completed"][CHALLENGES.BASIC]) {
-            let extra_mana = buildings["s_manastone"].amount - 100; /* How much mana over the 100 they are. */
+            var extra_mana = buildings["s_manastone"].amount - 100; /* How much mana over the 100 they are. */
             if (Math.pow(extra_mana / 10, 0.5) >= 1) { /* They get one at 10 extra, then 40 extra, then 90... */
-                let extra_basics = Math.min(25, Math.floor(Math.pow(extra_mana / 10, 0.5))); /* How many they're getting. Cap at 25 to not make the start list way too long. */
+                var extra_basics = Math.min(25, Math.floor(Math.pow(extra_mana / 10, 0.5))); /* How many they're getting. Cap at 25 to not make the start list way too long. */
                 start_buildings = start_buildings.concat(Array(extra_basics).fill("challenge_basic")); /* Add that many to the list. These all get added because each takes much more than 1 mana to get, so we'll definitely loop through it. */
             }
             if (Math.pow(extra_mana / 50, 0.5) >= 1) { /* Quadratic again, but * 50 instead of 10 */
-                let extra_basics = Math.min(25, Math.floor(Math.pow(extra_mana / 50, 0.5))); /* How many they're getting. Cap at 25 to not make the start list way too long. */
+                var extra_basics = Math.min(25, Math.floor(Math.pow(extra_mana / 50, 0.5))); /* How many they're getting. Cap at 25 to not make the start list way too long. */
                 start_buildings = start_buildings.concat(Array(extra_basics).fill("challenge_medium")); /* Add that many to the list. These all get added because each takes much more than 1 mana to get, so we'll definitely loop through it. */
             }
             if (Math.pow(extra_mana / 100, 0.5) >= 1) { /* And finally the hundreds. Is this too hard to get? Maybe. */
-                let extra_basics = Math.min(25, Math.floor(Math.pow(extra_mana / 100, 0.5))); /* How many they're getting. Cap at 25 to not make the start list way too long. */
+                var extra_basics = Math.min(25, Math.floor(Math.pow(extra_mana / 100, 0.5))); /* How many they're getting. Cap at 25 to not make the start list way too long. */
                 start_buildings = start_buildings.concat(Array(extra_basics).fill("challenge_advanced")); /* Add that many to the list. These all get added because each takes much more than 1 mana to get, so we'll definitely loop through it. */
             }
         }
         /* Only go as much as they have mana for or we boosts exist for. */
-        for (let i = 0; i < Math.min(buildings["s_manastone"].amount, start_buildings.length); i++) {
-            let bname = start_buildings[i];
+        for (var i = 0; i < Math.min(buildings["s_manastone"].amount, start_buildings.length); i++) {
+            var bname = start_buildings[i];
             if (bname == "") {
                 continue;
             }
-            let comp_state = buildings[bname].on;
+            var comp_state = buildings[bname].on;
             if (comp_state) {
                 toggle_building_state(bname);
             }
@@ -3873,6 +3903,14 @@ window.onload = () => {
         if (adventure_data["current_essence"]) {
             toggle_building_state("s_essence", true);
             buildings["s_essence"].amount = adventure_data["current_essence"];
+            if (adventure_data["challenge"]) {
+                if (adventure_data["challenge"] == CHALLENGES.UDM) {
+                    buildings["s_essence"].amount = 10;
+                }
+                else {
+                    buildings["s_essence"].amount = 100;
+                }
+            }
             toggle_building_state("s_essence");
             update_building_amount("s_essence"); /* Update amount shown. */
         }
@@ -3909,7 +3947,7 @@ window.onload = () => {
         adventure_data["max_refine"] = 10000;
     }
     /* Start our event system */
-    let to_next_event = 2 * 60000 + Math.random() * 60000 * 2;
+    var to_next_event = 2 * 60000 + Math.random() * 60000 * 2;
     if (purchased_upgrades.indexOf("more_events") != -1) {
         to_next_event *= .7;
     }
@@ -3922,12 +3960,12 @@ window.onload = () => {
     });
     /* Make sure we have enough hydrogen mines */
     if (buildings["hydrogen_mine"].amount < adventure_data["hydrogen_mines"]) {
-        let comp_state = buildings["hydrogen_mine"].on;
+        var comp_state = buildings["hydrogen_mine"].on;
         if (comp_state) {
             toggle_building_state("hydrogen_mine");
         }
         buildings["hydrogen_mine"].amount = adventure_data["hydrogen_mines"];
-        let challenge_hydrogen_cap = 5;
+        var challenge_hydrogen_cap = 5;
         if (adventure_data["challenges_completed"] && adventure_data["challenges_completed"].length >= CHALLENGES.METEORS && adventure_data["challenges_completed"][CHALLENGES.METEORS]) {
             challenge_hydrogen_cap = 50;
         }
@@ -3941,7 +3979,7 @@ window.onload = () => {
     }
     ["mana_purifier", "omega_machine"].forEach(function (build) {
         if (adventure_data[build]) {
-            let comp_state = buildings[build].on;
+            var comp_state = buildings[build].on;
             if (comp_state) {
                 toggle_building_state(build);
             }
@@ -3952,7 +3990,7 @@ window.onload = () => {
             $("#building_" + build + "  > .building_amount").html(format_num(buildings[build].amount, false));
         }
     });
-    if (buildings["s_manastone"].amount >= 200) {
+    if (buildings["s_manastone"].amount >= 200 || adventure_data["challenge"]) {
         $("#scratchpad").removeClass("hidden");
     }
     setup_groups();
@@ -3964,8 +4002,8 @@ window.onload = () => {
             async: true,
             success: function (log) {
                 /* Find the version number */
-                let changelog = log.split("\n");
-                for (let i = 0; i < changelog.length; i++) {
+                var changelog = log.split("\n");
+                for (var i = 0; i < changelog.length; i++) {
                     /* Find first line with a version number */
                     if (changelog[i].match(/v[0-9]+\.[0-9]+\.[0-9]+/)) {
                         /* We need to set version number. So just version line without the : */
@@ -3975,7 +4013,7 @@ window.onload = () => {
                             return;
                         }
                         /* Find the line number corresponding to last version they've seen.  */
-                        let last_version_line = changelog.findIndex((elem) => { return elem == localStorage["last_version"]; });
+                        var last_version_line = changelog.findIndex(function (elem) { return elem == localStorage["last_version"]; });
                         /* Remember they were at this version */
                         localStorage["last_version"] = changelog[i];
                         $("#events").removeClass("hidden");
@@ -4000,7 +4038,7 @@ window.onload = () => {
         $("#autobuild_unlock").removeClass("hidden");
     }
     /* Setup hotkeys */
-    let hotkey_mode = 0;
+    var hotkey_mode = 0;
     $(document).keyup(function (e) {
         /* ESC ALWAYS exits. */
         if (e.key == "Escape" || e.key.toLowerCase() == "x") {
@@ -4090,13 +4128,13 @@ window.onload = () => {
                 });
             }
             try {
-                let amount = parseInt($("#buy_amount").val());
-                if (isNaN(amount)) {
-                    amount = 1;
+                var amount_2 = parseInt($("#buy_amount").val());
+                if (isNaN(amount_2)) {
+                    amount_2 = 1;
                 }
                 Object.keys(buildings[build].base_cost).forEach(function (key) {
-                    let cost = buildings[build].base_cost[key] * Math.pow(buildings[build].price_ratio[key], buildings[build].amount - buildings[build].free) * (1 - Math.pow(buildings[build].price_ratio[key], amount)) / (1 - buildings[build].price_ratio[key]);
-                    if (Math.pow(buildings[build].price_ratio[key], buildings[build].amount + amount - 1 - buildings[build].free) == Infinity) {
+                    var cost = buildings[build].base_cost[key] * Math.pow(buildings[build].price_ratio[key], buildings[build].amount - buildings[build].free) * (1 - Math.pow(buildings[build].price_ratio[key], amount_2)) / (1 - buildings[build].price_ratio[key]);
+                    if (Math.pow(buildings[build].price_ratio[key], buildings[build].amount + amount_2 - 1 - buildings[build].free) == Infinity) {
                         cost = Infinity;
                     }
                     if (cost > resources[key].amount) {
@@ -4128,3 +4166,4 @@ function superhack(level) {
     add_log_elem("You filthy cheater :(. You make me sad.");
     Object.keys(resources).forEach(function (r) { resources_per_sec[r] = level; });
 }
+//# sourceMappingURL=app.js.map

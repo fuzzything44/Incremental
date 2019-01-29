@@ -71,9 +71,17 @@ let events = [
         "rejection": 10,
     }), /* End stock investments */
     ({
-        "condition": function () { return adventure_data["challenge"] != CHALLENGES.METEORS; },
+        "condition": function () { return true; },
         "run_event": function () {
-            $("#events_content").html("<span>Woah, a meteor just hit in your backyard!</span><br>");
+            if (adventure_data["challenge"] == CHALLENGES.METEORS) {
+                $("#events_content").html("<span>Woah, a meteor just hit in your everything!</span><br>");
+                meteor_hit();
+                meteor_hit();
+                meteor_hit();
+            } else {
+                $("#events_content").html("<span>Woah, a meteor just hit in your backyard!</span><br>");
+            }
+
             $("#events_content").append("<span onclick='resources.stone.amount += 50000; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 50000 stone\");' class='clickable'>Gather stone</span><br>");
             if (resources["iron"].amount > 0) {
                 $("#events_content").append("<span onclick='resources.iron.amount += 500; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 500 iron\");' class='clickable'>Recover iron</span><br>");
@@ -750,21 +758,6 @@ let events = [
         "rejection": 80,
     }), /* End wanderer */
     ({
-        "condition": function () { return adventure_data["challenge"] == CHALLENGES.METEORS; },
-        "run_event": function () {
-            $("#events_content").html("<span>Woah, a meteor just hit in your everything!</span><br>");
-            add_log_elem("A meteor fell!");
-
-            meteor_hit();
-            meteor_hit();
-            meteor_hit();
-
-
-        },
-        "name": "Meteor!",
-        "rejection": 30,
-    }), /* End meteor (challenge version) */
-    ({
         "condition": function () {
             return adventure_data["tower_floor"] > 46 && adventure_data["grind_tower_bank"] != undefined;
         },
@@ -777,6 +770,36 @@ let events = [
         "rejection": 99,
         "force_cost": 1000,
     }), /* End time dilation */
+    ({
+        "condition": function () {
+            return adventure_data["challenge"] == CHALLENGES.UDM;
+        },
+        "run_event": function () {
+            $("#events_content").html(":(<br/>Sorry");
+        },
+        "name": ":(",
+        "rejection": 0,
+    }), /* End UDM sadness */
+    ({
+        "condition": function () {
+            return adventure_data["challenge"] == CHALLENGES.UDM;
+        },
+        "run_event": function () {
+            $("#events_content").html(":(<br/>Sorry man");
+        },
+        "name": ":(",
+        "rejection": 0,
+    }), /* End UDM sadness */
+    ({
+        "condition": function () {
+            return adventure_data["challenge"] == CHALLENGES.UDM;
+        },
+        "run_event": function () {
+            $("#events_content").html(":(<br/>Sorry, m8");
+        },
+        "name": ":(",
+        "rejection": 0,
+    }), /* End UDM sadness (3rd copy) */
 
 ];
 
@@ -852,6 +875,10 @@ function handle_event(set_timer: boolean = true) {
         }
         if (time_on && purchased_upgrades.indexOf("time_use_boost") != -1) {
             to_next_event *= .5;
+        }
+
+        if (adventure_data["challenge"] == CHALLENGES.UDM) {
+            to_next_event *= 3;
         }
         setTimeout(handle_event, to_next_event);
     }    
@@ -1127,7 +1154,7 @@ function setup_events() {
     }, 1000);
 
     /* Meteor challenge */
-    if (adventure_data["challenge"] == CHALLENGES.METEORS) {
+    if (adventure_data["challenge"] == CHALLENGES.METEORS || adventure_data["challenge"] == CHALLENGES.UDM) {
         setInterval(meteor_hit, 60 * 1000);
     }
 }

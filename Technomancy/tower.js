@@ -612,7 +612,7 @@ var TOWER_DATA = [
         "boss": "",
         "text": "",
         get reward_text() {
-            return ""; /* ??? */
+            return "a new challenge, yay!";
         },
         reward: function () {
         }
@@ -699,18 +699,20 @@ function tower() {
     }
     $("#events_topbar").html("The Tower of Magic");
     $("#events_content").html("Welcome to the Tower of Magic. Your essence allows you to enter.<br/>");
-    var essence_cost = Math.round(Math.pow(adventure_data["total_essence"], essence_cost_multiplier()));
-    $("#events_content").append("<span class='clickable'>Compress</span> some magic into 1 essence (" + format_num(essence_cost, false) + " Mana Stones)<br/>");
-    $("#events_content span").last().click(function () {
-        if (buy_essence(1)) {
-            tower();
-            $("#events_content").prepend("You compress some magic into essence.<br/>");
-        }
-        else {
-            tower();
-            $("#events_content").prepend("You need a more mana stones. Or free up some mana. <br/>");
-        }
-    });
+    if (adventure_data["challenge"] == CHALLENGES.NONE) {
+        var essence_cost = Math.round(Math.pow(adventure_data["total_essence"], essence_cost_multiplier()));
+        $("#events_content").append("<span class='clickable'>Compress</span> some magic into 1 essence (" + format_num(essence_cost, false) + " Mana Stones)<br/>");
+        $("#events_content span").last().click(function () {
+            if (buy_essence(1)) {
+                tower();
+                $("#events_content").prepend("You compress some magic into essence.<br/>");
+            }
+            else {
+                tower();
+                $("#events_content").prepend("You need a more mana stones. Or free up some mana. <br/>");
+            }
+        });
+    }
     $("#events_content").append("You currently have " + format_num(adventure_data["tower_power"], false) + " power. <span class='clickable'>Spend</span> <input id='tower_power_increase' class='fgc bgc_second' type='number' min='0' value='1'> essence at a rate of 1 essence per power.<br/>");
     $("#events_content span").last().click(function () {
         /* Save both values to set inputs to previous values. */

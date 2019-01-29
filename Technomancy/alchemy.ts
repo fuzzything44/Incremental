@@ -87,7 +87,7 @@
 let ingredients: ingredient[] = [
     new ingredient("Gold Leaf",
         function (power: number, on_combat: boolean = false) {
-            resources["money"].amount += resources_per_sec["gold"] * 10;
+            resources["money"].amount += resources_per_sec["gold"] * 10 * power;
         },
         function () {
             

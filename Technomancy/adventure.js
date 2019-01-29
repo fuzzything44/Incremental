@@ -1,4 +1,4 @@
-const base_adventure_data = {
+var base_adventure_data = {
     ship: {
         engine: {
             name: "basic_engine",
@@ -18,28 +18,28 @@ const base_adventure_data = {
     warehouse: [],
     current_location: "home",
 };
-let adventure_data = JSON.parse(JSON.stringify(base_adventure_data)); /* Make a copy so we can reset adv_data easily. */
-let player_data = {};
-let enemy_data = {};
+var adventure_data = JSON.parse(JSON.stringify(base_adventure_data)); /* Make a copy so we can reset adv_data easily. */
+var player_data = {};
+var enemy_data = {};
 /* Sets up the adventure pane */
 function start_adventure() {
     $("#character").removeClass("hidden"); /* Show adventure panels */
     $("#events").removeClass("hidden");
     update_inventory();
     /* Load location */
-    let location_data = get_location(adventure_data.current_location);
+    var location_data = get_location(adventure_data.current_location);
     /* Location name */
     $("#events_topbar").html(location_data.name);
     /* Let them choose to adventure there or go somewhere else. */
     $("#events_content").html("You are currently at " + location_data.name + ". What will you do?<br />");
-    let color = location_data.leave_cost <= adventure_data.inventory_fuel ? "default" : "red";
+    var color = location_data.leave_cost <= adventure_data.inventory_fuel ? "default" : "red";
     $("#events_content").append("<span class='clickable' style='color:" + color + ";' onclick='travel(\"" + adventure_data.current_location + "\")'>" + location_data.go_again_text + " (" + format_num(location_data.leave_cost, false) + ")</span><br />");
     location_data.connects_to.forEach(function (loc) {
-        let test_connection = get_location(loc);
+        var test_connection = get_location(loc);
         if (test_connection.unlocked()) {
-            let fuel_cost = test_connection.enter_cost + location_data.leave_cost;
-            let color = fuel_cost <= adventure_data.inventory_fuel ? "default" : "red";
-            $("#events_content").append("<span class='clickable' onclick='travel(\"" + loc + "\");' style='color:" + color + ";'>Go to " + test_connection.name + " (" + format_num(fuel_cost, false) + ")</span><br />");
+            var fuel_cost = test_connection.enter_cost + location_data.leave_cost;
+            var color_1 = fuel_cost <= adventure_data.inventory_fuel ? "default" : "red";
+            $("#events_content").append("<span class='clickable' onclick='travel(\"" + loc + "\");' style='color:" + color_1 + ";'>Go to " + test_connection.name + " (" + format_num(fuel_cost, false) + ")</span><br />");
         }
     });
     if (adventure_data.current_location != "home") {
@@ -58,17 +58,17 @@ function get_location(where) {
         return this["aloc_" + where];
     }
     else {
-        let loc_data = {};
-        $.getScript("locations/" + where + ".js", (res) => { loc_data = eval(res); });
-        this["aloc_" + where] = loc_data;
-        return loc_data;
+        var loc_data_1 = {};
+        $.getScript("locations/" + where + ".js", function (res) { loc_data_1 = eval(res); });
+        this["aloc_" + where] = loc_data_1;
+        return loc_data_1;
     }
 }
 function travel(where) {
     /* Get location data */
-    let location_data = get_location(adventure_data.current_location);
-    let to_where = get_location(where);
-    let fuel_cost = to_where.enter_cost + location_data.leave_cost;
+    var location_data = get_location(adventure_data.current_location);
+    var to_where = get_location(where);
+    var fuel_cost = to_where.enter_cost + location_data.leave_cost;
     /* If we're just doing an explore, only charge the exit cost. */
     if (where == adventure_data.current_location) {
         fuel_cost = to_where.leave_cost;
@@ -85,9 +85,11 @@ function travel(where) {
     }
 }
 /* Checks how many items they have with a name in inventory (or warehouse) with data fields same as has_data*/
-function count_item(name, from_where = adventure_data.inventory, has_data = {}) {
-    let count = 0;
-    for (let i = 0; i < from_where.length; i++) {
+function count_item(name, from_where, has_data) {
+    if (from_where === void 0) { from_where = adventure_data.inventory; }
+    if (has_data === void 0) { has_data = {}; }
+    var count = 0;
+    var _loop_1 = function (i) {
         if (from_where[i].name == name) {
             try {
                 /* Make sure all has_data paramaters are found. */
@@ -103,14 +105,19 @@ function count_item(name, from_where = adventure_data.inventory, has_data = {}) 
                 console.error(e);
             }
         }
+    };
+    for (var i = 0; i < from_where.length; i++) {
+        _loop_1(i);
     }
     return count;
 }
 /* Returns index of item with given name, checking inventory (or warehouse) with data fields the same as has_data.
    Note: item could have extra data fields and will still return true.
 */
-function find_item(name, from_where = adventure_data.inventory, has_data = {}) {
-    for (let i = 0; i < from_where.length; i++) {
+function find_item(name, from_where, has_data) {
+    if (from_where === void 0) { from_where = adventure_data.inventory; }
+    if (has_data === void 0) { has_data = {}; }
+    var _loop_2 = function (i) {
         if (from_where[i].name == name) {
             try {
                 /* Make sure all has_data paramaters are found. */
@@ -120,12 +127,17 @@ function find_item(name, from_where = adventure_data.inventory, has_data = {}) {
                         throw "This is not the object we're looking for.";
                     }
                 });
-                return i;
+                return { value: i };
             }
             catch (e) {
                 console.error(e);
             }
         }
+    };
+    for (var i = 0; i < from_where.length; i++) {
+        var state_1 = _loop_2(i);
+        if (typeof state_1 === "object")
+            return state_1.value;
     }
     return -1;
 }
@@ -141,21 +153,24 @@ function update_inventory() {
     }
     $("#character_content").append("Ship Inventory (" + format_num(adventure_data.inventory.length + adventure_data.inventory_fuel, false) + "/" + format_num(adventure_data.inventory_size, false) + "): <br>");
     $("#character_content").append("Fuel: " + format_num(adventure_data.inventory_fuel, false) + "<br />");
-    for (let i = 0; i < adventure_data.inventory.length; i++) {
-        let equip = gen_equipment(adventure_data.inventory[i]);
+    var _loop_3 = function (i) {
+        var equip = gen_equipment(adventure_data.inventory[i]);
         $("#character_content").append(equip.name);
         if (equip.use != undefined) {
             $("#character_content").append("<span class='clickable'>Use</span>");
-            $("#character_content > span").last().click(() => equip.use(i, "inventory"));
+            $("#character_content > span").last().click(function () { return equip.use(i, "inventory"); });
         }
         $("#character_content").append("<br />");
+    };
+    for (var i = 0; i < adventure_data.inventory.length; i++) {
+        _loop_3(i);
     }
 }
 /* Sets the equipment to the proper slot, moves previous to warehouse, moves equipped from warehouse, refreshes equipment menu.*/
 function equip_item(slot, index) {
-    let to_add = adventure_data.warehouse[index];
-    let to_remove = adventure_data.ship[slot];
-    let add_type = gen_equipment(to_add).type;
+    var to_add = adventure_data.warehouse[index];
+    var to_remove = adventure_data.ship[slot];
+    var add_type = gen_equipment(to_add).type;
     /* Make sure equipment to set is actually of the proper type */
     if (add_type == slot || (add_type == "weapon" && slot.slice(0, 6) == "weapon")) {
         adventure_data.warehouse[index] = to_remove; /* Just swapping slots should make it a bit faster. */
@@ -173,10 +188,10 @@ function set_equipment() {
     $("#events_content").html("Equipment Manager<br />");
     $("#events_content").append("<span class='clickable' onclick='travel(\"home\")'>Back</span>");
     /* Our equipment types and lists of equipment we have that goes to them. Each element is an object with equip and warehouse_index */
-    let equip_mappings = { "engine": [], "shield": [], "weapon": [] };
-    for (let i = 0; i < adventure_data.warehouse.length; i++) {
+    var equip_mappings = { "engine": [], "shield": [], "weapon": [] };
+    for (var i = 0; i < adventure_data.warehouse.length; i++) {
         /* Generate each item only once. */
-        let generated = gen_equipment(adventure_data.warehouse[i]);
+        var generated = gen_equipment(adventure_data.warehouse[i]);
         /* Item is one of our equip types */
         if (equip_mappings[generated.type]) {
             equip_mappings[generated.type].push({ equip: generated, warehouse_index: i });
@@ -205,15 +220,16 @@ function set_equipment() {
     });
 }
 /* Selects an adventure at a given location and runs it */
-function run_adventure(location, can_reroll = true) {
+function run_adventure(location, can_reroll) {
+    if (can_reroll === void 0) { can_reroll = true; }
     /* Get location data. */
-    let location_data = get_location(location);
-    let global_data = get_location("global");
-    let chosen_encounter = null;
-    let available_encounters = [];
-    let forced_encounters = [];
-    let total_weight = 0;
-    let encounters = location_data.encounters;
+    var location_data = get_location(location);
+    var global_data = get_location("global");
+    var chosen_encounter = null;
+    var available_encounters = [];
+    var forced_encounters = [];
+    var total_weight = 0;
+    var encounters = location_data.encounters;
     if (location_data.leave_cost) { /* Global encounters can only happen in non-free zones. */
         encounters = encounters.concat(global_data.encounters);
     }
@@ -253,9 +269,9 @@ function run_adventure(location, can_reroll = true) {
         chosen_encounter = forced_encounters[Math.floor(Math.random() * forced_encounters.length)];
     }
     else if (available_encounters.length > 0) {
-        let roll = Math.floor(Math.random() * total_weight);
+        var roll_1 = Math.floor(Math.random() * total_weight);
         available_encounters.some(function (enc) {
-            let wght = enc.weight;
+            var wght = enc.weight;
             /* Encounters of the proper type have double weight. */
             if (event_flags["skills"]) { /* Turn on combat/noncombat manipulators. */
                 if (event_flags["skills"][5] && enc.types.indexOf("combat") != -1) {
@@ -265,12 +281,12 @@ function run_adventure(location, can_reroll = true) {
                     wght += enc.weight; /* Add weight to total. */
                 }
             }
-            if (roll < wght) {
+            if (roll_1 < wght) {
                 chosen_encounter = enc;
                 return true;
             }
             else {
-                roll -= wght;
+                roll_1 -= wght;
                 return false;
             }
         });
@@ -285,11 +301,11 @@ function run_adventure(location, can_reroll = true) {
     if (can_reroll && event_flags["skills"] && event_flags["skills"][13] && chosen_encounter.weight != 0) {
         $("#events_content").html("You predict that you will encounter: " + chosen_encounter.title + ". Will you keep it or change your fate?<br />");
         $("#events_content").append("<span class='clickable'>Keep</span>");
-        $("#events_content > span").last().click(() => {
+        $("#events_content > span").last().click(function () {
             chosen_encounter.run_encounter();
         });
         $("#events_content").append("<span class='clickable'>Reroll</span>");
-        $("#events_content > span").last().click(() => {
+        $("#events_content > span").last().click(function () {
             run_adventure(location, false);
         });
     }
@@ -310,12 +326,12 @@ function setup_combat(enemy_info, win_callback, ai) {
     $("#combat_stats").html("<div id='combat_energy' style='position: relative; top: 1em; height: 14em; width: 2em;'></div>");
     /* Setup energy */
     $("#combat_energy").html("<img src='images/power.png' alt='' style='width: 1.5em; height: 1.5em;' />");
-    for (let i = 0; i < 10; i++) {
+    for (var i = 0; i < 10; i++) {
         $("#combat_energy").append("<div id='combat_energy_" + i.toString() + "' class='energy_box_disabled'></div>");
     }
     /* Setup shields */
     $("#combat_attack").html("<div id='combat_shield' style='height: 14em; width: 2em; vertical-align: bottom; display: table-cell;'></div>");
-    for (let i = 4; i >= 0; i--) {
+    for (var i = 4; i >= 0; i--) {
         $("#combat_shield").append("<img id='combat_shield_" + i.toString() + "' src='images/shield_off.png' style='height: 2.5em; width: 2.5em;' />");
     }
     $("#combat_stats").append("<div id='stats_area' style='position: relative; top: -14em; left: 2.5em; width: 35em; height: 15em; margin: auto;'></div>");
@@ -437,8 +453,8 @@ function update_combat(actions_used) {
     if (player_data["shields"] < player_data["power_shields"]) {
         player_data["shields"] = player_data["power_shields"];
     }
-    for (let i = 4; i >= 0; i--) {
-        let shield_state = "off";
+    for (var i = 4; i >= 0; i--) {
+        var shield_state = "off";
         if (i < player_data["shields"]) {
             shield_state = "on";
         }
@@ -448,9 +464,9 @@ function update_combat(actions_used) {
         $("#combat_shield_" + i.toString()).attr("src", "images/shield_" + shield_state + ".png");
     }
     /* Update energy */
-    for (let i = 0; i < 10; i++) {
+    for (var i = 0; i < 10; i++) {
         $("#combat_energy_" + i.toString()).removeClass("energy_box_on energy_box_off energy_box_disabled");
-        let box_state = "off";
+        var box_state = "off";
         if (i < player_data["energy_left"]) {
             box_state = "on";
         }
@@ -488,3 +504,4 @@ function enemy_action() {
 function exit_button(text) {
     return "<span class='clickable' onclick='start_adventure()'>" + text + "</span>";
 }
+//# sourceMappingURL=adventure.js.map

@@ -7,7 +7,9 @@ var CHALLENGES = {
     CASCADE: 5,
     DISCO: 6,
     NO_UPGRADE: 7,
-    TOTAL_AMOUNT: 8
+    FORCED_PRESTIGE: 8,
+    UDM: 9,
+    TOTAL_AMOUNT: 10
 };
 function challenge_menu() {
     $("#events_topbar").html("Challenge Progress");
@@ -119,6 +121,26 @@ var CHALLENGE_INFO = [
             return "You can gain essence." + (buildings["s_manastone"].amount < 500 ? " Also, 200 mana!" : "");
         },
         "test_completed": function () { return buildings["s_manastone"].amount >= 200; }
+    },
+    {
+        "name": "15 Minute Challenge",
+        "description": "You prestige at least every 15 minutes. No less.",
+        "requirements": "Get 200 mana. Also, currently impossible.",
+        "restrictions": "Go back to 0 mana. If your prestige has lasted over 15 minutes, you prestige.",
+        get reward() {
+            return "Nothing, yet. Once it's added you'll actually be able to complete this.";
+        },
+        "test_completed": function () { return buildings["s_manastone"].amount >= 200 && false; }
+    },
+    {
+        "name": "UDM Challenge",
+        "description": "Pain. Lots of it. Thought poverty/meteors/No Upgrades sucked? This is worse.",
+        "requirements": "Get 500 mana. Also, currently impossible.",
+        "restrictions": "Go back to 0 mana. Essence is capped lower than other challenges. And there's meteors. And poverty. And events happen less, which might actually be a good thing.",
+        get reward() {
+            return "Nothing, yet. Once it's added you'll actually be able to complete this.";
+        },
+        "test_completed": function () { return buildings["s_manastone"].amount >= 200 && false; }
     },
 ];
 //# sourceMappingURL=challenges.js.map

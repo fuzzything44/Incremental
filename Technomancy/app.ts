@@ -35,9 +35,9 @@ function format_num(num: number, show_decimals: boolean = true): string {
             sf = 5;
         }
         return numberformat.formatShort(num, { sigfigs: sf, format: fm });
-
     }
 }
+
 var resources = {};
 var resources_per_sec = {};
 var buildings = {};
@@ -139,7 +139,7 @@ function set_initial_state() {
         "time": { "amount": 0, "value": -2, "mult": 1, "changes": {}, "ps_change": "" },
         "refined_mana": { "amount": 0, "value": -1, "mult": 1, "changes": {}, "ps_change": "" },
         "purified_mana": { "amount": 0, "value": -2500, "mult": 1, "changes": {}, "ps_change": "" },
-        "fuel": { "amount": 0, "value": -1000, "mult": 1, "changes": {}, "ps_change": "" },
+        "fuel": { "amount": 0, "value": -10000, "mult": 1, "changes": {}, "ps_change": "" },
         "magic_bag": { "amount": 0, "value": 0, "mult": 1, "changes": {}, "ps_change": "" },
         [OMEGA]: { "amount": 0, "value": -15000000, "mult": 1, "changes": {}, "ps_change": ""},
 
@@ -168,7 +168,7 @@ function set_initial_state() {
         "water": { "amount": 0, "value": 2, "mult": 1, "changes": {}, "ps_change": "" },
         "hydrogen": { "amount": 0, "value": 5, "mult": 1, "changes": {}, "ps_change": "" },
         "steel_beam": { "amount": 0, "value": 200, "mult": 1, "changes": {}, "ps_change": "" },
-        "uranium": { "amount": 0, "value": 500, "mult": 1, "changes": {}, "ps_change": "" },
+        "uranium": { "amount": 0, "value": 5000, "mult": 1, "changes": {}, "ps_change": "" },
         "sandcastle": { "amount": 0, "value": 10000000, "mult": 1, "changes": {}, "ps_change": "" }, 
         "glass_bottle": { "amount": 0, "value": 25000, "mult": 1, "changes": {}, "ps_change": "" }, /* Not much above glass value, but they're useful! */
         "mithril": { "amount": 0, "value": 3500, "mult": 1, "changes": {}, "ps_change": "" },
@@ -1067,8 +1067,8 @@ function set_initial_state() {
 
             },
             "multipliers": {
-                "iron": 0.1,
-                "iron_ore": 0.1,
+                "iron": 0.25,
+                "iron_ore": 0.25,
             },
             "free": 0,
             "flavor": "It's just a big magnet.",
@@ -1083,9 +1083,10 @@ function set_initial_state() {
             "generation": {
                 "energy": -1,
                 "book": -0.1,
+                "wood": 250,
             },
             "multipliers": {
-                "book": 0.15
+                "book": 0.25,
             },
             "free": 0,
             "flavor": "",
@@ -2424,6 +2425,7 @@ function set_initial_state() {
     };
     event_flags = {};
     autobuild_amount = 0;
+    total_time = 0;
     $("#buy_amount").val(1);
 }
 
@@ -2519,10 +2521,11 @@ let prestige = {
 
         let mana = buildings["s_manastone"].amount - mana_this_prestige; /* Don't count mana gained this prestige in here. */
 
-        let first_wall = Math.pow(mana, 1.3) * 0.5;
-        if (isNaN(first_wall)) {
-            first_wall = 0;
+        if (mana < 0) {
+            mana = 0;
         }
+
+        let first_wall = Math.pow(mana, 1.3) * 0.5;
 
         let mana_gain = prestige_points / 15000 - first_wall; /* One for every 15k pp, and apply reduction based off of current mana */
         mana_gain = Math.pow(Math.max(0, mana_gain), .36); /* Then raise to .36 power and apply some rounding/checking */
@@ -2573,6 +2576,8 @@ let prestige = {
         }
     },
     run: function (ask = true, callback = function () { }) {
+        if (adventure_data["challenge"] == CHALLENGES.LOAN) { alert("You can't prestige in this challenge."); return; }
+
         let mana_gain = prestige.mana();
         let mana = buildings["s_manastone"].amount;
 
@@ -2580,8 +2585,6 @@ let prestige = {
         let has_quickmana = event_flags["skills"] != undefined && event_flags["skills"][8];
 
         if (mana_gain < 1 && ask && !has_quickmana) {
-
-            if (adventure_data["challenge"] == CHALLENGES.LOAN) { alert("You can't prestige in this challenge."); return; }
 
             if (!confirm("Prestige now wouldn't produce mana! As you get more mana, it gets harder to make your first mana stone in a run. You are currently " + prestige.percent_through().toString() + "% of the way to your first mana. Prestige anyway?")) {
                 return;
@@ -2641,6 +2644,9 @@ let prestige = {
     }
 }
 
+function clamp(val: number, min: number, max: number) {
+    return Math.min(Math.max(val, min), max);
+}
 
 function add_log_elem(to_add: string) {
     while ($("#log > span").length >= 10) { /* We want to remove the last element(s) to bring length to 9.*/
@@ -2667,6 +2673,7 @@ function save() {
     localStorage["autobuild"] = JSON.stringify(build_queue);
     localStorage["autobuild_amt"] = JSON.stringify(autobuild_amount);
     localStorage["autobuild_rpt"] = JSON.stringify(autobuild_repeat);
+    localStorage["prestige_time"] = JSON.stringify(total_time);
     $('#save_text').css('opacity', '1'); setTimeout(() => $('#save_text').css({ 'opacity': '0', 'transition': 'opacity 1s' }), 1000);
     console.log("Saved");
     add_log_elem("Saved!");
@@ -2746,6 +2753,9 @@ function load() {
     }
     if (localStorage.getItem("autobuild_rpt")) {
         autobuild_repeat = JSON.parse(localStorage.getItem("autobuild_rpt"));
+    }
+    if (localStorage.getItem("prestige_time")) {
+        total_time = JSON.parse(localStorage.getItem("prestige_time"));
     }
 
     console.log("Loading theme");
@@ -2949,6 +2959,14 @@ function update() {
     let delta_time: number = Date.now() - last_update;
     last_update = Date.now();
 
+    total_time += delta_time; /* Track total time since prestige. */
+
+    /* They're forced to prestige. RIP. */
+    if (adventure_data["challenge"] == CHALLENGES.FORCED_PRESTIGE && total_time > 15 * 60000) {
+        prestige.run(false);
+    }
+
+
     if (delta_time > 15000) { /* More than 15 sec between tics and it's offline gen time. */
         resources["time"].amount += delta_time / 1000; /* 1 sec of production, rest goes to time. */
 
@@ -2985,7 +3003,7 @@ function update() {
                 resources["time"].amount -= amt;
             }
         }
-        if (adventure_data["challenge"] == CHALLENGES.METEORS) {
+        if (adventure_data["challenge"] == CHALLENGES.METEORS || adventure_data["challenge"] == CHALLENGES.UDM) {
             time_to_meteor++;
             if (time_to_meteor >= 6) {
                 time_to_meteor = 0;
@@ -3001,7 +3019,6 @@ function update() {
         run_autobuild();
     }
 
-    total_time += delta_time; /* Track total time since refresh */
     /* Check for negative resources or resources that will run out. */
     Object.keys(resources).forEach(function (res) { /* Loop through all resources, res is current checked resource */
         if (isNaN(resources[res].amount)) { resources[res].amount = 0; }
@@ -3092,7 +3109,7 @@ function update() {
         }
     });
 
-    if (adventure_data["challenge"] == CHALLENGES.POVERTY) {
+    if (adventure_data["challenge"] == CHALLENGES.POVERTY || adventure_data["challenge"] == CHALLENGES.UDM) {
         const MULT = 20;
         if (resources["money"].amount > 30 && resources["money"].amount > resources_per_sec["money"] * resources["money"].mult * MULT) {
             resources["money"].amount = Math.max(30, resources_per_sec["money"] * resources["money"].mult * MULT);
@@ -3108,7 +3125,7 @@ function update_upgrade_list() {
     /* Loop through all remaining upgrades */
     Object.keys(remaining_upgrades).forEach(function (upg_name) {
         /* No upgrades visible in no upgrade challenge. */
-        if (adventure_data["challenge"] == CHALLENGES.NO_UPGRADE) {
+        if (adventure_data["challenge"] == CHALLENGES.NO_UPGRADE || adventure_data["challenge"] == CHALLENGES.UDM) {
             $("#upgrade_" + upg_name).addClass("hidden");
             return;
         }
@@ -3356,7 +3373,7 @@ function destroy_building(name: string, amount = null) {
 
 function purchase_upgrade(name: string) {
     /* Can't buy upgrades in no upgrade challenge. */
-    if (adventure_data["challenge"] == CHALLENGES.NO_UPGRADE) {
+    if (adventure_data["challenge"] == CHALLENGES.NO_UPGRADE || adventure_data["challenge"] == CHALLENGES.UDM) {
         return;
     }
 
@@ -3392,7 +3409,7 @@ function purchase_upgrade(name: string) {
 function calculate_bag_amount(res) {
     if (adventure_data["perm_resources"] == undefined || adventure_data["perm_resources"][res] == undefined || resources[res].value >= adventure_data["max_bag_value"]) return 0;
 
-    if (res == "money" && adventure_data["challenge"] == CHALLENGES.POVERTY) {
+    if (res == "money" && (adventure_data["challenge"] == CHALLENGES.POVERTY || adventure_data["challenge"] == CHALLENGES.UDM)) {
         return 0;
     }
 
@@ -3440,7 +3457,9 @@ function random_title() {
         "Now playing: Kittens Game",
         "Now playing: Sandcastle Builder",
         "Now playing: Sharks game",
-
+        "Have you tried eating it?",
+        "New Update: Additional Pain",
+        "Tower OP, getting removed next update.",
     ];
     document.title = TITLES.filter(item => item !== document.title)[Math.floor(Math.random() * (TITLES.length - 1))];
 
@@ -4120,6 +4139,14 @@ window.onload = () => {
         if (adventure_data["current_essence"]) {
             toggle_building_state("s_essence", true);
             buildings["s_essence"].amount = adventure_data["current_essence"];
+            if (adventure_data["challenge"]) {
+                if (adventure_data["challenge"] == CHALLENGES.UDM) {
+                    buildings["s_essence"].amount = 10;
+                } else {
+                    buildings["s_essence"].amount = 100;
+
+                }
+            }
             toggle_building_state("s_essence");
             update_building_amount("s_essence");/* Update amount shown. */
         }
@@ -4189,7 +4216,7 @@ window.onload = () => {
         }
         buildings["hydrogen_mine"].amount = adventure_data["hydrogen_mines"];
         let challenge_hydrogen_cap = 5;
-        if (adventure_data["challenges_completed"] &&  adventure_data["challenges_completed"].length >= CHALLENGES.METEORS && adventure_data["challenges_completed"][CHALLENGES.METEORS]) {
+        if (adventure_data["challenges_completed"] && adventure_data["challenges_completed"].length >= CHALLENGES.METEORS && adventure_data["challenges_completed"][CHALLENGES.METEORS]) {
             challenge_hydrogen_cap = 50;
         }
         if (adventure_data["challenge"] && buildings["hydrogen_mine"].amount > challenge_hydrogen_cap) { /* If they're in a challenge, cap at 5 */
@@ -4215,7 +4242,7 @@ window.onload = () => {
         }
     });
 
-    if ( buildings["s_manastone"].amount >= 200 ) {
+    if (buildings["s_manastone"].amount >= 200 || adventure_data["challenge"]) {
         $("#scratchpad").removeClass("hidden");
     }
 

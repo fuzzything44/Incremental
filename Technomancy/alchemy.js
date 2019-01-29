@@ -80,7 +80,7 @@ var ingredient = /** @class */ (function () {
 var ingredients = [
     new ingredient("Gold Leaf", function (power, on_combat) {
         if (on_combat === void 0) { on_combat = false; }
-        resources["money"].amount += resources_per_sec["gold"] * 10;
+        resources["money"].amount += resources_per_sec["gold"] * 10 * power;
     }, function () {
     }, "Helps you get more money!", 30, 2, [
         { type: "resource", amount: 75, name: "gold" },

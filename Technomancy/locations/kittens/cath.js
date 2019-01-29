@@ -13,7 +13,8 @@
                 $("#events_content > span").last().click(function cat_market() {
                     $("#character").addClass("hidden"); /* Hide char pane so they can see what they have. */
                     $("#events_content").html("You wander the market and find many goods for sale. You have <span id='cath_money'>" + format_num(resources["money"].amount) + "</span> money to spend.<br />");
-                    var purchase_amount = resources["money"].amount / 20; /* Each trade they spend 5% of their money */
+                    var purchase_amount = resources["money"].amount / 10; /* How much money they can spend on a trade */
+                    purchase_amount = clamp(purchase_amount, 50000, 10000 * Math.log(purchase_amount));
                     var sold_resources = ["wood", "gold", "oil", "coal", "iron_ore", "iron", "uranium", "steel_beam", "hydrogen"]; /* What kittens have for sale. */
                     if (event_flags["bribed_politician"] == "environment" && event_flags["crisis_averted"]) {
                         sold_resources.push("book");
@@ -22,7 +23,7 @@
                         if (event_flags["c_sell_" + resource] == undefined) {
                             event_flags["c_sell_" + resource] = 0;
                         }
-                        var resource_amount = purchase_amount / resources[resource].value;
+                        var resource_amount = purchase_amount / (resources[resource].value * 2);
                         if (event_flags["c_sell_" + resource] < Date.now() - 60000 * 10) { /* Each resource can only be bought once every 10 minutes. */
                             $("#events_content").append("<span class='clickable'>Purchase</span> " + format_num(resource_amount, false) + " " + resource.replace("_", " ") + " (" + format_num(purchase_amount, false) + " money) <br />");
                             $("#events_content > span").last().click(function () {

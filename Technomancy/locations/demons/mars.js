@@ -2,7 +2,7 @@
   Here we start going from kittens to demons.
 */
 ({
-    "unlocked": function () { return buildings["s_manastone"].amount > 2500; },
+    "unlocked": function () { return true; },
     "go_again_text": "Rove",
     "encounters": [
         ({

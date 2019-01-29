@@ -14,7 +14,9 @@
                     $("#character").addClass("hidden"); /* Hide char pane so they can see what they have. */
                     $("#events_content").html("You wander the market and find many goods for sale. You have <span id='cath_money'>" + format_num(resources["money"].amount) + "</span> money to spend.<br />");
 
-                    let purchase_amount = resources["money"].amount / 20; /* Each trade they spend 5% of their money */
+                    let purchase_amount = resources["money"].amount / 10; /* How much money they can spend on a trade */
+                    purchase_amount = clamp(purchase_amount, 50000, 10000 * Math.log(purchase_amount));
+
                     let sold_resources = ["wood", "gold", "oil", "coal", "iron_ore", "iron", "uranium", "steel_beam", "hydrogen"]; /* What kittens have for sale. */
                     if (event_flags["bribed_politician"] == "environment" && event_flags["crisis_averted"]) {
                         sold_resources.push("book");
@@ -23,7 +25,7 @@
                         if (event_flags["c_sell_" + resource] == undefined) {
                             event_flags["c_sell_" + resource] = 0;
                         }
-                        let resource_amount = purchase_amount / resources[resource].value
+                        let resource_amount = purchase_amount / (resources[resource].value * 2);
                         if (event_flags["c_sell_" + resource] < Date.now() - 60000 * 10) { /* Each resource can only be bought once every 10 minutes. */
                             $("#events_content").append("<span class='clickable'>Purchase</span> " + format_num(resource_amount, false) + " " + resource.replace("_", " ") + " (" + format_num(purchase_amount, false) + " money) <br />");
                             $("#events_content > span").last().click(function () {
@@ -33,7 +35,7 @@
                                     resources[resource].amount += resource_amount;
                                 }
                                 event_flags["c_sell_" + resource] = Date.now();
-                                cat_market()
+                                cat_market();
                                 setTimeout(60000 * 10, function () {
                                     if (localStorage["cath_notify"] == "true") {
                                         $("#events_topbar").html("Cath Resources Available!");
@@ -52,7 +54,7 @@
                             if (resources["book"].amount >= 5000) {
                                 resources["book"].amount -= 5000;
                                 adventure_data["piscine_unlocked"] = true;
-                                $("#events_content").html("You purchase the chart. Apparently there's a new planet somewhere near Terminus.")
+                                $("#events_content").html("You purchase the chart. Apparently there's a new planet somewhere near Terminus.");
                             } else {
                                 cat_market();
                             }
@@ -65,7 +67,7 @@
                             if (resources["book"].amount >= 25000) {
                                 resources["book"].amount -= 25000;
                                 adventure_data["omega_planet_unlocked"] = true;
-                                $("#events_content").html("You purchase the chart. Apparently there's a new planet somewhere near Mars (check out the Moon when you have a ton of mana).")
+                                $("#events_content").html("You purchase the chart. Apparently there's a new planet somewhere near Mars (check out the Moon when you have a ton of mana).");
                             } else {
                                 cat_market();
                             }
