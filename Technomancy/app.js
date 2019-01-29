@@ -3905,10 +3905,10 @@ window.onload = function () {
             buildings["s_essence"].amount = adventure_data["current_essence"];
             if (adventure_data["challenge"]) {
                 if (adventure_data["challenge"] == CHALLENGES.UDM) {
-                    buildings["s_essence"].amount = 10;
+                    buildings["s_essence"].amount = Math.min(10, adventure_data["current_essence"]);
                 }
                 else {
-                    buildings["s_essence"].amount = 100;
+                    buildings["s_essence"].amount = Math.min(100, adventure_data["current_essence"]);
                 }
             }
             toggle_building_state("s_essence");

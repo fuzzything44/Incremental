@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.20.2: (1/28/19)
+If you're in a challenge, you no longer get your essence always set to 100, it's now CAPPED at 100 (10 if you're in the UDM challenge, which will be a thing later).
+
 v5.20.1: (1/28/19) Way too many minor things, and setting up for some new content.
 Mars is now always visible, and still a pain to get to. Nerfed Cath trading to a shadow of what it once was. Added a couple new challenges, which aren't available yet (unless you enter them with console commands). Buffed gold leaf potions. Increased fuel and uranium value. Increased magnet multipliers. Fixed a bug where you could prestige for infinite mana. You now can truly not prestige in a loan challenge. The scratchpad should appear in challenges too. In settings, F hotkey now properly says what it does. You can no longer purchase essence in a challenge (and essence is limited). In the meteor challenge, you now get to at least get something from the meteor event after it crushes your hopes and dreams. 
 
