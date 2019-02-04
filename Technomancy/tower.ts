@@ -314,7 +314,7 @@
         "reward_text": "a whole lot of gold and money for your magic bag!",
         reward: function () { }
     }, 
-    { /* Boss 24 */
+    { /* Boss 24 "Exploration?" */
         "boss": "The Entire Continent of America",
         "text": "No, not the people living there. You're fighting the continent itself. How did it fit in the tower? Don't ask.",
         get reward_text() {
@@ -365,7 +365,7 @@
         },
         reward: function () { }
     }, 
-    { /* Boss 28 */
+    { /* Boss 28 "fishies" */
         "boss": "a little swimmy fishy",
         "text": "It's just swimming around. ",
         get reward_text() {
@@ -404,7 +404,7 @@
         },
         reward: function () { }
     },
-    { /* Boss 31 (Ascension I - 1) */
+    { /* Boss 31 (Ascension I - 1) "mystical stuff" */
         "boss": "A very sparkly mystical bowl of spaghetti",
         "text": "Mmm, magic spaghetti. You get hungry just thinking about it.",
         "reward_text": "a halved cooldown on the tower of grinding!",
@@ -444,7 +444,7 @@
             }
         }
     },
-    { /* Boss 35 (Ascension II - 1) */
+    { /* Boss 35 (Ascension II - 1) "test stuff" */
         "boss": "test boss",
         "text": "test text.",
         get reward_text() {
@@ -480,7 +480,7 @@
         reward: function () {
         }
     },
-    { /* Boss 39 (Ascension III - 1) */
+    { /* Boss 39 (Ascension III - 1) "ninjas" */
         "boss": "a Ninja",
         "text": "...",
         get reward_text() {
@@ -536,7 +536,7 @@
             }
         }
     },
-    { /* Boss 43 (Ascension IV - 1) */
+    { /* Boss 43 (Ascension IV - 1) "pizza" */
         "boss": "a cheese pizza",
         "text": "Yum!",
         get reward_text() {
@@ -576,40 +576,119 @@
         reward: function () {
         }
     },
-    { /* Boss 47 (Ascension V - 1) */
-        "boss": "",
-        "text": "",
+    { /* Boss 47 (Ascension V - 1) "contributors" */
+        "boss": "fuzzything44",
+        "text": "Hey, wait! That's me! Stop! Ow!",
+        "special_chance": 50,
+        run_special: function () {
+            if (adventure_data["tower_healer"].current_health > 0) {
+                adventure_data["tower_healer"].current_health -= 100;
+                return { message: "I'll go attack your healer now. Ha!", damage: 0 };
+            } else {
+
+                return { message: "Pow! I just punched you right in your face! That's a lot of damage.", damage: 0, real_damage: 1000 };
+            }
+        },
         get reward_text() {
-            return ""; /* Bosses after this have special attacks? */
+            if (adventure_data["auto_upgrade"] == undefined) {
+                return "AutoUpgrade (see your settings menu).";
+            }
+            return "nothing";
         },
         reward: function () {
-        }
+            if (adventure_data["auto_upgrade"] == undefined) {
+                adventure_data["auto_upgrade"] = false;
+            }
+        },
+
     },
     { /* Boss 48 (Ascension V - 2) */
-        "boss": "",
-        "text": "",
+        "boss": "/u/raids_made_easy",
+        "text": "Do you know why the trading portal sucks? They broke it. They're why. They're the first person to find a ton of bugs and powerful interactions in this game.",
+        "special_chance": 30,
+        run_special: function () {
+            if (adventure_data["tower_warrior"].current_health > 0) {
+                adventure_data["tower_warrior"].current_health = Math.floor(adventure_data["tower_warrior"].current_health / 2);
+                return { message: "They use the power of exponents to halve your warrior's health!", damage: 0 };
+            } else {
+                return { message: "They use the power of exponents to halve your health!", damage: 0, percent_damage: 50 };
+            }
+        },
         get reward_text() {
-            return ""; /* Spikey kneepad upgrade? */
+            return "spikier kneepads.";
         },
         reward: function () {
-        }
+        },
     },
     { /* Boss 49 (Ascension V - 3) */
-        "boss": "",
-        "text": "",
+        "boss": "TheFool",
+        "text": "Without them, tower ascension may not even exist yet.",
+        "special_chance": 0,
+        run_special: function () {
+            return { message: "Oof ow ouch my bones", percent_damage: 90, damage: -1000};
+        },
         get reward_text() {
-            return ""; /* Healer can heal party members? */
+            if (adventure_data["autobuild_advanced"]) {
+                return "nothing";
+            }
+            return "improved autobuild"; 
         },
         reward: function () {
+            adventure_data["autobuild_advanced"] = true;
         }
     },
-    { /* Boss 50 (Ascension V - 5) */
-        "boss": "",
-        "text": "",
+    { /* Boss 50 (Ascension V - 4) */
+        "boss": "Joevdw",
+        "text": "The first person to monetarily support this game, along with MANY discoveries of major issues. Also, if this is you I guess this floor is just a mirror or something? Weird.",
+        /*"special_chance": 0,
+        run_special: function () {
+            return { message: "Oof ow ouch my bones", percent_damage: 90, damage: -1000 };
+        },*/
         get reward_text() {
             return "a new challenge, yay!"; 
         },
         reward: function () {
+
+        }
+    },
+    { /* Boss 51 (Ascension VI - 1) "Ye Olde" */
+        "boss": "Ye Olde Tavern",
+        "text": "Crush the (other) Tavern!",
+        get reward_text() {
+            return "";
+        },
+        reward: function () {
+
+        }
+    },
+    { /* Boss 52 (Ascension VI - 2)*/
+        "boss": "Ye Olde Castle",
+        "text": "Crush the Castle!",
+        get reward_text() {
+            return "";
+        },
+        reward: function () {
+
+        }
+    },
+    { /* Boss 53 (Ascension VI - 3) */
+        "boss": "Ye Olde Angree King",
+        "text": "Oops, maybe you shouldn't have crushed that castle.",
+        get reward_text() {
+            return "";
+        },
+        reward: function () {
+
+        }
+    },
+    { /* Boss 54 (Ascension VI - 4) */
+        "boss": "Ye Olde Ye Olde",
+        "text": "Things are beyond having to make sense by now, okay?",
+        get reward_text() {
+            return "";
+        },
+        reward: function () {
+
         }
     },
     { /* Boss Repeat, for extra levels */
@@ -906,8 +985,8 @@ function climb_tower(health = undefined, ehealth = undefined, grinding = false) 
     if (adventure_data["tower_floor"] > tower_height() && !grinding) {
         $("#events_content").html("You're at the current top of the tower! Oh, also if you're here please message fuzzything44 on the Discord channel.<br/>");
         /* Reset the tower information, increment ascension count and reset cost of essence. */
-        /* CURRENT: MAX ASCENSION COUNT IS 3 */
-        if (adventure_data["tower_ascension"] < 4) {
+        /* CURRENT: MAX ASCENSION COUNT IS 5 */
+        if (adventure_data["tower_ascension"] < 5) {
             $("#events_content").html("There is a shimmering portal before you.  You sense that stepping through it will replace this tower with a bigger, better and harder one.  It will also make essence much cheaper.<br/>(This is Tower Ascension - you'll start again at floor 0, keeping all your essence and essence spent. 4 new floors will be added to the tower and it'll become more difficult. It also lowers the essence cost back to the base. Some floor rewards will be locked until you reach that floor again. Also, the small tower will become harder and gain floors at the same rate.)<br/>");
             /* Need to modify the message above and the function below for Ascension specific extra upgrades. */
             $("#events_content").append("<span class='clickable'>Step</span> through the portal.<br/>");
@@ -928,25 +1007,19 @@ function climb_tower(health = undefined, ehealth = undefined, grinding = false) 
         $("#events_content").append("<span class='clickable'>Back</span> to tower base.<br/>");
         $("#events_content span").last().click(function () { tower(); });
     } else {
-
-        let boss = ""; 
-        let description = ""; 
-
+        let boss_data;
 
         if (tower_level < tower_height()) {
             if (tower_level < TOWER_DATA.length - 2) {
-                boss = TOWER_DATA[tower_level].boss;
-                description = TOWER_DATA[tower_level].text;
+                boss_data = TOWER_DATA[tower_level];
             } else {
-                boss = TOWER_DATA[TOWER_DATA.length - 2].boss;
-                description = TOWER_DATA[TOWER_DATA.length - 2].text;
+                boss_data = TOWER_DATA[TOWER_DATA.length - 2];
             }
         } else {
-            boss = TOWER_DATA[TOWER_DATA.length - 1].boss;
-            description = TOWER_DATA[TOWER_DATA.length - 1].text;
+            boss_data = TOWER_DATA[TOWER_DATA.length - 1];
         }
 
-        $("#events_content").html("This floor contains " + boss + ". " + description + "<br/>");
+        $("#events_content").html("This floor contains " + boss_data.boss + ". " + boss_data.text + "<br/>");
         $("#events_content").append("Your health: " + format_num(health, true) + "<br/>");
         $("#events_content").append("Enemy health: " + format_num(ehealth, true) + "<br/>");
 
@@ -993,7 +1066,11 @@ function climb_tower(health = undefined, ehealth = undefined, grinding = false) 
                 } else {
                     health -= amt;
                     /* They have spikey kneepads */
-                    if (adventure_data["tower_floor"] > 16) {
+                    if (adventure_data["tower_floor"] > 48) {
+                        let knee_dmg = Math.floor(amt / 5) + 5;
+                        fight_results_message += " Your super spikey kneepads poke your enemy for " + format_num(knee_dmg) + " damage!";
+                        ehealth -= knee_dmg;
+                    } else if (adventure_data["tower_floor"] > 16) {
                         fight_results_message += " Your spikey kneepads poke your enemy for 5 damage!";
                         ehealth -= 5;
                     }
@@ -1018,18 +1095,39 @@ function climb_tower(health = undefined, ehealth = undefined, grinding = false) 
                 damage_player(enemy_damage);
             }
             fight_results_message += "<br/>";
+
+            if (boss_data["special_chance"] < Math.random() * 100) {
+                let special_attack = boss_data.run_special();
+                fight_results_message += special_attack.message + "<br/>";
+
+                damage_player(special_attack.damage);
+
+                if (special_attack["percent_damage"]) {
+                    damage_player(Math.round(health * special_attack["percent_damage"] / 100));
+                }
+
+                if (special_attack["real_damage"]) {
+                    health -= special_attack["real_damage"];
+                }
+
+
+            }
+
             if (adventure_data["tower_healer"] != undefined) {
                 let heal_action = $("input:radio[name='healer_action']:checked").val();
-                if (heal_action == "heal") {
-                    let heal_amount = adventure_data["tower_healer"].power;
-                    heal_amount = Math.min(adventure_data["tower_toughness"] - health, heal_amount); /* Can't heal past max health. */
-                    health += heal_amount;
-                    fight_results_message += "Your healer heals you for " + format_num(heal_amount, false) + " health.";
-                } else { /* It's attack */
-                    let heal_damage = Math.round(adventure_data["tower_healer"].power / 2);
-                    ehealth -= heal_damage;
-                    fight_results_message += "Your healer attacks for " + format_num(heal_damage, false) + " damage.";
+                if (adventure_data["tower_healer"].current_health > 0) {
+                    if (heal_action == "heal") {
+                        let heal_amount = adventure_data["tower_healer"].power;
+                        heal_amount = Math.min(adventure_data["tower_toughness"] - health, heal_amount); /* Can't heal past max health. */
+                        health += heal_amount;
+                        fight_results_message += "Your healer heals you for " + format_num(heal_amount, false) + " health.";
+                    } else { /* It's attack */
+                        let heal_damage = Math.round(adventure_data["tower_healer"].power / 2);
+                        ehealth -= heal_damage;
+                        fight_results_message += "Your healer attacks for " + format_num(heal_damage, false) + " damage.";
+                    }
                 }
+
                 adventure_data["tower_healer"].action = heal_action;
                 fight_results_message += "<br/>";
             }

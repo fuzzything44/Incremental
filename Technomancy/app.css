@@ -17,6 +17,11 @@
                                   supported by Chrome and Opera */
 }
 
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+}
+
 table {
     margin-left: auto;
     margin-right: auto;

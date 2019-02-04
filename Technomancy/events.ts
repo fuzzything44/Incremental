@@ -169,7 +169,6 @@ let events = [
                 event_flags["demon_trades"] = 0;
             }
             $("#events_topbar").append(" " + format_num(event_flags["demon_trades"]));
-            events[6].rejection = Math.min(50 - event_flags["demon_trades"] * 5, 80); /* The more trades you make, the more likely this is. */
             let content = "<span>Demon Traders have come to visit you.</span><br>";
             if (event_flags["demon_trades"] >= 10) {
                 content += "<span style='color: red'>You bleed as they approach. </span><br />"
@@ -199,14 +198,17 @@ let events = [
             add_log_elem("Demons came to trade with you.");
             $("#events_content").html(content);
 
-            /* If they're corrupted enough, potentially skip this and go directly to pact*/
+            /* If they're corrupted enough, potentially skip this and go directly to pact */
             if (Math.random() < (event_flags["demon_trades"] - 15) / 10) {
                 event_flags["demon_trades"] -= 1; /* Reduce corruption */
                 force_event(7);
             }
         },
         "name": "Demonic Trading",
-        "rejection": 50,
+        get rejection() {
+            if (event_flags["demon_trades"] == undefined) { return 0; }
+            return Math.min(50 - event_flags["demon_trades"] * 5, 80);
+        }
     }), /* End demon trading */
     ({
         "condition": function () { return event_flags["demon_trades"] >= 10; },
@@ -240,31 +242,33 @@ let events = [
         "rejection": 0,
     }), /* End demon stealing */
     ({
-        "condition": function () { return event_flags["bribed_politician"] == undefined && buildings["big_bank"].amount >= 5 && buildings["s_manastone"].amount >= 150; },
+        "condition": function () { return event_flags["bribed_politician"] == undefined && buildings["s_manastone"].amount >= 150; },
         "run_event": function () {
-            let content = "<span>Business isn't doing well. Regulations are really holding you back.</span><br>";
-            if (buildings["bank"].amount >= 180) {
-                content += "<span>Why not bribe a politician to change something for you?</span><br />";
-                content += "<i>Bribing costs 1,000,000 money and is available once per prestige. Choose wisely.</i><br /><br />";
+            $("#events_content").html("<span>Business isn't doing well. Regulations are really holding you back.</span><br>");
+
+            if (buildings["bank"].amount >= 180 && buildings["big_bank"].amount + buildings["big_mine"].amount >= 5 && buildings["big_bank"].amount >= 5) {
+                $("#events_content").append("<span>Why not bribe a politician to change something for you?</span><br />");
+                $("#events_content").append("<i>Bribing costs 1,000,000 money and is available once per prestige. Choose wisely.</i><br /><br />");
 
                 /* Bribe investment regulations. Lets them have more money from banks. */
-                content += "<span onclick='bribe_finance();' class='clickable'>Remove Financial Regulations</span><i style='text: small'>This provides a massive boost to banks and investment companies.</i><br />";
+                $("#events_content").append("<span onclick='bribe_finance();' class='clickable'>Remove Financial Regulations</span><i style='text: small'>This provides a massive boost to banks and investment companies.</i><br />");
 
                 /* No environmental regulations. Mines and logging camps much stronger. */
-                content += "<span onclick='bribe_environment();' class='clickable'>Remove Environmental Regulations</span><i style='text: small'>This provides a massive boost to mines and logging camps.</i><br />";
+                $("#events_content").append("<span onclick='bribe_environment();' class='clickable'>Remove Environmental Regulations</span><i style='text: small'>This provides a massive boost to mines and logging camps.</i><br />");
 
                 if (buildings["s_manastone"].amount >= 250 && buildings["s_manastone"].amount < 10000) {
                     let regs = buildings["s_manastone"].amount % 100 >= 50 ? "financial" : "environmental";
-                    if (buildings["s_manastone"].amount >= 350) {
-                        content += "Removing " + regs + " regulations seems like it might be risky, but it could be worth it...";
+                    if (buildings["s_manastone"].amount >= 250) {
+                        $("#events_content").append("Removing " + regs + " regulations seems like it might be risky, but it could be worth it...<br/>");
                     } else {
-                        content += "Removing " + regs + " regulations seems like it might be risky though...";
+                        $("#events_content").append("Removing " + regs + " regulations seems like it might be risky though...<br/>");
                     }
+                } else if (buildings["s_manastone"].amount >= 10000) {
+                    $("#events_content").append("You laugh at the idea of risk by now.<br/>");
                 }
             } else {
-                content += "Sadly, you don't have the influence needed. <br /><em>(You need 180 banks.)</em>"
+                $("#events_content").append("Sadly, you don't have the influence needed. <br /><em>(You need 180 banks and 5 investment companies or strip mines.)</em>");
             }
-            $("#events_content").html(content);
 
         },
         "name": "Bribe a Politician",
@@ -800,6 +804,40 @@ let events = [
         "name": ":(",
         "rejection": 0,
     }), /* End UDM sadness (3rd copy) */
+    ({
+        "condition": function () { return buildings["s_manastone"].amount >= 100000 && event_flags["wanderer_knowledge"] != undefined && event_flags["wanderer_2"] == undefined; },
+        "run_event": function () {
+            $("#events_content").html("<span>The wanderer returns.</span><br>");
+
+            /* Yep, 50k mana worth of refined. */
+            if (resources["refined_mana"].amount < 50000 * 1000) {
+                $("#events_content").append("<span>You need more refined mana. Much more.</span><br>");
+            } else {
+                $("#events_content").append("<span>You can trade " + format_num(50000 * 1000) + " of your refined mana to double how much of a resource you have. Will you do it?<br/>");
+                $("#events_content").append("<table></table>");
+                Object.keys(resources).forEach(function (res) {
+                    if (resources[res].amount > 0 && resources[res].value > 0 && res != "money") {
+                        $("#events_content table").append("<tr><td><span>Double</span></td><td>your " + res.replace(/\_/g, " ") + "</td></tr>");
+                        $("#events_content table span").last().click(function () {
+                            if (resources["refined_mana"].amount < 50000 * 1000) {
+                                $("#events_content").html("?<br/>You don't have enough refined mana.");
+                            } else {
+                                resources["refined_mana"].amount -= 50000 * 1000;
+                                resources[res].amount *= 2;
+                                event_flags["wanderer_2"] = true;
+                            }
+                        });
+                        $("#events_content table").last().append("");
+
+                    }
+                });
+            }
+            add_log_elem("The wanderer returned.");
+        },
+        "name": "Wanderer Part II",
+        "rejection": 45,
+        "force_cost": 50,
+    }), /* End stupid trade */
 
 ];
 

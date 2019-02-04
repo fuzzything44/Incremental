@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.21.0: (2/3/19) Tower goes to floor 50 now!
+The moon encounter now gives a hint that you want machine parts there. Added 1 time as a cost to a few upgrades. Changed some of the prestige formula (this mostly affects high-level play with quickmana and a high tower level). Changed bribing a politician event to show up even if you don't have investment companies, but you'll still need them to proceed. Added an event that lets you trade insane amounts of refined mana for resources. Added another tower ascension! This has a lot of neat things! AutoUpgrade, a new challenge, and improved autobuild! 
+
 v5.20.2: (1/28/19)
 If you're in a challenge, you no longer get your essence always set to 100, it's now CAPPED at 100 (10 if you're in the UDM challenge, which will be a thing later).
 

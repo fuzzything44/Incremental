@@ -49,7 +49,7 @@
             "run_encounter": function () {
                 $("#events_content").html("Oh huh. This rock on the moon has a lot of hydrogen in it. You can <span class='clickable'>refine</span> some of it!<br />");
                 $("#events_content > span").last().click(() => {
-                    $("#events_content").html("You manage to find 30000 hydrogen. <br /><span class='clickable' onclick='start_adventure()'>Done</span>");
+                    $("#events_content").html("You manage to find 30000 hydrogen. Maybe if you had some machine parts you could set up a mine here...<br /><span class='clickable' onclick='start_adventure()'>Done</span>");
                     resources["hydrogen"].amount += 30000;
                 });
                 /* If they have a machine part, they can build a mine. */

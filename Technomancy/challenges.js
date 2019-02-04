@@ -124,11 +124,11 @@ var CHALLENGE_INFO = [
     },
     {
         "name": "15 Minute Challenge",
-        "description": "You prestige at least every 15 minutes. No less.",
+        "description": "You prestige at least every 15 minutes. No less. Time to learn how to use all this fancy automation stuff!",
         "requirements": "Get 200 mana. Also, currently impossible.",
         "restrictions": "Go back to 0 mana. If your prestige has lasted over 15 minutes, you prestige.",
         get reward() {
-            return "Nothing, yet. Once it's added you'll actually be able to complete this.";
+            return "Auto Prestige (when it exists). Once it's added you'll actually be able to complete this.";
         },
         "test_completed": function () { return buildings["s_manastone"].amount >= 200 && false; }
     },
@@ -140,7 +140,7 @@ var CHALLENGE_INFO = [
         get reward() {
             return "Nothing, yet. Once it's added you'll actually be able to complete this.";
         },
-        "test_completed": function () { return buildings["s_manastone"].amount >= 200 && false; }
+        "test_completed": function () { return buildings["s_manastone"].amount >= 500 && false; }
     },
 ];
 //# sourceMappingURL=challenges.js.map

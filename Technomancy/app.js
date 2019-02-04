@@ -155,7 +155,9 @@ function set_initial_state() {
         _a["sand"] = { "amount": 0, "value": 2, "mult": 1, "changes": {}, "ps_change": "" },
         _a["glass"] = { "amount": 0, "value": 20, "mult": 1, "changes": {}, "ps_change": "" },
         _a["water"] = { "amount": 0, "value": 2, "mult": 1, "changes": {}, "ps_change": "" },
-        _a["hydrogen"] = { "amount": 0, "value": 5, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["hydrogen"] = { "amount": 0, get value() { if (adventure_data["challenge"] == CHALLENGES.UDM) {
+                return 1;
+            } return 5; }, "mult": 1, "changes": {}, "ps_change": "" },
         _a["steel_beam"] = { "amount": 0, "value": 200, "mult": 1, "changes": {}, "ps_change": "" },
         _a["uranium"] = { "amount": 0, "value": 5000, "mult": 1, "changes": {}, "ps_change": "" },
         _a["sandcastle"] = { "amount": 0, "value": 10000000, "mult": 1, "changes": {}, "ps_change": "" },
@@ -1638,7 +1640,7 @@ function set_initial_state() {
             "tooltip": "Throw away some extra time. You didn't need that, did you?",
             "name": "Time Removal",
             "image": "shield_power.png",
-            "repeats": false
+            "repeats": false,
         },
         "uranium_finance": {
             "unlock": function () { return typeof event_flags["bribed_politician"] != "undefined" && event_flags["bribed_politician"] == "money" && buildings["s_manastone"].amount >= 200; },
@@ -2163,7 +2165,7 @@ function set_initial_state() {
                 }
             },
             get cost() {
-                return { "refined_mana": Math.floor(total_time / 1000) };
+                return { "refined_mana": Math.floor(total_time / 1000), "time": 1 };
             },
             "tooltip": "Gets more expensive over time, but the more it costs the better it is!",
             "name": "AI Growth",
@@ -2192,6 +2194,7 @@ function set_initial_state() {
                 "mithril": 5000,
                 "sand": 100000000,
                 "sandcastle": 200,
+                "time": 1,
             },
             "tooltip": "Teaches your AI how to build things. Oh, also it'll take up a lot more mana to run.",
             "name": "AI Construction",
@@ -2225,6 +2228,7 @@ function set_initial_state() {
                 "mithril": 5000,
                 "sand": 100000000,
                 "sandcastle": 200,
+                "time": 1,
             },
             "tooltip": "Teaches your AI the secrets of void, at the cost of much more mana to run.",
             "name": "AI Negation",
@@ -2341,10 +2345,7 @@ var prestige = {
         if (mana_this_prestige == undefined) {
             mana_this_prestige = 0;
         }
-        var mana = buildings["s_manastone"].amount - mana_this_prestige; /* Don't count mana gained this prestige in here. */
-        if (mana < 0) {
-            mana = 0;
-        }
+        var mana = Math.abs(buildings["s_manastone"].amount - mana_this_prestige); /* Don't count mana gained this prestige in here. */
         var first_wall = Math.pow(mana, 1.3) * 0.5;
         var mana_gain = prestige_points / 15000 - first_wall; /* One for every 15k pp, and apply reduction based off of current mana */
         mana_gain = Math.pow(Math.max(0, mana_gain), .36); /* Then raise to .36 power and apply some rounding/checking */
@@ -2353,6 +2354,9 @@ var prestige = {
             mana_gain = 50 + (mana_gain - 50) / 2;
         }
         mana_gain -= mana_this_prestige; /* Take out what they already got. */
+        if (adventure_data["tower_floor"] > 36) {
+            mana_gain *= 2;
+        }
         if (event_flags["skills"] != undefined && event_flags["skills"][8]) { /* They have the quick mana skill */
             if (event_flags["mage_quickmana"] == undefined) { /* Quickly define this. */
                 event_flags["mage_quickmana"] = 0;
@@ -2373,9 +2377,6 @@ var prestige = {
             }
         }
         mana_gain = Math.max(0, mana_gain); /* Can't get negative mana. */
-        if (adventure_data["tower_floor"] > 36) {
-            mana_gain *= 2;
-        }
         if (isNaN(mana_gain)) {
             mana_gain = 0;
         } /* Can't get NaN mana. */
@@ -2463,11 +2464,14 @@ var prestige = {
 function clamp(val, min, max) {
     return Math.min(Math.max(val, min), max);
 }
-function add_log_elem(to_add) {
-    while ($("#log > span").length >= 10) { /* We want to remove the last element(s) to bring length to 9.*/
-        $("#log > span").last().remove(); /* Remove last child. Repeat until no more. */
+function add_log_elem(to_add, type) {
+    if (type === void 0) { type = ""; }
+    if (true) {
+        while ($("#log > span").length >= 10) { /* We want to remove the last element(s) to bring length to 9.*/
+            $("#log > span").last().remove(); /* Remove last child. Repeat until no more. */
+        }
+        $("#log").prepend("<span>" + to_add + "<br />" + "</span>");
     }
-    $("#log").prepend("<span>" + to_add + "<br />" + "</span>");
 }
 function save() {
     Object.keys(resources).forEach(function (type) {
@@ -2935,8 +2939,18 @@ function update_upgrade_list() {
             return;
         }
         if (remaining_upgrades[upg_name].unlock()) {
-            $("#upgrade_" + upg_name).removeClass("hidden");
+            /* Only autobuy non-repeating upgrades that don't cost time (as time is constantly the most limited resource) */
+            if (adventure_data["auto_upgrade"] && !remaining_upgrades[upg_name].repeats && remaining_upgrades[upg_name].cost["time"] == undefined) {
+                try {
+                    purchase_upgrade(upg_name);
+                    return; /* Don't bother with the rest if we successfully buy it. */
+                }
+                catch (e) {
+                    /* Ah, well. Couldn't buy it. */
+                }
+            }
             var color_1 = ""; /* Set color to lightgray or red depending on if they can afford it */
+            $("#upgrade_" + upg_name).removeClass("hidden");
             Object.keys(remaining_upgrades[upg_name].cost).forEach(function (res) {
                 if (resources[res].amount < remaining_upgrades[upg_name].cost[res]) {
                     color_1 = "red";
@@ -3627,10 +3641,31 @@ function draw_autobuild() {
         });
     }
     var _loop_1 = function (i) {
-        var b_name = $("#building_" + build_queue[i] + " .building_name").text();
+        var building = build_queue[i];
+        var build_amount = 1;
+        if (typeof building == "object") {
+            build_amount = building[1];
+            building = building[0];
+        }
+        var b_name = $("#building_" + building + " .building_name").text();
         var color = i >= autobuild_amount ? "" : "green";
         if (i == build_queue.length - 1 && autobuild_repeat) {
             color = "yellow";
+        }
+        if (adventure_data["autobuild_advanced"]) {
+            $("#autobuild_items").append("<input value=" + build_amount + " type='number' class='fgc bgc_second' style='width: 3em;'/>");
+            $("#autobuild_items input").last().change(function () {
+                var new_amount = parseInt($(this).val());
+                if (isNaN(new_amount) || new_amount < 0) {
+                    new_amount = 0;
+                }
+                if (typeof build_queue[i] == "string") {
+                    build_queue[i] = [build_queue[i], new_amount];
+                }
+                else {
+                    build_queue[i][1] = new_amount;
+                }
+            });
         }
         $("#autobuild_items").append("<span style='color: " + color + "'>" + b_name + "</span><span class='clickable'>Remove</span><br>");
         $("#autobuild_items span").last().click(function () {
@@ -3663,9 +3698,15 @@ function run_autobuild() {
     /* We have a building queued and not built */
     if (build_queue.length > autobuild_amount) {
         var to_build = build_queue[autobuild_amount];
+        var build_amount = 1;
+        if (typeof to_build == "object") { /* Unpack */
+            build_amount = to_build[1];
+            to_build = to_build[0];
+            build_amount -= buildings[to_build].amount; /* We build UP TO this amount. */
+        }
         if (!$("#building_" + to_build).parent().hasClass("hidden") && SPELL_BUILDINGS.indexOf(to_build) == -1) { /* Building must be visible to build it. */
             try {
-                purchase_building(to_build, 1); /* Attempt to build it. */
+                purchase_building(to_build, build_amount); /* Attempt to build it. */
                 add_log_elem("Autobuilt activated!");
                 autobuild_amount++; /* purchase_building() throws an error if it can't build, so this only runs on successful build. */
                 if (!$("#autobuild_items").hasClass("hidden")) { /* If autobuild menu is open, refresh it.*/
@@ -3673,7 +3714,18 @@ function run_autobuild() {
                 }
             }
             catch (e) {
-                /* do nothing, this is just required if we have a try statement. */
+                try {
+                    /* We couldn't build them all, so try to build one. */
+                    purchase_building(to_build, 1); /* Attempt to build one. */
+                    add_log_elem("Autobuilt activated!");
+                    /* Since we didn't get high enough, we can't go to the next one */
+                    if (!$("#autobuild_items").hasClass("hidden")) { /* If autobuild menu is open, refresh it.*/
+                        draw_autobuild();
+                    }
+                }
+                catch (e) {
+                    /* do nothing, this is just required if we have a try statement. */
+                }
             }
         }
     }
@@ -3777,6 +3829,16 @@ function toggle_confirms() {
         $("#update_confirms").html("Confirms Enabled");
     }
 }
+function toggle_autoupgrade() {
+    if (adventure_data["auto_upgrade"] == true) {
+        adventure_data["auto_upgrade"] = false;
+        $("#update_autoupgrade").html("AutoUpgrade Off");
+    }
+    else {
+        adventure_data["auto_upgrade"] = true;
+        $("#update_autoupgrade").html("AutoUpgrade On");
+    }
+}
 window.onload = function () {
     set_initial_state();
     load();
@@ -3808,6 +3870,15 @@ window.onload = function () {
     }
     else {
         $("#update_confirms").html("Confirms Enabled");
+    }
+    if (adventure_data["auto_upgrade"] != undefined) {
+        if (adventure_data["auto_upgrade"]) {
+            $("#update_autoupgrade").html("AutoUpgrade On");
+        }
+        else {
+            $("#update_autoupgrade").html("AutoUpgrade Off");
+        }
+        $("#update_autoupgrade").removeClass("hidden");
     }
     /* Add upgrades to be unhidden*/
     /* Loop through all remaining upgrades */
