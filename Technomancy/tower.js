@@ -659,7 +659,7 @@ var TOWER_DATA = [
         "boss": "Ye Olde Tavern",
         "text": "Crush the (other) Tavern!",
         get reward_text() {
-            return "";
+            return ""; /* Let AI automate manufacturing? */
         },
         reward: function () {
         }
@@ -668,7 +668,7 @@ var TOWER_DATA = [
         "boss": "Ye Olde Castle",
         "text": "Crush the Castle!",
         get reward_text() {
-            return "";
+            return ""; /* Let AI build hydrogen mines? */
         },
         reward: function () {
         }
@@ -677,7 +677,7 @@ var TOWER_DATA = [
         "boss": "Ye Olde Angree King",
         "text": "Oops, maybe you shouldn't have crushed that castle.",
         get reward_text() {
-            return "";
+            return ""; /* ???  */
         },
         reward: function () {
         }
@@ -686,7 +686,7 @@ var TOWER_DATA = [
         "boss": "Ye Olde Ye Olde",
         "text": "Things are beyond having to make sense by now, okay?",
         get reward_text() {
-            return "";
+            return ""; /* Lootboxes? */
         },
         reward: function () {
         }

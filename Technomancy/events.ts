@@ -1304,7 +1304,7 @@ function meteor_hit() {
     /* We can actually destroy something. */
     if (available_buildings.length > 0) {
         let destroyed = available_buildings[prng(event_flags["meteor_amount"]) % available_buildings.length];
-        let amt = (prng(event_flags["meteor_amount"]) % buildings[destroyed].amount); /* This should leave us with at least one building */
+        let amt = (prng(event_flags["meteor_amount"]) % buildings[destroyed].amount) ; /* This should leave us with at least one building */
 
         /* Now we know what we're destroying and how many. Time to kill!*/
         let build_state = buildings[destroyed].on;
@@ -1321,7 +1321,7 @@ function meteor_hit() {
         /* And log it.*/
         add_log_elem("Oh no! A meteor fell on your " + $("#building_" + destroyed + " .building_name").text() + ", destroying " + amt.toString() + "!");
         /* Update amount of it shown */
-        purchase_building(destroyed, 0);
+        update_building_amount(destroyed);
 
     }
 }

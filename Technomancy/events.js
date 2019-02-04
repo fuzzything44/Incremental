@@ -1248,7 +1248,7 @@ function meteor_hit() {
         /* And log it.*/
         add_log_elem("Oh no! A meteor fell on your " + $("#building_" + destroyed + " .building_name").text() + ", destroying " + amt.toString() + "!");
         /* Update amount of it shown */
-        purchase_building(destroyed, 0);
+        update_building_amount(destroyed);
     }
 }
 //# sourceMappingURL=events.js.map

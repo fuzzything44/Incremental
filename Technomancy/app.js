@@ -3737,7 +3737,7 @@ function prng(seed) {
     if (seed <= 0) {
         seed = 1234567;
     }
-    return seed * 16807 % 2147483647;
+    return seed * 16811 % 2147483647;
 }
 function perm_bag() {
     $("#events_topbar").html("Magic Bag of Folding");
