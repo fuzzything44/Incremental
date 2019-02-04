@@ -2940,7 +2940,14 @@ function update_upgrade_list() {
         }
         if (remaining_upgrades[upg_name].unlock()) {
             /* Only autobuy non-repeating upgrades that don't cost time (as time is constantly the most limited resource) */
-            if (adventure_data["auto_upgrade"] && !remaining_upgrades[upg_name].repeats && remaining_upgrades[upg_name].cost["time"] == undefined) {
+            var color_1 = ""; /* Set color to lightgray or red depending on if they can afford it */
+            $("#upgrade_" + upg_name).removeClass("hidden");
+            Object.keys(remaining_upgrades[upg_name].cost).forEach(function (res) {
+                if (resources[res].amount < remaining_upgrades[upg_name].cost[res]) {
+                    color_1 = "red";
+                }
+            });
+            if (adventure_data["auto_upgrade"] && color_1 == "" && !remaining_upgrades[upg_name].repeats && remaining_upgrades[upg_name].cost["time"] == undefined) {
                 try {
                     purchase_upgrade(upg_name);
                     return; /* Don't bother with the rest if we successfully buy it. */
@@ -2949,13 +2956,6 @@ function update_upgrade_list() {
                     /* Ah, well. Couldn't buy it. */
                 }
             }
-            var color_1 = ""; /* Set color to lightgray or red depending on if they can afford it */
-            $("#upgrade_" + upg_name).removeClass("hidden");
-            Object.keys(remaining_upgrades[upg_name].cost).forEach(function (res) {
-                if (resources[res].amount < remaining_upgrades[upg_name].cost[res]) {
-                    color_1 = "red";
-                }
-            });
             $("#upgrade_" + upg_name).css("color", color_1);
             /* Refresh tooltip */
             var tooltip = remaining_upgrades[upg_name].tooltip;

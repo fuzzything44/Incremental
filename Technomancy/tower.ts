@@ -580,7 +580,7 @@
         "boss": "fuzzything44",
         "text": "Hey, wait! That's me! Stop! Ow!",
         "special_chance": 50,
-        run_special: function () {
+        run_special: function (health, ehealth) {
             if (adventure_data["tower_healer"].current_health > 0) {
                 adventure_data["tower_healer"].current_health -= 100;
                 return { message: "I'll go attack your healer now. Ha!", damage: 0 };
@@ -606,12 +606,12 @@
         "boss": "/u/raids_made_easy",
         "text": "Do you know why the trading portal sucks? They broke it. They're why. They're the first person to find a ton of bugs and powerful interactions in this game.",
         "special_chance": 30,
-        run_special: function () {
+        run_special: function (health, ehealth) {
             if (adventure_data["tower_warrior"].current_health > 0) {
                 adventure_data["tower_warrior"].current_health = Math.floor(adventure_data["tower_warrior"].current_health / 2);
                 return { message: "They use the power of exponents to halve your warrior's health!", damage: 0 };
             } else {
-                return { message: "They use the power of exponents to halve your health!", damage: 0, percent_damage: 50 };
+                return { message: "They use the power of exponents to halve your health!", damage: Math.ceil(health / 2) };
             }
         },
         get reward_text() {
@@ -624,8 +624,8 @@
         "boss": "TheFool",
         "text": "Without them, tower ascension may not even exist yet.",
         "special_chance": 0,
-        run_special: function () {
-            return { message: "Oof ow ouch my bones", percent_damage: 90, damage: -1000};
+        run_special: function (health, ehealth) {
+            return { message: "Oof ow ouch my bones", damage: Math.max(25, Math.ceil( health * 0.9 - 500)) };
         },
         get reward_text() {
             if (adventure_data["autobuild_advanced"]) {
@@ -641,8 +641,8 @@
         "boss": "Joevdw",
         "text": "The first person to monetarily support this game, along with MANY discoveries of major issues. Also, if this is you I guess this floor is just a mirror or something? Weird.",
         /*"special_chance": 0,
-        run_special: function () {
-            return { message: "Oof ow ouch my bones", percent_damage: 90, damage: -1000 };
+        run_special: function (health, ehealth) {
+            return { message: "huh", damage: 1 };
         },*/
         get reward_text() {
             return "a new challenge, yay!"; 
@@ -1097,19 +1097,14 @@ function climb_tower(health = undefined, ehealth = undefined, grinding = false) 
             fight_results_message += "<br/>";
 
             if (boss_data["special_chance"] < Math.random() * 100) {
-                let special_attack = boss_data.run_special();
+                let special_attack = boss_data.run_special(health, ehealth);
                 fight_results_message += special_attack.message + "<br/>";
 
                 damage_player(special_attack.damage);
 
-                if (special_attack["percent_damage"]) {
-                    damage_player(Math.round(health * special_attack["percent_damage"] / 100));
-                }
-
                 if (special_attack["real_damage"]) {
                     health -= special_attack["real_damage"];
                 }
-
 
             }
 
