@@ -1245,7 +1245,7 @@ function tavern() {
     $("#events_content").html("The tavern is pretty empty right now. It's just you, your party, and the bartender. Still, you could buy a drink for a party member.<br/>");
     function buydrink(name, pow_increase, health_increase, size) {
         if (size === void 0) { size = 1; }
-        if (buildings["s_essence"].amount >= size) {
+        if (buildings["s_essence"].amount > size) {
             spend_essence(size);
             var pow_gain = pow_increase * size;
             var health_gain = health_increase * size;
@@ -1314,11 +1314,13 @@ function tavern() {
     $("#events_content span").last().click(function () { tower(); });
 }
 function spend_essence(amount) {
-    toggle_building_state("s_essence", true);
-    buildings["s_essence"].amount -= amount;
-    adventure_data["current_essence"] -= amount;
-    update_building_amount("s_essence");
-    toggle_building_state("s_essence", true);
+    if (adventure_data["current_essence"] > amount) {
+        toggle_building_state("s_essence", true);
+        buildings["s_essence"].amount -= amount;
+        adventure_data["current_essence"] -= amount;
+        update_building_amount("s_essence");
+        toggle_building_state("s_essence", true);
+    }
 }
 function buy_essence(amount) {
     var essence_cost = Math.round(Math.pow(adventure_data["total_essence"], essence_cost_multiplier()));

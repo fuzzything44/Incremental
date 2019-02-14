@@ -123,14 +123,14 @@ var CHALLENGE_INFO = [
         "test_completed": function () { return buildings["s_manastone"].amount >= 200; }
     },
     {
-        "name": "15 Minute Challenge",
-        "description": "You prestige at least every 15 minutes. No less. Time to learn how to use all this fancy automation stuff!",
-        "requirements": "Get 200 mana. Also, currently impossible.",
-        "restrictions": "Go back to 0 mana. If your prestige has lasted over 15 minutes, you prestige.",
+        "name": "3 Minute Challenge",
+        "description": "You prestige at least every 3 minutes. No less. Time to learn how to use all this fancy automation stuff!",
+        "requirements": "Get 500 mana. Also, currently impossible.",
+        "restrictions": "Go back to 0 mana. If your prestige has lasted over 3 minutes, you prestige.",
         get reward() {
             return "Auto Prestige (when it exists). Once it's added you'll actually be able to complete this.";
         },
-        "test_completed": function () { return buildings["s_manastone"].amount >= 200 && false; }
+        "test_completed": function () { return buildings["s_manastone"].amount >= 500 && false; }
     },
     {
         "name": "UDM Challenge",

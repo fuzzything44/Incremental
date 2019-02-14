@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.22.3: (2/13/19) Interesting Alchemist Stuff
+Fixed a bug where you couldn't adventure some places if you were an alchemist, but hadn't yet learned about alchemy. Changed the 15 minute challenge to 3 minutes. And you need to get more mana in it (it's still impossible to complete though). Increased the value of Void. The 3 minute challenge should now say how long your prestige has been. Reduced the amount of extra hydrogen engines allowed in challenges from the Meteor completion. Fixed a bug where you could spend all your essence, making it impossible to get back to the tower and get more essence. Oops.
+
 v5.21.2: (2/4/19) Minor fixes
 AutoUpgrade no longer attempts to buy upgrades you can't afford, probably. There's a bit of placeholder text in the scratchpad. Please don't store important information there though. Switched up some stuff with how high level tower bosses do special attacks. It should fix some weird stuff with spikey kneepads.
 

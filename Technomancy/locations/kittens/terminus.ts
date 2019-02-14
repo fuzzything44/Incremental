@@ -109,7 +109,7 @@
         }), /* Continue/end quest for Cath. No clue why it's 2 different encounters but whatever. */
 
         ({
-            "condition": function () { return event_flags["alchemist_ingredients"] != undefined && adventure_data["alchemy_ingredients"]["Etherium"] != undefined && event_flags["alchemist_ingredients"]["etherium"] && Math.random() > 0.95; },
+            "condition": function () { return event_flags["alchemist_ingredients"] != undefined && event_flags["alchemy_ingredients"] != undefined  && adventure_data["alchemy_ingredients"]["Etherium"] != undefined && event_flags["alchemist_ingredients"]["etherium"] && Math.random() > 0.95; },
             "types": ["noncombat"],
             "weight": 1,
             "title": "Huh, that's weird",

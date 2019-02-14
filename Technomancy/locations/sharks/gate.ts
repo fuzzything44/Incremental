@@ -137,7 +137,7 @@
                     if (adventure_data["challenges_completed"][CHALLENGES.FORCED_PRESTIGE]) {
                         $("#events_content").append("<span style='color:green'>\u2714 </span>"); /* If completed, add check mark. */
                     }
-                    $("#events_content").append("<span class='clickable'>Info</span> 15 Minute Challenge<br/>");
+                    $("#events_content").append("<span class='clickable'>Info</span> 3 Minute Challenge<br/>");
                     $("#events_content span").last().click(function () {
                         challenge_info(CHALLENGES.FORCED_PRESTIGE, function () {
                             buildings["s_manastone"].amount = 0;

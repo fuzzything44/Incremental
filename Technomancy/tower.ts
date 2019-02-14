@@ -1266,7 +1266,7 @@ function tavern() {
     $("#events_content").html("The tavern is pretty empty right now. It's just you, your party, and the bartender. Still, you could buy a drink for a party member.<br/>");
 
     function buydrink(name: string, pow_increase: number, health_increase: number, size: number = 1) {
-        if (buildings["s_essence"].amount >= size) {
+        if (buildings["s_essence"].amount > size) {
             spend_essence(size);
             let pow_gain = pow_increase * size;
             let health_gain = health_increase * size;
@@ -1338,15 +1338,16 @@ function tavern() {
 }
 
 function spend_essence(amount) {
-    toggle_building_state("s_essence", true);
-    
-    buildings["s_essence"].amount -= amount;
-    adventure_data["current_essence"] -= amount;
+    if (adventure_data["current_essence"] > amount) {
+        toggle_building_state("s_essence", true);
 
-    update_building_amount("s_essence");
+        buildings["s_essence"].amount -= amount;
+        adventure_data["current_essence"] -= amount;
 
-    toggle_building_state("s_essence", true);
-    
+        update_building_amount("s_essence");
+
+        toggle_building_state("s_essence", true);
+    }
 }
 
 function buy_essence(amount) {

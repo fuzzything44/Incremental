@@ -163,7 +163,7 @@ function set_initial_state() {
         _a["sandcastle"] = { "amount": 0, "value": 10000000, "mult": 1, "changes": {}, "ps_change": "" },
         _a["glass_bottle"] = { "amount": 0, "value": 25000, "mult": 1, "changes": {}, "ps_change": "" },
         _a["mithril"] = { "amount": 0, "value": 3500, "mult": 1, "changes": {}, "ps_change": "" },
-        _a["void"] = { "amount": 0, "value": 100000, "mult": 1, "changes": {}, "ps_change": "" },
+        _a["void"] = { "amount": 0, "value": 200000, "mult": 1, "changes": {}, "ps_change": "" },
         _a);
     /* Set resources_per_sec */
     Object.keys(resources).forEach(function (res) {
@@ -2452,6 +2452,9 @@ var prestige = {
                 $("#prestige > span").first().html("Prestige&nbsp;(" + format_num(prestige.percent_through(), false) + "%)");
             }
         }
+        if (adventure_data["challenge"] == CHALLENGES.FORCED_PRESTIGE) {
+            $("#prestige > span").first().append(" - " + Math.floor(total_time / 60000) + ":" + (((total_time % 60000) / 1000) < 10 ? '0' : '') + ((total_time % 60000) / 1000).toFixed(0));
+        }
         var suggested_amounts = [2, 5, 10, 27, 52, 92, 150, 200]; /* What mana amounts are good to prestige at. */
         for (var i in suggested_amounts) {
             if (suggested_amounts[i] > buildings["s_manastone"].amount) {
@@ -2773,7 +2776,7 @@ function update() {
     last_update = Date.now();
     total_time += delta_time; /* Track total time since prestige. */
     /* They're forced to prestige. RIP. */
-    if (adventure_data["challenge"] == CHALLENGES.FORCED_PRESTIGE && total_time > 15 * 60000) {
+    if (adventure_data["challenge"] == CHALLENGES.FORCED_PRESTIGE && total_time > 3 * 60000) {
         prestige.run(false);
     }
     if (delta_time > 15000) { /* More than 15 sec between tics and it's offline gen time. */
@@ -4038,7 +4041,7 @@ window.onload = function () {
         buildings["hydrogen_mine"].amount = adventure_data["hydrogen_mines"];
         var challenge_hydrogen_cap = 5;
         if (adventure_data["challenges_completed"] && adventure_data["challenges_completed"].length >= CHALLENGES.METEORS && adventure_data["challenges_completed"][CHALLENGES.METEORS]) {
-            challenge_hydrogen_cap = 50;
+            challenge_hydrogen_cap = 10;
         }
         if (adventure_data["challenge"] && buildings["hydrogen_mine"].amount > challenge_hydrogen_cap) { /* If they're in a challenge, cap at 5 */
             buildings["hydrogen_mine"].amount = challenge_hydrogen_cap;

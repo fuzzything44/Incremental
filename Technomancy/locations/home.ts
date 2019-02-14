@@ -451,7 +451,7 @@
                             { name: "potato", cost: 5 }, /* Found at Umbra */
                             { name: "salamander", cost: 10 }, /* Found at kittens/castles (abandoned colony) */
                             { name: "etherium", cost: 20 }, /* Found at Terminus */
-                            { name: "core", cost: 40 }, /* Found at Terminus */
+                            { name: "core", cost: 40 }, /* Found at Marine World */
                         ];
 
                         UNLOCKS.forEach(function (ingredient) {
