@@ -109,7 +109,7 @@ var CHALLENGE_INFO = [
         "description": "A basic challenge, but in the best theme! What's not to love about this?",
         "requirements": "Get 200 mana.",
         "restrictions": "A basic challenge, but it's stuck in disco theme.",
-        "reward": "Nothing yet. It won't be anything super important.",
+        "reward": "1 uranium/s",
         "test_completed": function () { return buildings["s_manastone"].amount >= 200; }
     },
     {

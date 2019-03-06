@@ -659,16 +659,20 @@ var TOWER_DATA = [
         "boss": "Ye Olde Tavern",
         "text": "Crush the (other) Tavern!",
         get reward_text() {
-            return ""; /* Let AI automate manufacturing? */
+            if (adventure_data["keep_time"] == undefined) {
+                return "keeping your time on prestige (except in challenges)";
+            }
+            return "nothing";
         },
         reward: function () {
+            adventure_data["keep_time"] = true;
         }
     },
     {
         "boss": "Ye Olde Castle",
         "text": "Crush the Castle!",
         get reward_text() {
-            return ""; /* Let AI build hydrogen mines? */
+            return ""; /* ??? */
         },
         reward: function () {
         }

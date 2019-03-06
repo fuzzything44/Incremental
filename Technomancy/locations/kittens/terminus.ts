@@ -101,7 +101,7 @@
                 } else if (adventure_data["cath_discovery"] == 1) {
                     $("#events_content").html("While investigating the crashed probes you find an abandoned observatory. You can see the sky! <br />");
                 } else if (adventure_data["cath_discovery"] == 2) {
-                    $("#events_content").html("Analyzing the trajectory of the probes, you look where you think they cam from using an undamaged telescope in the observatory. Oh wow, you can see a planet there! <br /><em>Cath unlocked!</em><br />");
+                    $("#events_content").html("Analyzing the trajectory of the probes, you look where you think they came from using an undamaged telescope in the observatory. Oh wow, you can see a planet there! <br /><em>Cath unlocked!</em><br />");
                 }
                 adventure_data["cath_discovery"] += 1;
                 $("#events_content").append(exit_button("Continue onwards."));

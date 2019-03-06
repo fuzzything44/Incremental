@@ -538,7 +538,7 @@
                                     }
                                 });
                             }
-                            if (buildings["mana_purifier"].amount > 0 && event_flags["know_pts"] > 10) {
+                            if (buildings["mana_purifier"].amount > 0) {
                                 if (event_flags["buildings_fortified"] == undefined) {
                                     event_flags["buildings_fortified"] = 0;
                                 }

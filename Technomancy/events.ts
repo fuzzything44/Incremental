@@ -654,7 +654,7 @@ let events = [
                                     adventure_data.warehouse.push({"name": "conv_cube"});
                                 }
                             }];
-                        }
+                        } 
 
                         /* Choose random reward from list. */
                         let reward = reward_list[prng(adventure_data["logicat_level"]) % reward_list.length];

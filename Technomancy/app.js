@@ -2240,7 +2240,7 @@ function set_initial_state() {
             "purchase": function () {
             },
             "cost": {
-                "mana": 2500,
+                "mana": 750,
                 "refined_mana": 50000,
                 "money": 1000000000,
             },
@@ -2353,10 +2353,10 @@ var prestige = {
         if (mana_gain > 50) { /* If they're getting a ton, they get less*/
             mana_gain = 50 + (mana_gain - 50) / 2;
         }
-        mana_gain -= mana_this_prestige; /* Take out what they already got. */
         if (adventure_data["tower_floor"] > 36) {
             mana_gain *= 2;
         }
+        mana_gain -= mana_this_prestige; /* Take out what they already got. */
         if (event_flags["skills"] != undefined && event_flags["skills"][8]) { /* They have the quick mana skill */
             if (event_flags["mage_quickmana"] == undefined) { /* Quickly define this. */
                 event_flags["mage_quickmana"] = 0;
@@ -2404,6 +2404,10 @@ var prestige = {
         }
         var mana_gain = prestige.mana();
         var mana = buildings["s_manastone"].amount;
+        var time_saved = 0;
+        if (adventure_data["keep_time"]) {
+            time_saved = resources["time"].amount;
+        }
         /* If they have this skill, don't warn them they're prestiging for 0.  */
         var has_quickmana = event_flags["skills"] != undefined && event_flags["skills"][8];
         if (mana_gain < 1 && ask && !has_quickmana) {
@@ -2422,6 +2426,7 @@ var prestige = {
             adventure_data.current_location = "home"; /* You have to prestige at home. */
             /* Open bags of holding. Iterate backwards so we don't skip bags. Only do this if we're not in a challenge. */
             if (!adventure_data["challenge"]) {
+                resources["time"].amount = time_saved;
                 for (var i = adventure_data.inventory.length - 1; i >= 0; i--) {
                     if (adventure_data.inventory[i].name == "bag" && adventure_data.inventory[i].resource != undefined) {
                         resources[adventure_data.inventory[i].resource].amount += adventure_data.inventory[i].amount;
@@ -3966,6 +3971,15 @@ window.onload = function () {
                 buildings["s_challenge"].generation["money"] += 30; /* +1 money/s */
                 resources_per_sec["money"] += 30; /* Previous stuff is for when they reload it. This sets it up until then. */
                 resources["money"].changes["Challenge"] = buildings["s_challenge"].generation["money"]; /* Add it to the resource tooltip. */
+            }
+            if (adventure_data["challenges_completed"].length >= CHALLENGES.DISCO && adventure_data["challenges_completed"][CHALLENGES.DISCO]) {
+                /* Make sure it's defined to not get fuzzy production. */
+                if (buildings["s_challenge"].generation["uranium"] == undefined) {
+                    buildings["s_challenge"].generation["uranium"] = 0;
+                }
+                buildings["s_challenge"].generation["uranium"] += 1; /* +1 money/s */
+                resources_per_sec["uranium"] += 1; /* Previous stuff is for when they reload it. This sets it up until then. */
+                resources["uranium"].changes["Challenge"] = buildings["s_challenge"].generation["uranium"]; /* Add it to the resource tooltip. */
             }
             /* They have a no upgrades challenge completion and don't have essence unlocked yet. */
             if (adventure_data["challenges_completed"].length >= CHALLENGES.NO_UPGRADE && adventure_data["challenges_completed"][CHALLENGES.NO_UPGRADE] && adventure_data["current_essence"] == undefined) {

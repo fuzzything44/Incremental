@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.22.4: (3/5/19) Minor balance change and typo fixes
+Fixed a typo in Terminus. You no longer need 10 KP for building fortification to appear as an Inventory (you'll still need it to actually forfity). Beachball mana requirement greatly reduced. Fixed a weird bug with double mana mode and quickmana. Strobe challenge now gives a reward. 
+
 v5.22.3: (2/13/19) Interesting Alchemist Stuff
 Fixed a bug where you couldn't adventure some places if you were an alchemist, but hadn't yet learned about alchemy. Changed the 15 minute challenge to 3 minutes. And you need to get more mana in it (it's still impossible to complete though). Increased the value of Void. The 3 minute challenge should now say how long your prestige has been. Reduced the amount of extra hydrogen engines allowed in challenges from the Meteor completion. Fixed a bug where you could spend all your essence, making it impossible to get back to the tower and get more essence. Oops.
 
