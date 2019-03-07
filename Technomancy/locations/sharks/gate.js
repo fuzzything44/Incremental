@@ -134,6 +134,17 @@
                         });
                     });
                 }
+                if (adventure_data["challenges_completed"][CHALLENGES.FORCED_PRESTIGE]) {
+                    if (adventure_data["challenges_completed"][CHALLENGES.UDM]) {
+                        $("#events_content").append("<span style='color:green'>\u2714 </span>"); /* If completed, add check mark. */
+                    }
+                    $("#events_content").append("<span class='clickable'>Info</span> UDM Challenge<br/>");
+                    $("#events_content span").last().click(function () {
+                        challenge_info(CHALLENGES.UDM, function () {
+                            buildings["s_manastone"].amount = 0;
+                        });
+                    });
+                }
             }
         }),
     ],

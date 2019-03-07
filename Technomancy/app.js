@@ -3283,13 +3283,19 @@ function calculate_bag_amount(res) {
     if (adventure_data["challenge"]) {
         if (adventure_data["challenges_completed"].length >= CHALLENGES.METEORS && adventure_data["challenges_completed"][CHALLENGES.METEORS]) {
             res_gain = Math.max(Math.min(res_gain, 10000 / Math.abs(resources[res].value)), Math.pow(res_gain, 4 / 5)); /* If they have meteors, reduce it again, unless it would reduce to lower than what they would get normally. */
+            if (resources[res].value < 0) {
+                res_gain = Math.min(res_gain, 100);
+            }
         }
         else {
             res_gain = Math.min(res_gain, 10000 / Math.abs(resources[res].value)); /* Otherwise, cap it. */
+            if (resources[res].value < 0) {
+                res_gain = 0;
+            }
         }
     }
     if ((res == "money" || res == "gold") && adventure_data["tower_floor"] > 23) {
-        res_gain *= Math.log(res_gain / 1000);
+        res_gain = Math.max(res_gain, res_gain * Math.log(res_gain / 1000));
     }
     return res_gain;
 }

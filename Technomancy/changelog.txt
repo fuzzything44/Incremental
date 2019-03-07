@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.23.2: (3/6/19) More small fixes
+UDM challenge is actually a thing you can start now. The magic bag holds less of special resources in a challenge.
+
 v5.23.1: (3/6/19) Well that was fast
 Changed... pretty much all the seal requirements. Added rewards for the 3 minute challenge and UDM challenge. Omnivision helps with the cube. 
 
