@@ -38,6 +38,16 @@ function format_num(num: number, show_decimals: boolean = true): string {
     }
 }
 
+function get_extension(to_parse: string): number {
+    const postfixes = [
+        "k", "m", "b", "t", "qa", "qi"
+    ];
+    if (postfixes.indexOf(to_parse.toLowerCase()) == -1) {
+        return 0;
+    }
+    return Math.pow(10, 3 * postfixes.indexOf(to_parse.toLowerCase()));
+}
+
 var resources = {};
 var resources_per_sec = {};
 var buildings = {};
@@ -2413,7 +2423,36 @@ function set_initial_state() {
             "image": "",
             "repeats": false,
         },
+        "better_purifier": {
+            "unlock": function () {
+                return adventure_data["tower_floor"] > 52;
+            },
+            "purchase": function () {
+                let build_state = buildings["mana_purifier"].on;
+                if (build_state) {
+                    toggle_building_state("mana_purifier");
+                }
+                Object.keys(buildings["mana_purifier"].generation).forEach(function (res) {
+                    buildings["mana_purifier"].generation[res] *= 2;
+                });
 
+                if (build_state) { /* Only turn on if it already was on */
+                    toggle_building_state("mana_purifier");
+                }
+
+            },
+            "cost": {
+                "purified_mana": 5,
+                "mithril": 2500,
+                "void": 50,
+                "time": 500,
+                "research": 75,
+            },
+            "tooltip": "Makes your purifier run twice as fast.",
+            "name": "Fast Purification",
+            "image": "",
+            "repeats": false,
+        },
 
         "trade": { /* Having it unlockable here lets the actual element get in the list. */
             "unlock": function () { return false; },
@@ -2535,6 +2574,9 @@ let prestige = {
         }
         if (adventure_data["tower_floor"] > 36) {
             mana_gain *= 2;
+        }
+        if (adventure_data["magic_seals"]) {
+            mana_gain *= (1 + 0.5 * adventure_data["magic_seals"]);
         }
 
         mana_gain -= mana_this_prestige; /* Take out what they already got. */

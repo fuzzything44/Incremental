@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.23.0: (3/6/19) Another tower Ascension!
+Added a new adventure location, accessed by finishing the next ascension. Other rewards include more omega upgrades (because of course that's what you needed) and an upgrade to the purifier.
+
 v5.22.4: (3/5/19) Minor balance change and typo fixes
 Fixed a typo in Terminus. You no longer need 10 KP for building fortification to appear as an Inventory (you'll still need it to actually forfity). Beachball mana requirement greatly reduced. Fixed a weird bug with double mana mode and quickmana. Strobe challenge now gives a reward. 
 

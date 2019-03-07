@@ -83,6 +83,17 @@
                                 toggle_building_state("s_essence");
                             }),
                         ],
+                        [
+                            new omega_upgrade("Capacitor Overflow", "Further increases maximum mana", [100000, 200000, 500000, 1000000], function (n) {
+                                adventure_data["max_mana"] += 500000;
+                            }),
+                            new omega_upgrade("Extended Refining", "Further increases maximum refinement batch size", [250000, 500000, 750000, 1000000], function (n) {
+                                adventure_data["max_refine"] += 10000;
+                            }),
+                            new omega_upgrade("Enhanced Mana Compression", "Mana compresses faster", [100000, 250000, 500000, 1000000], function (n) { 
+                                /* Handled in essence compressor code */
+                            }),
+                        ],
                     ];
 
                     $("#events_content").append("Also, you're allowed to spend some of your " + OMEGA + " on various upgrades.<br/><table id='omega_upgrades' border='1'></table>");
@@ -115,7 +126,7 @@
             }
         }),
     ],
-    "connects_to": ["demons/mars"],
+    "connects_to": ["demons/mars", "demons/seals"],
     "enter_cost": 0,
     "leave_cost": 0,
     "name": "Ulgathor",

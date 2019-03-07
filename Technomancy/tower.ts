@@ -668,7 +668,7 @@
         "boss": "Ye Olde Castle",
         "text": "Crush the Castle!",
         get reward_text() {
-            return ""; /* ??? */
+            return "an upgrade to your mana purifier";
         },
         reward: function () {
 
@@ -678,20 +678,30 @@
         "boss": "Ye Olde Angree King",
         "text": "Oops, maybe you shouldn't have crushed that castle.",
         get reward_text() {
-            return ""; /* ???  */
+            if (adventure_data["tower_ascension"] == 6) {
+                return "new omega upgrades";
+            }
+            return "nothing";
         },
         reward: function () {
-
+            if (adventure_data["tower_ascension"] == 6) {
+                adventure_data["omega_upgrades"].push([0, 0, 0]);
+            }
         }
     },
     { /* Boss 54 (Ascension VI - 4) */
         "boss": "Ye Olde Ye Olde",
         "text": "Things are beyond having to make sense by now, okay?",
         get reward_text() {
-            return ""; /* Lootboxes? */
+            if (adventure_data["tower_ascension"] == 6) {
+                return "the arcane seals";
+            }
+            return "nothing";
         },
         reward: function () {
-
+            if (adventure_data["tower_ascension"] == 6) {
+                adventure_data["magic_seals"] = 0;
+            }
         }
     },
     { /* Boss Repeat, for extra levels */
@@ -988,8 +998,8 @@ function climb_tower(health = undefined, ehealth = undefined, grinding = false) 
     if (adventure_data["tower_floor"] > tower_height() && !grinding) {
         $("#events_content").html("You're at the current top of the tower! Oh, also if you're here please message fuzzything44 on the Discord channel.<br/>");
         /* Reset the tower information, increment ascension count and reset cost of essence. */
-        /* CURRENT: MAX ASCENSION COUNT IS 5 */
-        if (adventure_data["tower_ascension"] < 5) {
+        /* CURRENT: MAX ASCENSION COUNT IS 6 */
+        if (adventure_data["tower_ascension"] < 6) {
             $("#events_content").html("There is a shimmering portal before you.  You sense that stepping through it will replace this tower with a bigger, better and harder one.  It will also make essence much cheaper.<br/>(This is Tower Ascension - you'll start again at floor 0, keeping all your essence and essence spent. 4 new floors will be added to the tower and it'll become more difficult. It also lowers the essence cost back to the base. Some floor rewards will be locked until you reach that floor again. Also, the small tower will become harder and gain floors at the same rate.)<br/>");
             /* Need to modify the message above and the function below for Ascension specific extra upgrades. */
             $("#events_content").append("<span class='clickable'>Step</span> through the portal.<br/>");
@@ -1358,7 +1368,7 @@ function buy_essence(amount) {
     if (buildings["s_manastone"].amount > essence_cost && resources["mana"].amount >= essence_cost) {
         buildings["s_manastone"].amount -= essence_cost;
         resources_per_sec["mana"] -= essence_cost;
-        update_building_amount("s_manastone")
+        update_building_amount("s_manastone");
 
         toggle_building_state("s_essence", true);
         buildings["s_essence"].amount++;
@@ -1369,7 +1379,7 @@ function buy_essence(amount) {
         adventure_data["total_essence"]++;
 
         if (amount > 1) {
-            return buy_essence(amount - 1); /* TODO: Switch from recursion sometime later. There's a clean formula for this, but eh. */
+            return buy_essence(amount - 1); /* TODO: Switch from recursion sometime later. There's probably a clean formula for this, but eh. */
         }
         return true;
     } else {

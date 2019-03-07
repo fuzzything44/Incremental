@@ -593,7 +593,12 @@ function s_autoessence(delta_time: number) {
 
     if (autoessence_tick > 1000) {
         /* Buy essence */
-        buy_essence(1);
+        let buy_amount = 1;
+        if (adventure_data["omega_upgrades"].length >= 2 && adventure_data["omega_upgrades"][1].length >= 3) {
+            /* Omega upgrade for essence compressor */
+            buy_amount += adventure_data["omega_upgrades"][1][2];
+        }
+        buy_essence(buy_amount);
         autoessence_tick = autoessence_tick % 1000;
     }
 }
