@@ -1,7 +1,7 @@
 ﻿Technomancy Changelog
 
 v5.23.3: (3/7/19) Minor cost fix
-Fixed a bug where some of the costs for things were 1000x less than they should be. 
+Fixed a bug where some of the costs for things were 1000x less than they should be. Also, fixed the UDM description.
 
 v5.23.2: (3/6/19) More small fixes
 UDM challenge is actually a thing you can start now. The magic bag holds less of special resources in a challenge.
