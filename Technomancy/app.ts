@@ -40,7 +40,7 @@ function format_num(num: number, show_decimals: boolean = true): string {
 
 function get_extension(to_parse: string): number {
     const postfixes = [
-        "k", "m", "b", "t", "qa", "qi"
+        "", "k", "m", "b", "t", "qa", "qi"
     ];
     if (postfixes.indexOf(to_parse.toLowerCase()) == -1) {
         return 0;

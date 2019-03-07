@@ -41,7 +41,7 @@ function format_num(num, show_decimals) {
 }
 function get_extension(to_parse) {
     var postfixes = [
-        "k", "m", "b", "t", "qa", "qi"
+        "", "k", "m", "b", "t", "qa", "qi"
     ];
     if (postfixes.indexOf(to_parse.toLowerCase()) == -1) {
         return 0;
