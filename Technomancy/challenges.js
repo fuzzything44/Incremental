@@ -136,7 +136,7 @@ var CHALLENGE_INFO = [
         "name": "UDM Challenge",
         "description": "Pain. Lots of it. Thought poverty/meteors/No Upgrades sucked? This is worse.",
         "requirements": "Get 500 mana.",
-        "restrictions": "Go back to 0 mana. Essence is capped lower than other challenges. And there's meteors. And poverty. And events happen less, which might actually be a good thing.",
+        "restrictions": "Go back to 0 mana. Essence is capped lower than other challenges. And there's meteors. And poverty. And events happen less, which might actually be a good thing. And no upgrades. ",
         get reward() {
             return "???";
         },
