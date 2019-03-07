@@ -369,7 +369,15 @@ var equipment = {
                 var run_action = function (action, callback) {
                     if (callback === void 0) { callback = null; }
                     /* Check time limit. */
-                    if ((Date.now() - data.last_action < 15000 && (data.points < 400 || data.points > 600)) || (Date.now() - data.last_action < 3000)) {
+                    var time_limit = 15000;
+                    if (data.points >= 500 && data.points <= 600) {
+                        time_limit = 3000;
+                    }
+                    if (adventure_data["challenges_completed"] && adventure_data["challenges_completed"].length > CHALLENGES.FORCED_PRESTIGE
+                        && adventure_data["challenges_completed"][CHALLENGES.FORCED_PRESTIGE]) {
+                        time_limit /= 2;
+                    }
+                    if (Date.now() - data.last_action < time_limit) {
                         /* Too fast. */
                         $("#events_content").prepend("Please wait, your cube is still working from your last action.<br />");
                         return;
@@ -584,6 +592,9 @@ var equipment = {
                 }
                 else {
                     $("#events_content").append("You see some lights on the case: ⚪⚫⚪⚫⚪⚪⚪⚫⚪⚫⚫<br/>");
+                }
+                if (event_flags["skills"] && event_flags["skills"][7]) {
+                    $("#events_content").append("(The cube appears to be at " + data.points + " points<br/>");
                 }
                 /* Describe buttons. There will always be some as the value is nonzero. */
                 var button_val = 1;

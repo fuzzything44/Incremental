@@ -137,9 +137,9 @@ let CHALLENGE_INFO = [
         "requirements": "Get 500 mana. Also, currently impossible.",
         "restrictions": "Go back to 0 mana. If your prestige has lasted over 3 minutes, you prestige.",
         get reward() {
-            return "Auto Prestige (when it exists). Once it's added you'll actually be able to complete this.";
+            return "Faster convolution cube actions.";
         },
-        "test_completed": function () { return buildings["s_manastone"].amount >= 500 && false; }
+        "test_completed": function () { return buildings["s_manastone"].amount >= 500; }
     },
     { /* UDM */
         "name": "UDM Challenge",
@@ -147,8 +147,8 @@ let CHALLENGE_INFO = [
         "requirements": "Get 500 mana. Also, currently impossible.",
         "restrictions": "Go back to 0 mana. Essence is capped lower than other challenges. And there's meteors. And poverty. And events happen less, which might actually be a good thing.",
         get reward() {
-            return "Nothing, yet. Once it's added you'll actually be able to complete this.";
+            return "???";
         },
-        "test_completed": function () { return buildings["s_manastone"].amount >= 500 && false; }
+        "test_completed": function () { return buildings["s_manastone"].amount >= 500; }
     },
 ]

@@ -13,21 +13,14 @@
                 $("#events_content").append("Each seal broken gives an (additive) +50% mana bonus.<br/>");
                 var cost_list = [
                     {
-                        "text": "1000 essence",
-                        "can_buy": function () { return adventure_data["current_essence"] > 1000; },
+                        "text": format_num(100 * get_extension("Qa")) + " money",
+                        "can_buy": function () { return resources["money"].amount >= 100 * get_extension("Qa"); },
                         "buy": function () {
-                            spend_essence(1000);
+                            resources["money"].amount -= 100 * get_extension("Qa");
                         },
                     },
                     {
-                        "text": "1000000 " + OMEGA,
-                        "can_buy": function () { return resources[OMEGA].amount >= 1000000; },
-                        "buy": function () {
-                            resources[OMEGA].amount -= 1000000;
-                        },
-                    },
-                    {
-                        "text": "250000 mana stones",
+                        "text": format_num(250000) + " mana stones",
                         "can_buy": function () { return buildings["s_manastone"].amount > 250000; },
                         "buy": function () {
                             buildings["s_manastone"].amount -= 250000;
@@ -36,16 +29,31 @@
                         },
                     },
                     {
-                        "text": format_num(1 * get_extension("T")) + " money",
-                        "can_buy": function () { return resources["money"].amount >= get_extension("T"); },
+                        "text": format_num(10000) + " essence",
+                        "can_buy": function () { return adventure_data["current_essence"] > 10000; },
                         "buy": function () {
-                            resources["money"].amount -= get_extension("T");
+                            spend_essence(10000);
                         },
                     },
                     {
-                        "text": "5",
-                        "can_buy": function () { return true; },
-                        "buy": function () { },
+                        "text": "free, once you beat the UDM challenge",
+                        "can_buy": function () { return adventure_data["challenges_completed"].length > CHALLENGES.UDM && adventure_data["challenges_completed"][CHALLENGES.UDM]; },
+                        "buy": function () {
+                        },
+                    },
+                    {
+                        "text": "The small key",
+                        "can_buy": function () { return count_item("conv_key", adventure_data.warehouse) + count_item("conv_key", adventure_data.inventory) > 0; },
+                        "buy": function () {
+                            var item_loc = find_item("conv_key", adventure_data.warehouse);
+                            if (item_loc == -1) {
+                                item_loc = find_item("conv_key", adventure_data.inventory);
+                                adventure_data.inventory.splice(item_loc, 1);
+                            }
+                            else {
+                                adventure_data.warehouse.splice(item_loc, 1);
+                            }
+                        },
                     },
                 ];
                 if (adventure_data["magic_seals"] < 5) {

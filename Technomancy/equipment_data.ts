@@ -289,6 +289,7 @@ let equipment = {
                     if (data.levers == undefined) {
                         data.levers = {};
                     }
+
                     /*Individual levers. All set down. */
                     let lcount = 0;
                     LEVERS.forEach((type) => {                                      /* Each lever is randomly on/off */
@@ -378,7 +379,16 @@ let equipment = {
                 /* Runs an action if possible. Oh boy will this be fun. */
                 let run_action = (action, callback = null) => {
                     /* Check time limit. */
-                    if ((Date.now() - data.last_action < 15000 && (data.points < 400 || data.points > 600)) || (Date.now() - data.last_action < 3000)) {
+                    let time_limit = 15000;
+                    if (data.points >= 500 && data.points <= 600) {
+                        time_limit = 3000;
+                    }
+                    if (adventure_data["challenges_completed"] && adventure_data["challenges_completed"].length > CHALLENGES.FORCED_PRESTIGE
+                        && adventure_data["challenges_completed"][CHALLENGES.FORCED_PRESTIGE]) {
+                        time_limit /= 2;
+                    }
+
+                    if (Date.now() - data.last_action < time_limit) {
                         /* Too fast. */
                         $("#events_content").prepend("Please wait, your cube is still working from your last action.<br />");
                         return;
@@ -604,6 +614,9 @@ let equipment = {
                     /* No action resource cost. Handled elsewhere. */
                 } else {
                     $("#events_content").append("You see some lights on the case: ⚪⚫⚪⚫⚪⚪⚪⚫⚪⚫⚫<br/>");
+                }
+                if (event_flags["skills"] && event_flags["skills"][7]) {
+                    $("#events_content").append("(The cube appears to be at " + data.points + " points<br/>");
                 }
                 /* Describe buttons. There will always be some as the value is nonzero. */
                 let button_val = 1;
