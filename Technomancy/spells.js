@@ -565,7 +565,7 @@ function s_autoessence(delta_time) {
     if (autoessence_tick > 1000) {
         /* Buy essence */
         var buy_amount = 1;
-        if (adventure_data["omega_upgrades"].length >= 2 && adventure_data["omega_upgrades"][1].length >= 3) {
+        if (adventure_data["omega_upgrades"] && adventure_data["omega_upgrades"].length >= 2) {
             /* Omega upgrade for essence compressor */
             buy_amount += adventure_data["omega_upgrades"][1][2];
         }

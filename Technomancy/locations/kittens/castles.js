@@ -58,7 +58,7 @@
             }
         }),
         ({
-            "condition": function () { return event_flags["alchemy_ingredients"] != undefined && event_flags["alchemist_ingredients"] != undefined && adventure_data["alchemy_ingredients"]["Salamander"] != undefined && event_flags["alchemist_ingredients"]["salamander"] && Math.random() > 0.85; },
+            "condition": function () { return event_flags["alchemist_ingredients"] != undefined && event_flags["alchemist_ingredients"]["salamander"] && Math.random() > 0.85; },
             "types": ["noncombat"],
             "weight": 1,
             "title": "Why is this here?",

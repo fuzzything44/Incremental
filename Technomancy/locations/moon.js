@@ -79,7 +79,7 @@
             },
         }),
         ({
-            "condition": function () { return event_flags["alchemist_ingredients"] != undefined && event_flags["alchemy_ingredients"] != undefined && adventure_data["alchemy_ingredients"]["Cheese"] != undefined && event_flags["alchemist_ingredients"]["cheese"]; },
+            "condition": function () { return event_flags["alchemist_ingredients"] != undefined && event_flags["alchemist_ingredients"]["cheese"]; },
             "types": ["noncombat"],
             "weight": 1,
             "title": "This isn't right...",

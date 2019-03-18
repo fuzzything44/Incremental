@@ -594,7 +594,7 @@ var equipment = {
                     $("#events_content").append("You see some lights on the case: ⚪⚫⚪⚫⚪⚪⚪⚫⚪⚫⚫<br/>");
                 }
                 if (event_flags["skills"] && event_flags["skills"][7]) {
-                    $("#events_content").append("(The cube appears to be at " + data.points + " points<br/>");
+                    $("#events_content").append("(The cube appears to be at " + data.points + " points)<br/>");
                 }
                 /* Describe buttons. There will always be some as the value is nonzero. */
                 var button_val = 1;

@@ -893,6 +893,12 @@ function tower() {
                 adventure_data["grind_tower_bank"]--;
                 climb_tower(undefined, undefined, true);
             });
+            var date = new Date(null);
+            var elapsed_time = (Date.now() - adventure_data["grind_tower_time"]) / 1000;
+            date.setSeconds(grind_tower_time - elapsed_time);
+            var dates = date.toISOString().substr(11, 8);
+            var result = dates.split(":");
+            $("#events_content").append("Your next bank is available in " + parseInt(result[0]).toString() + "hours " + parseInt(result[1]).toString() + " minutes<br/>");
         }
         else {
             var date = new Date(null);

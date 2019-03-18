@@ -425,18 +425,23 @@
                             }
                             var UNLOCKS = [
                                 /* Cheese given for free just by being an alchemist. Found at the Moon. */
-                                { name: "potato", cost: 5 },
-                                { name: "salamander", cost: 10 },
-                                { name: "etherium", cost: 20 },
-                                { name: "core", cost: 40 },
+                                { name: "potato", cost: 5, location: "Umbra" },
+                                { name: "salamander", cost: 10, location: "Abandoned Colony" },
+                                { name: "etherium", cost: 20, location: "Terminus" },
+                                { name: "core", cost: 40, location: "Marine World" },
                             ];
                             UNLOCKS.forEach(function (ingredient) {
                                 if (event_flags["alchemist_ingredients"][ingredient.name] == undefined) {
                                     $("#events_content").append("<span class='clickable'>Unlock</span> the secrets of " + ingredient.name + "!(Costs" + format_num(ingredient.cost) + " KP)");
                                     $("#events_content span").last().click(function () {
                                         if (event_flags["know_pts"] >= ingredient.cost) {
+                                            event_flags["know_pts"] -= ingredient.cost;
                                             event_flags["alchemist_ingredients"][ingredient.name] = true;
+                                            if (adventure_data.alchemy_ingredients[ingredient.name] == undefined) {
+                                                adventure_data.alchemy_ingredients[ingredient.name] = 0;
+                                            }
                                             study();
+                                            $("#events_content").prepend("You can now find " + ingredient.name + " at " + ingredient.location + ".<br />");
                                         }
                                         else {
                                             $("#events_content").prepend("Oops, you can't get that");

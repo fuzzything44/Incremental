@@ -66,7 +66,7 @@
                 $("#events_content").html("You threw stuff into the black hole a few times! <br />");
                 $("#events_content").append("It seems that it's managed to compress into some ball of magic. Interesting.<br />");
 
-                if (event_flags["alchemy_ingredients"] != undefined && event_flags["alchemist_ingredients"] != undefined && adventure_data["alchemy_ingredients"]["Potato"] != undefined && event_flags["alchemist_ingredients"]["potato"] && Math.random() > 0.5) {
+                if (event_flags["alchemist_ingredients"] != undefined && event_flags["alchemist_ingredients"]["potato"] && Math.random() > 0.5) {
                     $("#events_content").append("Oh hey, there's also a potato right next to that orb! Unexpected.<br/>");
                     adventure_data["alchemy_ingredients"]["Potato"]++;
                 }

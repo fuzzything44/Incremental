@@ -213,7 +213,7 @@
             } /* End run_encounter*/
         }),
         ({
-            "condition": function () { return event_flags["alchemist_ingredients"] != undefined && event_flags["alchemy_ingredients"] != undefined && adventure_data["alchemy_ingredients"]["Dimensional Core"] != undefined && event_flags["alchemist_ingredients"]["core"] && Math.random() > 0.9; },
+            "condition": function () { return event_flags["alchemist_ingredients"] != undefined && event_flags["alchemist_ingredients"]["core"] && Math.random() > 0.9; },
             "types": ["noncombat"],
             "weight": 1,
             "title": "Gate",

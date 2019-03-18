@@ -699,13 +699,18 @@ var events = [
                 }
                 /* Alchemy! */
                 if (buildings["s_manastone"].amount % 3 != 1 || buildings["s_manastone"].amount >= 10000) {
-                    $("#events_content").append("<span class='clickable'>Become an Alchemist</span><i style='text: small'>Turning lead into gold is only a small part of the potential of alchemists.</i><br>");
-                    $("#events_content span").last().click(function () {
-                        destroy_building("library", 50);
-                        buildings["library"].free -= 50;
-                        event_flags["wanderer_knowledge"] = "alchemy";
-                        $("#events").addClass("hidden");
-                    });
+                    if (adventure_data["alchemy_ingredients"] == undefined) {
+                        $("#events_content").append("You don't know the basics of alchemy yet, so how could you become an Alchemist?<i style='text: small'>Try getting to Haven, beyond the clouds of dust.</i><br>");
+                    }
+                    else {
+                        $("#events_content").append("<span class='clickable'>Become an Alchemist</span><i style='text: small'>Turning lead into gold is only a small part of the potential of alchemists.</i><br>");
+                        $("#events_content span").last().click(function () {
+                            destroy_building("library", 50);
+                            buildings["library"].free -= 50;
+                            event_flags["wanderer_knowledge"] = "alchemy";
+                            $("#events").addClass("hidden");
+                        });
+                    }
                 }
                 /* Machines! */
                 if (buildings["s_manastone"].amount % 3 != 2 || buildings["s_manastone"].amount >= 10000) {

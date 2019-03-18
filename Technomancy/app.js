@@ -2251,7 +2251,7 @@ function set_initial_state() {
             "cost": {
                 "mana": 750,
                 "refined_mana": 50000,
-                "money": 1000000000,
+                "money": 1 * get_extension("b"),
             },
             "tooltip": "Solves logikittens.",
             "name": "Beachball",
