@@ -347,13 +347,16 @@ function s_workshop_update(delta_time) {
         workshop_elapsed_time = 0;
         $("#workshop_progress_bar").css("width", "17.5em");
         $("#workshop_progress_bar").css("background-color", "green");
+        $("#workshop_progress_bar").attr("title", "100%");
     }
     else {
         workshop_elapsed_time += delta_time;
         /* Set width. 17.5em is full bar. */
+        let percent = Math.round(Math.min(1, workshop_elapsed_time / workshop_time_total) * 100);
         let width = 17.5 * Math.min(1, workshop_elapsed_time / workshop_time_total);
         $("#workshop_progress_bar").css("width", width.toString() + "em");
         $("#workshop_progress_bar").css("background-color", "red");
+        $("#workshop_progress_bar").attr("title", format_num(percent) + "%");
         /* Item finished! */
         if (workshop_elapsed_time >= workshop_time_total) {
             /* Give them the item */
@@ -478,13 +481,16 @@ function s_enchant_update(delta_time) {
         buildings["s_enchantment"].time_left = 0;
         $("#enchantment_progress_bar").css("width", "17.5em");
         $("#enchantment_progress_bar").css("background-color", "green");
+        $("#enchantment_progress_bar").attr("title", "100%");
     }
     else {
         /* Set width. 17.5em is full bar. */
         buildings["s_enchantment"].time_left -= delta_time;
+        let percent = Math.round(Math.min(1, 1 - (buildings["s_enchantment"].time_left) / enchantments[buildings["s_enchantment"].item].time) * 100);
         let width = 17.5 * Math.min(1, 1 - (buildings["s_enchantment"].time_left) / enchantments[buildings["s_enchantment"].item].time);
         $("#enchantment_progress_bar").css("width", width.toString() + "em");
         $("#enchantment_progress_bar").css("background-color", "red");
+        $("#enchantment_progress_bar").attr("title", format_num(percent) + "%");
         $("#enchant_" + buildings["s_enchantment"].item).css("color", "gold");
         /* Enchantment finished! */
         if (buildings["s_enchantment"].time_left <= 0) {

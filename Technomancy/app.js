@@ -3050,6 +3050,7 @@ function gen_building_tooltip(name) {
     }
     let tooltip = "";
     let gen_text = "";
+    let building_buyable = true;
     /* Add resource gen, update how much each one generates. */
     Object.keys(buildings[name].generation).forEach(function (key) {
         if (resources[key].value) { /* Add X per second for regular resources */
@@ -3079,6 +3080,7 @@ function gen_building_tooltip(name) {
         }
         if (cost > resources[key].amount) {
             cost_text += "<span style='color: red'>";
+            building_buyable = false;
         }
         else if (isNaN(cost)) {
             cost_text += "<span style='color: green'>";
@@ -3097,6 +3099,12 @@ function gen_building_tooltip(name) {
         flavor_text = "";
     }
     tooltip += flavor_text;
+    if (building_buyable) {
+        tooltip += "<span style='display: none'>Can afford</span>"; /* Should only be visible to screen readers */
+    }
+    else {
+        tooltip += "<span style='display: none'>Can't afford</span>"; /* Should only be visible to screen readers */
+    }
     return tooltip;
 }
 function update_building_amount(name) {
@@ -4176,7 +4184,7 @@ window.onload = () => {
         if (hotkey_mode == 0) {
             if ("1234567890".indexOf(e.key) != -1) {
                 if (!$("#events").hasClass("hidden")) {
-                    $("#events_content span.clickable")["1234567890".indexOf(e.key)].click();
+                    $("#events_content .clickable, #events_content button")["1234567890".indexOf(e.key)].click();
                 }
             }
             else if (e.key.toLowerCase() == "f") {
@@ -4243,6 +4251,7 @@ window.onload = () => {
         Object.keys(buildings).forEach(function (build) {
             if (SPELL_BUILDINGS.indexOf(build) == -1) {
                 $('#tooltip_' + build).html(gen_building_tooltip(build)); /* Generate tooltip for it. */
+                $("#tooltip_" + build).children().attr("aria-hidden", "false");
             }
             if (buildings[build].amount > 0 && SPELL_BUILDINGS.indexOf(build) == -1) {
                 $("#building_" + build).parent().removeClass("hidden"); /* Any owned building is unlocked. Needed in case they sell previous ones and reload. */
