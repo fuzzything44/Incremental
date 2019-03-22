@@ -2618,7 +2618,7 @@ let prestige = {
         }
     },
     run: function (ask = true, callback = function () { }) {
-        if (adventure_data["challenge"] == CHALLENGES.LOAN) { alert("You can't prestige in this challenge."); return; }
+        if (adventure_data["challenge"] == CHALLENGES.LOAN && ask) { alert("You can't prestige in this challenge."); return; }
 
         let mana_gain = prestige.mana();
         let mana = buildings["s_manastone"].amount;
@@ -3251,7 +3251,7 @@ function update_total_upgrades(name: string) {
     $("#num_upgrades").html("Upgrades: " + purchased_upgrades.length.toString());
     /* Update tooltip list of purchased upgrades */
     $("#purchased_upgrades").append("<br />" + name.replace("<br />", ""));
-
+    
 }
 
 function gen_building_tooltip(name: string) {
@@ -4193,6 +4193,8 @@ window.onload = () => {
         }
     });
 
+
+
     /* Give start of prestige rewards */
     if (event_flags["start_buildings"] == undefined) {
         event_flags["start_buildings"] = true;
@@ -4289,6 +4291,8 @@ window.onload = () => {
             }
             toggle_building_state("s_essence");
             update_building_amount("s_essence");/* Update amount shown. */
+        } else {
+            $("#building_s_essence").parent().addClass("hidden");
         }
 
         if (adventure_data["tower_floor"] > 34 || adventure_data["tower_ascension"] > 1) {

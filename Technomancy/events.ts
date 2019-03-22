@@ -81,27 +81,27 @@ let events = [
             } else {
                 $("#events_content").html("<span>Woah, a meteor just hit in your backyard!</span><br>");
             }
-
-            $("#events_content").append("<span onclick='resources.stone.amount += 50000; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 50000 stone\");' class='clickable'>Gather stone</span><br>");
+            
+            $("#events_content").append("<button class='fgc bgc_second' onclick='resources.stone.amount += 50000; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 50000 stone\");'>Gather stone</button><br>");
             if (resources["iron"].amount > 0) {
-                $("#events_content").append("<span onclick='resources.iron.amount += 500; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 500 iron\");' class='clickable'>Recover iron</span><br>");
+                $("#events_content").append("<button class='fgc bgc_second' onclick='resources.iron.amount += 500; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 500 iron\");'>Recover iron</button><br>");
             }
             if (resources["gold"].amount > 0) {
-                $("#events_content").append("<span onclick='resources.gold.amount += 150; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 150 gold\");' class='clickable'>Look for gold</span><br>");
+                $("#events_content").append("<button class='fgc bgc_second' onclick='resources.gold.amount += 150; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 150 gold\");'>Look for gold</button><br>");
             }
             if (resources["energy"].amount > 0) {
-                $("#events_content").append("<span onclick='resources_per_sec.energy += 10; setTimeout(() => resources_per_sec[\"energy\"] -= 10, 5 *60000); $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 10 energy for 5 minutes\");' class='clickable'>Capture the heat</span><br>");
+                $("#events_content").append("<button class='fgc bgc_second' onclick='resources_per_sec.energy += 10; setTimeout(() => resources_per_sec[\"energy\"] -= 10, 5 *60000); $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 10 energy for 5 minutes\");' >Capture the heat</button><br>");
             }
             if (buildings["big_mine"].amount >= 3 && buildings["big_mine"].on && Math.random() > .7 && buildings["library"].amount >= 5) {
                 if (resources["uranium"].amount > 0) {
-                    $("#events_content").append("<span onclick='resources.uranium.amount += 3; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 3 uranium\");' class='clickable'>Wait, what's that?</span><br>");
+                    $("#events_content").append("<button class='fgc bgc_second' onclick='resources.uranium.amount += 3; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 3 uranium\");'>Wait, what's that?</button><br>");
                 } else {
-                    $("#events_content").append("<span onclick='resources.diamond.amount += 10; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 10 diamond\");' class='clickable'>Wait, what's that?</span><br>");
+                    $("#events_content").append("<button class='fgc bgc_second' onclick='resources.diamond.amount += 10; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 10 diamond\");'>Wait, what's that?</button><br>");
                 }
             }
 
             if (adventure_data["tower_floor"] > 44) {
-                $("#events_content").append("<span onclick='resources.void.amount += 5; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 5 void\");' class='clickable'>Examine</span> the darkness.<br>");
+                $("#events_content").append("<button class='fgc bgc_second' onclick='resources.void.amount += 5; $(\"#events\").addClass(\"hidden\"); add_log_elem(\"Gained 5 void\");'>Examine</button> the darkness.<br>");
             }
             add_log_elem("A meteor fell!");
         },

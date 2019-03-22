@@ -283,7 +283,6 @@ hr {
 
 /* Tooltip text */
 .tooltip .tooltiptext {
-    visibility: hidden;
     width: 15em;
     text-align: center;
     border: 1px solid;
@@ -292,9 +291,9 @@ hr {
     
     /* Position the tooltip text */
     position: absolute;
+    top: -999999999em;
+    right: 999999999em;
     z-index: 1;
-    top: 100%;
-    right: 10%;
 
     opacity: 0;
     transition: opacity .3s;
@@ -306,8 +305,9 @@ hr {
 
 /* Show the tooltip text when you mouse over the tooltip container */
 .tooltip:hover .tooltiptext {
-    visibility: visible;
     opacity: 1;
+    top: 100%;
+    right: 10%;
 }
 
 

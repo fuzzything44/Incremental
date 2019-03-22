@@ -381,25 +381,25 @@
         <!-- Base production -->
         <div style="position: relative">
             <button onclick="destroy_building('bank')" class="building_remove bgc" aria-label="Destroy Bank">X</button>
-            <span id="building_bank" class="building tooltip fgc bgc" onclick="purchase_building('bank');" aria-describedby="tooltip_bank" role="button">
+            <span id="building_bank" class="building tooltip" onclick="purchase_building('bank');" aria-describedby="tooltip_bank" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Bank</span>
                 <span class="building_amount">0</span>
-                <span id="tooltip_bank" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()">Generates 1 money per second.<br /> Costs 10 money.</span>
+                <span id="tooltip_bank" role="tooltip" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()">Generates 1 money per second.<br /> Costs 10 money.</span>
             </span>
             <button id="toggle_bank" class="building_state_on fgc" onclick="toggle_building_state('bank')">On</button>
         </div>
         <div style="position: relative" class="hidden">
             <button onclick="destroy_building('oil_well')" class="building_remove bgc" aria-label="Destroy Oil Well">X</button>
-            <span id="building_oil_well" class="building tooltip" onclick="purchase_building('oil_well');" aria-describedby="tooltip_oil_well">
+            <span id="building_oil_well" class="building tooltip" onclick="purchase_building('oil_well');" aria-describedby="tooltip_oil_well" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Oil Well</span>
                 <span class="building_amount">0</span>
-                <span id="tooltip_oil_well" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()">Generates 1 oil per second.<br /> Costs 1000 money, 100 stone, 500 iron.</span>
+                <span id="tooltip_oil_well" role="tooltip" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()">Generates 1 oil per second.<br /> Costs 1000 money, 100 stone, 500 iron.</span>
             </span>
             <button id="toggle_oil_well" class="building_state_on fgc" onclick="toggle_building_state('oil_well')">On</button>
         </div>
         <div style="position: relative" class="hidden">
             <button onclick="destroy_building('library')" class="building_remove bgc" aria-label="Destroy Library">X</button>
-            <span id="building_library" class="building tooltip" onclick="purchase_building('library');" aria-describedby="tooltip_library">
+            <span id="building_library" class="building tooltip" onclick="purchase_building('library');" aria-describedby="tooltip_library" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Library</span>
                 <span class="building_amount">0</span>
                 <span id="tooltip_library" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()">Generates 1 research per second.<br /> Costs 500 money, 500 wood, 50 iron, 10 book.</span>
@@ -408,7 +408,7 @@
         </div>
         <div style="position: relative" class="hidden">
             <button onclick="destroy_building('water_purifier')" class="building_remove bgc" aria-label="Destroy Water Purifier">X</button>
-            <span id="building_water_purifier" class="building tooltip" onclick="purchase_building('water_purifier');" aria-describedby="tooltip_water_purifier">
+            <span id="building_water_purifier" class="building tooltip" onclick="purchase_building('water_purifier');" aria-describedby="tooltip_water_purifier" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Water Purifier</span>
                 <span class="building_amount">0</span>
                 <span id="tooltip_water_purifier" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()">Generates 1 water per second.<br /> Costs 500 money, 500 stone, 500 sand, 100 glass.</span>
@@ -417,7 +417,7 @@
         </div>
         <div style="position: relative" class="hidden">
             <button onclick="destroy_building('skyscraper')" class="building_remove bgc" aria-label="Destroy Skyscraper">X</button>
-            <span id="building_skyscraper" class="building tooltip" onclick="purchase_building('skyscraper');" aria-describedby="tooltip_skyscraper">
+            <span id="building_skyscraper" class="building tooltip" onclick="purchase_building('skyscraper');" aria-describedby="tooltip_skyscraper" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Skyscraper</span>
                 <span class="building_amount">0</span>
                 <span id="tooltip_skyscraper" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()">Generates 1 manager.<br /> Should be auto-filled here </span>
@@ -428,8 +428,8 @@
 
         <!-- Energy Generators -->
         <div style="position: relative" class="hidden">
-            <button onclick="destroy_building('oil_engine')" class="building_remove bgc">X</button>
-            <span id="building_oil_engine" class="building tooltip" onclick="purchase_building('oil_engine');" aria-describedby="tooltip_oil_engine">
+            <button onclick="destroy_building('oil_engine')" class="building_remove bgc" aria-label="Destroy Oil-burning Engine">X</button>
+            <span id="building_oil_engine" class="building tooltip" onclick="purchase_building('oil_engine');" aria-describedby="tooltip_oil_engine" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Oil-burning Engine</span>
                 <span class="building_amount">0</span>
                 <span id="tooltip_oil_engine" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()">Generates -1 oil per second, 1 energy per second.<br /> Costs 500 money, 200 iron.</span>
@@ -437,8 +437,8 @@
             <button id="toggle_oil_engine" class="building_state_on fgc" onclick="toggle_building_state('oil_engine')">On</button>
         </div>
         <div style="position: relative" class="hidden">
-            <button onclick="destroy_building('solar_panel')" class="building_remove bgc">X</button>
-            <span id="building_solar_panel" class="building tooltip" onclick="purchase_building('solar_panel');" aria-describedby="tooltip_solar_panel">
+            <button onclick="destroy_building('solar_panel')" class="building_remove bgc"aria-label="Destroy Solar Panel">X</button>
+            <span id="building_solar_panel" class="building tooltip" onclick="purchase_building('solar_panel');" aria-describedby="tooltip_solar_panel" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Solar Panel</span>
                 <span class="building_amount">0</span>
                 <span id="tooltip_solar_panel" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()"></span>
@@ -446,8 +446,8 @@
             <button id="toggle_solar_panel" class="building_state_on fgc" onclick="toggle_building_state('solar_panel')">On</button>
         </div>
         <div style="position: relative" class="hidden">
-            <button onclick="destroy_building('hydrogen_burner')" class="building_remove bgc">X</button>
-            <span id="building_hydrogen_burner" class="building tooltip" onclick="purchase_building('hydrogen_burner');" aria-describedby="tooltip_hydrogen_burner">
+            <button onclick="destroy_building('hydrogen_burner')" class="building_remove bgc"aria-label="Destroy Hydrogen Engine">X</button>
+            <span id="building_hydrogen_burner" class="building tooltip" onclick="purchase_building('hydrogen_burner');" aria-describedby="tooltip_hydrogen_burner" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Hydrogen Engine</span>
                 <span class="building_amount">0</span>
                 <span id="tooltip_hydrogen_burner" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()">Generates -20 hydrogen per second, 10 energy per second, 7 water per second.<br /> Costs 2500 money, 500 iron.</span>
@@ -455,8 +455,8 @@
             <button id="toggle_hydrogen_burner" class="building_state_on fgc" onclick="toggle_building_state('hydrogen_burner')">On</button>
         </div>
         <div style="position: relative" class="hidden">
-            <button onclick="destroy_building('reactor')" class="building_remove bgc">X</button>
-            <span id="building_reactor" class="building tooltip" onclick="purchase_building('reactor');" aria-describedby="tooltip_reactor">
+            <button onclick="destroy_building('reactor')" class="building_remove bgc" aria-label="Destroy Nuclear Reactor">X</button>
+            <span id="building_reactor" class="building tooltip" onclick="purchase_building('reactor');" aria-describedby="tooltip_reactor" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Nuclear Reactor</span>
                 <span class="building_amount">0</span>
                 <span id="tooltip_reactor" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()"></span>
@@ -468,8 +468,8 @@
 
         <!-- Converters (uses a resource to run)-->
         <div style="position: relative" class="hidden">
-            <button onclick="destroy_building('mine')" class="building_remove bgc">X</button>
-            <span id="building_mine" class="building tooltip" onclick="purchase_building('mine');" aria-describedby="tooltip_mine">
+            <button onclick="destroy_building('mine')" class="building_remove bgc" aria-label="Destroy Mine">X</button>
+            <span id="building_mine" class="building tooltip" onclick="purchase_building('mine');" aria-describedby="tooltip_mine" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Mine</span>
                 <span class="building_amount">0</span>
                 <span id="tooltip_mine" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()">Generates -1 money per second, 1 Stone per second.<br /> Costs 20 money.</span>
@@ -477,8 +477,8 @@
             <button id="toggle_mine" class="building_state_on fgc" onclick="toggle_building_state('mine')">On</button>
         </div>
         <div style="position: relative" class="hidden">
-            <button onclick="destroy_building('logging')" class="building_remove bgc">X</button>
-            <span id="building_logging" class="building tooltip" onclick="purchase_building('logging');" aria-describedby="tooltip_logging">
+            <button onclick="destroy_building('logging')" class="building_remove bgc" aria-label="Destroy Logging Camp">X</button>
+            <span id="building_logging" class="building tooltip" onclick="purchase_building('logging');" aria-describedby="tooltip_logging" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Logging Camp</span>
                 <span class="building_amount">0</span>
                 <span id="tooltip_logging" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()">Generates -1 money per second, 1 Wood per second.<br /> Costs 20 money.</span>
@@ -486,8 +486,8 @@
             <button id="toggle_logging" class="building_state_on fgc" onclick="toggle_building_state('logging')">On</button>
         </div>
         <div style="position: relative" class="hidden" >
-            <button onclick="destroy_building('furnace')" class="building_remove bgc">X</button>
-            <span id="building_furnace" class="building tooltip" onclick="purchase_building('furnace');" aria-describedby="tooltip_furnace">
+            <button onclick="destroy_building('furnace')" class="building_remove bgc" aria-label="Destroy Blast Furnace">X</button>
+            <span id="building_furnace" class="building tooltip" onclick="purchase_building('furnace');" aria-describedby="tooltip_furnace" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Blast Furnace</span>
                 <span class="building_amount">0</span>
                 <span id="tooltip_furnace" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()">
@@ -498,8 +498,8 @@
             <button id="toggle_furnace" class="building_state_on fgc" onclick="toggle_building_state('furnace')">On</button>
         </div>
         <div style="position: relative" class="hidden">
-            <button onclick="destroy_building('gold_finder')" class="building_remove bgc">X</button>
-            <span id="building_gold_finder" class="building tooltip" onclick="purchase_building('gold_finder');" aria-describedby="tooltip_gold_finder">
+            <button onclick="destroy_building('gold_finder')" class="building_remove bgc" aria-label="Destroy Gold Sifter">X</button>
+            <span id="building_gold_finder" class="building tooltip" onclick="purchase_building('gold_finder');" aria-describedby="tooltip_gold_finder" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Gold Sifter</span>
                 <span class="building_amount">0</span>
                 <span id="tooltip_gold_finder" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()">Generates 0.1 gold per second, -20 stone per second.<br />Costs 100 money, 500 stone, 200 wood.</span>
@@ -507,8 +507,8 @@
             <button id="toggle_gold_finder" class="building_state_on fgc" onclick="toggle_building_state('gold_finder')">On</button>
         </div>
         <div style="position: relative" class="hidden">
-            <button onclick="destroy_building('compressor')" class="building_remove bgc">X</button>
-            <span id="building_compressor" class="building tooltip" onclick="purchase_building('compressor');" aria-describedby="tooltip_compressor">
+            <button onclick="destroy_building('compressor')" class="building_remove bgc" aria-label="Destroy Diamond Compressor">X</button>
+            <span id="building_compressor" class="building tooltip" onclick="purchase_building('compressor');" aria-describedby="tooltip_compressor" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Diamond Compressor</span>
                 <span class="building_amount">0</span>
                 <span id="tooltip_compressor" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()">Generates 0.1 diamond per second, -10 coal per second. <br />Costs 100 money, 500 stone, 200 iron.</span>
@@ -516,8 +516,8 @@
             <button id="toggle_compressor" class="building_state_on fgc" onclick="toggle_building_state('compressor')">On</button>
         </div>
         <div style="position: relative" class="hidden">
-            <button onclick="destroy_building('jeweler')" class="building_remove bgc">X</button>
-            <span id="building_jeweler" class="building tooltip" onclick="purchase_building('jeweler');" aria-describedby="tooltip_jeweler">
+            <button onclick="destroy_building('jeweler')" class="building_remove bgc" aria-label="Destroy Jeweler">X</button>
+            <span id="building_jeweler" class="building tooltip" onclick="purchase_building('jeweler');" aria-describedby="tooltip_jeweler" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Jeweler</span>
                 <span class="building_amount">0</span>
                 <span id="tooltip_jeweler" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()">Generates -3 gold per second, -1 diamond per second, 1 jewelry per second.<br /> Costs 200 money, 750 stone</span>
@@ -525,8 +525,8 @@
             <button id="toggle_jeweler" class="building_state_on fgc" onclick="toggle_building_state('jeweler')">On</button>
         </div>
         <div style="position: relative" class="hidden">
-            <button onclick="destroy_building('glass_jeweler')" class="building_remove bgc">X</button>
-            <span id="building_glass_jeweler" class="building tooltip" onclick="purchase_building('glass_jeweler');" aria-describedby="tooltip_glass_jeweler">
+            <button onclick="destroy_building('glass_jeweler')" class="building_remove bgc" aria-label="Destroy Glassblower">X</button>
+            <span id="building_glass_jeweler" class="building tooltip" onclick="purchase_building('glass_jeweler');" aria-describedby="tooltip_glass_jeweler" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Glassblower</span>
                 <span class="building_amount">0</span>
                 <span id="tooltip_glass_jeweler" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()">  TOOLTIP  </span>
@@ -534,8 +534,8 @@
             <button id="toggle_glass_jeweler" class="building_state_on fgc" onclick="toggle_building_state('glass_jeweler')">On</button>
         </div>
         <div style="position: relative" class="hidden">
-            <button onclick="destroy_building('jewelry_store')" class="building_remove bgc">X</button>
-            <span id="building_jewelry_store" class="building tooltip" onclick="purchase_building('jewelry_store');" aria-describedby="tooltip_jewelry_store">
+            <button onclick="destroy_building('jewelry_store')" class="building_remove bgc" aria-label="Destroy Jewelry Store">X</button>
+            <span id="building_jewelry_store" class="building tooltip" onclick="purchase_building('jewelry_store');" aria-describedby="tooltip_jewelry_store" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Jewelry Store</span>
                 <span class="building_amount">0</span>
                 <span id="tooltip_jewelry_store" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()">Generates -1 jewelry per second, 400 money per second.<br /> Costs 5000 money, 500 stone, 500 wood.</span>
@@ -546,8 +546,8 @@
 
         <!-- Machines (use energy) -->
         <div style="position: relative" class="hidden">
-            <button onclick="destroy_building('paper_mill')" class="building_remove bgc">X</button>
-            <span id="building_paper_mill" class="building tooltip" onclick="purchase_building('paper_mill');" aria-describedby="tooltip_paper_mill">
+            <button onclick="destroy_building('paper_mill')" class="building_remove bgc" aria-label="Destroy Paper Mill">X</button>
+            <span id="building_paper_mill" class="building tooltip" onclick="purchase_building('paper_mill');" aria-describedby="tooltip_paper_mill" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Paper Mill</span>
                 <span class="building_amount">0</span>
                 <span id="tooltip_paper_mill" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()">Generates -1 energy per second, -3 wood per second, 1 paper per second.<br /> Costs 200 money, 200 iron, 100 oil.</span>
@@ -555,8 +555,8 @@
             <button id="toggle_paper_mill" class="building_state_on fgc" onclick="toggle_building_state('paper_mill')">On</button>
         </div>
         <div style="position: relative" class="hidden">
-            <button onclick="destroy_building('ink_refinery')" class="building_remove bgc">X</button>
-            <span id="building_ink_refinery" class="building tooltip" onclick="purchase_building('ink_refinery');" aria-describedby="tooltip_ink_refinery">
+            <button onclick="destroy_building('ink_refinery')" class="building_remove bgc" aria-label="Destroy Ink Refinery">X</button>
+            <span id="building_ink_refinery" class="building tooltip" onclick="purchase_building('ink_refinery');" aria-describedby="tooltip_ink_refinery" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Ink Refinery</span>
                 <span class="building_amount">0</span>
                 <span id="tooltip_ink_refinery" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()">Generates -1 energy per second, -3 oil per second, 1 ink per second.<br /> Costs 200 money, 200 iron, 100 oil.</span>
@@ -564,8 +564,8 @@
             <button id="toggle_ink_refinery" class="building_state_on fgc" onclick="toggle_building_state('ink_refinery')">On</button>
         </div>
         <div style="position: relative" class="hidden">
-            <button onclick="destroy_building('money_printer')" class="building_remove bgc">X</button>
-            <span id="building_money_printer" class="building tooltip" onclick="purchase_building('money_printer');" aria-describedby="tooltip_money_printer">
+            <button onclick="destroy_building('money_printer')" class="building_remove bgc" aria-label="Destroy Money Printer">X</button>
+            <span id="building_money_printer" class="building tooltip" onclick="purchase_building('money_printer');" aria-describedby="tooltip_money_printer" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Money Printer</span>
                 <span class="building_amount">0</span>
                 <span id="tooltip_money_printer" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()">Generates -1 energy per second, -2 paper per second, -1 ink per second, 30 money per second.<br /> Costs 500 money, 500 iron, 200 oil.</span>
@@ -573,8 +573,8 @@
             <button id="toggle_money_printer" class="building_state_on fgc" onclick="toggle_building_state('money_printer')">On</button>
         </div>
         <div style="position: relative" class="hidden">
-            <button onclick="destroy_building('book_printer')" class="building_remove bgc">X</button>
-            <span id="building_book_printer" class="building tooltip" onclick="purchase_building('book_printer');" aria-describedby="tooltip_book_printer">
+            <button onclick="destroy_building('book_printer')" class="building_remove bgc" aria-label="Destroy Printing Press">X</button>
+            <span id="building_book_printer" class="building tooltip" onclick="purchase_building('book_printer');" aria-describedby="tooltip_book_printer" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Printing Press</span>
                 <span class="building_amount">0</span>
                 <span id="tooltip_book_printer" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()">Generates -1 energy per second, -2 paper per second, -1 ink per second, 0.1 book per second.<br /> Costs 500 money, 500 iron, 200 oil.</span>
@@ -582,8 +582,8 @@
             <button id="toggle_book_printer" class="building_state_on fgc" onclick="toggle_building_state('book_printer')">On</button>
         </div>
         <div style="position: relative" class="hidden">
-            <button onclick="destroy_building('hydrogen_gen')" class="building_remove bgc">X</button>
-            <span id="building_hydrogen_gen" class="building tooltip" onclick="purchase_building('hydrogen_gen');" aria-describedby="tooltip_hydrogen_gen">
+            <button onclick="destroy_building('hydrogen_gen')" class="building_remove bgc" aria-label="Destroy Electrolysis Machine">X</button>
+            <span id="building_hydrogen_gen" class="building tooltip" onclick="purchase_building('hydrogen_gen');" aria-describedby="tooltip_hydrogen_gen" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Electrolysis Machine</span>
                 <span class="building_amount">0</span>
                 <span id="tooltip_hydrogen_gen" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()">Generates -2 energy per second, -1 water per second, 2 hydrogen per second.<br /> Costs 2500 money, 500 glass.</span>
@@ -591,8 +591,8 @@
             <button id="toggle_hydrogen_gen" class="building_state_on fgc" onclick="toggle_building_state('hydrogen_gen')">On</button>
         </div>
         <div style="position: relative" class="hidden">
-            <button onclick="destroy_building('fuel_maker')" class="building_remove bgc">X</button>
-            <span id="building_fuel_maker" class="building tooltip" onclick="purchase_building('fuel_maker');" aria-describedby="tooltip_fuel_maker">
+            <button onclick="destroy_building('fuel_maker')" class="building_remove bgc" aria-label="Destroy Fuel Synthesizer">X</button>
+            <span id="building_fuel_maker" class="building tooltip" onclick="purchase_building('fuel_maker');" aria-describedby="tooltip_fuel_maker" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Fuel Synthesizer</span>
                 <span class="building_amount">0</span>
                 <span id="tooltip_fuel_maker" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()"></span>
@@ -600,8 +600,8 @@
             <button id="toggle_fuel_maker" class="building_state_on fgc" onclick="toggle_building_state('fuel_maker')">On</button>
         </div>
         <div style="position: relative" class="hidden">
-            <button onclick="destroy_building('magnet')" class="building_remove bgc">X</button>
-            <span id="building_magnet" class="building tooltip" onclick="purchase_building('magnet');" aria-describedby="tooltip_magnet">
+            <button onclick="destroy_building('magnet')" class="building_remove bgc" aria-label="Destroy Giant Magnet">X</button>
+            <span id="building_magnet" class="building tooltip" onclick="purchase_building('magnet');" aria-describedby="tooltip_magnet" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Giant Magnet</span>
                 <span class="building_amount">0</span>
                 <span id="tooltip_magnet" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()"></span>
@@ -609,8 +609,8 @@
             <button id="toggle_magnet" class="building_state_on fgc" onclick="toggle_building_state('magnet')">On</button>
         </div>
         <div style="position: relative" class="hidden">
-            <button onclick="destroy_building('book_boost')" class="building_remove bgc">X</button>
-            <span id="building_book_boost" class="building tooltip" onclick="purchase_building('book_boost');" aria-describedby="tooltip_book_boost">
+            <button onclick="destroy_building('book_boost')" class="building_remove bgc" aria-label="Destroy Book Recycler">X</button>
+            <span id="building_book_boost" class="building tooltip" onclick="purchase_building('book_boost');" aria-describedby="tooltip_book_boost" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Book Recycler</span>
                 <span class="building_amount">0</span>
                 <span id="tooltip_book_boost" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()"></span>
@@ -618,8 +618,8 @@
             <button id="toggle_book_boost" class="building_state_on fgc" onclick="toggle_building_state('book_boost')">On</button>
         </div>
         <div style="position: relative" class="hidden">
-            <button onclick="destroy_building('steel_smelter')" class="building_remove bgc">X</button>
-            <span id="building_steel_smelter" class="building tooltip" onclick="purchase_building('steel_smelter');" aria-describedby="tooltip_steel_smelter">
+            <button onclick="destroy_building('steel_smelter')" class="building_remove bgc" aria-label="Destroy Steel Foundry">X</button>
+            <span id="building_steel_smelter" class="building tooltip" onclick="purchase_building('steel_smelter');" aria-describedby="tooltip_steel_smelter" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Steel Foundry</span>
                 <span class="building_amount">0</span>
                 <span id="tooltip_steel_smelter" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()"></span>
@@ -627,8 +627,8 @@
             <button id="toggle_steel_smelter" class="building_state_on fgc" onclick="toggle_building_state('steel_smelter')">On</button>
         </div>
         <div style="position: relative" class="hidden">
-            <button onclick="destroy_building('mithril_smelter')" class="building_remove bgc">X</button>
-            <span id="building_mithril_smelter" class="building tooltip" onclick="purchase_building('mithril_smelter');" aria-describedby="tooltip_mithril_smelter">
+            <button onclick="destroy_building('mithril_smelter')" class="building_remove bgc" aria-label="Destroy Mithril Forge">X</button>
+            <span id="building_mithril_smelter" class="building tooltip" onclick="purchase_building('mithril_smelter');" aria-describedby="tooltip_mithril_smelter" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Mithril Forge</span>
                 <span class="building_amount">0</span>
                 <span id="tooltip_mithril_smelter" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()"></span>
@@ -636,8 +636,8 @@
             <button id="toggle_mithril_smelter" class="building_state_on fgc" onclick="toggle_building_state('mithril_smelter')">On</button>
         </div>
         <div style="position: relative" class="hidden">
-            <button onclick="destroy_building('drill')" class="building_remove bgc">X</button>
-            <span id="building_drill" class="building tooltip" onclick="purchase_building('drill');" aria-describedby="tooltip_drill">
+            <button onclick="destroy_building('drill')" class="building_remove bgc" aria-label="Destroy Giant Drill">X</button>
+            <span id="building_drill" class="building tooltip" onclick="purchase_building('drill');" aria-describedby="tooltip_drill" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Giant Drill</span>
                 <span class="building_amount">0</span>
                 <span id="tooltip_drill" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()"></span>
@@ -648,8 +648,8 @@
 
         <!-- Managed Buildings -->
         <div style="position: relative" class="hidden">
-            <button onclick="destroy_building('big_bank')" class="building_remove bgc">X</button>
-            <span id="building_big_bank" class="building tooltip" onclick="purchase_building('big_bank');" aria-describedby="tooltip_big_bank">
+            <button onclick="destroy_building('big_bank')" class="building_remove bgc" aria-label="Destroy Investment Company">X</button>
+            <span id="building_big_bank" class="building tooltip" onclick="purchase_building('big_bank');" aria-describedby="tooltip_big_bank" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Investment Company</span>
                 <span class="building_amount">0</span>
                 <span id="tooltip_big_bank" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()">Generates -1 manager, 50 money per second.<br />Costs 5000 money, 5000 stone, 100 glass.<hr><i style='font-size: small'>Serious business</i></span>
@@ -657,8 +657,8 @@
             <button id="toggle_big_bank" class="building_state_on fgc" onclick="toggle_building_state('big_bank')">On</button>
         </div>
         <div style="position: relative" class="hidden">
-            <button onclick="destroy_building('big_mine')" class="building_remove bgc">X</button>
-            <span id="building_big_mine" class="building tooltip" onclick="purchase_building('big_mine');" aria-describedby="tooltip_big_mine">
+            <button onclick="destroy_building('big_mine')" class="building_remove bgc" aria-label="Destroy Strip Mine">X</button>
+            <span id="building_big_mine" class="building tooltip" onclick="purchase_building('big_mine');" aria-describedby="tooltip_big_mine" role="button">
                 <span class="building_name"><span class="building_prefix"></span>Strip Mine</span>
                 <span class="building_amount">0</span>
                 <span id="tooltip_big_mine" class="tooltiptext fgc bgc_second" onclick="event.stopPropagation()">Generates -1 manager, -150 money per second, 50 stone per second, 10 iron ore per second, 3 coal per second, 2 iron per second, 0.5 gold per second, 0.1 diamond per second, 20 sand per second.<br />Costs 10000 money, 100 steel beam, 10000 wood.</span>

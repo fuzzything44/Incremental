@@ -2430,7 +2430,7 @@ let prestige = {
         }
     },
     run: function (ask = true, callback = function () { }) {
-        if (adventure_data["challenge"] == CHALLENGES.LOAN) {
+        if (adventure_data["challenge"] == CHALLENGES.LOAN && ask) {
             alert("You can't prestige in this challenge.");
             return;
         }
@@ -4033,6 +4033,9 @@ window.onload = () => {
             }
             toggle_building_state("s_essence");
             update_building_amount("s_essence"); /* Update amount shown. */
+        }
+        else {
+            $("#building_s_essence").parent().addClass("hidden");
         }
         if (adventure_data["tower_floor"] > 34 || adventure_data["tower_ascension"] > 1) {
             if (buildings["s_autoessence"].on) {

@@ -31,8 +31,8 @@
                     $("#events_content").append("<span class='clickable'>Start!</span>");
                     $("#events_content span").last().click(function () {
                         if (confirm("Are you sure you want to start this challenge?")) {
+                            adventure_data["challenge"] = number; /* Set challenge number to whatever challenge ID they're doing. */
                             prestige.run(false, function () { /* When they finish, they get to keep mana from prestige. */
-                                adventure_data["challenge"] = number; /* Set challenge number to whatever challenge ID they're doing. */
                                 adventure_data["challenge_mana"] = buildings["s_manastone"].amount; /* Save old amount of mana */
                                 startfunc(); /* Run the start-of-run function for their challenge, which will reset their mana. */
                             });
