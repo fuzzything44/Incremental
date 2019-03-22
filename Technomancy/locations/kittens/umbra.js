@@ -32,7 +32,7 @@
                 $("#events_content").html("You fly up to the black hole. Would you like to throw away any items in your ship?<br />");
                 $("#events_content").append("<span>Destroy Fuel: <input id='remove_fuel' type='number' min='1'/><span class='clickable'>Remove</span></span><br />");
                 $("#events_content > span > span").last().click(function () {
-                    var fuel_to_remove = parseInt($("#remove_fuel").val());
+                    let fuel_to_remove = parseInt($("#remove_fuel").val());
                     if (isNaN(fuel_to_remove)) {
                         fuel_to_remove = 0;
                     }
@@ -47,7 +47,7 @@
                     adventure_data["umbra_throwaway"] += fuel_to_remove * .5;
                     update_inventory();
                 });
-                var _loop_1 = function (i) {
+                for (let i = 0; i < adventure_data.inventory.length; i++) {
                     $("#events_content").append("<span class='clickable'>Remove</span> " + gen_equipment(adventure_data.inventory[i]).name + "<br />");
                     $("#events_content > span").last().click(function (e) {
                         /* Remove item from inventory */
@@ -56,9 +56,6 @@
                         adventure_data["umbra_throwaway"] += 1;
                         umbra_throw_away();
                     });
-                };
-                for (var i = 0; i < adventure_data.inventory.length; i++) {
-                    _loop_1(i);
                 }
                 $("#events_content").append("<span class='clickable' onclick='start_adventure()'>Leave</span>");
             },
@@ -77,7 +74,7 @@
                     adventure_data["alchemy_ingredients"]["Potato"]++;
                 }
                 $("#events_content").append(exit_button("Done"));
-                var elements = ["time", "energy", "space", "force"];
+                const elements = ["time", "energy", "space", "force"];
                 adventure_data.warehouse.push({ "name": "magic_orb", "elem": elements[Math.floor(Math.random() * elements.length)] });
                 adventure_data["umbra_throwaway"] -= 5;
             },

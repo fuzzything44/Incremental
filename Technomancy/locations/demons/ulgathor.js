@@ -35,7 +35,7 @@
                 }
                 $("#events_content").append("<span class='clickable'>Deposit</span> <input id='omega_deposit' class='fgc bgc_second' type='number' min='0' value='1'><br/>");
                 $("#events_content span").last().click(function () {
-                    var bank_amount = Math.round(parseFloat($("#omega_deposit").val()));
+                    let bank_amount = Math.round(parseFloat($("#omega_deposit").val()));
                     if (isNaN(bank_amount) || bank_amount < 0) {
                         bank_amount = 0;
                     }
@@ -49,16 +49,15 @@
                     $("#events_content").append("Also, through some byzantine regulations you don't understand, you're apparently not able to withdraw any omegas. That kind of sucks.<br />");
                 }
                 if (adventure_data["omega_upgrades"] != undefined) {
-                    var omega_upgrade = /** @class */ (function () {
-                        function omega_upgrade(name, desc, costs, on_purchase) {
+                    class omega_upgrade {
+                        constructor(name, desc, costs, on_purchase) {
                             this.name = name;
                             this.description = desc;
                             this.costs = costs;
                             this.purchase = on_purchase;
                         }
-                        return omega_upgrade;
-                    }());
-                    var OMEGA_UPGRADES = [
+                    }
+                    const OMEGA_UPGRADES = [
                         [
                             new omega_upgrade("Flux Capacitor", "Increases maximum mana", [1000, 5000, 10000, 100000], function (n) {
                                 adventure_data["max_mana"] += 100000;
@@ -87,13 +86,13 @@
                         ],
                     ];
                     $("#events_content").append("Also, you're allowed to spend some of your " + OMEGA + " on various upgrades.<br/><table id='omega_upgrades' border='1'></table>");
-                    var _loop_1 = function (i) {
-                        var upgrade_line = OMEGA_UPGRADES[i];
+                    for (let i = 0; i < adventure_data["omega_upgrades"].length; i++) {
+                        let upgrade_line = OMEGA_UPGRADES[i];
                         $("#omega_upgrades").append('<tr></tr>');
-                        var _loop_2 = function (j) {
-                            var upgrade = upgrade_line[j];
-                            var upgrade_level = adventure_data["omega_upgrades"][i][j];
-                            var upgrade_cost = upgrade_level < 4 ? format_num(upgrade.costs[upgrade_level]) : "MAX";
+                        for (let j = 0; j < upgrade_line.length; j++) {
+                            let upgrade = upgrade_line[j];
+                            let upgrade_level = adventure_data["omega_upgrades"][i][j];
+                            let upgrade_cost = upgrade_level < 4 ? format_num(upgrade.costs[upgrade_level]) : "MAX";
                             $("#omega_upgrades tr").last().append("<td class='tooltip level_" + upgrade_level + "'>" + upgrade.name + "<br/>" + upgrade_cost + "<span class='tooltiptext fgc bgc_second'>" + upgrade.description + "</span></td>");
                             if (upgrade_level < 4) {
                                 $("#omega_upgrades td").last().click(function () {
@@ -105,13 +104,7 @@
                                     }
                                 });
                             }
-                        };
-                        for (var j = 0; j < upgrade_line.length; j++) {
-                            _loop_2(j);
                         }
-                    };
-                    for (var i = 0; i < adventure_data["omega_upgrades"].length; i++) {
-                        _loop_1(i);
                     }
                 } /* End omega upgrades*/
                 $("#events_content").append(exit_button("Done"));

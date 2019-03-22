@@ -1,4 +1,4 @@
-var ingredient = /** @class */ (function () {
+class ingredient {
     /**
      *
      * @param name: The displayed name of the ingredient
@@ -11,10 +11,10 @@ var ingredient = /** @class */ (function () {
      * @param time_name: Time name. If a potion is named Brightly Glowing Potion of Power, this is Glowing
      * @param str_name: Strength name. If a potion is named Brightly Glowing Potion of Power, this is Brightly
      */
-    function ingredient(name, maj, ending, desc, time, str, costs, maj_name, time_name, str_name) {
+    constructor(name, maj, ending, desc, time, str, costs, maj_name, time_name, str_name) {
         this.name = name;
         this.effect_func = maj;
-        this.ending_func = function () { maj(0); ending(); }; /* When potion stops, make sure to run effect once more to make sure it was actually initialized first. */
+        this.ending_func = () => { maj(0); ending(); }; /* When potion stops, make sure to run effect once more to make sure it was actually initialized first. */
         this.effect_desc = desc;
         this.effect_time = time;
         this.effect_strength = str;
@@ -23,14 +23,14 @@ var ingredient = /** @class */ (function () {
         this.time_name = time_name;
         this.strength_name = str_name;
     }
-    ingredient.prototype.verify_costs = function () {
+    verify_costs() {
         /* Can't buy if no costs. They need to find it! */
         if (this.cost.length == 0) {
             return false;
         }
         /* Go through all costs */
-        for (var i = 0; i < this.cost.length; i++) {
-            var cost = this.cost[i]; /* Get the actual cost object. */
+        for (let i = 0; i < this.cost.length; i++) {
+            let cost = this.cost[i]; /* Get the actual cost object. */
             if (cost.type == "adventure") {
                 /* Adventure mode cost. So just match an item. */
                 if (count_item(cost.name, adventure_data.inventory, cost.requirements) < cost.amount) {
@@ -48,18 +48,18 @@ var ingredient = /** @class */ (function () {
             }
         }
         return true;
-    };
-    ingredient.prototype.spend_costs = function () {
+    }
+    spend_costs() {
         /* Make sure they can actually buy it.*/
         if (!this.verify_costs()) {
             throw "Hmm... they can't buy this.";
         }
         /* Go through all costs */
-        for (var i = 0; i < this.cost.length; i++) {
-            var cost = this.cost[i]; /* Get the actual cost object. */
+        for (let i = 0; i < this.cost.length; i++) {
+            let cost = this.cost[i]; /* Get the actual cost object. */
             if (cost.type == "adventure") {
                 /* Adventure mode cost. So just match an item. */
-                for (var j = 0; j < cost.amount; j++) { /* Remove however many of the item from inventory. */
+                for (let j = 0; j < cost.amount; j++) { /* Remove however many of the item from inventory. */
                     adventure_data.inventory.splice(find_item(cost.name, adventure_data.inventory, cost.requirements), 1);
                 }
             }
@@ -71,15 +71,13 @@ var ingredient = /** @class */ (function () {
                 throw "Unknown cost type " + cost.type;
             }
         }
-    };
-    return ingredient;
-}());
+    }
+}
 /**
  * Only add ingredients to the end, as potions rely on this order staying the same.
  */
-var ingredients = [
-    new ingredient("Gold Leaf", function (power, on_combat) {
-        if (on_combat === void 0) { on_combat = false; }
+let ingredients = [
+    new ingredient("Gold Leaf", function (power, on_combat = false) {
         resources["money"].amount += resources_per_sec["gold"] * 10 * power;
     }, function () {
     }, "Helps you get more money!", 30, 2, [
@@ -87,14 +85,12 @@ var ingredients = [
         { type: "resource", amount: 1, name: "glass_bottle" },
         { type: "resource", amount: 500, name: "water" }
     ], "Wealth", "Glowing", "Softly"),
-    new ingredient("Magic Dust", function (power, on_combat) {
-        if (on_combat === void 0) { on_combat = false; }
+    new ingredient("Magic Dust", function (power, on_combat = false) {
     }, function () {
     }, "Does nothing.", 120, 7, [
         { type: "adventure", amount: 1, name: "magic_orb", requirements: {} }
     ], "Disgust", "Shimmering", "Brightly"),
-    new ingredient("Explodium", function (power, on_combat) {
-        if (on_combat === void 0) { on_combat = false; }
+    new ingredient("Explodium", function (power, on_combat = false) {
         if (on_combat) {
             player_data["weapon_1"].extra_damage += Math.floor(1 + power / 5);
         }
@@ -107,13 +103,12 @@ var ingredients = [
         { type: "resource", amount: 50, name: "uranium" },
         { type: "resource", amount: 10, name: "fuel" }
     ], "Fire", "Fizzing", "Loud,"),
-    new ingredient("Powder", function (power, on_combat) {
-        if (on_combat === void 0) { on_combat = false; }
+    new ingredient("Powder", function (power, on_combat = false) {
         if (on_combat) {
         }
         else {
             if (adventure_data["current_potion"].time % 5) {
-                var castle_cost = 3000000 * Math.pow(0.9, 1 + 0.75 * power);
+                let castle_cost = 3000000 * Math.pow(0.9, 1 + 0.75 * power);
                 if (resources["sand"].amount > castle_cost) {
                     resources["sand"].amount -= castle_cost;
                     resources["sandcastle"].amount++;
@@ -126,8 +121,7 @@ var ingredients = [
         { type: "resource", amount: 1, name: "sandcastle" },
         { type: "resource", amount: 500000, name: "sand" },
     ], "the Earth", "Bubbling", "Occasionally"),
-    new ingredient("Ferrous Oxide", function (power, on_combat) {
-        if (on_combat === void 0) { on_combat = false; }
+    new ingredient("Ferrous Oxide", function (power, on_combat = false) {
         if (on_combat) {
             if (player_data["shields"] < 5) {
                 player_data["shields"]++;
@@ -143,8 +137,7 @@ var ingredients = [
         { type: "resource", amount: 500000, name: "iron" },
         { type: "resource", amount: 5000, name: "water" },
     ], "Strength", "Unmoving", "Solidly"),
-    new ingredient("Crystallized Thought", function (power, on_combat) {
-        if (on_combat === void 0) { on_combat = false; }
+    new ingredient("Crystallized Thought", function (power, on_combat = false) {
         if (on_combat) {
             player_data["actions"] += 2;
             player_data["actions_per_turn"] += 2;
@@ -172,11 +165,10 @@ var ingredients = [
         { type: "resource", amount: 10000, name: "glass" },
         { type: "adventure", amount: 1, name: "conv_key", requirements: {} },
     ], "the Mind", "Shifting", "Slowly"),
-    new ingredient("Liquid Flame", function (power, on_combat) {
-        if (on_combat === void 0) { on_combat = false; }
+    new ingredient("Liquid Flame", function (power, on_combat = false) {
         function can_run() {
-            var runnable = true;
-            ["wood", "oil", "sand", "iron_ore"].forEach(function (item) {
+            let runnable = true;
+            ["wood", "oil", "sand", "iron_ore"].forEach((item) => {
                 if (resources[item].amount <= -resources_per_sec[item]) {
                     runnable = false;
                 }
@@ -208,7 +200,7 @@ var ingredients = [
             }
         }
     }, function () {
-        var power = adventure_data["current_potion"].power;
+        let power = adventure_data["current_potion"].power;
         resources_per_sec["glass"] -= 25 * power;
         delete resources["glass"].changes["Potion"];
         resources_per_sec["wood"] -= -50 * power;
@@ -227,8 +219,7 @@ var ingredients = [
         { type: "resource", amount: 10000, name: "wood" },
         { type: "resource", amount: 5000, name: "coal" },
     ], "Burninating", "Burning", "Hot,"),
-    new ingredient("Carrot", function (power, on_combat) {
-        if (on_combat === void 0) { on_combat = false; }
+    new ingredient("Carrot", function (power, on_combat = false) {
         if (on_combat) {
         }
         else {
@@ -244,7 +235,7 @@ var ingredients = [
     }, function () {
         /* Only remove these if they have been added yet. */
         if (adventure_data["current_potion"].applied_effect != undefined) {
-            var power = adventure_data["current_potion"].power;
+            let power = adventure_data["current_potion"].power;
             resources_per_sec["gold"] -= 25 * power;
             delete resources["gold"].changes["Potion"];
             resources_per_sec["diamond"] -= 5 * power;
@@ -252,8 +243,7 @@ var ingredients = [
             resource_tooltip();
         }
     }, "You have good vision.", 150, 9, [], "Sight", "Still", "Fine"),
-    new ingredient("Space Carrot", function (power, on_combat) {
-        if (on_combat === void 0) { on_combat = false; }
+    new ingredient("Space Carrot", function (power, on_combat = false) {
         if (on_combat) {
         }
         else {
@@ -266,13 +256,12 @@ var ingredients = [
             }
         }
     }, function () {
-        var power = adventure_data["current_potion"].power;
+        let power = adventure_data["current_potion"].power;
         resources_per_sec["uranium"] -= power;
         delete resources["uranium"].changes["Potion"];
         resource_tooltip();
     }, "You have good space vision.", 180, 10, [], "Space Sight", "Super Still", "Very Fine"),
-    new ingredient("Cheese", function (power, on_combat) {
-        if (on_combat === void 0) { on_combat = false; }
+    new ingredient("Cheese", function (power, on_combat = false) {
         if (on_combat) {
         }
         else {
@@ -289,8 +278,7 @@ var ingredients = [
         buildings["logging"].generation["money"] = adventure_data["current_potion"].logging_upkeep;
         buildings["mine"].generation["money"] = adventure_data["current_potion"].mine_upkeep;
     }, "Mmm... cheese...", 90, 6, [], "Happiness", "Lactose Intolerant", "Tasty,"),
-    new ingredient("Etherium", function (power, on_combat) {
-        if (on_combat === void 0) { on_combat = false; }
+    new ingredient("Etherium", function (power, on_combat = false) {
         if (on_combat) {
         }
         else {
@@ -302,8 +290,7 @@ var ingredients = [
         }
     }, function () {
     }, "Mmm, tastes like strawberry", 600, 20, [], "Mana", "Twinkling", "Specially"),
-    new ingredient("Potato", function (power, on_combat) {
-        if (on_combat === void 0) { on_combat = false; }
+    new ingredient("Potato", function (power, on_combat = false) {
         if (on_combat) {
         }
         else {
@@ -317,15 +304,14 @@ var ingredients = [
             }
         }
     }, function () {
-        var power = adventure_data["current_potion"].power;
+        let power = adventure_data["current_potion"].power;
         resources_per_sec["book"] -= power * 5;
         resources_per_sec["oil"] -= power * 5;
         delete resources["book"].changes["Potion"];
         delete resources["oil"].changes["Potion"];
         resource_tooltip();
     }, "Boil 'em mash 'em stick 'em in a stew", 400, 15, [], "Starch", "Starchy", "Deliciously"),
-    new ingredient("Salamander", function (power, on_combat) {
-        if (on_combat === void 0) { on_combat = false; }
+    new ingredient("Salamander", function (power, on_combat = false) {
         if (on_combat) {
         }
         else {
@@ -337,13 +323,12 @@ var ingredients = [
             }
         }
     }, function () {
-        var power = adventure_data["current_potion"].power;
+        let power = adventure_data["current_potion"].power;
         resources_per_sec["steel_beam"] -= power;
         delete resources["steel_beam"].changes["Potion"];
         resource_tooltip();
     }, "They're quite good grilled in a sandwich.", 6000, 3, [], "...things", "Rubbery", "Weirdly"),
-    new ingredient("Dimensional Core", function (power, on_combat) {
-        if (on_combat === void 0) { on_combat = false; }
+    new ingredient("Dimensional Core", function (power, on_combat = false) {
         if (on_combat) {
             enemy_data["actions_per_turn"] -= 1;
             player_data["energy_left"] += 5;
@@ -362,7 +347,7 @@ var ingredients = [
             }
         }
     }, function () {
-        var power = adventure_data["current_potion"].power;
+        let power = adventure_data["current_potion"].power;
         resources_per_sec["steel_beam"] -= 1000 * power;
         resources_per_sec["money"] -= 100000 * power;
         delete resources["steel_beam"].changes["Potion"];
@@ -381,15 +366,16 @@ function alchemy_ingredients() {
     $("#events_content").html("<span class='clickable' onclick='alchemy_mix()'>Mix</span> Potions<table><tbody></tbody></table>");
     /* Table start*/
     $("#events_content tbody").append("<tr style='font-weight: bold;'><td></td><td>&nbsp;&nbsp;Item&nbsp;&nbsp;</td><td>&nbsp;&nbsp;Amount Owned&nbsp;&nbsp;</td><td>&nbsp;&nbsp;Cost to Make&nbsp;&nbsp;</td></tr>");
-    var _loop_1 = function (i) {
-        var index = i;
+    /* Go through each ingredient, let them craft it. */
+    for (let i = 0; i < ingredients.length; i++) {
+        let index = i;
         /* Make sure that the ingredient exists. If not, add it. This lets us add ingredients later. */
         if (adventure_data.alchemy_ingredients[ingredients[i].name] == undefined) {
             adventure_data.alchemy_ingredients[ingredients[i].name] = 0;
         }
         /* If they can't buy it, don't show as a crafting option. */
         if (ingredients[i].cost.length == 0) {
-            return "continue";
+            continue;
         }
         /* Add table row for it. */
         $("#events_content tbody").append("<tr></tr>");
@@ -415,21 +401,17 @@ function alchemy_ingredients() {
                 $("#events_content td").last().append(format_num(ingredients[i].cost[cost].amount, true) + " " + ingredients[i].cost[cost].name.replace("_", " "));
             }
             else {
-                var data = ingredients[i].cost[cost].requirements;
+                let data = ingredients[i].cost[cost].requirements;
                 data["name"] = ingredients[i].cost[cost].name;
                 $("#events_content td").last().append(format_num(ingredients[i].cost[cost].amount, true) + " " + gen_equipment(data).name);
             }
             $("#events_content td").last().append("<br/>&nbsp;"); /* Append line break for next item. */
         });
-    };
-    /* Go through each ingredient, let them craft it. */
-    for (var i = 0; i < ingredients.length; i++) {
-        _loop_1(i);
     }
 }
-var alchemy_first = null;
-var alchemy_time = null;
-var alchemy_power = null;
+let alchemy_first = null;
+let alchemy_time = null;
+let alchemy_power = null;
 function add_ingredient(item) {
     if (alchemy_first == null) {
         alchemy_first = item;
@@ -461,28 +443,28 @@ function add_ingredient(item) {
                 adventure_data.alchemy_ingredients[alchemy_power]--;
                 resources["glass_bottle"].amount--;
                 /* Find ingredient indices. */
-                var first_index = null;
-                var time_index = null;
-                var power_index = null;
-                for (var i = 0; i < ingredients.length; i++) {
+                let first_index = null;
+                let time_index = null;
+                let power_index = null;
+                for (let i = 0; i < ingredients.length; i++) {
                     if (ingredients[i].name == alchemy_first) {
                         first_index = i;
                         break;
                     }
                 }
-                for (var i = 0; i < ingredients.length; i++) {
+                for (let i = 0; i < ingredients.length; i++) {
                     if (ingredients[i].name == alchemy_time) {
                         time_index = i;
                         break;
                     }
                 }
-                for (var i = 0; i < ingredients.length; i++) {
+                for (let i = 0; i < ingredients.length; i++) {
                     if (ingredients[i].name == alchemy_power) {
                         power_index = i;
                         break;
                     }
                 }
-                var item_1 = {
+                let item = {
                     name: "potion",
                     /* Format name to be someting like Brightly Glowing Potion of Power. */
                     disp_name: ingredients[power_index].strength_name + " " + ingredients[time_index].time_name + " Potion of " + ingredients[first_index].major_name,
@@ -493,12 +475,12 @@ function add_ingredient(item) {
                 alchemy_mix();
                 if (adventure_data.inventory.length + adventure_data.inventory_fuel < adventure_data.inventory_size) {
                     $("#events_content").prepend("You store the potion on your ship.<br/>");
-                    adventure_data.inventory.push(item_1);
+                    adventure_data.inventory.push(item);
                     update_inventory();
                 }
                 else {
                     $("#events_content").prepend("You store the potion in your warehouse. Don't ask how you got it there.<br/>");
-                    adventure_data.warehouse.push(item_1);
+                    adventure_data.warehouse.push(item);
                 }
             }
         });

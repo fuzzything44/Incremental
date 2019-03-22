@@ -111,7 +111,7 @@
             "title": "Huh, that's weird",
             "run_encounter": function () {
                 $("#events_content").html("Hmm, that ice crystal doesn't look normal. <br /><span class='clickable'>Investigate</span>");
-                $("#events_content > span").last().click(function () {
+                $("#events_content > span").last().click(() => {
                     $("#events_content").html("Oh huh, looks like it's not ice. It's actually the incredibly rare ETHERIUM! <br /><span class='clickable' onclick='start_adventure()'>Yay!</span>");
                     adventure_data["alchemy_ingredients"]["Etherium"]++;
                 });

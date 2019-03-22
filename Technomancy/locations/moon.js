@@ -46,14 +46,14 @@
             "title": "Hydrogen mining",
             "run_encounter": function () {
                 $("#events_content").html("Oh huh. This rock on the moon has a lot of hydrogen in it. You can <span class='clickable'>refine</span> some of it!<br />");
-                $("#events_content > span").last().click(function () {
+                $("#events_content > span").last().click(() => {
                     $("#events_content").html("You manage to find 30000 hydrogen. Maybe if you had some machine parts you could set up a mine here...<br /><span class='clickable' onclick='start_adventure()'>Done</span>");
                     resources["hydrogen"].amount += 30000;
                 });
                 /* If they have a machine part, they can build a mine. */
                 if (count_item("machine_part")) {
                     $("#events_content").append("Or, you could <span class='clickable'>build</span> a mine on here with that machine part.");
-                    $("#events_content > span").last().click(function () {
+                    $("#events_content > span").last().click(() => {
                         /* Remove the machine part that they have. */
                         adventure_data.inventory.splice(find_item("machine_part"), 1);
                         $("#events_content").html("You set up a hydrogen mine on the moon. <br /><span class='clickable' onclick='start_adventure()'>Done</span>");
@@ -64,7 +64,7 @@
                         else {
                             adventure_data["hydrogen_mines"] = 1;
                         }
-                        var comp_state = buildings["hydrogen_mine"].on;
+                        let comp_state = buildings["hydrogen_mine"].on;
                         if (comp_state) {
                             toggle_building_state("hydrogen_mine");
                         }
@@ -85,7 +85,7 @@
             "title": "This isn't right...",
             "run_encounter": function () {
                 $("#events_content").html("Everyone knows the moon is made of cheese. But now that you're at the moon, you can't find cheese anywhere. Just some boring rocks. <br /><span class='clickable'>Fine</span>");
-                $("#events_content > span").last().click(function () {
+                $("#events_content > span").last().click(() => {
                     $("#events_content").html("You're an alchemist! You don't have to take this abuse! You transmute some of the moon to cheese. A nice gouda, actually. <br /><span class='clickable' onclick='start_adventure()'>Yay!</span>");
                     adventure_data["alchemy_ingredients"]["Cheese"]++;
                 });

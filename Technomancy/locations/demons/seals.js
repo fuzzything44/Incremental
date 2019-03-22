@@ -11,7 +11,7 @@
                 $("#events_topbar").html("The Seals of Eternity");
                 $("#events_content").html("The 5 Seals of Eternity lie here.<br/>");
                 $("#events_content").append("Each seal broken gives an (additive) +50% mana bonus.<br/>");
-                var cost_list = [
+                let cost_list = [
                     {
                         "text": format_num(100 * get_extension("Qa")) + " money",
                         "can_buy": function () { return resources["money"].amount >= 100 * get_extension("Qa"); },
@@ -45,7 +45,7 @@
                         "text": "The small key",
                         "can_buy": function () { return count_item("conv_key", adventure_data.warehouse) + count_item("conv_key", adventure_data.inventory) > 0; },
                         "buy": function () {
-                            var item_loc = find_item("conv_key", adventure_data.warehouse);
+                            let item_loc = find_item("conv_key", adventure_data.warehouse);
                             if (item_loc == -1) {
                                 item_loc = find_item("conv_key", adventure_data.inventory);
                                 adventure_data.inventory.splice(item_loc, 1);
@@ -57,11 +57,11 @@
                     },
                 ];
                 if (adventure_data["magic_seals"] < 5) {
-                    var cost_1 = adventure_data["magic_seals"];
-                    $("#events_content").append("You can <span class='clickable'>shatter</span> the next one for " + cost_list[cost_1].text + "<br/>");
+                    let cost = adventure_data["magic_seals"];
+                    $("#events_content").append("You can <span class='clickable'>shatter</span> the next one for " + cost_list[cost].text + "<br/>");
                     $("#events_content span").last().click(function () {
-                        if (cost_list[cost_1].can_buy()) {
-                            cost_list[cost_1].buy();
+                        if (cost_list[cost].can_buy()) {
+                            cost_list[cost].buy();
                             adventure_data["magic_seals"]++;
                             seals();
                         }

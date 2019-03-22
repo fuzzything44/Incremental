@@ -44,18 +44,18 @@
             "weight": 0,
             "title": "Adventure!",
             "run_encounter": function () {
-                $("#events_content").html("<span class='clickable'>Add</span> or <span class='clickable'>Remove</span> items from your ship inventory.<br />");
+                $("#events_content").html("<button class='fgc bgc_second'>Add</button> or <span class='clickable'>Remove</span> items from your ship inventory.<br />");
                 /* Handle adding of items to ship inventory. */
                 $("#events_content > span").last().prev().click(function add_to_inv() {
                     $("#events_topbar").html("Stock Your Ship");
                     $("#events_content").html("<span>Add Fuel: <input id='add_fuel' type='number' min='1'/><span class='clickable'>Add!</span></span> (You have " + format_num(resources["fuel"].amount) + " fuel)<br />");
                     $("#events_content > span > span").last().click(function () {
-                        var fuel_to_add = parseInt($("#add_fuel").val());
+                        let fuel_to_add = parseInt($("#add_fuel").val());
                         if (isNaN(fuel_to_add) || fuel_to_add < 0) {
                             fuel_to_add = 0;
                         }
                         /* Check to make sure the ship has enough space. Space is total size - used space. */
-                        var ship_space = adventure_data.inventory_size - (adventure_data.inventory_fuel + adventure_data.inventory.length);
+                        let ship_space = adventure_data.inventory_size - (adventure_data.inventory_fuel + adventure_data.inventory.length);
                         if (ship_space < fuel_to_add) {
                             fuel_to_add = ship_space;
                         }
@@ -68,8 +68,8 @@
                             alert("Not enough fuel.");
                         }
                     });
-                    var _loop_1 = function (i) {
-                        var equip = gen_equipment(adventure_data.warehouse[i]);
+                    for (let i = 0; i < adventure_data.warehouse.length; i++) {
+                        let equip = gen_equipment(adventure_data.warehouse[i]);
                         /* They can add it to their ship. */
                         $("#events_content").append("<span class='clickable'>Add</span> ");
                         $("#events_content > span").last().click(function (e) {
@@ -87,7 +87,7 @@
                         /* They can use it. */
                         if (equip.use != undefined) {
                             $("#events_content").append("<span class='clickable'>Use</span> ");
-                            $("#events_content > span").last().click(function () {
+                            $("#events_content > span").last().click(() => {
                                 if (!equip.use(i, "warehouse")) {
                                     add_to_inv();
                                 }
@@ -95,9 +95,6 @@
                         }
                         /* And display what it actually is. */
                         $("#events_content").append(gen_equipment(adventure_data.warehouse[i]).name + "<br />");
-                    };
-                    for (var i = 0; i < adventure_data.warehouse.length; i++) {
-                        _loop_1(i);
                     }
                     $("#events_content").append("<span class='clickable' onclick='run_adventure(\"home\");'>Go Back</span>");
                 }); /* End adding items to ship */
@@ -106,7 +103,7 @@
                     $("#events_topbar").html("Empty Your Ship");
                     $("#events_content").html("<span>Remove Fuel: <input id='remove_fuel' type='number' min='1'/><span class='clickable'>Remove</span></span><br />");
                     $("#events_content > span > span").last().click(function () {
-                        var fuel_to_remove = parseInt($("#remove_fuel").val());
+                        let fuel_to_remove = parseInt($("#remove_fuel").val());
                         if (isNaN(fuel_to_remove) || fuel_to_remove < 0) {
                             fuel_to_remove = 0;
                         }
@@ -118,7 +115,7 @@
                         resources["fuel"].amount += fuel_to_remove;
                         update_inventory();
                     });
-                    var _loop_2 = function (i) {
+                    for (let i = 0; i < adventure_data.inventory.length; i++) {
                         $("#events_content").append("<span class='clickable'>Remove</span> " + gen_equipment(adventure_data.inventory[i]).name + "<br />");
                         $("#events_content > span").last().click(function (e) {
                             /* Remove item from warehouse and add it to inventory */
@@ -126,9 +123,6 @@
                             update_inventory();
                             rem_from_inv();
                         });
-                    };
-                    for (var i = 0; i < adventure_data.inventory.length; i++) {
-                        _loop_2(i);
                     }
                     $("#events_content").append("<span class='clickable' onclick='run_adventure(\"home\");'>Go Back</span>");
                 }); /* End removing items from ship. */
@@ -176,22 +170,22 @@
                             if (event_flags["skills"] == undefined) {
                                 event_flags["skills"] = Array(16);
                             }
-                            var SKILL_MAKE_BAG = 0;
-                            var SKILL_BETTER_REFINE = 1;
-                            var SKILL_EVENTS = 2;
-                            var SKILL_LOOT = 3;
-                            var SKILL_MANA_FORMULA = 4;
-                            var SKILL_COMBAT_1 = 5;
-                            var SKILL_NONCOMBAT_1 = 6;
-                            var SKILL_OMNIVISION = 7;
-                            var SKILL_QUICK_MANA = 8;
-                            var SKILL_COMBAT_STRONG = 9;
-                            var SKILL_NONCOMBAT_STRONG = 10;
-                            var SKILL_LOOT_III = 11;
-                            var SKILL_LIBRARY = 12;
-                            var SKILL_FORESIGHT = 13;
-                            var SKILL_MAKE_PERM_BAG = 14;
-                            var SKILL_FINAL = 15;
+                            const SKILL_MAKE_BAG = 0;
+                            const SKILL_BETTER_REFINE = 1;
+                            const SKILL_EVENTS = 2;
+                            const SKILL_LOOT = 3;
+                            const SKILL_MANA_FORMULA = 4;
+                            const SKILL_COMBAT = 5;
+                            const SKILL_NONCOMBAT = 6;
+                            const SKILL_OMNIVISION = 7;
+                            const SKILL_QUICK_MANA = 8;
+                            const SKILL_COMBAT_STRONG = 9;
+                            const SKILL_NONCOMBAT_STRONG = 10;
+                            const SKILL_LOOT_III = 11;
+                            const SKILL_LIBRARY = 12;
+                            const SKILL_FORESIGHT = 13;
+                            const SKILL_MAKE_PERM_BAG = 14;
+                            const SKILL_FINAL = 15;
                             if (event_flags["skills"][SKILL_FINAL]) {
                                 $("#events_content").append("Good job getting this. But it's not quite implemented yet. <br />");
                             }
@@ -234,45 +228,45 @@
                                     }
                                 });
                             }
-                            if (event_flags["skills"][SKILL_COMBAT_1] != undefined || event_flags["skills"][SKILL_NONCOMBAT_1] != undefined) {
+                            if (event_flags["skills"][SKILL_COMBAT] != undefined || event_flags["skills"][SKILL_NONCOMBAT] != undefined) {
                                 $("#events_content").append("<div id='c_nc_group' class='radio-group'></div>");
-                                if (event_flags["skills"][SKILL_COMBAT_1] != undefined) {
+                                if (event_flags["skills"][SKILL_COMBAT] != undefined) {
                                     $("#c_nc_group").append("<input type='radio' name='c_nc_group' id='c_nc_c' value='combat'><label for='c_nc_c'>Combat</label></input>");
                                 }
-                                if (event_flags["skills"][SKILL_NONCOMBAT_1] != undefined) {
+                                if (event_flags["skills"][SKILL_NONCOMBAT] != undefined) {
                                     $("#c_nc_group").append("<input type='radio' name='c_nc_group' id='c_nc_nc' value='noncombat'><label for='c_nc_nc'>Noncombat</label></input>");
                                 }
                                 $("#c_nc_group").append("<input type='radio' name='c_nc_group' id='c_nc_off' value='off'><label for='c_nc_off'>Off</label></input>");
                                 $("input[type=radio][name=c_nc_group]").change(function () {
                                     if (this.value == "combat") {
-                                        event_flags["skills"][SKILL_COMBAT_1] = true;
-                                        if (event_flags["skills"][SKILL_NONCOMBAT_1] != undefined) {
-                                            event_flags["skills"][SKILL_NONCOMBAT_1] = false;
+                                        event_flags["skills"][SKILL_COMBAT] = true;
+                                        if (event_flags["skills"][SKILL_NONCOMBAT] != undefined) {
+                                            event_flags["skills"][SKILL_NONCOMBAT] = false;
                                         }
                                     }
                                     else if (this.value == "noncombat") {
-                                        event_flags["skills"][SKILL_NONCOMBAT_1] = true;
-                                        if (event_flags["skills"][SKILL_COMBAT_1] != undefined) {
-                                            event_flags["skills"][SKILL_COMBAT_1] = false;
+                                        event_flags["skills"][SKILL_NONCOMBAT] = true;
+                                        if (event_flags["skills"][SKILL_COMBAT] != undefined) {
+                                            event_flags["skills"][SKILL_COMBAT] = false;
                                         }
                                     }
                                     else {
-                                        if (event_flags["skills"][SKILL_NONCOMBAT_1] != undefined) {
-                                            event_flags["skills"][SKILL_NONCOMBAT_1] = false;
+                                        if (event_flags["skills"][SKILL_NONCOMBAT] != undefined) {
+                                            event_flags["skills"][SKILL_NONCOMBAT] = false;
                                         }
-                                        if (event_flags["skills"][SKILL_COMBAT_1] != undefined) {
-                                            event_flags["skills"][SKILL_COMBAT_1] = false;
+                                        if (event_flags["skills"][SKILL_COMBAT] != undefined) {
+                                            event_flags["skills"][SKILL_COMBAT] = false;
                                         }
                                     }
                                 });
-                                if (event_flags["skills"][SKILL_COMBAT_1]) {
+                                if (event_flags["skills"][SKILL_COMBAT]) {
                                     $("#c_nc_c").prop("checked", true);
                                     /* Turn off the nc one. */
-                                    if (event_flags["skills"][SKILL_NONCOMBAT_1] != undefined) {
-                                        event_flags["skills"][SKILL_NONCOMBAT_1] = false;
+                                    if (event_flags["skills"][SKILL_NONCOMBAT] != undefined) {
+                                        event_flags["skills"][SKILL_NONCOMBAT] = false;
                                     }
                                 }
-                                else if (event_flags["skills"][SKILL_NONCOMBAT_1]) {
+                                else if (event_flags["skills"][SKILL_NONCOMBAT]) {
                                     $("#c_nc_nc").prop("checked", true);
                                     /* We already know the combat one is off, so we don't need to turn it off. */
                                 }
@@ -280,7 +274,7 @@
                                     $("#c_nc_off").prop("checked", true);
                                 }
                             }
-                            if (event_flags["skills"][SKILL_COMBAT_STRONG] != undefined || event_flags["skills"][SKILL_NONCOMBAT_1] != undefined) {
+                            if (event_flags["skills"][SKILL_COMBAT_STRONG] != undefined || event_flags["skills"][SKILL_NONCOMBAT] != undefined) {
                                 if (event_flags["c_nc_strong"] == undefined) {
                                     event_flags["c_nc_strong"] = false;
                                 }
@@ -306,7 +300,7 @@
                             /* Tier 1 */
                             $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 23em; top: 0em; z-index: 16;'><br />Artificing<br />1 KP<span class='tooltiptext fgc bgc_second'>Lets you make bags of holding.</span></div>");
                             /* Connecting lines */
-                            var color = "gray";
+                            let color = "gray";
                             color = event_flags["skills"][SKILL_MAKE_BAG] != undefined ? "blue" : "gray";
                             $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:360px;height: 1px;position: absolute; left: 30em; top: 5em; transform: rotate(20deg);'></div>");
                             $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:360px;height: 1px;position: absolute; left: 5em; top: 5em; transform: rotate(340deg);'></div>");
@@ -331,9 +325,9 @@
                             /* Connecting lines */
                             color = event_flags["skills"][SKILL_MANA_FORMULA] != undefined ? "blue" : "gray";
                             $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:150px;height: 280px;position: absolute; left: 11.5em; top: 15em; transform: rotate(90deg);'></div>");
-                            color = event_flags["skills"][SKILL_COMBAT_1] != undefined ? "blue" : "gray";
+                            color = event_flags["skills"][SKILL_COMBAT] != undefined ? "blue" : "gray";
                             $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:100px;height: 280px;position: absolute; left: 28em; top: 14em; transform: rotate(90deg);'></div>");
-                            color = event_flags["skills"][SKILL_NONCOMBAT_1] != undefined ? "blue" : "gray";
+                            color = event_flags["skills"][SKILL_NONCOMBAT] != undefined ? "blue" : "gray";
                             $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:100px;height: 280px;position: absolute; left: 41em; top: 14em; transform: rotate(90deg);'></div>");
                             color = event_flags["skills"][SKILL_OMNIVISION] != undefined ? "blue" : "gray";
                             $("#skill_tree").append("<div style='border-bottom: 5px solid " + color + ";width:150px;height: 280px;position: absolute; left: 55em; top: 18em; transform: rotate(90deg);'></div>");
@@ -365,12 +359,12 @@
                             /* Ultimate Skill */
                             $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 23em; top: 42em; z-index: 1;'><br />Super Skill<br />4 KP<span class='tooltiptext fgc bgc_second'>TODO: TOOLTIP</span></div>");
                             $("#events_content").append("<br /><br />");
-                            var _loop_3 = function (i) {
+                            for (let i = 0; i < event_flags["skills"].length; i++) {
                                 if (event_flags["skills"][i] != undefined) {
                                     $("#skill_tree .skill_box").eq(i).addClass("purchased");
                                 }
                                 else {
-                                    var COSTS_1 = [
+                                    const COSTS = [
                                         1,
                                         1, 1, 1,
                                         1, 1, 1, 1,
@@ -378,7 +372,7 @@
                                         2, 3, 2,
                                         4
                                     ];
-                                    var REQUIREMENTS_1 = [
+                                    const REQUIREMENTS = [
                                         [],
                                         [SKILL_MAKE_BAG],
                                         [SKILL_MAKE_BAG],
@@ -388,8 +382,8 @@
                                         [SKILL_EVENTS],
                                         [SKILL_LOOT],
                                         [SKILL_MANA_FORMULA],
-                                        [SKILL_COMBAT_1],
-                                        [SKILL_NONCOMBAT_1],
+                                        [SKILL_COMBAT],
+                                        [SKILL_NONCOMBAT],
                                         [SKILL_OMNIVISION],
                                         [SKILL_QUICK_MANA],
                                         [SKILL_COMBAT_STRONG, SKILL_NONCOMBAT_STRONG],
@@ -397,33 +391,30 @@
                                         [SKILL_LIBRARY, SKILL_FORESIGHT, SKILL_MAKE_PERM_BAG] /* Final skill */
                                     ];
                                     function prereqs_satisfied(skill) {
-                                        for (var i_1 = 0; i_1 < REQUIREMENTS_1[skill].length; i_1++) {
-                                            if (event_flags["skills"][REQUIREMENTS_1[skill][i_1]] == undefined) {
+                                        for (let i = 0; i < REQUIREMENTS[skill].length; i++) {
+                                            if (event_flags["skills"][REQUIREMENTS[skill][i]] == undefined) {
                                                 return false;
                                             }
                                         }
                                         return true;
                                     }
-                                    var index_1 = i;
-                                    if (event_flags["know_pts"] >= COSTS_1[index_1] && prereqs_satisfied(index_1)) { /* Have enough KP */
-                                        $("#skill_tree .skill_box").eq(index_1).click(function () {
-                                            event_flags["skills"][index_1] = true;
-                                            event_flags["know_pts"] -= COSTS_1[index_1];
+                                    let index = i;
+                                    if (event_flags["know_pts"] >= COSTS[index] && prereqs_satisfied(index)) { /* Have enough KP */
+                                        $("#skill_tree .skill_box").eq(index).click(function () {
+                                            event_flags["skills"][index] = true;
+                                            event_flags["know_pts"] -= COSTS[index];
                                             study();
                                         });
-                                        $("#skill_tree .skill_box").eq(index_1).addClass("buyable");
+                                        $("#skill_tree .skill_box").eq(index).addClass("buyable");
                                     }
                                 }
-                            };
-                            for (var i = 0; i < event_flags["skills"].length; i++) {
-                                _loop_3(i);
                             }
                         }
                         else if (event_flags["wanderer_knowledge"] == "alchemy") {
                             if (event_flags["alchemist_ingredients"] == undefined) {
                                 event_flags["alchemist_ingredients"] = { "cheese": true };
                             }
-                            var UNLOCKS = [
+                            let UNLOCKS = [
                                 /* Cheese given for free just by being an alchemist. Found at the Moon. */
                                 { name: "potato", cost: 5, location: "Umbra" },
                                 { name: "salamander", cost: 10, location: "Abandoned Colony" },
@@ -455,7 +446,7 @@
                             $("#events_content > span").last().click(function () {
                                 if (count_item("machine_part", adventure_data.warehouse)) {
                                     if (event_flags["know_pts"]) {
-                                        var build_state = buildings["magnet"].on;
+                                        let build_state = buildings["magnet"].on;
                                         if (build_state) {
                                             toggle_building_state("magnet");
                                         }
@@ -483,7 +474,7 @@
                             $("#events_content").append("<span class='clickable'>Make</span> a Book Recycler (Costs 1 KP)<br />");
                             $("#events_content > span").last().click(function () {
                                 if (event_flags["know_pts"]) {
-                                    var build_state = buildings["book_boost"].on;
+                                    let build_state = buildings["book_boost"].on;
                                     if (build_state) {
                                         toggle_building_state("book_boost");
                                     }
@@ -508,7 +499,7 @@
                                     if (buildings["steel_smelter"].amount > 1) {
                                         if (event_flags["know_pts"]) {
                                             /* Remove a steel foundry, give a mithril forge. */
-                                            var build_state = buildings["steel_smelter"].on;
+                                            let build_state = buildings["steel_smelter"].on;
                                             if (build_state) {
                                                 toggle_building_state("steel_smelter");
                                             }
@@ -547,19 +538,19 @@
                                 if (event_flags["buildings_fortified"] == undefined) {
                                     event_flags["buildings_fortified"] = 0;
                                 }
-                                var cost_1 = 1000 * (event_flags["buildings_fortified"] + 1) * (event_flags["buildings_fortified"] + 1);
-                                $("#events_content").append("You could fortify a building for " + cost_1.toString() + " steel and 10 KP<br />");
+                                let cost = 1000 * (event_flags["buildings_fortified"] + 1) * (event_flags["buildings_fortified"] + 1);
+                                $("#events_content").append("You could fortify a building for " + cost.toString() + " steel and 10 KP<br />");
                                 Object.keys(buildings).forEach(function (build) {
                                     if (SPELL_BUILDINGS.indexOf(build) == -1 && buildings[build].amount > 10 && buildings[build]["prefix"] == undefined) { /* Regular building, they have a bunch of them, and not already upgrades. */
                                         $("#events_content").append("<span class='clickable'>Fortify</span> your " + $("#building_" + build + " .building_name").text() + "<br />");
                                         $("#events_content > span").last().click(function () {
-                                            if (resources["steel_beam"].amount > cost_1 && event_flags["know_pts"] >= 10) {
-                                                resources["steel_beam"].amount -= cost_1; /* Spend everything */
+                                            if (resources["steel_beam"].amount > cost && event_flags["know_pts"] >= 10) {
+                                                resources["steel_beam"].amount -= cost; /* Spend everything */
                                                 event_flags["know_pts"] -= 10;
                                                 event_flags["buildings_fortified"]++; /* Next fortify costs more. */
                                                 buildings[build]["prefix"] = "Fortified"; /* Give it the prefix */
                                                 $("#building_" + build + " .building_prefix").html("Fortified ");
-                                                var build_state = buildings[build].on;
+                                                let build_state = buildings[build].on;
                                                 if (build_state) {
                                                     toggle_building_state(build);
                                                 }

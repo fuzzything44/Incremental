@@ -1,5 +1,5 @@
 function gen_equipment(equip_data) {
-    var equip = $.extend(true, {}, equipment[equip_data.name]);
+    let equip = $.extend(true, {}, equipment[equip_data.name]);
     /* Here we do modification on equip if we have stuff that can. */
     if (equip.modify != undefined) {
         equip.modify(equip, equip_data);
@@ -9,7 +9,7 @@ function gen_equipment(equip_data) {
 var presents_used = {
     "2017": false,
 };
-var equipment = {
+let equipment = {
     /* Engines */
     "basic_engine": {
         on_combat: function (slot) {
@@ -92,7 +92,7 @@ var equipment = {
                     return;
                 }
                 /* Attack! */
-                var damage = 1 + player_data[slot].extra_damage;
+                let damage = 1 + player_data[slot].extra_damage;
                 enemy_data["shields"] -= damage;
                 player_data[slot].charge_level -= 1;
                 /* Update visuals */
@@ -110,7 +110,7 @@ var equipment = {
                     $("#combat_log").text("Not enough actions left.");
                 }
                 /* Attack! */
-                var damage = 1 + player_data[slot].extra_damage;
+                let damage = 1 + player_data[slot].extra_damage;
                 $("#combat_log").text("Small Lazer " + slot[slot.length - 1] + " fired for " + format_num(damage, false) + " damage " + player_data[slot].charge_level.toString() + " times!");
                 while (player_data[slot].charge_level > 0) {
                     enemy_data["shields"] -= damage;
@@ -167,7 +167,7 @@ var equipment = {
                     return;
                 }
                 /* Attack! */
-                var damage = 3 + player_data[slot].extra_damage;
+                let damage = 3 + player_data[slot].extra_damage;
                 enemy_data["shields"] -= damage;
                 /* Update visuals */
                 $("#combat_" + slot).remove();
@@ -200,7 +200,7 @@ var equipment = {
                     }
                     case "energy": {
                         resources_per_sec["energy"] += 8;
-                        setTimeout(function () { return resources_per_sec["energy"] -= 8; }, 60000);
+                        setTimeout(() => resources_per_sec["energy"] -= 8, 60000);
                         break;
                     }
                     case "space": {
@@ -237,7 +237,7 @@ var equipment = {
         type: "item",
         name: "Convolution Cube",
         modify: function (self, data) {
-            var LEVER_COLORS = {
+            const LEVER_COLORS = {
                 "cyan": "cyan",
                 "magenta": "magenta",
                 "yellow": "yellow",
@@ -250,7 +250,7 @@ var equipment = {
                 "shaking": "olive",
                 "ghostly": "turquoise"
             };
-            var LEVERS = [
+            const LEVERS = [
                 "cyan", "magenta", "yellow",
                 "iron", "copper", "lead",
                 "squishy", "slimy",
@@ -281,17 +281,17 @@ var equipment = {
                         data.levers = {};
                     }
                     /*Individual levers. All set down. */
-                    var lcount_1 = 0;
-                    LEVERS.forEach(function (type) {
+                    let lcount = 0;
+                    LEVERS.forEach((type) => {
                         if (data.levers[type] == undefined) {
-                            data.levers[type] = (prng(adventure_data["cubes_solved"] + lcount_1) % 2 == 0);
+                            data.levers[type] = (prng(adventure_data["cubes_solved"] + lcount) % 2 == 0);
                         }
-                        lcount_1++;
+                        lcount++;
                     });
                 }
                 else {
                     /* Basic values */
-                    ["color", "shape", "stripes", "corners"].forEach(function (type) {
+                    ["color", "shape", "stripes", "corners"].forEach((type) => {
                         if (data[type] == undefined) {
                             data[type] = 0;
                         }
@@ -305,7 +305,7 @@ var equipment = {
                         data.levers = {};
                     }
                     /*Individual levers. All set down. */
-                    LEVERS.forEach(function (type) {
+                    LEVERS.forEach((type) => {
                         if (data.levers[type] == undefined) {
                             data.levers[type] = false;
                         }
@@ -320,14 +320,14 @@ var equipment = {
             self.use = function (index, location) {
                 $("#character").addClass("hidden");
                 /* Definitions of stuff. */
-                var COLORS = ["red", "green", "blue", "black", "white"];
-                var SHAPES = ["pyramid", "cube", "octahedron", "cylinder"];
-                var STRIPES = ["no", "thin", "thick"];
-                var CORNERS = ["sharp", "rounded"];
+                const COLORS = ["red", "green", "blue", "black", "white"];
+                const SHAPES = ["pyramid", "cube", "octahedron", "cylinder"];
+                const STRIPES = ["no", "thin", "thick"];
+                const CORNERS = ["sharp", "rounded"];
                 /* Is the given lever visible? We need to calculate this in a few places, so let's do it in a function. */
                 function lever_visible(lever) {
                     /* We don't do the nice way because writing a horrible switch is easier and the cube design is finished, so I won't be adding levers later. */
-                    var vsum = data.color + data.shape + data.stripes + data.corners;
+                    let vsum = data.color + data.shape + data.stripes + data.corners;
                     switch (lever) {
                         case "cyan": {
                             return ((vsum + data.color) % 3) == 0;
@@ -366,10 +366,9 @@ var equipment = {
                     throw "That's not a lever.";
                 }
                 /* Runs an action if possible. Oh boy will this be fun. */
-                var run_action = function (action, callback) {
-                    if (callback === void 0) { callback = null; }
+                let run_action = (action, callback = null) => {
                     /* Check time limit. */
-                    var time_limit = 15000;
+                    let time_limit = 15000;
                     if (data.points >= 500 && data.points <= 600) {
                         time_limit = 3000;
                     }
@@ -383,7 +382,7 @@ var equipment = {
                         return;
                     }
                     /* Tracking what will be modified. */
-                    var modification = {
+                    let modification = {
                         /* How much to add/subtract from color. */
                         color: 0,
                         shape: 0,
@@ -468,7 +467,7 @@ var equipment = {
                     }
                     if (data.levers.slimy) {
                         /* Flip all other levers. But if you're already flipping, it should then flip back so they can get levers out of sync. */
-                        Object.keys(modification.levers).forEach(function (lever) {
+                        Object.keys(modification.levers).forEach((lever) => {
                             if (lever != "slimy") {
                                 modification.levers[lever] = !modification.levers[lever];
                             }
@@ -492,14 +491,14 @@ var equipment = {
                     }
                     /* Yay, that's all the levers! Literally only other thing is the point range of 700-900 removing resource costs. */
                     if (data.points >= 700 && data.points <= 900) {
-                        Object.keys(modification.resource_costs).forEach(function (res) {
+                        Object.keys(modification.resource_costs).forEach((res) => {
                             if (modification.resource_costs[res] < 0) {
                                 modification.resource_costs[res] = 0;
                             }
                         });
                     }
                     /* Make sure we can actually run the action. */
-                    Object.keys(modification.resource_costs).forEach(function (res) {
+                    Object.keys(modification.resource_costs).forEach((res) => {
                         if (modification.resource_costs[res] > resources[res].amount && resources[res].value != 0) {
                             $("#events_content").prepend("The cube shakes slightly. (You need more " + res.replace("_", " ") + ")<br />");
                             throw "Not enough resources for cube.";
@@ -507,7 +506,7 @@ var equipment = {
                     });
                     /* Okay, time to run it! */
                     /* Pay resources */
-                    Object.keys(modification.resource_costs).forEach(function (res) {
+                    Object.keys(modification.resource_costs).forEach((res) => {
                         if (resources[res].value != 0) {
                             resources[res].amount -= modification.resource_costs[res];
                         }
@@ -524,7 +523,7 @@ var equipment = {
                     /* Change points. This doesn't wrap and is limited 0-1190. */
                     data.points = Math.max(Math.min(data.points + modification.points, 1190), 0);
                     /* Change levers */
-                    Object.keys(modification.levers).forEach(function (lever) {
+                    Object.keys(modification.levers).forEach((lever) => {
                         /* Okay, so this is a bit weird but it effectively flips all levers that need to be and no others. */
                         /* Remember, modification.levers.XXX being true means that it needs to be flipped. */
                         data.levers[lever] = modification.levers[lever] != data.levers[lever];
@@ -556,13 +555,13 @@ var equipment = {
                 }
                 else if (data.points <= 650) {
                     $("#events_content").append("There's a crank here. <span class='clickable'>Crank</span><br />");
-                    $("#events_content > span").last().click(function () { return run_action(function (mod) {
+                    $("#events_content > span").last().click(() => run_action(function (mod) {
                         /* Doesn't change cube. Does cost fuel for not-ridiculous carrot farming. */
                         mod.resource_costs["fuel"] += 1;
                     }, function () {
                         $("#events").addClass("hidden");
                         handle_event(false);
-                    }); });
+                    }));
                 }
                 else if (data.points == 651) {
                     $("#events_content").append("There's a drawer here. <span class='clickable'>Open</span><br />");
@@ -582,10 +581,10 @@ var equipment = {
                 }
                 else if (data.points < 700) {
                     $("#events_content").append("There's a rope here. <span class='clickable'>Yank!</span><br />");
-                    $("#events_content > span").last().click(function () { return run_action(function (mod) {
-                    }, function () {
+                    $("#events_content > span").last().click(() => run_action((mod) => {
+                    }, () => {
                         $("#events_content").prepend("The number " + format_num(data.points, false) + " appears on the cube. <br />");
-                    }); });
+                    }));
                 }
                 else if (data.points < 900) {
                     /* No action resource cost. Handled elsewhere. */
@@ -597,7 +596,7 @@ var equipment = {
                     $("#events_content").append("(The cube appears to be at " + data.points + " points)<br/>");
                 }
                 /* Describe buttons. There will always be some as the value is nonzero. */
-                var button_val = 1;
+                let button_val = 1;
                 /* Add 1 because it's 0-4 and we want 1-5. */
                 button_val *= (data.color + 1);
                 button_val *= (data.shape + 1);
@@ -606,56 +605,56 @@ var equipment = {
                 button_val += data.color + data.stripes + 2;
                 /* Theoretically it should now be bounded by 3-128 */
                 /* Test first bit. Large button. */
-                if (button_val & 1) {
+                if (button_val & 0b00000001) {
                     $("#events_content").append("There is a large button. <span class='clickable'>Press</span><br/>");
-                    $("#events_content > span").last().click(function () { return run_action(function (mod) {
+                    $("#events_content > span").last().click(() => run_action(function (mod) {
                         mod.color++;
                         if (data.corners) {
                             mod.shape++;
                         }
-                    }); });
+                    }));
                 }
                 /* Test second bit.*/
-                if (button_val & 2) {
+                if (button_val & 0b00000010) {
                     $("#events_content").append("There is a small button. <span class='clickable'>Press</span><br/>");
-                    $("#events_content > span").last().click(function () { return run_action(function (mod) {
+                    $("#events_content > span").last().click(() => run_action(function (mod) {
                         mod.shape++;
                         mod.corners++;
                         mod.color--;
                         mod.stripes--;
-                    }); });
+                    }));
                 }
                 /* Third */
-                if (button_val & 4) {
+                if (button_val & 0b00000100) {
                     $("#events_content").append("There is a clear button. <span class='clickable'>Press</span><br/>");
-                    $("#events_content > span").last().click(function () { return run_action(function (mod) {
+                    $("#events_content > span").last().click(() => run_action(function (mod) {
                         mod.shape--;
                         mod.resource_costs["refined_mana"] += 50;
                     }, function () {
-                        var elem = ["time", "energy", "space", "force"][prng(button_val) % 4];
-                        var orb = { name: "magic_orb", elem: elem };
+                        let elem = ["time", "energy", "space", "force"][prng(button_val) % 4];
+                        let orb = { name: "magic_orb", elem: elem };
                         adventure_data.warehouse.push(orb);
                         $("#events_content").prepend("You gained a " + gen_equipment(orb).name + "<br />");
-                    }); });
+                    }));
                 }
                 /* 4 */
-                if (button_val & 8) {
+                if (button_val & 0b00001000) {
                     $("#events_content").append("There is a ticking button. <span class='clickable'>Press</span><br/>");
-                    $("#events_content > span").last().click(function () { return run_action(function (mod) {
+                    $("#events_content > span").last().click(() => run_action(function (mod) {
                         /* Turn off visible levers. So flip all visible ones that are on. */
-                        LEVERS.forEach(function (lever) {
+                        LEVERS.forEach((lever) => {
                             if (lever_visible(lever) && data.levers[lever]) {
                                 mod.levers[lever] = true;
                             }
                         });
                         /* Also, we should do something to change cube state. */
                         mod.corners++;
-                    }); });
+                    }));
                 }
                 /* 5 */
-                if (button_val & 16) {
+                if (button_val & 0b00010000) {
                     $("#events_content").append("There is a cold button. <span class='clickable'>Press</span><br/>");
-                    $("#events_content > span").last().click(function () { return run_action(function (mod) {
+                    $("#events_content > span").last().click(() => run_action(function (mod) {
                         /* Remove costs */
                         if (mod.resource_costs.fuel < 0) {
                             mod.resource_costs.fuel = 0;
@@ -663,17 +662,17 @@ var equipment = {
                         /* And give bonus. */
                         mod.resource_costs.fuel -= 3;
                         mod.resource_costs["refined_mana"] += 300;
-                    }); });
+                    }));
                 }
                 /* 6 */
-                if (button_val & 32) {
+                if (button_val & 0b00100000) {
                     $("#events_content").append("There is an inverse button. <span class='clickable'>Press</span><br/>");
-                    $("#events_content > span").last().click(function () { return run_action(function (mod) {
-                        for (var i = 0; i < 5; i++) {
+                    $("#events_content > span").last().click(() => run_action(function (mod) {
+                        for (let i = 0; i < 5; i++) {
                             /* Swap costs of two random resources. */
-                            var first_res = Object.keys(mod.resource_costs)[prng(button_val) % (Object.keys(mod.resource_costs).length)];
-                            var second_res = Object.keys(mod.resource_costs)[prng(button_val + 1) % (Object.keys(mod.resource_costs).length)];
-                            var temp_amt = mod.resource_costs[first_res];
+                            let first_res = Object.keys(mod.resource_costs)[prng(button_val) % (Object.keys(mod.resource_costs).length)];
+                            let second_res = Object.keys(mod.resource_costs)[prng(button_val + 1) % (Object.keys(mod.resource_costs).length)];
+                            let temp_amt = mod.resource_costs[first_res];
                             mod.resource_costs[first_res] = mod.resource_costs[second_res];
                             mod.resource_costs[second_res] = temp_amt;
                         }
@@ -683,12 +682,12 @@ var equipment = {
                         else {
                             mod.stripes++;
                         }
-                    }); });
+                    }));
                 }
                 /* 7 */
-                if (button_val & 64) {
+                if (button_val & 0b01000000) {
                     $("#events_content").append("There is a shiny button. <span class='clickable'>Press</span><br/>");
-                    $("#events_content > span").last().click(function () { return run_action(function (mod) {
+                    $("#events_content > span").last().click(() => run_action(function (mod) {
                         /* Turn on visible levers. */
                         LEVERS.forEach(function (lever) {
                             if (lever_visible(lever) && !data.levers[lever]) {
@@ -697,12 +696,12 @@ var equipment = {
                         });
                         /* Also, we should do something to change cube state. */
                         mod.corners--;
-                    }); });
+                    }));
                 }
                 /* 8th. If this is set no others should be. Hopefully. */
-                if (button_val & 128) {
+                if (button_val & 0b10000000) {
                     $("#events_content").append("There is a dull button. <span class='clickable'>Press</span><br/>");
-                    $("#events_content > span").last().click(function () { return run_action(function (mod) {
+                    $("#events_content > span").last().click(() => run_action(function (mod) {
                         /* Flip visible levers, give 1 min of resources. */
                         LEVERS.forEach(function (lever) {
                             if (lever_visible(lever)) {
@@ -713,12 +712,12 @@ var equipment = {
                             /* Give bonus resources. */
                             mod.resource_costs[res] -= resources_per_sec[res] * 60;
                         });
-                    }); });
+                    }));
                 }
                 $("#events_content").append("There is a gray button. <span class='clickable'>Press</span><br/><br/>");
-                $("#events_content > span").last().click(function () {
+                $("#events_content > span").last().click(() => {
                     adventure_data[location][index] = { name: "conv_cube" }; /* Reset cube. */
-                    var equip = gen_equipment(adventure_data[location][index]); /* Re-generate it */
+                    let equip = gen_equipment(adventure_data[location][index]); /* Re-generate it */
                     equip.use(index, location); /* Use it. */
                     $("#events_content").prepend("You see a bright flash of light and get a strange sense of déjà vu.<br />");
                 });
@@ -726,9 +725,9 @@ var equipment = {
                 LEVERS.forEach(function (lever) {
                     if (lever_visible(lever)) {
                         $("#events_content").append("There is a <span style='color:" + LEVER_COLORS[lever] + ";'>" + lever + "</span> lever. <span class='clickable'>" + (data.levers[lever] ? "Push" : "Pull") + "</span><br/>");
-                        $("#events_content > span").last().click(function () { return run_action(function (mod) {
+                        $("#events_content > span").last().click(() => run_action(function (mod) {
                             mod.levers[lever] = true;
-                        }); });
+                        }));
                     }
                 });
                 /* Let them go back */
@@ -763,8 +762,7 @@ var equipment = {
             /* When we stop nothing happens. */
             self.stop = function () { };
             /* Give +50% to any positive gains. Yay Thanksgiving! */
-            self.effect = function (power, on_combat) {
-                if (on_combat === void 0) { on_combat = false; }
+            self.effect = function (power, on_combat = false) {
                 /* Also gives a shield boost when starting combat. */
                 if (on_combat) {
                     if (player_data["shields"] < 5) {
@@ -887,13 +885,13 @@ var equipment = {
                     /* Let them put some resources in. */
                     Object.keys(resources).forEach(function (res) {
                         if (resources[res].value > 0 && resources[res].amount > 0) {
-                            var amount_1 = Math.min(resources[res].amount, 100000 / resources[res].value); /* Can hold 100k value. */
-                            $("#events_content").append("<span class='clickable'>Add</span> " + format_num(amount_1, true) + " " + res.replace("_", " ") + "<br />");
+                            let amount = Math.min(resources[res].amount, 100000 / resources[res].value); /* Can hold 100k value. */
+                            $("#events_content").append("<span class='clickable'>Add</span> " + format_num(amount, true) + " " + res.replace("_", " ") + "<br />");
                             $("#events_content > span").last().click(function () {
                                 /* Add them. */
                                 data.resource = res;
-                                data.amount = amount_1;
-                                resources[res].amount -= amount_1;
+                                data.amount = amount;
+                                resources[res].amount -= amount;
                                 start_adventure();
                             });
                         }
@@ -917,10 +915,10 @@ var equipment = {
                 /* Let them replicate something. */
                 Object.keys(resources).forEach(function (res) {
                     if (resources[res].value > 0 && resources[res].amount > 0 && event_flags["replicated_" + res] == undefined) {
-                        var amount_2 = resources[res].amount / 2;
-                        $("#events_content").append("<span class='clickable'>Copy</span> " + format_num(amount_2, true) + " " + res.replace("_", " ") + "<br >");
+                        let amount = resources[res].amount / 2;
+                        $("#events_content").append("<span class='clickable'>Copy</span> " + format_num(amount, true) + " " + res.replace("_", " ") + "<br >");
                         $("#events_content > span").last().click(function () {
-                            resources[res].amount += amount_2;
+                            resources[res].amount += amount;
                             event_flags["replicated_" + res] = true;
                             adventure_data[location].splice(index, 1);
                             update_inventory();
@@ -967,8 +965,7 @@ var equipment = {
             /* When we stop nothing happens. */
             self.stop = function () { };
             /* Give +50% to any positive gains. Yay Halloween! */
-            self.effect = function (power, on_combat) {
-                if (on_combat === void 0) { on_combat = false; }
+            self.effect = function (power, on_combat = false) {
                 /* Also gives a shield boost when starting combat. */
                 if (on_combat) {
                     if (player_data["shields"] < 5) {

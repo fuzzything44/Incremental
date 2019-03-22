@@ -11,8 +11,8 @@
                 adventure_data["logicat_points"] = 0;
                 adventure_data["logicat_level"] = 0;
                 $("#events_content").html("You land on a strange planet. It seems to be covered in sandcastles as far as you can see. Dragons fly overhead, but you see no other forms of life. <br />");
-                setTimeout(function () { return $("#events_content").append("Suddenly, a ... kitten? appears in front of you. At least you think it's a kitten - the head is upside down and it's spouting nonsense about how Statement A is true. <br />"); }, 2000);
-                setTimeout(function () {
+                setTimeout(() => $("#events_content").append("Suddenly, a ... kitten? appears in front of you. At least you think it's a kitten - the head is upside down and it's spouting nonsense about how Statement A is true. <br />"), 2000);
+                setTimeout(() => {
                     $("#events_content").append("<span class='clickable'>Okay?</span>");
                     $("#events_content > span").last().click(function () {
                         /* Enter them into logicat. */
@@ -32,8 +32,8 @@
             "run_encounter": function () {
                 $("#events_content").html("You continue to explore. <br />");
                 if (Math.random() > .5) {
-                    setTimeout(function () { return $("#events_content").append("Another one of those strange kittens appears. What do they want?<br />"); }, 1000);
-                    setTimeout(function () {
+                    setTimeout(() => $("#events_content").append("Another one of those strange kittens appears. What do they want?<br />"), 1000);
+                    setTimeout(() => {
                         $("#events_content").append("<span class='clickable'>Okay?</span><br>");
                         $("#events_content > span").last().click(function () {
                             /* Enter them into logicat. */
@@ -64,7 +64,7 @@
             "title": "Why is this here?",
             "run_encounter": function () {
                 $("#events_content").html("There's a goat here. A goat. Why?<br /><span class='clickable'>Investigate</span>");
-                $("#events_content > span").last().click(function () {
+                $("#events_content > span").last().click(() => {
                     $("#events_content").html("And that's a salamander riding the goat. Okay. Well, at least that salamander is good for alchemy.<br /><span class='clickable' onclick='start_adventure()'>Yay!</span>");
                     adventure_data["alchemy_ingredients"]["Salamander"]++;
                 });

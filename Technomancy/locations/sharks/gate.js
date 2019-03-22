@@ -13,11 +13,11 @@
                     adventure_data["warp_locations"].push("sharks/gate");
                 }
                 function challenge_info(number, startfunc) {
-                    var name = CHALLENGE_INFO[number].name;
-                    var description = CHALLENGE_INFO[number].description;
-                    var requirements = CHALLENGE_INFO[number].requirements;
-                    var restrictions = CHALLENGE_INFO[number].restrictions;
-                    var reward = CHALLENGE_INFO[number].reward;
+                    let name = CHALLENGE_INFO[number].name;
+                    let description = CHALLENGE_INFO[number].description;
+                    let requirements = CHALLENGE_INFO[number].requirements;
+                    let restrictions = CHALLENGE_INFO[number].restrictions;
+                    let reward = CHALLENGE_INFO[number].reward;
                     $("#events_content").html(name);
                     if (adventure_data["challenges_completed"][number]) {
                         $("#events_content").append(" (Completed)");

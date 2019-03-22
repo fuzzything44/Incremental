@@ -1,4 +1,4 @@
-var CHALLENGES = {
+const CHALLENGES = {
     NONE: 0,
     BASIC: 1,
     POVERTY: 2,
@@ -13,12 +13,12 @@ var CHALLENGES = {
 };
 function challenge_menu() {
     $("#events_topbar").html("Challenge Progress");
-    var number = adventure_data["challenge"];
-    var name = CHALLENGE_INFO[number].name;
-    var description = CHALLENGE_INFO[number].description;
-    var requirements = CHALLENGE_INFO[number].requirements;
-    var restrictions = CHALLENGE_INFO[number].restrictions;
-    var reward = CHALLENGE_INFO[number].reward;
+    let number = adventure_data["challenge"];
+    let name = CHALLENGE_INFO[number].name;
+    let description = CHALLENGE_INFO[number].description;
+    let requirements = CHALLENGE_INFO[number].requirements;
+    let restrictions = CHALLENGE_INFO[number].restrictions;
+    let reward = CHALLENGE_INFO[number].reward;
     $("#events_content").html(name);
     if (adventure_data["challenges_completed"][number]) {
         $("#events_content").append(" (Completed)");
@@ -55,7 +55,7 @@ function challenge_menu() {
     }
     $("#events").removeClass("hidden");
 }
-var CHALLENGE_INFO = [
+let CHALLENGE_INFO = [
     {
         "name": "Oops",
         "description": "This... shouldn't happen.",

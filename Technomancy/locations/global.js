@@ -25,7 +25,7 @@
                             $("#combat_log").html("The turkey runs in a circle.");
                         }
                         else {
-                            var pecks = 1;
+                            let pecks = 1;
                             while (Math.random() > pecks / player_data["max_shields"]) {
                                 pecks++;
                             }
@@ -46,9 +46,9 @@
                 $("#events_content").html("You arrive at a house with it's lights on. And you even remembered your plastic pumpkin bucket!<br/>");
                 $("#events_content").append("<span class='clickable'>Trick or Treat!</span>");
                 $("#events_content").children().last().click(function () {
-                    var candy = Math.floor(Math.random() * 10 + 2);
+                    let candy = Math.floor(Math.random() * 10 + 2);
                     $("#events_content").html("You got a nice handful of " + format_num(candy) + " pieces of candy!");
-                    var candy_loc = find_item("candy", adventure_data.warehouse);
+                    let candy_loc = find_item("candy", adventure_data.warehouse);
                     if (candy_loc == -1) {
                         adventure_data["warehouse"].push({ "name": "candy", "amount": candy });
                     }

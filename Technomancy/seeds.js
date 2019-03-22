@@ -1,6 +1,6 @@
-var SEED_FUNCS = {
+const SEED_FUNCS = {
     "carrot": function (seed) {
-        var harvest = "You harvested " + format_num(seed.quality, false) + " carrots.";
+        let harvest = "You harvested " + format_num(seed.quality, false) + " carrots.";
         adventure_data.alchemy_ingredients["Carrot"] += seed.quality;
         /* Chance to get seeds.*/
         if (Math.random() < seed.quality / 10) {

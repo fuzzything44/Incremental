@@ -98,18 +98,6 @@ label + input[type=radio] + label {
 }
 
 
-.building {
-    border-radius: 3px;
-    padding-left: 0.3em;
-    padding-right: 0.3em;
-    border: 1px solid;
-    display: block;
-
-        width: 18em;
-    max-width: 18em;
-    min-width: 18em;
-}
-
 .building_state_on {
     background-color: green;
     position: absolute;
@@ -334,7 +322,7 @@ hr {
 }
 
 .clickable {
-    border: solid 1px; 
+    border: solid 1px;
     border-radius: 3px; 
     padding-left: .3em; 
     padding-right: .3em; 
@@ -342,6 +330,28 @@ hr {
     margin: .2em;
 }
 
+button {
+    border: solid 1px; 
+    border-radius: 3px; 
+    padding-left: .3em; 
+    padding-right: .3em; 
+    padding-top: .2em;
+    padding-bottom: .2em;
+    display: inline-block; 
+    margin: .2em;
+}
+
+.building {
+    border-radius: 3px;
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    border: 1px solid;
+    display: block;
+
+        width: 18em;
+    max-width: 18em;
+    min-width: 18em;
+}
 
 .energy_box_off {
     height: 1em;

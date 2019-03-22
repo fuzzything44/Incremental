@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.23.6: (3/21/19) Testing for screen reader support
+Banks should now be described by their tooltip?
+
 v5.23.5: (3/17/19) Bugfixes
 Fixed some issues with alchemist ingredients not showing up. Also, when you unlock them it should say where you can find them. You now also need to know alchemy before you can become an Alchemist. Essence compressor now works even if you don't have omega upgrades unlocked. If you have small tower entries banked, it now says how long until the next one is available.
 

@@ -1,4 +1,4 @@
-var TOWER_DATA = [
+let TOWER_DATA = [
     {
         "boss": "a noodle",
         "text": "It's just a wet noodle",
@@ -496,7 +496,7 @@ var TOWER_DATA = [
         },
         reward: function () {
             adventure_data["omega_machine"] = 1;
-            var build_state = buildings["omega_machine"].on;
+            let build_state = buildings["omega_machine"].on;
             if (build_state) {
                 toggle_building_state("omega_machine");
             }
@@ -727,16 +727,16 @@ var TOWER_DATA = [
         reward: function () { }
     },
 ];
-var TOWER_ASCENSION_GROWTH = 4;
-var grinding_level = 1;
+const TOWER_ASCENSION_GROWTH = 4;
+let grinding_level = 1;
 /* Adjectives and nouns to describe the boss.  Please ensure that the lengths of each set are mutually coprime with all the others. */
 /* Also, adjectives must end with a space or be totally empty. */
-var tower_adj_a = ["beautiful ", "ugly ", "", "strange ", "corrupt ", "quaint ", "cute ", ""];
-var tower_adj_b = ["big ", "small ", "baby ", "huge ", ""];
-var tower_adj_c = ["green ", "", "blue ", "purple ", "red ", "striped ", "spotty "];
-var tower_noun = ["fish", "frog", "triffid", "dog", "cat", "dove", "eagle", "goat", "golem"];
+let tower_adj_a = ["beautiful ", "ugly ", "", "strange ", "corrupt ", "quaint ", "cute ", ""];
+let tower_adj_b = ["big ", "small ", "baby ", "huge ", ""];
+let tower_adj_c = ["green ", "", "blue ", "purple ", "red ", "striped ", "spotty "];
+let tower_noun = ["fish", "frog", "triffid", "dog", "cat", "dove", "eagle", "goat", "golem"];
 /* Room descriptions.  Want to be a multiple of noun length so that the rooms match the noun. */
-var tower_rooms = ["It's just swimming around, looking angry. ",
+let tower_rooms = ["It's just swimming around, looking angry. ",
     "It's hopping mad at you. ",
     "It's nearly filling the whole room, waiting to strike. ",
     "It looks like it might just sit if you told it to firmly.  Maybe not. ",
@@ -758,12 +758,12 @@ function tower_height() {
     return 31 + (adventure_data["tower_ascension"] * TOWER_ASCENSION_GROWTH);
 }
 function tower_boss_ascension_scale() {
-    var asc = adventure_data["tower_ascension"] + 1; /* + 1 to shift it properly. This gives Ascension 0 and I at 1x, then 2x on Ascension II... instead of 1 on Ascensions 0, I, AND II. */
+    let asc = adventure_data["tower_ascension"] + 1; /* + 1 to shift it properly. This gives Ascension 0 and I at 1x, then 2x on Ascension II... instead of 1 on Ascensions 0, I, AND II. */
     if (asc < 1) {
         return -5;
     }
-    var a = (1 + Math.sqrt(5)) / 2;
-    var b = (1 - Math.sqrt(5)) / 2;
+    let a = (1 + Math.sqrt(5)) / 2;
+    let b = (1 - Math.sqrt(5)) / 2;
     return Math.round((Math.pow(a, asc) - Math.pow(b, asc)) / Math.sqrt(5));
 }
 function essence_cost_multiplier() {
@@ -790,7 +790,7 @@ function tower() {
     $("#events_topbar").html("The Tower of Magic");
     $("#events_content").html("Welcome to the Tower of Magic. Your essence allows you to enter.<br/>");
     if (adventure_data["challenge"] == CHALLENGES.NONE) {
-        var essence_cost = Math.round(Math.pow(adventure_data["total_essence"], essence_cost_multiplier()));
+        let essence_cost = Math.round(Math.pow(adventure_data["total_essence"], essence_cost_multiplier()));
         $("#events_content").append("<span class='clickable'>Compress</span> some magic into 1 essence (" + format_num(essence_cost, false) + " Mana Stones)<br/>");
         $("#events_content span").last().click(function () {
             if (buy_essence(1)) {
@@ -806,11 +806,11 @@ function tower() {
     $("#events_content").append("You currently have " + format_num(adventure_data["tower_power"], false) + " power. <span class='clickable'>Spend</span> <input id='tower_power_increase' class='fgc bgc_second' type='number' min='0' value='1'> essence at a rate of 1 essence per power.<br/>");
     $("#events_content span").last().click(function () {
         /* Save both values to set inputs to previous values. */
-        var pow_increase = Math.round(parseFloat($("#tower_power_increase").val()));
+        let pow_increase = Math.round(parseFloat($("#tower_power_increase").val()));
         if (isNaN(pow_increase) || pow_increase < 0) {
             pow_increase = 0;
         }
-        var tough_increase = Math.round(parseFloat($("#tower_tough_increase").val()));
+        let tough_increase = Math.round(parseFloat($("#tower_tough_increase").val()));
         if (isNaN(tough_increase) || tough_increase < 0) {
             tough_increase = 0;
         }
@@ -822,18 +822,18 @@ function tower() {
         $("#tower_power_increase").val(pow_increase);
         $("#tower_tough_increase").val(tough_increase);
     });
-    var toughness_per_essence = "";
+    let toughness_per_essence = "";
     if (adventure_data["tower_floor"] > 21) {
         toughness_per_essence = "5 ";
     }
     $("#events_content").append("You currently have " + format_num(adventure_data["tower_toughness"], false) + " toughness. <span class='clickable'>Spend</span> <input id='tower_tough_increase' class='fgc bgc_second' type='number' min='0' value='1'> essence at a rate of 1 essence per " + toughness_per_essence + "toughness.<br/>");
     $("#events_content span").last().click(function () {
         /* Save both values to set inputs to previous values. */
-        var pow_increase = Math.round(parseFloat($("#tower_power_increase").val()));
+        let pow_increase = Math.round(parseFloat($("#tower_power_increase").val()));
         if (isNaN(pow_increase) || pow_increase < 0) {
             pow_increase = 0;
         }
-        var tough_increase = Math.round(parseFloat($("#tower_tough_increase").val()));
+        let tough_increase = Math.round(parseFloat($("#tower_tough_increase").val()));
         if (isNaN(tough_increase) || tough_increase < 0) {
             tough_increase = 0;
         }
@@ -859,7 +859,7 @@ function tower() {
         $("#events_content").append("You're at tower floor: " + format_num(adventure_data["tower_floor"]) + "<br/>");
     }
     if (adventure_data["grind_tower_time"] != undefined && adventure_data["tower_floor"] > 8) {
-        var grind_tower_time = 24 * 60 * 60;
+        let grind_tower_time = 24 * 60 * 60;
         if (adventure_data["tower_floor"] > 31 && adventure_data["tower_ascension"] /* Don't have the tower guardian also give this */) {
             grind_tower_time /= 2;
         }
@@ -893,19 +893,19 @@ function tower() {
                 adventure_data["grind_tower_bank"]--;
                 climb_tower(undefined, undefined, true);
             });
-            var date = new Date(null);
-            var elapsed_time = (Date.now() - adventure_data["grind_tower_time"]) / 1000;
+            let date = new Date(null);
+            let elapsed_time = (Date.now() - adventure_data["grind_tower_time"]) / 1000;
             date.setSeconds(grind_tower_time - elapsed_time);
-            var dates = date.toISOString().substr(11, 8);
-            var result = dates.split(":");
+            let dates = date.toISOString().substr(11, 8);
+            let result = dates.split(":");
             $("#events_content").append("Your next bank is available in " + parseInt(result[0]).toString() + "hours " + parseInt(result[1]).toString() + " minutes<br/>");
         }
         else {
-            var date = new Date(null);
-            var elapsed_time = (Date.now() - adventure_data["grind_tower_time"]) / 1000;
+            let date = new Date(null);
+            let elapsed_time = (Date.now() - adventure_data["grind_tower_time"]) / 1000;
             date.setSeconds(grind_tower_time - elapsed_time);
-            var dates = date.toISOString().substr(11, 8);
-            var result = dates.split(":");
+            let dates = date.toISOString().substr(11, 8);
+            let result = dates.split(":");
             $("#events_content").append("The small tower is still closed. Come back in " + parseInt(result[0]).toString() + "hours " + parseInt(result[1]).toString() + " minutes<br/>");
         }
     }
@@ -917,10 +917,7 @@ function tower() {
     }
     $("#events").removeClass("hidden");
 }
-function climb_tower(health, ehealth, grinding) {
-    if (health === void 0) { health = undefined; }
-    if (ehealth === void 0) { ehealth = undefined; }
-    if (grinding === void 0) { grinding = false; }
+function climb_tower(health = undefined, ehealth = undefined, grinding = false) {
     if (grinding) {
         $("#events_topbar").html("Small tower floor " + format_num(grinding_level));
     }
@@ -933,7 +930,7 @@ function climb_tower(health, ehealth, grinding) {
         }
         else {
             function convertToRoman(num) {
-                var roman = {
+                let roman = {
                     M: 1000,
                     CM: 900,
                     D: 500,
@@ -948,8 +945,8 @@ function climb_tower(health, ehealth, grinding) {
                     IV: 4,
                     I: 1
                 };
-                var result = '';
-                for (var key in roman) {
+                let result = '';
+                for (let key in roman) {
                     if (num == roman[key]) {
                         return result += key;
                     }
@@ -992,7 +989,7 @@ function climb_tower(health, ehealth, grinding) {
             return;
         }
     }
-    var tower_level;
+    let tower_level;
     if (grinding) {
         tower_level = grinding_level;
     }
@@ -1024,23 +1021,23 @@ function climb_tower(health, ehealth, grinding) {
         $("#events_content span").last().click(function () { tower(); });
     }
     else {
-        var boss_data_1;
+        let boss_data;
         if (tower_level < tower_height()) {
             if (tower_level < TOWER_DATA.length - 2) {
-                boss_data_1 = TOWER_DATA[tower_level];
+                boss_data = TOWER_DATA[tower_level];
             }
             else {
-                boss_data_1 = TOWER_DATA[TOWER_DATA.length - 2];
+                boss_data = TOWER_DATA[TOWER_DATA.length - 2];
             }
         }
         else {
-            boss_data_1 = TOWER_DATA[TOWER_DATA.length - 1];
+            boss_data = TOWER_DATA[TOWER_DATA.length - 1];
         }
-        $("#events_content").html("This floor contains " + boss_data_1.boss + ". " + boss_data_1.text + "<br/>");
+        $("#events_content").html("This floor contains " + boss_data.boss + ". " + boss_data.text + "<br/>");
         $("#events_content").append("Your health: " + format_num(health, true) + "<br/>");
         $("#events_content").append("Enemy health: " + format_num(ehealth, true) + "<br/>");
         function fight_enemy(attack) {
-            var fight_results_message = "";
+            let fight_results_message = "";
             if (attack == "attack") {
                 fight_results_message += "You attack!";
             }
@@ -1048,11 +1045,11 @@ function climb_tower(health, ehealth, grinding) {
                 fight_results_message += "You dodge!";
             }
             else if (attack == "spaz") {
-                var spaz_messages = ["You flail around!", "You do the TEACUP EXTERMINATION.", "You start tapdancing.", "You attack! Wait, no. You don't.", "You suddenly become happy."];
+                let spaz_messages = ["You flail around!", "You do the TEACUP EXTERMINATION.", "You start tapdancing.", "You attack! Wait, no. You don't.", "You suddenly become happy."];
                 fight_results_message += spaz_messages[Math.floor(Math.random() * spaz_messages.length)];
             }
-            var rval = Math.random(); /* Roll random enemy attack. */
-            var enemy_attack = "";
+            let rval = Math.random(); /* Roll random enemy attack. */
+            let enemy_attack = "";
             if (rval < 1 / 3) {
                 enemy_attack = "attack";
                 fight_results_message += " Your enemy attacks!";
@@ -1063,18 +1060,18 @@ function climb_tower(health, ehealth, grinding) {
             }
             else {
                 enemy_attack = "spaz";
-                var spaz_messages = ["Your enemy spins in circles for 20 minutes!", "Your enemy does something unspeakable.", "Your enemy pulls out a giant hammer and hits you with it! Oh good, it was foam.", "Your enemy throws a tomato at you.", "... maybe?"];
+                let spaz_messages = ["Your enemy spins in circles for 20 minutes!", "Your enemy does something unspeakable.", "Your enemy pulls out a giant hammer and hits you with it! Oh good, it was foam.", "Your enemy throws a tomato at you.", "... maybe?"];
                 fight_results_message += " " + spaz_messages[Math.floor(Math.random() * spaz_messages.length)];
             }
             fight_results_message += "<br/>";
-            var winstate = "won"; /* Figure out who won. */
+            let winstate = "won"; /* Figure out who won. */
             if (attack == enemy_attack) {
                 winstate = "tie";
             }
             else if ((attack == "attack" && enemy_attack == "dodge") || (attack == "dodge" && enemy_attack == "spaz") || (attack == "spaz" && enemy_attack == "attack")) {
                 winstate = "lost";
             }
-            var enemy_damage = Math.pow(tower_level, 2) * tower_boss_ascension_scale();
+            let enemy_damage = Math.pow(tower_level, 2) * tower_boss_ascension_scale();
             function damage_player(amt) {
                 /* Warrior exists and is defending. And is alive. */
                 if (adventure_data["tower_warrior"] != undefined && $("input:radio[name='warrior_action']:checked").val() == "defend" && adventure_data["tower_warrior"].current_health > 0) {
@@ -1085,7 +1082,7 @@ function climb_tower(health, ehealth, grinding) {
                     health -= amt;
                     /* They have spikey kneepads */
                     if (adventure_data["tower_floor"] > 48) {
-                        var knee_dmg = Math.floor(amt / 5) + 5;
+                        let knee_dmg = Math.floor(amt / 5) + 5;
                         fight_results_message += " Your super spikey kneepads poke your enemy for " + format_num(knee_dmg) + " damage!";
                         ehealth -= knee_dmg;
                     }
@@ -1115,8 +1112,8 @@ function climb_tower(health, ehealth, grinding) {
                 damage_player(enemy_damage);
             }
             fight_results_message += "<br/>";
-            if (boss_data_1["special_chance"] < Math.random() * 100) {
-                var special_attack = boss_data_1.run_special(health, ehealth);
+            if (boss_data["special_chance"] < Math.random() * 100) {
+                let special_attack = boss_data.run_special(health, ehealth);
                 fight_results_message += special_attack.message + "<br/>";
                 damage_player(special_attack.damage);
                 if (special_attack["real_damage"]) {
@@ -1124,16 +1121,16 @@ function climb_tower(health, ehealth, grinding) {
                 }
             }
             if (adventure_data["tower_healer"] != undefined) {
-                var heal_action = $("input:radio[name='healer_action']:checked").val();
+                let heal_action = $("input:radio[name='healer_action']:checked").val();
                 if (adventure_data["tower_healer"].current_health > 0) {
                     if (heal_action == "heal") {
-                        var heal_amount = adventure_data["tower_healer"].power;
+                        let heal_amount = adventure_data["tower_healer"].power;
                         heal_amount = Math.min(adventure_data["tower_toughness"] - health, heal_amount); /* Can't heal past max health. */
                         health += heal_amount;
                         fight_results_message += "Your healer heals you for " + format_num(heal_amount, false) + " health.";
                     }
                     else { /* It's attack */
-                        var heal_damage = Math.round(adventure_data["tower_healer"].power / 2);
+                        let heal_damage = Math.round(adventure_data["tower_healer"].power / 2);
                         ehealth -= heal_damage;
                         fight_results_message += "Your healer attacks for " + format_num(heal_damage, false) + " damage.";
                     }
@@ -1142,9 +1139,9 @@ function climb_tower(health, ehealth, grinding) {
                 fight_results_message += "<br/>";
             }
             if (adventure_data["tower_warrior"] != undefined) {
-                var warrior_action = $("input:radio[name='warrior_action']:checked").val();
+                let warrior_action = $("input:radio[name='warrior_action']:checked").val();
                 if (warrior_action == "attack" && adventure_data["tower_warrior"].current_health > 0) {
-                    var warr_damage = Math.round(adventure_data["tower_warrior"].power);
+                    let warr_damage = Math.round(adventure_data["tower_warrior"].power);
                     ehealth -= warr_damage;
                     fight_results_message += "Your warrior attacks for " + format_num(warr_damage, false) + " damage.";
                 }
@@ -1197,9 +1194,9 @@ function climb_tower(health, ehealth, grinding) {
             });
         }
         function class_stats(classname) {
-            var current = adventure_data["tower_" + classname].current_health;
-            var max = adventure_data["tower_" + classname].health;
-            var pow = adventure_data["tower_" + classname].power;
+            let current = adventure_data["tower_" + classname].current_health;
+            let max = adventure_data["tower_" + classname].health;
+            let pow = adventure_data["tower_" + classname].power;
             if (current <= 0) {
                 return "(DEAD)";
             }
@@ -1221,8 +1218,7 @@ function climb_tower(health, ehealth, grinding) {
         }
     }
 }
-function defeat_floor(health) {
-    if (health === void 0) { health = undefined; }
+function defeat_floor(health = undefined) {
     $("#events_content").html("Yay, you won! That was a hard battle.<br/>");
     if (health == undefined) {
         var floor = adventure_data["tower_floor"];
@@ -1246,7 +1242,7 @@ function defeat_floor(health) {
         $("#events_content span").last().click(function () { tower(); });
     }
     else {
-        var essence_reward = Math.max(1, adventure_data["tower_ascension"]);
+        let essence_reward = Math.max(1, adventure_data["tower_ascension"]);
         $("#events_content").append("For defeating the boss on floor " + format_num(grinding_level) + ", you are awarded with " + format_num(essence_reward) + " essence<br/>");
         /* Give one essence */
         toggle_building_state("s_essence", true);
@@ -1265,12 +1261,11 @@ function defeat_floor(health) {
 function tavern() {
     $("#events_topbar").html("A tavern");
     $("#events_content").html("The tavern is pretty empty right now. It's just you, your party, and the bartender. Still, you could buy a drink for a party member.<br/>");
-    function buydrink(name, pow_increase, health_increase, size) {
-        if (size === void 0) { size = 1; }
+    function buydrink(name, pow_increase, health_increase, size = 1) {
         if (buildings["s_essence"].amount > size) {
             spend_essence(size);
-            var pow_gain = pow_increase * size;
-            var health_gain = health_increase * size;
+            let pow_gain = pow_increase * size;
+            let health_gain = health_increase * size;
             adventure_data["tower_" + name].power += pow_gain;
             adventure_data["tower_" + name].health += health_gain;
             $("#events_content").prepend("You buy your " + name + " a drink. They gain " + format_num(pow_gain) + " power and " + format_num(health_gain) + " health!<br/>");
@@ -1345,7 +1340,7 @@ function spend_essence(amount) {
     }
 }
 function buy_essence(amount) {
-    var essence_cost = Math.round(Math.pow(adventure_data["total_essence"], essence_cost_multiplier()));
+    let essence_cost = Math.round(Math.pow(adventure_data["total_essence"], essence_cost_multiplier()));
     if (buildings["s_manastone"].amount > essence_cost && resources["mana"].amount >= essence_cost) {
         buildings["s_manastone"].amount -= essence_cost;
         resources_per_sec["mana"] -= essence_cost;

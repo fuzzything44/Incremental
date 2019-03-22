@@ -46,7 +46,7 @@
         "weight": 0,
         "title": "Adventure!",
         "run_encounter": function () {
-            $("#events_content").html("<span class='clickable'>Add</span> or <span class='clickable'>Remove</span> items from your ship inventory.<br />");
+            $("#events_content").html("<button class='fgc bgc_second'>Add</button> or <span class='clickable'>Remove</span> items from your ship inventory.<br />");
             /* Handle adding of items to ship inventory. */
             $("#events_content > span").last().prev().click(function add_to_inv() {
                 $("#events_topbar").html("Stock Your Ship");

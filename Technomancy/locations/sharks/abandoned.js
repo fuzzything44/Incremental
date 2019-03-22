@@ -63,7 +63,7 @@
                 if (adventure_data["repl_time"] == undefined) {
                     adventure_data["repl_time"] = Date.now();
                 }
-                var num_machines = Math.pow(1.00001, Date.now() - adventure_data["repl_time"]);
+                let num_machines = Math.pow(1.00001, Date.now() - adventure_data["repl_time"]);
                 if (num_machines == Infinity) {
                     $("#events_content").html("The replicators are everywhere. <br />");
                     $("#events_content").append("<span class='clickable'>Take</span> one.");

@@ -8,11 +8,10 @@
             "weight": 1,
             "title": "Deep Sea Casino",
             "run_encounter": function () {
-                var _this = this;
                 /* Use a special token for the table in case it gets closed/reopened before the interval clears. */
-                var TOKEN_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-                var table_token = "slots_";
-                for (var i = 0; i < 5; i++) {
+                const TOKEN_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                let table_token = "slots_";
+                for (let i = 0; i < 5; i++) {
                     table_token += TOKEN_CHARS.charAt(Math.floor(Math.random() * TOKEN_CHARS.length));
                 }
                 /* Define all our adventure data we need to keep track of. This lets us later use it without caring if it's in adventure data (it is). */
@@ -56,20 +55,20 @@
                 }
                 token_updates();
                 /* Run our slot machine! */
-                var slot_strength = 0;
-                var chars = "ABCDEFabcdefVWXYwvxy$?!";
+                let slot_strength = 0;
+                let chars = "ABCDEFabcdefVWXYwvxy$?!";
                 chars = chars.slice(adventure_data["slots_less"], chars.length);
                 if (adventure_data["slots_double"]) {
                     chars += "$!?$!?$!?$!?$!?*"; /* 5x $!?, then one * */
                 }
                 function slots() {
                     /* Move up all columns. Sometimes we'll skip one. So 70% chance of skipping a random column. */
-                    var colskip = Math.random() > 0.7 ? Math.floor(Math.random() * 3) : -1;
-                    for (var i = 0; i < 3; i++) {
-                        for (var j = 0; j < 3; j++) {
+                    let colskip = Math.random() > 0.7 ? Math.floor(Math.random() * 3) : -1;
+                    for (let i = 0; i < 3; i++) {
+                        for (let j = 0; j < 3; j++) {
                             if (j == colskip)
                                 continue;
-                            var char = "";
+                            let char = "";
                             if (i == 2) {
                                 char = chars[Math.floor(Math.random() * chars.length)];
                             }
@@ -83,7 +82,7 @@
                     if (!$("#events").hasClass("hidden") && $("#" + table_token).length != 0) {
                         slot_strength--;
                         if (slot_strength > 0) {
-                            var time = 300 - (slot_strength * 6);
+                            let time = 300 - (slot_strength * 6);
                             time /= adventure_data["slots_time"];
                             setTimeout(slots, time);
                         }
@@ -136,42 +135,42 @@
                 });
                 if (adventure_data["slots_less"] < 17) { /* Arbitrary value less than 23. */
                     $("#events_content").append("<span class='clickable'>Improve</span> slot machine odds (" + format_num(adventure_data["slots_less"] + 1, false) + " tokens)<br />");
-                    $("#events_content span").last().click(function () {
+                    $("#events_content span").last().click(() => {
                         if (adventure_data["casino_tokens"] > adventure_data["slots_less"]) {
                             adventure_data["slots_less"]++;
                             adventure_data["casino_tokens"] -= adventure_data["slots_less"];
-                            _this.run_encounter();
+                            this.run_encounter();
                         }
                     });
                 }
                 else if (adventure_data["slots_double"] == undefined) {
                     $("#events_content").append("<span class='clickable'>Improve</span> slot machine odds (50 tokens)<br />");
-                    $("#events_content span").last().click(function () {
+                    $("#events_content span").last().click(() => {
                         if (adventure_data["casino_tokens"] >= 50) {
                             adventure_data["slots_double"] = true;
                             adventure_data["casino_tokens"] -= 50;
-                            _this.run_encounter();
+                            this.run_encounter();
                         }
                     });
                 }
                 if (adventure_data["slots_time"] < 7) { /* Arbitrary value. */
                     $("#events_content").append("<span class='clickable'>Increase</span> slot machine speed (" + format_num(adventure_data["slots_time"], false) + " tokens)<br />");
-                    $("#events_content span").last().click(function () {
+                    $("#events_content span").last().click(() => {
                         if (adventure_data["casino_tokens"] >= adventure_data["slots_time"]) {
                             adventure_data["casino_tokens"] -= adventure_data["slots_time"];
                             adventure_data["slots_time"]++;
-                            _this.run_encounter();
+                            this.run_encounter();
                         }
                     });
                 }
                 if (adventure_data["slots_reward"] < 5) { /* Yet another arbitrary value. */
-                    var cost_1 = Math.pow(2, adventure_data["slots_reward"]) + adventure_data["slots_reward"];
-                    $("#events_content").append("<span class='clickable'>Increase</span> slot machine reward (" + format_num(cost_1, false) + " tokens)<br />");
-                    $("#events_content span").last().click(function () {
-                        if (adventure_data["casino_tokens"] >= cost_1) {
-                            adventure_data["casino_tokens"] -= cost_1;
+                    let cost = Math.pow(2, adventure_data["slots_reward"]) + adventure_data["slots_reward"];
+                    $("#events_content").append("<span class='clickable'>Increase</span> slot machine reward (" + format_num(cost, false) + " tokens)<br />");
+                    $("#events_content span").last().click(() => {
+                        if (adventure_data["casino_tokens"] >= cost) {
+                            adventure_data["casino_tokens"] -= cost;
                             adventure_data["slots_reward"]++;
-                            _this.run_encounter();
+                            this.run_encounter();
                         }
                     });
                 }
@@ -179,14 +178,14 @@
                     $("#events_content").append("<table id='slot_prizes'><caption>Prize Wall</caption></table>");
                     $("#slot_prizes").append("<tr><th>Prize</td><th>Token Cost</td></tr>");
                     $("#slot_prizes").append("<tr><td class='clickable'>500 Steel</td><td>10</td></tr>");
-                    $("#slot_prizes td.clickable").last().click(function () {
+                    $("#slot_prizes td.clickable").last().click(() => {
                         if (adventure_data["casino_tokens"] >= 10) {
                             adventure_data["casino_tokens"] -= 10;
                             resources["steel_beam"].amount += 500;
                         }
                     });
                     $("#slot_prizes").append("<tr><td class='clickable'>250 Fuel</td><td>10</td></tr>");
-                    $("#slot_prizes td.clickable").last().click(function () {
+                    $("#slot_prizes td.clickable").last().click(() => {
                         if (adventure_data["casino_tokens"] >= 10) {
                             adventure_data["casino_tokens"] -= 10;
                             resources["fuel"].amount += 250;
@@ -194,7 +193,7 @@
                     });
                     if (resources["mithril"].amount >= 100) {
                         $("#slot_prizes").append("<tr><td class='clickable'>100 Mithril</td><td>25</td></tr>");
-                        $("#slot_prizes td.clickable").last().click(function () {
+                        $("#slot_prizes td.clickable").last().click(() => {
                             if (adventure_data["casino_tokens"] >= 25) {
                                 adventure_data["casino_tokens"] -= 25;
                                 resources["mithril"].amount += 100;
@@ -202,7 +201,7 @@
                         });
                     }
                     $("#slot_prizes").append("<tr><td class='clickable'>1 Void</td><td>50</td></tr>");
-                    $("#slot_prizes td.clickable").last().click(function () {
+                    $("#slot_prizes td.clickable").last().click(() => {
                         if (adventure_data["casino_tokens"] >= 50) {
                             adventure_data["casino_tokens"] -= 50;
                             resources["void"].amount += 1;
@@ -219,7 +218,7 @@
             "title": "Gate",
             "run_encounter": function () {
                 $("#events_content").html("Gate.<br/>The gate is.<br/>The gate is the world. Between worlds. Beyond. The gate. The gate. The gate. Gate. Gate.gate.gategategategate.<br /><span class='clickable'>Gate</span>");
-                $("#events_content > span").last().click(function () {
+                $("#events_content > span").last().click(() => {
                     $("#events_content").html("You obtain it.<br /><span class='clickable' onclick='start_adventure()'>Yay!</span>");
                     adventure_data["alchemy_ingredients"]["Dimensional Core"]++;
                 });

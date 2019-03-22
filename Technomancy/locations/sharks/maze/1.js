@@ -28,9 +28,9 @@
                     }
                 }
                 /* Show progress */
-                var progress = [];
-                var progress_values = [0, 2, 3];
-                var progress_text = ["swirling dust", "a pillar of fire", "a bright light", " some dust glittering"];
+                let progress = [];
+                let progress_values = [0, 2, 3];
+                let progress_text = ["swirling dust", "a pillar of fire", "a bright light", " some dust glittering"];
                 progress_values.forEach(function (val) {
                     if (adventure_data["maze_progress"][val]) {
                         progress.push(progress_text[val]);
@@ -41,8 +41,8 @@
                 });
                 /* They have some progress. */
                 if (progress.length) {
-                    var last = progress.pop();
-                    var text = progress.join(", ");
+                    let last = progress.pop();
+                    let text = progress.join(", ");
                     $("#events_content").append("In the distance you see " + text);
                     if (text) {
                         $("#events_content").append(" and ");
