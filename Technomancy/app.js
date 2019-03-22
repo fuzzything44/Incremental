@@ -3092,7 +3092,7 @@ function gen_building_tooltip(name) {
         cost_text = "Unbuyable,";
     } /* Free buildings don't have a cost. */
     tooltip += cost_text.trim().replace(/.$/, ".");
-    let flavor_text = "<hr><i style='font-size: small'>" + buildings[name].flavor + "</i>";
+    let flavor_text = "<br />---<br /><i style='font-size: small'>" + buildings[name].flavor + "</i>";
     if (buildings[name].flavor == undefined || buildings[name].flavor == "") {
         flavor_text = "";
     }
@@ -4239,7 +4239,7 @@ window.onload = () => {
         /* Unhide buildings */
         Object.keys(buildings).forEach(function (build) {
             if (SPELL_BUILDINGS.indexOf(build) == -1) {
-                $('#building_' + build + " > .tooltiptext").html(gen_building_tooltip(build)); /* Generate tooltip for it. */
+                $('#tooltip_' + build).html(gen_building_tooltip(build)); /* Generate tooltip for it. */
             }
             if (buildings[build].amount > 0 && SPELL_BUILDINGS.indexOf(build) == -1) {
                 $("#building_" + build).parent().removeClass("hidden"); /* Any owned building is unlocked. Needed in case they sell previous ones and reload. */

@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.23.8: (3/21/19) Start adding more screen reader support
+Buildings should now be properly described in a screen reader. Changed the buttons to destroy buildings and turn them on/off to actual buttons. The first few buttons to destroy a building should now have ARIA labels for that. If that works, the rest will have it added.
+
 v5.23.7: (3/21/19) Testing for screen reader support
 Banks should actually now be described by their tooltip?
 

@@ -103,8 +103,8 @@ label + input[type=radio] + label {
     position: absolute;
     border: solid green 1px;
     border-radius: 3px;
-    left: 19em;
-    top: 0em;
+    left: 22.5em;
+    top: -0.2em;
 
 }
 
@@ -113,19 +113,19 @@ label + input[type=radio] + label {
     position: absolute;
     border: solid red 1px;
     border-radius: 3px;
-    left: 19em;
-    top: 0em;
-
+    left: 22.5em;
+    top: -0.2em;
 }
 
 .building_remove {
     position: absolute;
-    left: -2em;
+    left: -2.5em;
+    top: -0.2em;
     border: solid red 1px;
     border-radius: 3px;
     color: red;
-    padding-left: .5em;
-    padding-right: .5em;
+    padding-left: .7em;
+    padding-right: .7em;
 }
 
 .building_expensive {

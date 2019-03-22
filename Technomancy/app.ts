@@ -3255,9 +3255,9 @@ function update_total_upgrades(name: string) {
 }
 
 function gen_building_tooltip(name: string) {
-    let amount = parseInt($("#buy_amount").val());
+    let amount: number = parseInt($("#buy_amount").val());
     if (isNaN(amount)) { amount = 1; }
-    let tooltip = "";
+    let tooltip: string = "";
     let gen_text: string = "";
     /* Add resource gen, update how much each one generates. */
     Object.keys(buildings[name].generation).forEach(function (key) {
@@ -3299,7 +3299,7 @@ function gen_building_tooltip(name: string) {
     if (cost_text == "Costs ") { cost_text = "Unbuyable,"; } /* Free buildings don't have a cost. */
     tooltip += cost_text.trim().replace(/.$/, ".");
 
-    let flavor_text: string = "<hr><i style='font-size: small'>" + buildings[name].flavor + "</i>";
+    let flavor_text: string = "<br />---<br /><i style='font-size: small'>" + buildings[name].flavor + "</i>";
     if (buildings[name].flavor == undefined || buildings[name].flavor == "") {
         flavor_text = "";
     }
@@ -4513,7 +4513,7 @@ window.onload = () => {
         /* Unhide buildings */
         Object.keys(buildings).forEach(function (build) {
             if (SPELL_BUILDINGS.indexOf(build) == -1) {
-                $('#building_' + build + " > .tooltiptext").html(gen_building_tooltip(build)); /* Generate tooltip for it. */
+                $('#tooltip_' + build).html(gen_building_tooltip(build)); /* Generate tooltip for it. */
             }
             if (buildings[build].amount > 0 && SPELL_BUILDINGS.indexOf(build) == -1) {
                 $("#building_" + build).parent().removeClass("hidden"); /* Any owned building is unlocked. Needed in case they sell previous ones and reload. */
