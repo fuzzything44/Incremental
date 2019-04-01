@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.23.11: (4/1/19) ( ͡° ͜ʖ ͡°)
+( ͡° ͜ʖ ͡°) ( ͡° ͜ʖ ͡°) ( ͡° ͜ʖ ͡°) ( ͡° ͜ʖ ͡°) ( ͡° ͜ʖ ͡°) ( ͡° ͜ʖ ͡°) ( ͡° ͜ʖ ͡°) ( ͡° ͜ʖ ͡°) ( ͡° ͜ʖ ͡°)
+
 v5.23.10: (3/22/19) Final update for a week, probably
 Keyboard shortcuts should work with mixed button/clickables now. Tooltips should read properly with a screen reader for real this time. Added roles for non-buyable buildings. Workshop/enchanting progress bar now also says what % it is completed.
 
