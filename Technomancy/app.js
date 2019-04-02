@@ -5,7 +5,9 @@ const DELTA = "Δ";
 const EPSILON = "ε";
 const PHI = "φ";
 function format_num(num, show_decimals = true) {
-    return "( ͡° ͜ʖ ͡°)";
+    if (adventure_data["challenge"] == CHALLENGES.UDM) {
+        return "UDM";
+    }
     /* If our numberformatting library broke, we fallback to a terrible option instead. This should really only happen in development when it's being worked on online, so it doesn't matter too much.*/
     if (typeof numberformat == "undefined") {
         return Math.round(num).toString();

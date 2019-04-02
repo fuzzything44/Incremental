@@ -10,7 +10,9 @@ const EPSILON = "ε";
 const PHI = "φ";
 
 function format_num(num: number, show_decimals: boolean = true): string {
-    return "( ͡° ͜ʖ ͡°)";
+    if (adventure_data["challenge"] == CHALLENGES.UDM) {
+        return "UDM";
+    }
     /* If our numberformatting library broke, we fallback to a terrible option instead. This should really only happen in development when it's being worked on online, so it doesn't matter too much.*/
     if (typeof numberformat == "undefined") {
         return Math.round(num).toString();
