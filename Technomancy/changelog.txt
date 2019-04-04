@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.23.13: (4/3/19) Minor bugfixes
+You can now bribe a politician with 5 strip mines. Also, if you need more money when trying to bribe, it tells you that. Meteor event and wanderer II should now both work with AutoEvents.
+
 v5.23.12: (4/1/19) No more ( ͡° ͜ʖ ͡°)
 But who IS spooky lenny? And WHY does he eat?
 

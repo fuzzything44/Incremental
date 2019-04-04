@@ -246,7 +246,7 @@ let events = [
         "run_event": function () {
             $("#events_content").html("<span>Business isn't doing well. Regulations are really holding you back.</span><br>");
 
-            if (buildings["bank"].amount >= 180 && buildings["big_bank"].amount + buildings["big_mine"].amount >= 5 && buildings["big_bank"].amount >= 5) {
+            if (buildings["bank"].amount >= 180 && (buildings["big_bank"].amount + buildings["big_mine"].amount) >= 5) {
                 $("#events_content").append("<span>Why not bribe a politician to change something for you?</span><br />");
                 $("#events_content").append("<i>Bribing costs 1,000,000 money and is available once per prestige. Choose wisely.</i><br /><br />");
 
@@ -821,8 +821,8 @@ let events = [
                 $("#events_content").append("<table></table>");
                 Object.keys(resources).forEach(function (res) {
                     if (resources[res].amount > 0 && resources[res].value > 0 && res != "money") {
-                        $("#events_content table").append("<tr><td><span>Double</span></td><td>your " + res.replace(/\_/g, " ") + "</td></tr>");
-                        $("#events_content table span").last().click(function () {
+                        $("#events_content table").append("<tr><td><button class='fgc bgc_second'>Double</button></td><td>your " + res.replace(/\_/g, " ") + "</td></tr>");
+                        $("#events_content button").last().click(function () {
                             if (resources["refined_mana"].amount < 50000 * 1000) {
                                 $("#events_content").html("?<br/>You don't have enough refined mana.");
                             } else {
@@ -841,7 +841,7 @@ let events = [
         "name": "Wanderer Part II",
         "rejection": 45,
         "force_cost": 50,
-    }), /* End stupid trade */
+    }), /* End wanderer II */
 
 ];
 
@@ -966,8 +966,8 @@ function handle_event(set_timer: boolean = true) {
                     $("#events").addClass("hidden");
                 } else {
                     erule_timeout = setTimeout(() => $("#events").addClass("hidden"), 1000);
-                    if ($("#events span.clickable").length >= parseInt(rule[1])) {
-                        $("#events span.clickable")[parseInt(rule[1]) - 1].click();
+                    if ($("#events .clickable, #events button").length >= parseInt(rule[1])) {
+                        $("#events .clickable, #events button")[parseInt(rule[1]) - 1].click();
                     }
                 }
                 throw "Finished event, we're done here.";
@@ -1204,6 +1204,7 @@ function setup_events() {
 /* Functions because putting all of this in an onclick is too much. */
 function bribe_finance() {
     if (resources["money"].amount < 1000000) {
+        $("#events_content").prepend("You need more money!<br/>");
         return;
     }
     /* Pay bribe */
@@ -1245,6 +1246,7 @@ function bribe_finance() {
 
 function bribe_environment() {
     if (resources["money"].amount < 1000000) {
+        $("#events_content").prepend("You need more money!<br/>");
         return;
     }
     /* Pay bribe */
