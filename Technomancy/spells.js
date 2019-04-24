@@ -149,7 +149,7 @@ function s_workshop(newopt) {
     }
 }
 function s_refinery(amount, override = false) {
-    if (isNaN(amount)) {
+    if (isNaN(amount) || amount < 0) {
         amount = 1;
     }
     if (amount > adventure_data["max_refine"] && !override) {

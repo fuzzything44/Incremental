@@ -158,7 +158,7 @@ function s_workshop(newopt: string) {
 }
 
 function s_refinery(amount: number, override: boolean = false) {
-    if (isNaN(amount)) { amount = 1; }
+    if (isNaN(amount) || amount < 0) { amount = 1; }
     if (amount > adventure_data["max_refine"] && !override) {
         alert("Warning: Magic limits require mana to be refined in batches of " + format_num(adventure_data["max_refine"]) + " or less. You will be refining " + format_num(adventure_data["max_refine"]) + " instead");
         amount = adventure_data["max_refine"];

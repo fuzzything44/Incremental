@@ -134,7 +134,7 @@ let CHALLENGE_INFO = [
     { /* Forced prestige */
         "name": "3 Minute Challenge",
         "description": "You prestige at least every 3 minutes. No less. Time to learn how to use all this fancy automation stuff!",
-        "requirements": "Get 500 mana. Also, currently impossible.",
+        "requirements": "Get 500 mana.",
         "restrictions": "Go back to 0 mana. If your prestige has lasted over 3 minutes, you prestige.",
         get reward() {
             return "Faster convolution cube actions.";
@@ -145,7 +145,7 @@ let CHALLENGE_INFO = [
         "name": "UDM Challenge",
         "description": "Pain. Lots of it. Thought poverty/meteors/No Upgrades sucked? This is worse.",
         "requirements": "Get 500 mana.",
-        "restrictions": "Go back to 0 mana. Essence is capped lower than other challenges. And there's meteors. And poverty. And events happen less, which might actually be a good thing. And no upgrades. ",
+        "restrictions": "Go back to 0 mana. Essence is capped lower than other challenges. And there's meteors. And poverty. And events happen less, which might actually be a good thing. And no upgrades. And more stuff.",
         get reward() {
             return "???";
         },

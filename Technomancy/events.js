@@ -788,6 +788,7 @@ let events = [
                                 resources["refined_mana"].amount -= 50000 * 1000;
                                 resources[res].amount *= 2;
                                 event_flags["wanderer_2"] = true;
+                                $("#events_content").html("The wanderer takes your mana and leaves. You notice you have twice as much " + res.replace(/\_/g, " ") + "<br/>");
                             }
                         });
                         $("#events_content table").last().append("");

@@ -179,7 +179,7 @@ function set_initial_state() {
         "sand": { "amount": 0, "value": 2, "mult": 1, "changes": {}, "ps_change": "" },
         "glass": { "amount": 0, "value": 20, "mult": 1, "changes": {}, "ps_change": "" },
         "water": { "amount": 0, "value": 2, "mult": 1, "changes": {}, "ps_change": "" },
-        "hydrogen": { "amount": 0, get value() { if (adventure_data["challenge"] == CHALLENGES.UDM) { return 1; } return 5; }, "mult": 1, "changes": {}, "ps_change": "" },
+        "hydrogen": { "amount": 0, get value() { if (adventure_data["challenge"] == CHALLENGES.UDM) { return 0.01; } return 5; }, "mult": 1, "changes": {}, "ps_change": "" },
         "steel_beam": { "amount": 0, "value": 200, "mult": 1, "changes": {}, "ps_change": "" },
         "uranium": { "amount": 0, "value": 5000, "mult": 1, "changes": {}, "ps_change": "" },
         "sandcastle": { "amount": 0, "value": 10000000, "mult": 1, "changes": {}, "ps_change": "" }, 
@@ -2553,6 +2553,10 @@ let prestige = {
         if (adventure_data["tower_floor"] > 30) {
             prestige_points *= Math.max(10, Math.log(prestige_points / 1000000));
         }
+
+        if (adventure_data["challenge"] == CHALLENGES.UDM) {
+            prestige_points = prestige_points / 2;
+        }
         return prestige_points;
     },
     /* Calculate mana gain */
@@ -2569,6 +2573,10 @@ let prestige = {
 
         let first_wall = Math.pow(mana, 1.3) * 0.5;
 
+        if (adventure_data["challenge"] == CHALLENGES.UDM) {
+            first_wall = Math.pow(mana, 2);
+        }
+
         let mana_gain = prestige_points / 15000 - first_wall; /* One for every 15k pp, and apply reduction based off of current mana */
         mana_gain = Math.pow(Math.max(0, mana_gain), .36); /* Then raise to .36 power and apply some rounding/checking */
         mana_gain = mana_gain / (1 + Math.floor(mana / 50) * .5); /* Then divide gain by a number increasing every 50 mana. */
@@ -2580,6 +2588,10 @@ let prestige = {
         }
         if (adventure_data["magic_seals"]) {
             mana_gain *= (1 + 0.5 * adventure_data["magic_seals"]);
+        }
+
+        if (adventure_data["challenge"] == CHALLENGES.UDM) {
+            mana_gain /= 4;
         }
 
         mana_gain -= mana_this_prestige; /* Take out what they already got. */
@@ -2627,7 +2639,7 @@ let prestige = {
         let mana = buildings["s_manastone"].amount;
         let time_saved = 0;
         if (adventure_data["keep_time"]) {
-            time_saved = resources["time"].amount;
+            time_saved = Math.max(0, resources["time"].amount - adventure_data["perm_resources"]["time"]);
         }
 
         /* If they have this skill, don't warn them they're prestiging for 0.  */
@@ -3199,7 +3211,7 @@ function update_upgrade_list() {
                 }
             });
 
-            if (adventure_data["auto_upgrade"] && color == "" && !remaining_upgrades[upg_name].repeats && remaining_upgrades[upg_name].cost["time"] ==undefined){
+            if (adventure_data["auto_upgrade"] && color == "" && !remaining_upgrades[upg_name].repeats && remaining_upgrades[upg_name].cost["time"] == undefined){
                 try {
                     purchase_upgrade(upg_name);
                     return; /* Don't bother with the rest if we successfully buy it. */

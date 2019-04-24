@@ -788,6 +788,9 @@ function tower() {
         adventure_data["tower_ascension"] = 0;
     }
     $("#events_topbar").html("The Tower of Magic");
+    if (adventure_data["tower_ascension"]) {
+        $("#events_topbar").append(" (Tower ascension " + convertToRoman(adventure_data["tower_ascension"]) + ")");
+    }
     $("#events_content").html("Welcome to the Tower of Magic. Your essence allows you to enter.<br/>");
     if (adventure_data["challenge"] == CHALLENGES.NONE) {
         let essence_cost = Math.round(Math.pow(adventure_data["total_essence"], essence_cost_multiplier()));
@@ -917,6 +920,34 @@ function tower() {
     }
     $("#events").removeClass("hidden");
 }
+function convertToRoman(num) {
+    let roman = {
+        M: 1000,
+        CM: 900,
+        D: 500,
+        CD: 400,
+        C: 100,
+        XC: 90,
+        L: 50,
+        XL: 40,
+        X: 10,
+        IX: 9,
+        V: 5,
+        IV: 4,
+        I: 1
+    };
+    let result = '';
+    for (let key in roman) {
+        if (num == roman[key]) {
+            return result += key;
+        }
+        if (num > roman[key]) {
+            result = result + key.repeat(Math.floor(num / roman[key]));
+            num = num % roman[key];
+        }
+    }
+    return result;
+}
 function climb_tower(health = undefined, ehealth = undefined, grinding = false) {
     if (grinding) {
         $("#events_topbar").html("Small tower floor " + format_num(grinding_level));
@@ -929,34 +960,6 @@ function climb_tower(health = undefined, ehealth = undefined, grinding = false) 
             $("#events_topbar").html("Tower floor " + format_num(adventure_data["tower_floor"]));
         }
         else {
-            function convertToRoman(num) {
-                let roman = {
-                    M: 1000,
-                    CM: 900,
-                    D: 500,
-                    CD: 400,
-                    C: 100,
-                    XC: 90,
-                    L: 50,
-                    XL: 40,
-                    X: 10,
-                    IX: 9,
-                    V: 5,
-                    IV: 4,
-                    I: 1
-                };
-                let result = '';
-                for (let key in roman) {
-                    if (num == roman[key]) {
-                        return result += key;
-                    }
-                    if (num > roman[key]) {
-                        result = result + key.repeat(Math.floor(num / roman[key]));
-                        num = num % roman[key];
-                    }
-                }
-                return result;
-            }
             $("#events_topbar").html("Tower ascension " + convertToRoman(adventure_data["tower_ascension"]) + ", floor " + format_num(adventure_data["tower_floor"]));
         }
     }
