@@ -2919,6 +2919,26 @@ function load_from_clip() {
     location.reload();
 }
 
+function load_from_file() {
+    function b64DecodeUnicode(str) {
+        return decodeURIComponent(Array.prototype.map.call(atob(str), function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+    }
+    var reader = new FileReader();
+    reader.onload = function() {
+        let loaded_data = b64DecodeUnicode(reader.result); // It shouldn't be possible to have an old save at this point
+            loaded_data = JSON.parse(loaded_data);
+            Object.keys(loaded_data).forEach(function (key) {
+                localStorage[key] = loaded_data[key];
+            });
+        location.reload();
+    };
+
+    reader.readAsText(document.getElementById("importFile").files[0]);
+}
+
+
 function resource_tooltip() {
     Object.keys(resources).forEach(function (res) {
         if (!$.isEmptyObject(resources[res].changes)) {

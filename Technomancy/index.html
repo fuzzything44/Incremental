@@ -778,7 +778,9 @@
             <a href="http://crappy-incremental.wikia.com/wiki/Crappy_Incremental_Wiki" target="_blank" class="fgc">Wiki</a> |
             <a href="https://discord.gg/78AGWku" target="_blank" class="fgc">Discord</a> |
             <a href="#" class="fgc" onclick="save_to_clip()">Export</a> |
-            <a href="#" class="fgc" onclick="load_from_clip()">Import</a> <br />
+            <a href="#" class="fgc" onclick="load_from_clip()">Import</a> 
+            <label for="importFile" class="fgc">Import (file) </label>
+            <input type="file" id="importFile" style="opacity:0" onchange="load_from_file()"><br />
             <br />
             <b>Settings</b><br />
             <select id="theme_select" class="fgc bgc_second" onchange="if (event.target.value == 'crazy' && !confirm('Seizure warning: This has quickly flashing colors. Proceed?')) { return; } change_theme(event.target.value)">
