@@ -2877,34 +2877,16 @@ function save_to_clip() { /* Put save data in clipboard. Copied from Stack Overf
 
     save();
     let text = b64EncodeUnicode(JSON.stringify(localStorage));
-    let textArea: any = document.createElement("textarea");
+    let a: any = document.createElement("a");
 
-    /* Styling to make sure it doesn't do much if the element gets rendered */
+    textArea.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
+    textArea.download = "Technomancy.sav";
+    textArea.style.display = 'none';
 
-    /* Place in top-left corner of screen regardless of scroll position. */
-    textArea.style.position = 'fixed'; textArea.style.top = 0; textArea.style.left = 0; textArea.style.width = '2em'; textArea.style.height = '2em';
+    document.body.appendChild(a);
 
-    textArea.style.padding = 0; textArea.style.border = 'none'; textArea.style.outline = 'none'; textArea.style.boxShadow = 'none';
-    textArea.style.background = 'transparent'; textArea.value = text;
+    a.click()
 
-    document.body.appendChild(textArea);
-    textArea.select();
-
-    try {
-        let successful = document.execCommand('copy');
-        if (successful) {
-            alert("Save copied to clipboard.");
-        } else {
-            throw "Save unsuccessful";
-        }
-    } catch (err) {
-        $("#settings").addClass("hidden");
-        $("#events_topbar").html("Save Export - Secondary");
-        $("#events_content").html("<textarea class='fgc bgc' style='width: 90%; height: 90%;' readonly>" + text + "</textarea>");
-        $("#events_content textarea").select();
-        $("#events").removeClass("hidden");
-        
-    }
     document.body.removeChild(textArea);
 }
 
