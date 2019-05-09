@@ -2869,10 +2869,46 @@ function load() {
 }
 
 function save_to_clip() { /* Put save data in clipboard. Copied from Stack Overflow :) */
-    alert("STUB!")
+    function b64EncodeUnicode(str) {
+        return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
+                    return String.fromCharCode(parseInt(p1, 16))
+                    }))
+    }
+
+    save();
+    let text = b64EncodeUnicode(JSON.stringify(localStorage));
+    let textArea: any = document.createElement("textarea");
+
+    /* Styling to make sure it doesn't do much if the element gets rendered */
+
+    /* Place in top-left corner of screen regardless of scroll position. */
+    textArea.style.position = 'fixed'; textArea.style.top = 0; textArea.style.left = 0; textArea.style.width = '2em'; textArea.style.height = '2em';
+
+    textArea.style.padding = 0; textArea.style.border = 'none'; textArea.style.outline = 'none'; textArea.style.boxShadow = 'none';
+    textArea.style.background = 'transparent'; textArea.value = text;
+
+    document.body.appendChild(textArea);
+    textArea.select();
+
+    try {
+        let successful = document.execCommand('copy');
+        if (successful) {
+            alert("Save copied to clipboard.");
+        } else {
+            throw "Save unsuccessful";
+        }
+    } catch (err) {
+        $("#settings").addClass("hidden");
+        $("#events_topbar").html("Save Export - Secondary");
+        $("#events_content").html("<textarea class='fgc bgc' style='width: 90%; height: 90%;' readonly>" + text + "</textarea>");
+        $("#events_content textarea").select();
+        $("#events").removeClass("hidden");
+
+    }
+    document.body.removeChild(textArea);
 }
 
-function save_to_file() { /* Put save data in clipboard. Copied from Stack Overflow :) */
+function save_to_file() { 
     function b64EncodeUnicode(str) {
         return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
             return String.fromCharCode(parseInt(p1, 16))
@@ -2883,15 +2919,15 @@ function save_to_file() { /* Put save data in clipboard. Copied from Stack Overf
     let text = b64EncodeUnicode(JSON.stringify(localStorage));
     let a: any = document.createElement("a");
 
-    textArea.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
-    textArea.download = "Technomancy.sav";
-    textArea.style.display = 'none';
+    a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
+    a.download = "Technomancy.sav";
+    a.style.display = 'none';
 
     document.body.appendChild(a);
 
     a.click()
 
-    document.body.removeChild(textArea);
+    document.body.removeChild(a);
 }
 
 function load_from_clip() {
