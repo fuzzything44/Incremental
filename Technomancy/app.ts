@@ -3596,6 +3596,7 @@ function random_title() {
         "Have you tried eating it?",
         "New Update: Additional Pain",
         "Tower OP, getting removed next update.",
+        "Trans Rights!",
     ];
     document.title = TITLES.filter(item => item !== document.title)[Math.floor(Math.random() * (TITLES.length - 1))];
 
