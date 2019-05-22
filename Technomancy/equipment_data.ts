@@ -507,7 +507,7 @@ let equipment = {
                     /* Yay, that's all the levers! Literally only other thing is the point range of 700-900 removing resource costs. */
                     if (data.points >= 700 && data.points <= 900) {
                         Object.keys(modification.resource_costs).forEach((res) => {
-                            if (modification.resource_costs[res] < 0) {
+                            if (modification.resource_costs[res] > 0) {
                                 modification.resource_costs[res] = 0;
                             }
                         });

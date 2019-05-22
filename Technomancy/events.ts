@@ -675,13 +675,13 @@ let events = [
                     Object.keys(resources_per_sec).forEach(function (res) {
                         /* Don't double negatives. */
                         let ps_add = 0.5 * Math.max(0, resources_per_sec[res]);
-                        if (["mana", "essence", "magic_bag"].indexOf(res) != -1 || resources[res].value < 0) { ps_add = 0; } /* Don't add mana or special resources. Do give other stuff. */
+                        if (["mana", "essence", "magic_bag", "sludge"].indexOf(res) != -1 || resources[res].value < 0) { ps_add = 0; } /* Don't add mana or special resources. Do give other stuff. */
 
                         resources_per_sec[res] += ps_add;
                         resources[res].changes["Logicat bonus"] = ps_add; /* Add it to the change list. */
                         setTimeout(() => {
                             resources_per_sec[res] -= ps_add
-                            delete resources["res"].changes["Logicat bonus"];
+                            delete resources[res].changes["Logicat bonus"];
                             resource_tooltip();
                         }, 60000 * 3);
                     });

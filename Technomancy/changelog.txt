@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.23.15: (5/22/19) More minor bugfixes
+Fixed a weird bug with convolution cube. Logicat bonus is removed from tooltips when it should be.
+
 v5.23.14: (4/24/19) More minor bugfixes
 Hopefully fix an issue on Mac where alternate fonts mess things up. Hydrogen is worth even less in UDM, along with a couple other tweaks to the prestige formula. Time saved on prestige is slightly less now (specifically, it's lessened by the amount of time you get on prestige.) Fixed some challenge descriptions. Wanderer II doesn't let you double as much as you want anymore. You can't refine negative amounts of mana. The entrance to the tower tells you what ascension you're on. Added new bugs, probably.
 
