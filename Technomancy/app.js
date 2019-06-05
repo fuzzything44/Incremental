@@ -2708,6 +2708,22 @@ function save_to_clip() {
     }
     document.body.removeChild(textArea);
 }
+function save_to_file() {
+    function b64EncodeUnicode(str) {
+        return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
+            return String.fromCharCode(parseInt(p1, 16));
+        }));
+    }
+    save();
+    let text = b64EncodeUnicode(JSON.stringify(localStorage));
+    let a = document.createElement("a");
+    a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
+    a.download = "Technomancy.sav";
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
 function load_from_clip() {
     function b64DecodeUnicode(str) {
         return decodeURIComponent(Array.prototype.map.call(atob(str), function (c) {
@@ -2734,6 +2750,23 @@ function load_from_clip() {
         });
     }
     location.reload();
+}
+function load_from_file() {
+    function b64DecodeUnicode(str) {
+        return decodeURIComponent(Array.prototype.map.call(atob(str), function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+    }
+    var reader = new FileReader();
+    reader.onload = function () {
+        let loaded_data = b64DecodeUnicode(reader.result); // It shouldn't be possible to have an old save at this point
+        loaded_data = JSON.parse(loaded_data);
+        Object.keys(loaded_data).forEach(function (key) {
+            localStorage[key] = loaded_data[key];
+        });
+        location.reload();
+    };
+    reader.readAsText(document.getElementById("importFile").files[0]);
 }
 function resource_tooltip() {
     Object.keys(resources).forEach(function (res) {
@@ -3335,6 +3368,7 @@ function random_title() {
         "Have you tried eating it?",
         "New Update: Additional Pain",
         "Tower OP, getting removed next update.",
+        "Trans Rights!",
     ];
     document.title = TITLES.filter(item => item !== document.title)[Math.floor(Math.random() * (TITLES.length - 1))];
 }

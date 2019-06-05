@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.23.17: (6/5/19) Hopefully actually fix file stuff
+So apparently it wasn't getting compiled in. Also, for updates after this I might try to have a dev branch somewhere else and only push to the main game when it's stable. Yay!
+
 v5.23.16: (5/22/19) More minor bugfixes
 Also finish save/load to/from file.
 

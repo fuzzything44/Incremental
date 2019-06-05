@@ -2975,7 +2975,7 @@ function load_from_file() {
         location.reload();
     };
 
-    reader.readAsText(document.getElementById("importFile").files[0]);
+    reader.readAsText((document.getElementById("importFile") as any).files[0]);
 }
 
 
