@@ -4102,18 +4102,24 @@ function perm_bag() {
         perm_bag();
     });
 
+    // If they have quick mana, they're locked out of depositing. 
+    let can_deposit: boolean = !(event_flags["skills"] != undefined && event_flags["skills"][8]);
+
     $("#events_content").append("<table></table>");
     Object.keys(resources).forEach(function (res) {
         if (resources[res].value > 0 && resources[res].value <= adventure_data["max_bag_value"] && (resources[res].amount > 0 || adventure_data["perm_resources"][res])) { /* We only can store resources with > 0 value. Also only show resources the player knows about. */
             let rname = (res.charAt(0).toUpperCase() + res.slice(1)).replace("_", " ");
             if (adventure_data["perm_resources"][res] != undefined) { /* This is unlocked for storage*/
                 let res_on_p = calculate_bag_amount(res);
-                $("#events_content table").append("<tr><td>" + rname + "</td><td>Current Stored: " + format_num(adventure_data["perm_resources"][res], true) + "</td><td>Gained on Prestige: " + format_num(res_on_p, true) + "</td><td><span class='clickable'>Deposit</span> all into bag. </td></tr>");
-                $("#events_content span").last().click(function () {
-                    adventure_data["perm_resources"][res] += resources[res].amount;
-                    resources[res].amount = 0;
-                    perm_bag();
-                });
+                let deposit_msg: string = can_deposit ? "<span class='clickable'>Deposit</span> all into bag. " : "";
+                $("#events_content table").append("<tr><td>" + rname + "</td><td>Current Stored: " + format_num(adventure_data["perm_resources"][res], true) + "</td><td>Gained on Prestige: " + format_num(res_on_p, true) + "</td><td>" + deposit_msg + "</td></tr>");
+                if (can_deposit) {
+                    $("#events_content span").last().click(function () {
+                        adventure_data["perm_resources"][res] += resources[res].amount;
+                        resources[res].amount = 0;
+                        perm_bag();
+                    });
+                }
 
             } else { /* Still need to unlock it. */
                 $("#events_content table").append("<tr><td>" + rname + "</td><td><span class='clickable'>Unlock</span></td></tr>");
