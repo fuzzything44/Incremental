@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.23.18: (11/10/19) I'm not dead
+You can no longer put anything in your magic bag if you have instant mana. Also, this is the first use of the dev branch!
+
 v5.23.17: (6/5/19) Hopefully actually fix file stuff
 So apparently it wasn't getting compiled in. Also, for updates after this I might try to have a dev branch somewhere else and only push to the main game when it's stable. Yay!
 
