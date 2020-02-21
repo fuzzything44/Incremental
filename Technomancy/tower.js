@@ -1,12 +1,12 @@
-let TOWER_DATA = [
-    {
+let TOWER_DATA = {
+    0: {
         "boss": "a noodle",
         "text": "It's just a wet noodle",
         "reward_text": "nothing, sorry",
         reward: function () {
         }
     },
-    {
+    1: {
         "boss": "a bowl of spaghetti",
         "text": "That's a lot of noodles!",
         "reward_text": "cheaper essence",
@@ -20,7 +20,7 @@ let TOWER_DATA = [
             }
         }
     },
-    {
+    2: {
         "boss": "some linguini",
         "text": "These are evil noodles, I tell you. Eviiiil!",
         get reward_text() {
@@ -38,7 +38,7 @@ let TOWER_DATA = [
             resources["time"].amount += tower_ascension_scale(1000000, 100000, false); /* That's 1 mil, I think. */
         }
     },
-    {
+    3: {
         "boss": "ramen noodles",
         "text": "Seriously, what's with all these noodles?",
         get reward_text() {
@@ -56,7 +56,7 @@ let TOWER_DATA = [
             update_building_amount("s_manastone");
         }
     },
-    {
+    4: {
         "boss": "a guy named Mac",
         "text": "Finally, no more pasta. Oh wait, what's that? Dangit, looks like he has his own block of cheese with him.",
         "reward_text": "extra power",
@@ -64,7 +64,7 @@ let TOWER_DATA = [
             adventure_data["tower_power"] += 10;
         }
     },
-    {
+    5: {
         "boss": "the Flying Spaghetti Monster",
         "text": "Well, it's finally come to kill you. Guess you shouldn't have beaten up all those helpless bowls of pasta.",
         "reward_text": "extra toughness",
@@ -72,7 +72,7 @@ let TOWER_DATA = [
             adventure_data["tower_toughness"] += 10;
         }
     },
-    {
+    6: {
         "boss": "a shrimp",
         "text": "This is literally just a normal shrimp. How is it more powerful than the god you just killed?",
         get reward_text() {
@@ -93,7 +93,7 @@ let TOWER_DATA = [
             adventure_data["perm_resources"]["time"] += tower_ascension_scale(600, 10, true);
         }
     },
-    {
+    7: {
         "boss": "a chimp",
         "text": "Oh, now you're fighting a monkey. Of course. This is totally normal.",
         get reward_text() {
@@ -106,7 +106,7 @@ let TOWER_DATA = [
         },
         reward: function () { }
     },
-    {
+    8: {
         "boss": "a blimp",
         "text": "Zeppelin, blimp, airship, dirigible, whatever you want to call it. Okay, I know that those mean slightly different things, but does it really matter if you're about to destroy it?",
         get reward_text() {
@@ -121,7 +121,7 @@ let TOWER_DATA = [
             adventure_data["grind_tower_time"] = 0;
         }
     },
-    {
+    9: {
         "boss": "a pimp",
         "text": "He's about to mess up your face with his dope bling. Better fight back.",
         get reward_text() {
@@ -139,7 +139,7 @@ let TOWER_DATA = [
             adventure_data["perm_resources"]["purified_mana"] += tower_ascension_scale(20, 1, true);
         }
     },
-    {
+    10: {
         "boss": "a trimp",
         "text": "Wait, isn't this from a completely different <a href='https://trimps.github.io/' target='_blank' class='fgc'>game</a>?",
         get reward_text() {
@@ -160,7 +160,7 @@ let TOWER_DATA = [
             }
         }
     },
-    {
+    11: {
         "boss": "the monster under your bed",
         "text": "It's a completely different species than the monster in your closet.",
         "reward_text": "an upgrade for your healer",
@@ -173,7 +173,7 @@ let TOWER_DATA = [
             }
         }
     },
-    {
+    12: {
         "boss": "the monster in your closet",
         "text": "It's a completely different species than the monster under your bed.",
         "reward_text": "an upgrade for your healer",
@@ -186,7 +186,7 @@ let TOWER_DATA = [
             }
         }
     },
-    {
+    13: {
         "boss": "a vampyre",
         "text": "The y makes it spookier than your regular vampire. It also makes it much more flammable.",
         get reward_text() {
@@ -204,7 +204,7 @@ let TOWER_DATA = [
             adventure_data["perm_resources"]["fuel"] += tower_ascension_scale(100, 10, true);
         }
     },
-    {
+    14: {
         "boss": "a glass of milk",
         "text": "Wait, what's so scary about this?",
         get reward_text() {
@@ -217,7 +217,7 @@ let TOWER_DATA = [
         },
         reward: function () { }
     },
-    {
+    15: {
         "boss": "mr. skeltal",
         "text": "oh, no. he came to doot doot you because you didn't drink your milk. prepare your weak bones.",
         get reward_text() {
@@ -238,7 +238,7 @@ let TOWER_DATA = [
             }
         }
     },
-    {
+    16: {
         "boss": "some random British dude",
         "text": "How nice, he's offering you some tea. And he just put in the milk before the tea. There's now only one reasonable course of action. KILL HIM!",
         get reward_text() {
@@ -251,9 +251,9 @@ let TOWER_DATA = [
         },
         reward: function () { }
     },
-    {
+    17: {
         "boss": "the same dude, but angrier",
-        "text": "Huh, turns out that if you attack someone, the get angry at you. He's really pissed off. And you're in a tower. That seems somehow <a href='https://www.kongregate.com/games/somethingggg/ngu-idle' target='_blank' class='fgc'>familiar</a>. Whatever, time to mercilessly kill him.",
+        "text": "Huh, turns out that if you attack someone, they get angry at you. He's really pissed off. And you're in a tower. That seems somehow <a href='https://www.kongregate.com/games/somethingggg/ngu-idle' target='_blank' class='fgc'>familiar</a>. Whatever, time to mercilessly kill him.",
         "reward_text": "an upgrade for your warrior",
         reward: function () {
             if (!adventure_data["tower_ascension"]) {
@@ -264,7 +264,7 @@ let TOWER_DATA = [
             }
         }
     },
-    {
+    18: {
         "boss": "a guy in a kilt",
         "text": "This is the british guy's brother. He has a kilt and a sweet sword. Good luck.",
         get reward_text() {
@@ -277,13 +277,13 @@ let TOWER_DATA = [
         },
         reward: function () { }
     },
-    {
+    19: {
         "boss": "King Arfur",
         "text": "It's an adorable puppy with a sword in it's mouth. Ow! Bad dog!",
         "reward_text": "nothing. Reflect on what you just did.",
         reward: function () { }
     },
-    {
+    20: {
         "boss": "a pile of gold",
         "text": "This is a medium sized pile of gold. Probably big enough to pay off your student loans. ",
         "reward_text": "yet another party upgrade",
@@ -300,25 +300,25 @@ let TOWER_DATA = [
             }
         }
     },
-    {
+    21: {
         "boss": "a lawyer",
         "text": "It turns out that gold wasn't yours. You're now being sued. ",
         "reward_text": "a better rate on toughness",
         reward: function () { }
     },
-    {
+    22: {
         "boss": "a suitcase of gold",
         "text": "You know all that gold you picked up? Well the lawyer put it in his suitcase. Also, the suitcase has legs and isn't happy. ",
         "reward_text": "all the gold in the suitcase, which you use to buy a tavern nearby instead of paying off your loans. Maybe next time",
         reward: function () { }
     },
-    {
+    23: {
         "boss": "Kombast©™ Cable",
         "text": "This is the greediest company of all and they're here for your money!",
         "reward_text": "a whole lot of gold and money for your magic bag!",
         reward: function () { }
     },
-    {
+    24: {
         "boss": "The Entire Continent of America",
         "text": "No, not the people living there. You're fighting the continent itself. How did it fit in the tower? Don't ask.",
         get reward_text() {
@@ -331,7 +331,7 @@ let TOWER_DATA = [
         },
         reward: function () { }
     },
-    {
+    25: {
         "boss": "Kristoffer Kolumbus",
         "text": "The Legendary Explorer himself! He's rumored to be the original person to find the mystical land of Canadia!",
         get reward_text() {
@@ -344,7 +344,7 @@ let TOWER_DATA = [
         },
         reward: function () { }
     },
-    {
+    26: {
         "boss": "A Very Large Telescope",
         "text": "It's used for finding exoplanets. Also, you're fighting it now. ",
         get reward_text() {
@@ -357,7 +357,7 @@ let TOWER_DATA = [
         },
         reward: function () { }
     },
-    {
+    27: {
         "boss": "A globe",
         "text": "What's so tough about just a regular globe? Well, maybe the fact that this one is to scale. 1:1 scale that is. ",
         get reward_text() {
@@ -370,7 +370,7 @@ let TOWER_DATA = [
         },
         reward: function () { }
     },
-    {
+    28: {
         "boss": "a little swimmy fishy",
         "text": "It's just swimming around. ",
         get reward_text() {
@@ -383,7 +383,7 @@ let TOWER_DATA = [
         },
         reward: function () { }
     },
-    {
+    29: {
         "boss": "a little golden swimmy fishy",
         "text": "It's just swimming around. It's also very shiny. ",
         get reward_text() {
@@ -396,7 +396,7 @@ let TOWER_DATA = [
         },
         reward: function () { }
     },
-    {
+    30: {
         "boss": "a little sparkly swimmy fishy",
         "text": "It's just swimming around. It's also very extremely shiny. ",
         get reward_text() {
@@ -409,25 +409,25 @@ let TOWER_DATA = [
         },
         reward: function () { }
     },
-    {
+    31: {
         "boss": "A very sparkly mystical bowl of spaghetti",
         "text": "Mmm, magic spaghetti. You get hungry just thinking about it.",
         "reward_text": "a halved cooldown on the tower of grinding!",
         reward: function () { }
     },
-    {
+    32: {
         "boss": "A very sparkly mystical trimp",
         "text": "This isn't as tasty as magic spaghetti. Ugh, more fighting.",
         "reward_text": "Joe's Premium Iron Juice",
         reward: function () { }
     },
-    {
+    33: {
         "boss": "A very sparkly mystical skelton",
         "text": "DOOT DOOT!",
         "reward_text": "A nice fruit punch. Wait, that label doesn't say fruit, it says face!",
         reward: function () { }
     },
-    {
+    34: {
         "boss": "that one guy",
         "text": "Yeah, you know. THAT guy.",
         get reward_text() {
@@ -449,7 +449,7 @@ let TOWER_DATA = [
             }
         }
     },
-    {
+    35: {
         "boss": "test boss",
         "text": "test text.",
         get reward_text() {
@@ -458,7 +458,7 @@ let TOWER_DATA = [
         reward: function () {
         }
     },
-    {
+    36: {
         "boss": "A really annoyed QA guy",
         "text": "He mutters something about not testing in production. It sounds really lame.",
         get reward_text() {
@@ -467,7 +467,7 @@ let TOWER_DATA = [
         reward: function () {
         }
     },
-    {
+    37: {
         "boss": "Hackerman",
         "text": "Oh no, you've been hacked!",
         get reward_text() {
@@ -476,7 +476,7 @@ let TOWER_DATA = [
         reward: function () {
         }
     },
-    {
+    38: {
         "boss": "The Client",
         "text": "Hey, what if you added balloons? No, get rid of those, they're terrible. Hey, what if you had it make my coffee? No, not black coffee, 3 sugars and 2 creams. Why won't it make me a latte? It keeps making my coffee with 3 sugars and 2 creams which is wrong. I found a bug: if I press this button, it makes me a latte when I actually want some tea. Hey, there's no lemon in my tea. Why won't it make me coffee with 2 sugars and 3 creams? Fix that NOW. Okay, new top highest priority item: ...",
         get reward_text() {
@@ -485,7 +485,7 @@ let TOWER_DATA = [
         reward: function () {
         }
     },
-    {
+    39: {
         "boss": "a Ninja",
         "text": "...",
         get reward_text() {
@@ -507,7 +507,7 @@ let TOWER_DATA = [
             $("#building_omega_machine  > .building_amount").html(format_num(buildings["omega_machine"].amount, false));
         }
     },
-    {
+    40: {
         "boss": "1,000 ninjas",
         "text": "Fun fact: the more enemies you fight at once, the weaker each one is. Watch any Kung Fu movie for proof.",
         get reward_text() {
@@ -516,7 +516,7 @@ let TOWER_DATA = [
         reward: function () {
         }
     },
-    {
+    41: {
         "boss": "Jackie Chan",
         "text": "Prepare to get rekt.",
         get reward_text() {
@@ -526,7 +526,7 @@ let TOWER_DATA = [
             adventure_data["inventory_fuel"] += 50;
         }
     },
-    {
+    42: {
         "boss": "that dang sneaky fox",
         "text": "Oh no! It's going to sneak into your house! And email your mom or something.",
         get reward_text() {
@@ -541,7 +541,7 @@ let TOWER_DATA = [
             }
         }
     },
-    {
+    43: {
         "boss": "a cheese pizza",
         "text": "Yum!",
         get reward_text() {
@@ -554,7 +554,7 @@ let TOWER_DATA = [
             adventure_data["tower_nuke"] = true;
         }
     },
-    {
+    44: {
         "boss": "a pepperoni pizza",
         "text": "Ooh, I love pepperoni!",
         get reward_text() {
@@ -563,7 +563,7 @@ let TOWER_DATA = [
         reward: function () {
         }
     },
-    {
+    45: {
         "boss": "a limburger and sardine pizza",
         "text": "It smells kind of bad, but if you like it, hey, you do you.",
         get reward_text() {
@@ -572,7 +572,7 @@ let TOWER_DATA = [
         reward: function () {
         }
     },
-    {
+    46: {
         "boss": "a pineapple pizza",
         "text": "KILL THE ABOMINATION! BURN BURN BURN!",
         get reward_text() {
@@ -581,7 +581,7 @@ let TOWER_DATA = [
         reward: function () {
         }
     },
-    {
+    47: {
         "boss": "fuzzything44",
         "text": "Hey, wait! That's me! Stop! Ow!",
         "special_chance": 50,
@@ -606,7 +606,7 @@ let TOWER_DATA = [
             }
         },
     },
-    {
+    48: {
         "boss": "/u/raids_made_easy",
         "text": "Do you know why the trading portal sucks? They broke it. They're why. They're the first person to find a ton of bugs and powerful interactions in this game.",
         "special_chance": 30,
@@ -625,7 +625,7 @@ let TOWER_DATA = [
         reward: function () {
         },
     },
-    {
+    49: {
         "boss": "TheFool",
         "text": "Without them, tower ascension may not even exist yet.",
         "special_chance": 0,
@@ -642,7 +642,7 @@ let TOWER_DATA = [
             adventure_data["autobuild_advanced"] = true;
         }
     },
-    {
+    50: {
         "boss": "Joevdw",
         "text": "The first person to monetarily support this game, along with MANY discoveries of major issues. Also, if this is you I guess this floor is just a mirror or something? Weird.",
         /*"special_chance": 0,
@@ -655,7 +655,7 @@ let TOWER_DATA = [
         reward: function () {
         }
     },
-    {
+    51: {
         "boss": "Ye Olde Tavern",
         "text": "Crush the (other) Tavern!",
         get reward_text() {
@@ -668,7 +668,7 @@ let TOWER_DATA = [
             adventure_data["keep_time"] = true;
         }
     },
-    {
+    52: {
         "boss": "Ye Olde Castle",
         "text": "Crush the Castle!",
         get reward_text() {
@@ -677,7 +677,7 @@ let TOWER_DATA = [
         reward: function () {
         }
     },
-    {
+    53: {
         "boss": "Ye Olde Angree King",
         "text": "Oops, maybe you shouldn't have crushed that castle.",
         get reward_text() {
@@ -692,7 +692,7 @@ let TOWER_DATA = [
             }
         }
     },
-    {
+    54: {
         "boss": "Ye Olde Ye Olde",
         "text": "Things are beyond having to make sense by now, okay?",
         get reward_text() {
@@ -707,7 +707,7 @@ let TOWER_DATA = [
             }
         }
     },
-    {
+    "repeat": {
         get boss() {
             return "a " + tower_adj_a[adventure_data["tower_floor"] % tower_adj_a.length]
                 + tower_adj_b[adventure_data["tower_floor"] % tower_adj_b.length]
@@ -720,13 +720,13 @@ let TOWER_DATA = [
         "reward_text": "nothing but boasting rights",
         reward: function () { }
     },
-    {
+    "final": {
         "boss": "the final tower guardian",
         "text": "It bounces around the room like a demented ferret, hissing and snarling as it goes. ",
         "reward_text": "a new bigger shinier tower; oh and cheaper essence",
         reward: function () { }
     },
-];
+};
 const TOWER_ASCENSION_GROWTH = 4;
 let grinding_level = 1;
 /* Adjectives and nouns to describe the boss.  Please ensure that the lengths of each set are mutually coprime with all the others. */
@@ -767,12 +767,14 @@ function tower_boss_ascension_scale() {
     return Math.round((Math.pow(a, asc) - Math.pow(b, asc)) / Math.sqrt(5));
 }
 function essence_cost_multiplier() {
+    let mult = 0.2;
     if (adventure_data["tower_floor"] > 38) {
-        return 1.15;
+        mult -= 0.05;
     }
-    else {
-        return 1.2;
+    if (adventure_data["deal_cheap_essence"]) {
+        mult -= 0.5;
     }
+    return 1 + mult;
 }
 function tower() {
     if (adventure_data["tower_floor"] == undefined) {
@@ -1026,15 +1028,15 @@ function climb_tower(health = undefined, ehealth = undefined, grinding = false) 
     else {
         let boss_data;
         if (tower_level < tower_height()) {
-            if (tower_level < TOWER_DATA.length - 2) {
+            if (TOWER_DATA[tower_level] != undefined) {
                 boss_data = TOWER_DATA[tower_level];
             }
             else {
-                boss_data = TOWER_DATA[TOWER_DATA.length - 2];
+                boss_data = TOWER_DATA["extra"];
             }
         }
         else {
-            boss_data = TOWER_DATA[TOWER_DATA.length - 1];
+            boss_data = TOWER_DATA["final"];
         }
         $("#events_content").html("This floor contains " + boss_data.boss + ". " + boss_data.text + "<br/>");
         $("#events_content").append("Your health: " + format_num(health, true) + "<br/>");
@@ -1226,10 +1228,10 @@ function defeat_floor(health = undefined) {
     if (health == undefined) {
         var floor = adventure_data["tower_floor"];
         if (floor >= tower_height()) {
-            floor = TOWER_DATA.length - 1;
+            floor = TOWER_DATA["final"];
         }
-        else if (floor > TOWER_DATA.length - 2) {
-            floor = TOWER_DATA.length - 2;
+        else if (TOWER_DATA["floor"] == undefined) {
+            floor = TOWER_DATA["extra"];
         }
         if (adventure_data["tower_floor"] == tower_height()) {
             $("#events_content").append("You defeated the final boss of the tower! A mystical portal opens in front of you.<br/>");
@@ -1246,8 +1248,11 @@ function defeat_floor(health = undefined) {
     }
     else {
         let essence_reward = Math.max(1, adventure_data["tower_ascension"]);
+        if (adventure_data["deal_essence"]) {
+            essence_reward *= 2;
+        }
         $("#events_content").append("For defeating the boss on floor " + format_num(grinding_level) + ", you are awarded with " + format_num(essence_reward) + " essence<br/>");
-        /* Give one essence */
+        /* Give essence */
         toggle_building_state("s_essence", true);
         buildings["s_essence"].amount += essence_reward;
         adventure_data["current_essence"] += essence_reward;
