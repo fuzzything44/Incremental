@@ -2594,6 +2594,14 @@ let prestige = {
             mana_gain /= 4;
         }
 
+        if (adventure_data["deal_mana"] == 1) {
+            mana_gain *= 6;
+        } else if (adventure_data["deal_mana"] == 2) {
+            mana_gain *= 66;
+        } else if (adventure_data["deal_mana"] == 3) {
+            mana_gain *= 666;
+        }
+
         mana_gain -= mana_this_prestige; /* Take out what they already got. */
         if (event_flags["skills"] != undefined && event_flags["skills"][8]) { /* They have the quick mana skill */
             if (event_flags["mage_quickmana"] == undefined) { /* Quickly define this. */

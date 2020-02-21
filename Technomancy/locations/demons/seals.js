@@ -107,7 +107,7 @@
             }
         }),
     ],
-    "connects_to": [],
+    "connects_to": ["demons/ulgathor", "demons/vexine"],
     "enter_cost": 5,
     "leave_cost": 0,
     "name": "The Seals of Eternity",

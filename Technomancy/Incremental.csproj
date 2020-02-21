@@ -17,6 +17,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
@@ -38,6 +39,7 @@
     <TypeScriptCompile Include="locations\demons\seals.ts" />
     <TypeScriptCompile Include="locations\demons\ulgathor.ts" />
     <TypeScriptCompile Include="locations\demons\mars.ts" />
+    <TypeScriptCompile Include="locations\demons\vexine.ts" />
     <TypeScriptCompile Include="locations\global.ts" />
     <TypeScriptCompile Include="locations\home.ts" />
     <TypeScriptCompile Include="locations\kittens\castles.ts" />
