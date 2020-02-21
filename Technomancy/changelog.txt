@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.24.2: (2/22/2020) More ascension issues
+You can now actually beat floors when past written ascension. 
+
 v5.24.1: (2/21/2020) Fix tower ascension issues
 You can now ascend when at the max tower level. Oops, thought I had changed that already but I guess not.
 
