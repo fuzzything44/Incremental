@@ -1030,7 +1030,7 @@ function climb_tower(health = undefined, ehealth = undefined, grinding = false) 
                 boss_data = TOWER_DATA[tower_level];
             }
             else {
-                boss_data = TOWER_DATA["extra"];
+                boss_data = TOWER_DATA["repeat"];
             }
         }
         else {
@@ -1226,10 +1226,10 @@ function defeat_floor(health = undefined) {
     if (health == undefined) {
         var floor = adventure_data["tower_floor"];
         if (floor >= tower_height()) {
-            floor = TOWER_DATA["final"];
+            floor = "final";
         }
         else if (TOWER_DATA["floor"] == undefined) {
-            floor = TOWER_DATA["extra"];
+            floor = "repeat";
         }
         if (adventure_data["tower_floor"] == tower_height()) {
             $("#events_content").append("You defeated the final boss of the tower! A mystical portal opens in front of you.<br/>");

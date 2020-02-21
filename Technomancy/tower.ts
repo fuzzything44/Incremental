@@ -1041,7 +1041,7 @@ function climb_tower(health = undefined, ehealth = undefined, grinding = false) 
             if (TOWER_DATA[tower_level] != undefined) {
                 boss_data = TOWER_DATA[tower_level];
             } else {
-                boss_data = TOWER_DATA["extra"];
+                boss_data = TOWER_DATA["repeat"];
             }
         } else {
             boss_data = TOWER_DATA["final"];
@@ -1246,9 +1246,9 @@ function defeat_floor(health = undefined) {
         var floor = adventure_data["tower_floor"];
 
         if (floor >= tower_height()) {
-            floor = TOWER_DATA["final"];
+            floor = "final";
         } else if (TOWER_DATA["floor"] == undefined) {
-            floor = TOWER_DATA["extra"];
+            floor = "repeat";
         }
 
         if (adventure_data["tower_floor"] == tower_height()) {
