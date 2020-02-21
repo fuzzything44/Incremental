@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v5.24.1: (2/21/2020) Fix tower ascension issues
+You can now ascend when at the max tower level. Oops, thought I had changed that already but I guess not.
+
 v5.24.0: (2/20/2020) Huh, neat date
 The seals now let you get back to Ulgathor, if you cared. Changed a ton of code internally for how the tower works, hopefully nothing is too broken. Ascensions are now uncapped - climb as high as you want. Added Ascension burning: why keep grinding such hard of ascensions when a lower level one would be much easier? Well, now's your opportunity. There's a new location with high-value upgrades to be purchased for ascension levels. Note that the stock of items IS limited, so don't go too crazy with ascending as only so many can be burned. 
 
