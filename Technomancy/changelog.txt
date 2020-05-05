@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v6.0.0: (5/5/2020) End of the Game
+Added content to finish the game. Buy a star chart at the black market of Cath. Pass the 4 Gates and receive a reward for it. Also clarify what happens after you choose a class.
+
 v5.24.2: (2/22/2020) More ascension issues
 You can now actually beat floors when past written ascension. 
 

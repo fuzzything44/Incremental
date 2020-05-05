@@ -27,6 +27,15 @@
                 if (adventure_data["slots_reward"] == undefined) {
                     adventure_data["slots_reward"] = 1;
                 }
+                if (adventure_data["key_piece_1"] == undefined) {
+                    adventure_data["key_piece_1"] = 0;
+                }
+                if (adventure_data["key_piece_2"] == undefined) {
+                    adventure_data["key_piece_2"] = 0;
+                }
+                if (adventure_data["key_piece_3"] == undefined) {
+                    adventure_data["key_piece_3"] = 0;
+                }
                 $("#character").addClass("hidden");
                 $("#events_content").html("Welcome to the Casino of Bad Slot Machines!<br />");
                 $("#events_content").append("You currently have <span id='casino_tokens'>0</span> casino tokens!");
@@ -97,16 +106,16 @@
                                     adventure_data["casino_tokens"] += 95 * adventure_data["slots_reward"]; /* Total of 100 tokens/reward level*/
                                 }
                                 else if ($("#" + table_token + " #slot_1_0").html() == "?") {
-                                    $("#slot_results").append(" Weird. Whats this symbol mean?");
-                                    /* TODO figure out what this special reward is. */
+                                    $("#slot_results").append(" Weird. Whats this symbol mean? Hey, you got some gold thing though!");
+                                    adventure_data["key_piece_1"]++;
                                 }
                                 else if ($("#" + table_token + " #slot_1_0").html() == "!") {
-                                    $("#slot_results").append(" You're really excited!");
-                                    /* TODO figure out what this special reward is. */
+                                    $("#slot_results").append(" You're really excited! Oh nice, that's a bit of gold!");
+                                    adventure_data["key_piece_2"]++;
                                 }
                                 else if ($("#" + table_token + " #slot_1_0").html() == "*") {
-                                    $("#slot_results").append(" Woah, that's a special character!");
-                                    /* TODO figure out what this special reward is. */
+                                    $("#slot_results").append(" Woah, that's a special character! And a shiny piece of something golden!");
+                                    adventure_data["key_piece_3"]++;
                                 }
                                 /* Color the center row. Because looking nice is always good. */
                                 $("#" + table_token + " #slot_1_0").html("<span style='color: yellow'>" + $("#" + table_token + " #slot_1_0").html() + "</span>");
@@ -172,6 +181,15 @@
                             adventure_data["slots_reward"]++;
                             this.run_encounter();
                         }
+                    });
+                }
+                if (adventure_data["luck_key"] === undefined && adventure_data["key_piece_1"] >= 5 && adventure_data["key_piece_2"] >= 5 && adventure_data["key_piece_3"] >= 5) {
+                    $("#events_content").append("Hmm, you have a lot of those golden bits. Maybe try to tinker with them and see what you can get<br/>");
+                    $("#events_content").append("<button class='fgc bgc_second'>Combine</button> the pieces<br/>");
+                    $("#events_content button").last().click(() => {
+                        adventure_data["luck_key"] = true;
+                        $("#events_content").html("You take some of the parts and manage to put them together into a nice golden key! Sweet, I wonder what it goes to!");
+                        $("#events_content").append(exit_button("Done"));
                     });
                 }
                 if (adventure_data["casino_tokens"] >= 25) { /* They have a bunch of tokens. */

@@ -2285,6 +2285,34 @@ function set_initial_state() {
             "image": "",
             "repeats": false,
         },
+        "final": {
+            "unlock": function () { return adventure_data["mavrith"]; },
+            "purchase": function () {
+                $("#building_s_final").parent().removeClass("hidden");
+            },
+            "onload": function () {
+                this.purchase();
+            },
+            "cost": {
+                "time": 666,
+                "purified_mana": 666,
+                "fuel": 666,
+                "mana": 666,
+                "energy": 666,
+                "research": 66,
+                "money": 666,
+                "iron": 666,
+                "gold": 666,
+                "diamond": 666,
+                "mithril": 666,
+                "void": 666,
+                [OMEGA]: 666
+            },
+            "tooltip": "Channel the power of the temple to your advantage.",
+            "name": "Mavrith's Temple<br />",
+            "image": "",
+            "repeats": false,
+        },
         "trade": {
             "unlock": function () { return false; },
             "purchase": function () { },
@@ -2916,6 +2944,9 @@ function update() {
         rule_timer = 0;
         run_rules();
         run_autobuild();
+    }
+    if (adventure_data["gates_open"] !== undefined) {
+        delta_time *= Math.pow(5, adventure_data["gates_open"]);
     }
     /* Check for negative resources or resources that will run out. */
     Object.keys(resources).forEach(function (res) {

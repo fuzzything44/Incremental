@@ -540,7 +540,7 @@ function s_final_upgrade() {
     if (resources["refined_mana"].amount < 100000 * amount) {
         alert("You need more refined mana.");
     } else if (confirm("Upgrade for " + format_num(100000 * amount) + " refined mana?")) {
-        buildings["s_final"].strength *= Math.pow(1.5, amount);
+        buildings["s_final"].strength *= Math.pow(1.1, amount);
         resources["refined_mana"].amount -= 100000 * amount;
     }
 }
@@ -550,7 +550,13 @@ function s_final(delta_time: number) {
     if (buildings["s_final"].strength == null) {
         buildings["s_final"].strength = Infinity;
     }
-    $("#building_s_final .tooltiptext").html("Strength at " + format_num(buildings["s_final"].strength));
+
+    let amount = parseInt($("#buy_amount").val());
+    if (isNaN(amount)) { amount = 1; }
+    if (amount < 0) { amount = 0; }
+
+    $("#building_s_final .tooltiptext").html("Strength at " + format_num(buildings["s_final"].strength) + "<br/>Requires " + format_num(100000 * amount) + " refined mana to upgrade");
+
     Object.keys(resources).forEach((res) => {
         if (resources[res].value == 0) { return; } /* Don't boost special resources. */
         if (this["res-" + res] == undefined) {
@@ -574,7 +580,7 @@ function s_final(delta_time: number) {
             /* If they normally generate none, then don't give them NaN per sec. */
             resources_per_sec[res] = this["res-" + res] + neg_gain;
             /* Update tooltip to show changes */
-            resources[res].changes["???"] = this["res-" + res] - normal_gain;
+            resources[res].changes["Mavrith"] = this["res-" + res] - normal_gain;
             resource_tooltip();
 
             /* Checks if building was turned off */
@@ -582,7 +588,7 @@ function s_final(delta_time: number) {
                 if (!buildings["s_final"].on) {
                     resources_per_sec[res] = normal_gain + neg_gain;
                     /* Update tooltip */
-                    delete resources[res].changes["???"];
+                    delete resources[res].changes["Mavrith"];
                     resource_tooltip();
                 }
             }, 50);

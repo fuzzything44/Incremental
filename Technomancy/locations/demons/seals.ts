@@ -70,6 +70,22 @@
                         }
                     });
                 }
+
+                if (adventure_data["magic_seals"] == 5 && adventure_data["sacrifice_key"] === undefined) {
+                    $("#events_content").append("The seals are all broken. You feel a calling to sacrifice yourself.<br/>");
+                    $("#events_content").append("Warning: this will enact a heavy cost. You may not gain anything for a long time.<br/>");
+                    $("#events_content").append("<button class='fgc bgc_second>Sacrifice</button><br/>");
+                    $("#events_content button").last().click(() => {
+                        adventure_data["sacrifice_key"] = true;
+                        adventure_data["tower_power"] = Math.floor(adventure_data["tower_power"] / 10);
+                        adventure_data["tower_toughness"] = Math.floor(adventure_data["tower_toughness"] / 10);
+                        spend_essence(adventure_data["current_essence"] - 1);
+                        $("#events_content").html("It is done. You receive a bone key for your sacrifice.");
+                        prestige.mana = () => 1;
+                        prestige.run(false);
+                    });
+                }
+
                 $("#events_content").append("<br/><div id='seal_area' style='position: relative;'></div>");
 
                 $("#seal_area").append("<svg height='400' width='400' style='position: absolute; top: 5em; left: 285px;'><polygon points='200,20 80,396 380,156 20,156 320,396' style='stroke: red; stroke-width: 5; position: absolute;'/></svg>");
