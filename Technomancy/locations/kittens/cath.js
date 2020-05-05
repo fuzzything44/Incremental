@@ -72,6 +72,20 @@
                             }
                         });
                     }
+                    if ((find_item("conv_key") != -1 || adventure_data["deal_key"] !== undefined) && adventure_data["gates_unlocked"] == undefined) {
+                        $("#events_content").append("<span class='clickable'>Purchase</span> a black market map of the demon's realm (5m " + OMEGA + ") < br /> ");
+                        $("#events_content > span").last().click(function () {
+                            /* Make sure they still have enough money */
+                            if (resources[OMEGA].amount >= 5 * get_extension("m")) {
+                                resources[OMEGA].amount -= 5 * get_extension("m");
+                                adventure_data["gates_un locked"] = true;
+                                $("#events_content").html("You purchase the chart. It's blackened and burnt in places, but shows you something strange near Vexine.");
+                            }
+                            else {
+                                cat_market();
+                            }
+                        });
+                    }
                     $("#events_content").append("<span class='clickable' onclick='$(\"#character\").removeClass(\"hidden\");start_adventure()'>Leave</span>");
                 });
                 $("#events_content").append("<span class='clickable'>Listen</span> to an old cat tell stories<br/>");

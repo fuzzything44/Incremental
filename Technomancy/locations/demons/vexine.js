@@ -17,6 +17,19 @@
                 $("#events_content").append("<br/>Make a deal with the devil? It will reduce your tower ascension, along with give great rewards.<br />");
                 $("#events_content").append("You can spend " + format_num(to_spend) + " more ascensions.<br/>");
                 $("#events_content").append("Current deals: <br/>");
+                if (adventure_data["deal_key"] == undefined && to_spend >= 7) {
+                    $("events_content").append("<button class='fgc bgs_second'>Burn 7 ascensions to get a strange key<br/>");
+                    $("#events_content button").last().click(() => {
+                        if (to_spend >= 7) {
+                            adventure_data["deal_key"] = true;
+                            adventure_data["tower_ascension"] -= 7;
+                            run_adventure("demons/vexine", false);
+                        }
+                        else {
+                            $("events_content").prepend("You don't have the ascensions to burn on that<br/>");
+                        }
+                    });
+                }
                 if (adventure_data["deal_essence"] == undefined) {
                     $("#events_content").append("<button class='fgc bgc_second'>Burn</button> 1 ascension to double essence gain from the small tower<br/>");
                     $("#events_content button").last().click(() => {
@@ -88,7 +101,7 @@
             }
         })
     ],
-    "connects_to": ["demons/mars", "demons/seals"],
+    "connects_to": ["demons/mars", "demons/seals", "demons/gates"],
     "enter_cost": 2,
     "leave_cost": 0,
     "name": "Vexine",

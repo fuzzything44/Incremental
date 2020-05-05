@@ -687,7 +687,7 @@ let events = [
                         destroy_building("library", 50);
                         buildings["library"].free -= 50;
                         event_flags["wanderer_knowledge"] = "magic";
-                        $("#events").addClass("hidden");
+                        $("#events_content").html("You have been taught magic. Go to your home planet in adventure mode to study further.<br>");
                     });
                 }
                 /* Alchemy! */
@@ -701,7 +701,7 @@ let events = [
                             destroy_building("library", 50);
                             buildings["library"].free -= 50;
                             event_flags["wanderer_knowledge"] = "alchemy";
-                            $("#events").addClass("hidden");
+                            $("#events_content").html("You have been taught alchemy. Go to your home planet in adventure mode to study further.<br>");
                         });
                     }
                 }
@@ -712,7 +712,7 @@ let events = [
                         destroy_building("library", 50);
                         buildings["library"].free -= 50;
                         event_flags["wanderer_knowledge"] = "inventor";
-                        $("#events").addClass("hidden");
+                        $("#events_content").html("You have been taught engineering. Go to your home planet in adventure mode to study further.<br>");
                     });
                 }
             }
