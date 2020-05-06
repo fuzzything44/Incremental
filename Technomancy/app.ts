@@ -2646,7 +2646,7 @@ let prestige = {
                 mana_gain -= gained;
                 /* Show more buildings with the gained mana. */
                 SPELL_BUILDINGS.forEach(function (build) {
-                    if (buildings["s_manastone"].amount * 2 >= buildings[build].amount * -buildings[build].generation["mana"]) {
+                    if (buildings["s_manastone"].amount * 2 >= buildings[build].amount * -buildings[build].generation["mana"] && build !== "s_final") {
                         $("#building_" + build).parent().removeClass("hidden");
                     }
                 });
