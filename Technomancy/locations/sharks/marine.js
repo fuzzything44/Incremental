@@ -39,6 +39,9 @@
                 $("#character").addClass("hidden");
                 $("#events_content").html("Welcome to the Casino of Bad Slot Machines!<br />");
                 $("#events_content").append("You currently have <span id='casino_tokens'>0</span> casino tokens!");
+                $("#events_content").append("You currently have <span id='key1'>0</span> strange gold bits!");
+                $("#events_content").append("You currently have <span id='key2'>0</span> odd gold bits!");
+                $("#events_content").append("You currently have <span id='key3'>0</span> weird gold bits!");
                 $("#events_content").append("<table id='" + table_token + "'>" +
                     "<tr>" +
                     "<td id='slot_0_0'>A</td>" +
@@ -60,6 +63,9 @@
                     if (!$("#events").hasClass("hidden") && $("#" + table_token).length != 0) {
                         setTimeout(token_updates, 50);
                         $("#casino_tokens").html(format_num(adventure_data["casino_tokens"]));
+                        $("#key1").html(format_num(adventure_data["key_piece_1"]));
+                        $("#key2").html(format_num(adventure_data["key_piece_2"]));
+                        $("#key3").html(format_num(adventure_data["key_piece_3"]));
                     }
                 }
                 token_updates();

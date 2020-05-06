@@ -69,12 +69,10 @@
                             $("#events_content").prepend("You can't break this seal yet.<br/>");
                         }
                     });
-                }
-
-                if (adventure_data["magic_seals"] == 5 && adventure_data["sacrifice_key"] === undefined) {
+                } else if (adventure_data["sacrifice_key"] === undefined) {
                     $("#events_content").append("The seals are all broken. You feel a calling to sacrifice yourself.<br/>");
                     $("#events_content").append("Warning: this will enact a heavy cost. You may not gain anything for a long time.<br/>");
-                    $("#events_content").append("<button class='fgc bgc_second>Sacrifice</button><br/>");
+                    $("#events_content").append("<button class='fgc bgc_second'>Sacrifice</button><br/>");
                     $("#events_content button").last().click(() => {
                         adventure_data["sacrifice_key"] = true;
                         adventure_data["tower_power"] = Math.floor(adventure_data["tower_power"] / 10);

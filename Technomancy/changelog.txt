@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v6.0.2: (5/6/2020) More bugfixes
+You can now sacrifice yourself, if you really want to. Also, QoL: you can see your key progress at the casino.
+
 v6.0.1: (5/6/2020) Bugfix
 Fix a bug that allowed quick mana to unlock the final spell way too early.
 
