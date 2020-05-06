@@ -2456,6 +2456,32 @@ function set_initial_state() {
             "image": "",
             "repeats": false,
         },
+        "better_energy_spell": {
+            "unlock": function () { return event_flags["skills"] != undefined && event_flags["skills"][11]; },
+            "purchase": function () {
+                let build_state = buildings["s_energyboost"].on;
+                if (build_state) {
+                    toggle_building_state("s_energyboost");
+                }
+
+                buildings["s_energyboost"].generation["mana"] = -1;
+
+                if (build_state) { /* Only turn on if it already was on */
+                    toggle_building_state("s_energyboost");
+                }
+            },
+            "onload": function () {
+                this.purchase();
+            },
+            "cost": {
+                "energy": 1
+            },
+            "tooltip": "You've earned this!",
+            "name": "Converter Upgrade<br />",
+            "image": "",
+            "repeats": false,
+        },
+
         "final": {
             "unlock": function () { return adventure_data["mavrith"]; },
             "purchase": function () {
@@ -3164,6 +3190,10 @@ function update() {
         rule_timer = 0;
         run_rules();
         run_autobuild();
+    }
+
+    if (event_flags["skills"] != undefined && event_flags["skills"][15]) {
+        delta_time *= 1.5;
     }
 
     if (adventure_data["gates_open"] !== undefined) {

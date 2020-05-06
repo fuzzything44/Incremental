@@ -193,12 +193,6 @@
                         const SKILL_MAKE_PERM_BAG = 14;
                         const SKILL_FINAL = 15;
 
-                        if (event_flags["skills"][SKILL_FINAL]) {
-                            $("#events_content").append("Good job getting this. But it's not quite implemented yet. <br />");
-                        }
-
-                        $("#events_content").append("Please note that some skills don't do anything yet. They're coming soon! Anything with an actual tooltip should work though.<br />");
-
                         if (event_flags["skills"][SKILL_MAKE_BAG]) {
                             $("#events_content").append("<span class='clickable'>Make</span> a Bag of Holding (requires one of each magic orb)<br />");
                             $("#events_content span").last().click(function () {
@@ -360,7 +354,7 @@
                         $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 3em;  top: 28em; z-index: 5;'><br />Instant Mana<br />2 KP<span class='tooltiptext fgc bgc_second'>Gives you your mana instantly without need for prestige.</span></div>");
                         $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 17em; top: 25em; z-index: 6;'><br />Temporal Rage<br />2 KP<span class='tooltiptext fgc bgc_second'>Increases the strength of Temporal Anger</span></div>");
                         $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 30em; top: 25em; z-index: 7;'><br />Temporal Absence<br />2 KP<span class='tooltiptext fgc bgc_second'>Increases the strength of Temporal Slow</span></div>");
-                        $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 44em; top: 28em; z-index: 8;'><br />LOOT III?<br />2 KP<span class='tooltiptext fgc bgc_second'>TODO: TOOLTIP</span></div>");
+                        $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 44em; top: 28em; z-index: 8;'><br />Mana Efficiency<br />2 KP<span class='tooltiptext fgc bgc_second'>Mana converts to energy at a better rate.</span></div>");
 
                         /* Connecting lines */
                         color = event_flags["skills"][SKILL_QUICK_MANA] != undefined ? "blue" : "gray";
@@ -387,7 +381,7 @@
 
 
                         /* Ultimate Skill */
-                        $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 23em; top: 42em; z-index: 1;'><br />Super Skill<br />4 KP<span class='tooltiptext fgc bgc_second'>TODO: TOOLTIP</span></div>");
+                        $("#skill_tree").append("<div class='skill_box bgc_second tooltip' style='position: absolute; left: 23em; top: 42em; z-index: 1;'><br />Super Skill<br />4 KP<span class='tooltiptext fgc bgc_second'>Makes you produce more stuff.</span></div>");
                         $("#events_content").append("<br /><br />");
 
                         for (let i = 0; i < event_flags["skills"].length; i++) {
