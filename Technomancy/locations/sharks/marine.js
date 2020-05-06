@@ -38,10 +38,10 @@
                 }
                 $("#character").addClass("hidden");
                 $("#events_content").html("Welcome to the Casino of Bad Slot Machines!<br />");
-                $("#events_content").append("You currently have <span id='casino_tokens'>0</span> casino tokens!");
-                $("#events_content").append("You currently have <span id='key1'>0</span> strange gold bits!");
-                $("#events_content").append("You currently have <span id='key2'>0</span> odd gold bits!");
-                $("#events_content").append("You currently have <span id='key3'>0</span> weird gold bits!");
+                $("#events_content").append("You currently have <span id='casino_tokens'>0</span> casino tokens<br />!");
+                $("#events_content").append("You currently have <span id='key1'>0</span> strange gold bits!<br />");
+                $("#events_content").append("You currently have <span id='key2'>0</span> odd gold bits!<br />");
+                $("#events_content").append("You currently have <span id='key3'>0</span> weird gold bits!<br />");
                 $("#events_content").append("<table id='" + table_token + "'>" +
                     "<tr>" +
                     "<td id='slot_0_0'>A</td>" +
@@ -74,7 +74,7 @@
                 let chars = "ABCDEFabcdefVWXYwvxy$?!";
                 chars = chars.slice(adventure_data["slots_less"], chars.length);
                 if (adventure_data["slots_double"]) {
-                    chars += "$!?$!?$!?$!?$!?*"; /* 5x $!?, then one * */
+                    chars += "*$!?$!?$!?$!?$!?*"; /* one *, 5x $!?, then one * */
                 }
                 function slots() {
                     /* Move up all columns. Sometimes we'll skip one. So 70% chance of skipping a random column. */
@@ -189,7 +189,7 @@
                         }
                     });
                 }
-                if (adventure_data["luck_key"] === undefined && adventure_data["key_piece_1"] >= 5 && adventure_data["key_piece_2"] >= 5 && adventure_data["key_piece_3"] >= 5) {
+                if (adventure_data["luck_key"] === undefined && adventure_data["key_piece_1"] >= 5 && adventure_data["key_piece_2"] >= 5 && adventure_data["key_piece_3"] >= 1) {
                     $("#events_content").append("Hmm, you have a lot of those golden bits. Maybe try to tinker with them and see what you can get<br/>");
                     $("#events_content").append("<button class='fgc bgc_second'>Combine</button> the pieces<br/>");
                     $("#events_content button").last().click(() => {
