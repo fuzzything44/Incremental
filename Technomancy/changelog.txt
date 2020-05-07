@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v6.0.5: (5/7/2020) Really actually fix this
+The strange key should now actually appear to buy, if you want it. Again. Also remove extra < br /> from black market.
+
 v6.0.5: (5/7/2020) Even more bug fixes
 The strange key should now actually appear to buy, if you want it.
 
