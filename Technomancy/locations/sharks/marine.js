@@ -7,7 +7,7 @@
             "types": [],
             "weight": 1,
             "title": "Deep Sea Casino",
-            "run_encounter": function () {
+            "run_encounter": function casino() {
                 /* Use a special token for the table in case it gets closed/reopened before the interval clears. */
                 const TOKEN_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
                 let table_token = "slots_";
@@ -38,10 +38,12 @@
                 }
                 $("#character").addClass("hidden");
                 $("#events_content").html("Welcome to the Casino of Bad Slot Machines!<br />");
-                $("#events_content").append("You currently have <span id='casino_tokens'>0</span> casino tokens<br />!");
-                $("#events_content").append("You currently have <span id='key1'>0</span> strange gold bits!<br />");
-                $("#events_content").append("You currently have <span id='key2'>0</span> odd gold bits!<br />");
-                $("#events_content").append("You currently have <span id='key3'>0</span> weird gold bits!<br />");
+                $("#events_content").append("You currently have <span id='casino_tokens'>0</span> casino tokens!<br />");
+                if (adventure_data["luck_key"] === undefined) {
+                    $("#events_content").append("You currently have <span id='key1'>0</span> strange gold bits!<br />");
+                    $("#events_content").append("You currently have <span id='key2'>0</span> odd gold bits!<br />");
+                    $("#events_content").append("You currently have <span id='key3'>0</span> weird gold bits!<br />");
+                }
                 $("#events_content").append("<table id='" + table_token + "'>" +
                     "<tr>" +
                     "<td id='slot_0_0'>A</td>" +
@@ -66,6 +68,9 @@
                         $("#key1").html(format_num(adventure_data["key_piece_1"]));
                         $("#key2").html(format_num(adventure_data["key_piece_2"]));
                         $("#key3").html(format_num(adventure_data["key_piece_3"]));
+                        if (adventure_data["luck_key"] === undefined && adventure_data["key_piece_1"] >= 5 && adventure_data["key_piece_2"] >= 5 && adventure_data["key_piece_3"] >= 1) {
+                            $("#key_buy").removeClass("hidden");
+                        }
                     }
                 }
                 token_updates();
@@ -114,14 +119,17 @@
                                 else if ($("#" + table_token + " #slot_1_0").html() == "?") {
                                     $("#slot_results").append(" Weird. Whats this symbol mean? Hey, you got some gold thing though!");
                                     adventure_data["key_piece_1"]++;
+                                    adventure_data["casino_tokens"] += 45 * adventure_data["slots_reward"];
                                 }
                                 else if ($("#" + table_token + " #slot_1_0").html() == "!") {
                                     $("#slot_results").append(" You're really excited! Oh nice, that's a bit of gold!");
                                     adventure_data["key_piece_2"]++;
+                                    adventure_data["casino_tokens"] += 45 * adventure_data["slots_reward"];
                                 }
                                 else if ($("#" + table_token + " #slot_1_0").html() == "*") {
                                     $("#slot_results").append(" Woah, that's a special character! And a shiny piece of something golden!");
                                     adventure_data["key_piece_3"]++;
+                                    adventure_data["casino_tokens"] += 495 * adventure_data["slots_reward"];
                                 }
                                 /* Color the center row. Because looking nice is always good. */
                                 $("#" + table_token + " #slot_1_0").html("<span style='color: yellow'>" + $("#" + table_token + " #slot_1_0").html() + "</span>");
@@ -189,15 +197,14 @@
                         }
                     });
                 }
-                if (adventure_data["luck_key"] === undefined && adventure_data["key_piece_1"] >= 5 && adventure_data["key_piece_2"] >= 5 && adventure_data["key_piece_3"] >= 1) {
-                    $("#events_content").append("Hmm, you have a lot of those golden bits. Maybe try to tinker with them and see what you can get<br/>");
-                    $("#events_content").append("<button class='fgc bgc_second'>Combine</button> the pieces<br/>");
-                    $("#events_content button").last().click(() => {
-                        adventure_data["luck_key"] = true;
-                        $("#events_content").html("You take some of the parts and manage to put them together into a nice golden key! Sweet, I wonder what it goes to!");
-                        $("#events_content").append(exit_button("Done"));
-                    });
-                }
+                $("#events_content").append("<div id='key_buy' class='hidden'></div>");
+                $("#key_buy").append("Hmm, you have a lot of those golden bits. Maybe try to tinker with them and see what you canget<br/>");
+                $("#key_buy").append("<button class='fgc bgc_second'>Combine</button> the pieces<br/>");
+                $("#key_buy button").last().click(() => {
+                    adventure_data["luck_key"] = true;
+                    $("#events_content").html("You take some of the parts and manage to put them together into a nice golden key! Sweet, Iwonder what it goes to!");
+                    $("#events_content").append(exit_button("Done"));
+                });
                 if (adventure_data["casino_tokens"] >= 25) { /* They have a bunch of tokens. */
                     $("#events_content").append("<table id='slot_prizes'><caption>Prize Wall</caption></table>");
                     $("#slot_prizes").append("<tr><th>Prize</td><th>Token Cost</td></tr>");

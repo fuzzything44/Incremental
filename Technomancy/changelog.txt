@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v6.0.4: (5/6/2020) Yes more bugs
+You can now unlock the gates if you have any of the keys, not just two specific ones. Fix some stuff with acquiring the key at the casino.
+
 v6.0.3: (5/6/2020) More fixes
 Hopefully made casino chances better (maybe possible?) and fix currency information. Finish up the last couple sorceror skills. Hopefully it's all working now.
 
