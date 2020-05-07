@@ -77,12 +77,12 @@
                         adventure_data["luck_key"] !== undefined ||
                         adventure_data["sacrifice_key"] !== undefined)
                         && adventure_data["gates_unlocked"] == undefined) {
-                        $("#events_content").append("<span class='clickable'>Purchase</span> a black market map of the demon's realm (5m " + OMEGA + ") <br />");
+                        $("#events_content").append("<span class='clickable'>Purchase</span> a black market map of the demon's realm (" + format_num(100000) + " " + OMEGA + ") <br />");
                         $("#events_content > span").last().click(function () {
                             /* Make sure they still have enough money */
-                            if (resources[OMEGA].amount >= 5 * get_extension("m")) {
-                                resources[OMEGA].amount -= 5 * get_extension("m");
-                                adventure_data["gates_un locked"] = true;
+                            if (resources[OMEGA].amount >= 100000) {
+                                resources[OMEGA].amount -= 100000;
+                                adventure_data["gates_unlocked"] = true;
                                 $("#events_content").html("You purchase the chart. It's blackened and burnt in places, but shows you something strange near Vexine.");
                             }
                             else {
