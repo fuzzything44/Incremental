@@ -19,8 +19,8 @@
                 $("#events_content").append("You can spend " + format_num(to_spend) + " more ascensions.<br/>");
                 $("#events_content").append("Current deals: <br/>");
 
-                if (adventure_data["deal_key"] == undefined && to_spend >= 7) {
-                    $("events_content").append("<button class='fgc bgs_second'>Burn 7 ascensions to get a strange key<br/>");
+                if (adventure_data["deal_key"] == undefined) {
+                    $("events_content").append("<button class='fgc bgc_second'>Burn</button> 7 ascensions to get a strange key<br/>");
                     $("#events_content button").last().click(() => {
                         if (to_spend >= 7) {
                             adventure_data["deal_key"] = true;
