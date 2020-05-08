@@ -1,5 +1,8 @@
 ﻿Technomancy Changelog
 
+v6.0.8: (5/7/2020) Fix final encounter
+Final encounter should now have the last button to do stuff.
+
 v6.0.7: (5/7/2020) Fix prices for black market
 5m OMEGA -> 100k OMEGA
 

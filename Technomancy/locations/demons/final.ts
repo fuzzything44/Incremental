@@ -18,7 +18,7 @@
                     $("#events_content").html("You approach the man on the throne and finally catch a glimpse of their sunken, gaunt face.<br/>");
                     $("#events_content").append("This is the face of Mavrith, an ancient wizard of legends. The one who is rumored to have created fire. Not just lighting a fire, but changing reality itself so that fire could even exist.<br/>");
                     $("#events_content").append("If you wish, you could free him from these chains. But maybe he's here for a reason...<br/>");
-                    $("#events_content").append("<button class='fgc bgc_second>Free</button> him");
+                    $("#events_content").append("<button class='fgc bgc_second'>Free</button> him");
                     $("#events_content button").last().click(() => {
                         adventure_data["mavrith"] = true;
                         $("#events_content").html("You break the chains and free Mavrith.<br/>");
