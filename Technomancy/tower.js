@@ -1228,7 +1228,7 @@ function defeat_floor(health = undefined) {
         if (floor >= tower_height()) {
             floor = "final";
         }
-        else if (TOWER_DATA["floor"] == undefined) {
+        else if (TOWER_DATA[floor] == undefined) {
             floor = "repeat";
         }
         if (adventure_data["tower_floor"] == tower_height()) {

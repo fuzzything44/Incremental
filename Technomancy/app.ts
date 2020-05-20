@@ -3192,10 +3192,6 @@ function update() {
         run_autobuild();
     }
 
-    if (event_flags["skills"] != undefined && event_flags["skills"][15]) {
-        delta_time *= 1.5;
-    }
-
     if (adventure_data["gates_open"] !== undefined) {
         delta_time *= Math.pow(5, adventure_data["gates_open"]);
     }
@@ -3209,7 +3205,7 @@ function update() {
         } else {
             $("#" + res).addClass("hidden");
         }
-        let time = delta_time;
+        let time = delta_time * mage_skill_mult;
         /* These don't normally run out. */
         if (resources[res].value == 0) {
             time = 0
@@ -3240,11 +3236,12 @@ function update() {
     Object.keys(resources).forEach(function (key) {
         /* Don't add special resources */
         if (resources[key].value != 0) {
+            let mage_skill_mult = event_flags["skills"] != undefined && event_flags["skills"][15] && resources[key].value > 0 ? 1.5 : 1;
             /* Only positive generation gets a multiplier. */
             if (resources_per_sec[key] > 0) {
-                resources[key].amount += resources_per_sec[key] * resources[key].mult * delta_time / 1000;
+                resources[key].amount += resources_per_sec[key] * resources[key].mult * delta_time * mage_skill_mult / 1000;
             } else {
-                resources[key].amount += resources_per_sec[key] * delta_time / 1000;
+                resources[key].amount += resources_per_sec[key] * delta_time * mage_skill_mult / 1000;
             }
         } else { /* We have as much of specialty resources as we generate */
             resources[key].amount = resources_per_sec[key];
